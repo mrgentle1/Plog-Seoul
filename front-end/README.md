@@ -1,6 +1,6 @@
 ## 프로젝트 구조
 
-front-end
+front-end   
 ┣ node_modules  
 ┣ public  
 ┣ src  
