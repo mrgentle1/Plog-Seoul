@@ -1,0 +1,27 @@
+.homeHeader {
+  position: fixed;
+  top: 0;
+  background-color: #ffffff;
+  width: 393px;
+  height: 127px;
+  padding: 66px 0 36px 20px;
+
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 15px;
+  border: 0;
+
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: flex-start;
+  align-items: center;
+
+  z-index: 100;
+}
+
+.homeHeader h3 {
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 25px;
+}

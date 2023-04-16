@@ -1,0 +1,29 @@
+.homePage {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.box1 {
+  width: 353px;
+  height: 300px;
+  background-color: #d9d9d9;
+}
+.box2 {
+  width: 353px;
+  height: 150px;
+  margin-top: 13px;
+  background-color: #d9d9d9;
+}
+.box3 {
+  width: 353px;
+  height: 100px;
+  margin-top: 13px;
+  background-color: #d9d9d9;
+}
+.box4 {
+  width: 353px;
+  height: 170px;
+  margin-top: 13px;
+  background-color: #d9d9d9;
+}

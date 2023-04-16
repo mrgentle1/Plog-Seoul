@@ -1,0 +1,154 @@
+.footer {
+  position: fixed;
+  bottom: 0;
+
+  background: #f2f2f2;
+  width: 393px;
+  height: 100px;
+  padding: 0;
+  margin: 0;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+button {
+  width: 32px;
+  height: 46px;
+  padding: 0;
+}
+
+.footerHome {
+  display: flex;
+  flex-direction: column;
+  font-size: 11px;
+  margin-top: 10.5px;
+  padding: 0;
+  height: 46px;
+}
+.footerHomeBtn {
+  margin: 0;
+  padding: 0;
+}
+.footerHomeIcon {
+  margin: 0;
+  padding: 0;
+  width: 18.67px;
+  height: 21px;
+}
+.footerHome p {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  text-align: center;
+  margin-top: 5px;
+}
+
+.footerCourse {
+  display: flex;
+  flex-direction: column;
+  font-size: 11px;
+  margin-top: 10px;
+  padding: 0;
+  height: 46px;
+}
+.footerCourseBtn {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
+.footerCourseIcon {
+  width: 25.67px;
+  height: 21px;
+}
+.footerCourse p {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  text-align: center;
+  margin-top: 8.9px;
+}
+
+.footerRecord {
+  display: flex;
+  flex-direction: column;
+  font-size: 11px;
+  margin-top: 8.75px;
+  padding: 0;
+  height: 46px;
+}
+.footerRecordBtn {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
+.footerRecordIcon {
+  width: 21px;
+  height: 25.08px;
+}
+.footerRecord p {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  text-align: center;
+  margin-top: 5px;
+}
+
+.footerPlog {
+  display: flex;
+  flex-direction: column;
+  font-size: 11px;
+  margin-top: 10.25px;
+  padding: 0;
+  height: 46px;
+}
+.footerPlogBtn {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
+.footerPlogIcon {
+  width: 21px;
+  height: 21px;
+}
+.footerPlog p {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  text-align: center;
+  margin-top: 7.35px;
+}
+
+.footerMy {
+  display: flex;
+  flex-direction: column;
+  font-size: 11px;
+  margin-top: 10.5px;
+  padding: 0;
+  height: 46px;
+}
+.footerMyBtn {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
+.footerMyIcon {
+  width: 21px;
+  height: 21px;
+}
+.footerMy p {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  text-align: center;
+  margin-top: 7.25px;
+}
+
+.footer > active {
+  fill: red;
+}
