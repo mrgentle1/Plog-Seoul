@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Builder
@@ -14,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Entity
-public class PloggingRecord {
+public class PloggingRecord extends BaseEntity{
 
     // 플로깅 기록
 
@@ -25,9 +24,6 @@ public class PloggingRecord {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
 
     @Column(name = "distance")
     private Float distance;
