@@ -27,22 +27,29 @@ button {
   padding: 0;
   height: 46px;
 }
+.footerHome:hover {
+  color: #688acb;
+}
 .footerHomeBtn {
   margin: 0;
   padding: 0;
+}
+.footerHomeBtn:hover {
+  color: #688acb;
 }
 .footerHomeIcon {
   margin: 0;
   padding: 0;
   width: 18.67px;
   height: 21px;
+  margin-left: 0.55px;
 }
 .footerHome p {
   display: flex;
   width: 100%;
   justify-content: center;
   text-align: center;
-  margin-top: 5px;
+  margin-top: 5.5px;
 }
 
 .footerCourse {
@@ -53,22 +60,29 @@ button {
   padding: 0;
   height: 46px;
 }
+.footerCourse:hover {
+  color: #688acb;
+}
 .footerCourseBtn {
   margin: 0;
   padding: 0;
-  display: flex;
-  justify-content: center;
+}
+.footerCourseBtn:hover {
+  color: #688acb;
 }
 .footerCourseIcon {
+  margin: 0;
+  padding: 0;
   width: 25.67px;
   height: 21px;
+  margin-left: 7px;
 }
 .footerCourse p {
   display: flex;
   width: 100%;
   justify-content: center;
   text-align: center;
-  margin-top: 8.9px;
+  margin-top: 6.7px;
 }
 
 .footerRecord {
@@ -79,22 +93,29 @@ button {
   padding: 0;
   height: 46px;
 }
+.footerRecord:hover {
+  color: #688acb;
+}
 .footerRecordBtn {
   margin: 0;
   padding: 0;
-  display: flex;
-  justify-content: center;
+}
+.footerRecordBtn:hover {
+  color: #688acb;
 }
 .footerRecordIcon {
+  margin: 0;
+  padding: 0;
   width: 21px;
   height: 25.08px;
+  margin-left: 9px;
 }
 .footerRecord p {
   display: flex;
   width: 100%;
   justify-content: center;
   text-align: center;
-  margin-top: 5px;
+  margin-top: 3px;
 }
 
 .footerPlog {
@@ -105,22 +126,29 @@ button {
   padding: 0;
   height: 46px;
 }
+.footerPlog:hover {
+  color: #688acb;
+}
 .footerPlogBtn {
   margin: 0;
   padding: 0;
-  display: flex;
-  justify-content: center;
+}
+.footerPlogBtn:hover {
+  color: #688acb;
 }
 .footerPlogIcon {
+  margin: 0;
+  padding: 0;
   width: 21px;
   height: 21px;
+  margin-left: 4px;
 }
 .footerPlog p {
   display: flex;
   width: 100%;
   justify-content: center;
   text-align: center;
-  margin-top: 7.35px;
+  margin-top: 5.5px;
 }
 
 .footerMy {
@@ -131,24 +159,27 @@ button {
   padding: 0;
   height: 46px;
 }
+.footerMy:hover {
+  color: #688acb;
+}
 .footerMyBtn {
   margin: 0;
   padding: 0;
-  display: flex;
-  justify-content: center;
+}
+.footerMyBtn:hover {
+  color: #688acb;
 }
 .footerMyIcon {
+  margin: 0;
+  padding: 0;
   width: 21px;
   height: 21px;
+  margin-left: 13px;
 }
 .footerMy p {
   display: flex;
   width: 100%;
   justify-content: center;
   text-align: center;
-  margin-top: 7.25px;
-}
-
-.footer > active {
-  fill: red;
+  margin-top: 5.5px;
 }
