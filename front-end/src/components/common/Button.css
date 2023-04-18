@@ -1,0 +1,33 @@
+.button {
+  width: 353px;
+  height: 60px;
+  border: none;
+  border-radius: 14px;
+  background-color: #688acb;
+  color: #ffffff;
+  font-family: "SUIT Variable";
+  font-style: normal;
+  font-weight: 600;
+  line-height: 19px;
+  letter-spacing: 1.2px;
+}
+.button:hover {
+  background-color: #97b0de;
+}
+.button:active {
+  background-color: #97b0de;
+}
+
+.disabled-button {
+  width: 353px;
+  height: 60px;
+  border: 1px solid #97b0de;
+  border-radius: 14px;
+  background-color: #f3f3f3;
+  color: #97b0de;
+  font-family: "SUIT Variable";
+  font-style: normal;
+  font-weight: 600;
+  line-height: 19px;
+  letter-spacing: 1.2px;
+}
