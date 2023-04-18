@@ -27,7 +27,7 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	implementation'com.google.code.gson:gson:2.8.7'
+	implementation 'com.fasterxml.jackson.core:jackson-databind'
 
 	/* swagger-ui */
 	implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'

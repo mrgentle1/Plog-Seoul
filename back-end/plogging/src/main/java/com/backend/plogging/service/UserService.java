@@ -1,10 +1,13 @@
 package com.backend.plogging.service;
 
 
+import com.backend.plogging.base.BaseResponseEntity;
+import com.backend.plogging.dto.request.user.KakaoUserDto;
 import com.backend.plogging.repository.UserRepository;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -50,12 +53,11 @@ public class UserService {
                 result += line;
             }
 
-            //Gson 라이브러리에 포함된 클래스로 JSON파싱 객체 생성
-            JsonParser parser = new JsonParser();
-            JsonElement element = parser.parse(result);
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(result);
 
-            accessToken = element.getAsJsonObject().get("access_token").getAsString();
-            refreshToken = element.getAsJsonObject().get("refresh_token").getAsString();
+            accessToken = rootNode.get("access_token").asText();
+            refreshToken = rootNode.get("refresh_token").asText();
 
             br.close();
             br.close();
@@ -69,7 +71,7 @@ public class UserService {
         return accessToken;
     }
 
-    public void createKakaoUser(String token) {
+    public BaseResponseEntity<?> createKakaoUser(String token) {
         String requestURL = "https://kapi.kakao.com/v2/user/me";
 
         // accessToken을 이용하여 사용자 정보 조회
@@ -93,26 +95,37 @@ public class UserService {
             while ((line = br.readLine()) != null) {
                 result += line;
             }
-            System.out.println("response body : " + result);
 
-            //Gson 라이브러리로 JSON파싱
-            JsonParser parser = new JsonParser();
-            JsonElement element = parser.parse(result);
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(result);
 
-            Long id = element.getAsJsonObject().get("id").getAsLong();
-            boolean hasEmail = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("has_email").getAsBoolean();
-            String email = "";
-            if (hasEmail) {
-                email = element.getAsJsonObject().get("kakao_account").getAsJsonObject().get("email").getAsString();
-            }
-
-            System.out.println("id : " + id);
-            System.out.println("email : " + email);
+            // 필요한 정보를 추출합니다.
+            String email = jsonNode.get("kakao_account").get("email").asText();
+            String name = jsonNode.get("kakao_account").get("profile").get("nickname").asText();
+            String profileImage = jsonNode.get("kakao_account").get("profile").get("profile_image_url").asText();
+            String gender = jsonNode.get("kakao_account").get("gender").asText();
 
             br.close();
 
+            if (userRepository.findByEmail(email).isPresent()) {
+                return new BaseResponseEntity<>(HttpStatus.BAD_REQUEST, "이미 가입한 회원입니다");
+            } else {
+                KakaoUserDto userDto = new KakaoUserDto(email, name, profileImage, gender);
+                userRepository.save(userDto.toEntity());
+                return new BaseResponseEntity<>(HttpStatus.OK);
+            }
+
+
+//            System.out.println("email = " + email);
+//            System.out.println("name = " + name);
+//            System.out.println("profileImage = " + profileImage);
+//            System.out.println("gender = " + gender);
+//
+//            System.out.println("response body : " + result);
+
         } catch (IOException e) {
             e.printStackTrace();
+            return new BaseResponseEntity<>(e);
         }
 
     }

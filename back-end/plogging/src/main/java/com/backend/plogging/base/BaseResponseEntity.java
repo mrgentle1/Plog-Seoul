@@ -31,7 +31,7 @@ public class BaseResponseEntity<T> extends ResponseEntity<Map<String, Object>> {
     }
 
     private static Map<String, Object> createErrorBody(Throwable e) {
-        Map<String, Object> body = new HashMap<>();
+        Map<String, Object> body = new LinkedHashMap<>();
         body.put("success", false);
         body.put("code", HttpStatus.INTERNAL_SERVER_ERROR.value());
         body.put("message", HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());

@@ -19,6 +19,9 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
+    @Column(name = "email")
+    private String email;
+
     @Column(name = "name")
     private String name;
 
@@ -40,6 +43,8 @@ public class User extends BaseEntity {
     @Column(name = "role")
     private String role;
 
+    @Column(name = "is_first")
+    private Boolean isFirst;
 
     // walking records for this user
     @OneToMany(mappedBy = "user", orphanRemoval = true)
