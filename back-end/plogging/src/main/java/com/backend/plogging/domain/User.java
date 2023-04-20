@@ -54,4 +54,9 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<Review> reviews;
 
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
 }

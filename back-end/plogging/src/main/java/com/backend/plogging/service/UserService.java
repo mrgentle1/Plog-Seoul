@@ -2,23 +2,36 @@ package com.backend.plogging.service;
 
 
 import com.backend.plogging.base.BaseResponseEntity;
+import com.backend.plogging.domain.User;
 import com.backend.plogging.dto.request.user.KakaoUserDto;
+import com.backend.plogging.dto.response.user.AuthenticationResponse;
+import com.backend.plogging.dto.response.user.UserResponseDto;
 import com.backend.plogging.repository.UserRepository;
+import com.backend.plogging.util.JwtUtils;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
+
+    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
+
+    @Autowired
+    private JwtUtils jwtUtils;
 
     public String getKakaoAccessToken(String code) {
         String accessToken = "";
@@ -69,6 +82,43 @@ public class UserService {
         }
 
         return accessToken;
+    }
+
+    public Optional<User> getKakaoUser(String token) {
+        String requestURL = "https://kapi.kakao.com/v2/user/me";
+
+        // accessToken을 이용하여 사용자 정보 조회
+        try {
+            URL url = new URL(requestURL);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+            conn.setRequestProperty("Authorization", "Bearer " + token); //전송할 header 작성, access_token전송
+
+            //요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String line = "";
+            String result = "";
+
+            while ((line = br.readLine()) != null) {
+                result += line;
+            }
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(result);
+
+            // 필요한 정보를 추출합니다.
+            String email = jsonNode.get("kakao_account").get("email").asText();
+
+            br.close();
+
+            return userRepository.findByEmail(email);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public BaseResponseEntity<?> createKakaoUser(String token) {
@@ -128,5 +178,25 @@ public class UserService {
             return new BaseResponseEntity<>(e);
         }
 
+    }
+
+    public BaseResponseEntity<?> login(User user) {
+        String email = user.getEmail();
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+        final String jwt = jwtUtils.generateToken(userDetails);
+        return new BaseResponseEntity<>(HttpStatus.OK, new AuthenticationResponse(jwt, user));
+    }
+
+    public BaseResponseEntity<?> updateNickname(String nickname, String email) {
+        return null;
+    }
+
+    public BaseResponseEntity<?> getUserByEmail(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isPresent()) {
+            return new BaseResponseEntity<>(HttpStatus.OK, new UserResponseDto(user.get()));
+        } else {
+            return new BaseResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }
