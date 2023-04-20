@@ -188,7 +188,11 @@ public class UserService {
     }
 
     public BaseResponseEntity<?> updateNickname(String nickname, String email) {
-        return null;
+        User user = userRepository.findByEmail(email).get();
+        user.setNickname(nickname);
+        user.setIsFirst(false);
+        userRepository.save(user);
+        return new BaseResponseEntity<>(HttpStatus.OK, "닉네임 변경이 완료되었습니다.");
     }
 
     public BaseResponseEntity<?> getUserByEmail(String email) {

@@ -2,10 +2,10 @@ package com.backend.plogging.controller;
 
 import com.backend.plogging.base.BaseResponseEntity;
 import com.backend.plogging.domain.User;
+import com.backend.plogging.dto.request.user.NicknameDto;
 import com.backend.plogging.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -47,17 +47,15 @@ public class AuthenticationController {
     }
 
     @PostMapping("/registration")
-    public BaseResponseEntity<?> registerNickname(@RequestBody String nickname,
+    public BaseResponseEntity<?> registerNickname(@RequestBody NicknameDto nickname,
                                                   Principal principal) {
-        BaseResponseEntity response = userService.updateNickname(nickname, principal.getName());
+        BaseResponseEntity response = userService.updateNickname(nickname.getNickname(), principal.getName());
         return response;
     }
 
     @GetMapping("/me")
     public BaseResponseEntity<?> getMyInfo(Principal principal) {
         BaseResponseEntity response = userService.getUserByEmail(principal.getName());
-        System.out.println("principal.getName() = " + principal.getName());
-
         return response;
     }
 
