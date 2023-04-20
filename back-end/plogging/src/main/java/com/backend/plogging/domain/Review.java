@@ -18,6 +18,12 @@ public class Review extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reviewId;
 
+    @Column(name = "content")
+    private String content;
+
+    @Column(name = "star")
+    private String star;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -25,8 +31,5 @@ public class Review extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "route_id")
     private RouteData routeData;
-
-    @Column(name = "content")
-    private String content;
 
 }

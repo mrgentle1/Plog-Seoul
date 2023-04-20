@@ -12,6 +12,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,8 @@ import org.springframework.stereotype.Service;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -201,6 +206,57 @@ public class UserService {
             return new BaseResponseEntity<>(HttpStatus.OK, new UserResponseDto(user.get()));
         } else {
             return new BaseResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    public BaseResponseEntity<?> getUserById(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isPresent()) {
+            return new BaseResponseEntity<>(HttpStatus.OK, new UserResponseDto(user.get()));
+        } else {
+            return new BaseResponseEntity<>(HttpStatus.BAD_REQUEST, "해당 유저가 존재하지 않습니다.");
+        }
+    }
+
+    public BaseResponseEntity<?> deleteUserById(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if (!user.isPresent()) {
+            return new BaseResponseEntity<>(HttpStatus.BAD_REQUEST, "해당 유저가 존재하지 않습니다.");
+        } else {
+            userRepository.delete(user.get());
+            return new BaseResponseEntity<>(HttpStatus.OK, "유저가 삭제되었습니다.");
+        }
+    }
+
+    public BaseResponseEntity<Page<UserResponseDto>> getAllUsers(int pagingIndex, int pagingSize) {
+        Pageable pageable = PageRequest.of(pagingIndex, pagingSize);
+        Page<User> users = userRepository.findAll(pageable);
+        return new BaseResponseEntity<>(HttpStatus.OK, users.map(UserResponseDto::new));
+    }
+
+    public BaseResponseEntity<?> getPoint(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isPresent()) {
+            Map<String, Object> result = new HashMap<>();
+            result.put("point", user.get().getPoint());
+            return new BaseResponseEntity<>(HttpStatus.OK, result);
+        } else {
+            return new BaseResponseEntity<>(HttpStatus.BAD_REQUEST, "해당 유저가 존재하지 않습니다.");
+        }
+    }
+
+    public BaseResponseEntity<?> updatePoint(Long userId, int newPoint) {
+        Optional<User> user = userRepository.findById(userId);
+        
+        if (user.isPresent()) {
+            user.get().setPoint(newPoint);
+            userRepository.save(user.get());
+
+            Map<String, Object> result = new HashMap<>();
+            result.put("point", user.get().getPoint());
+            return new BaseResponseEntity<>(HttpStatus.OK, result);
+        } else {
+            return new BaseResponseEntity<>(HttpStatus.BAD_REQUEST, "해당 유저가 존재하지 않습니다.");
         }
     }
 }
