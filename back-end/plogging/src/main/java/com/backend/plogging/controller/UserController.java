@@ -18,7 +18,6 @@ public class UserController {
     public BaseResponseEntity<Page<UserResponseDto>> getAllUsers(
             @RequestParam(value = "pagingIndex", defaultValue = "0") int pagingIndex,
             @RequestParam(value = "pagingSize", defaultValue = "50") int pagingSize) {
-
         BaseResponseEntity responses = userService.getAllUsers(pagingIndex, pagingSize);
         return responses;
     }

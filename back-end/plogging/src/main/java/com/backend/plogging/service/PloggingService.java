@@ -5,13 +5,18 @@ import com.backend.plogging.domain.PloggingRecord;
 import com.backend.plogging.domain.User;
 import com.backend.plogging.dto.request.plogging.PloggingPostRequestDto;
 import com.backend.plogging.dto.response.plogging.RecordResponseDto;
+import com.backend.plogging.dto.response.user.UserResponseDto;
 import com.backend.plogging.repository.PloggingRecordRepository;
 import com.backend.plogging.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -21,10 +26,12 @@ public class PloggingService {
     private final PloggingRecordRepository ploggingRecordRepository;
     private final UserRepository userRepository;
 
-    public BaseResponseEntity<?> create(PloggingPostRequestDto dto) {
+    public BaseResponseEntity<?> create(PloggingPostRequestDto dto, String email) {
+
+        User user = userRepository.findByEmail(email).get();
 
         PloggingRecord record = PloggingRecord.builder()
-                .user(userRepository.findById(1l).get())
+                .user(user)
                 .distance(dto.getDistance())
                 .startLat(dto.getStartLat())
                 .startLng(dto.getStartLng())
@@ -40,10 +47,28 @@ public class PloggingService {
         }
     }
 
-    public BaseResponseEntity<List<RecordResponseDto>> getList() {
-        List<RecordResponseDto> records = this.ploggingRecordRepository.findAll().stream()
-                .map(RecordResponseDto::new)
-                .collect(Collectors.toList());
-        return new BaseResponseEntity<>(HttpStatus.OK, records);
+    public BaseResponseEntity<Page<RecordResponseDto>> getAllRecords(int pagingIndex, int pagingSize) {
+        Pageable pageable = PageRequest.of(pagingIndex, pagingSize);
+        Page<PloggingRecord> records = ploggingRecordRepository.findAll(pageable);
+        return new BaseResponseEntity<>(HttpStatus.OK, records.map(RecordResponseDto::new));
+    }
+
+    public BaseResponseEntity<?> getRecordById(Long recordId) {
+        Optional<PloggingRecord> record = ploggingRecordRepository.findById(recordId);
+        if (record.isPresent()) {
+            return new BaseResponseEntity<>(HttpStatus.OK, new RecordResponseDto(record.get()));
+        } else {
+            return new BaseResponseEntity<>(HttpStatus.BAD_REQUEST, "해당 기록이 존재하지 않습니다.");
+        }
+    }
+
+    public BaseResponseEntity<?> deleteRecordById(Long recordId) {
+        Optional<PloggingRecord> record = ploggingRecordRepository.findById(recordId);
+        if (!record.isPresent()) {
+            return new BaseResponseEntity<>(HttpStatus.BAD_REQUEST, "해당 기록이 존재하지 않습니다.");
+        } else {
+            ploggingRecordRepository.delete(record.get());
+            return new BaseResponseEntity<>(HttpStatus.OK, "기록이 삭제되었습니다.");
+        }
     }
 }

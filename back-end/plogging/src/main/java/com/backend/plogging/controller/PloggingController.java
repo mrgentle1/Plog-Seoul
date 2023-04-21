@@ -1,14 +1,14 @@
 package com.backend.plogging.controller;
 
 import com.backend.plogging.base.BaseResponseEntity;
-import com.backend.plogging.domain.PloggingRecord;
 import com.backend.plogging.dto.request.plogging.PloggingPostRequestDto;
 import com.backend.plogging.dto.response.plogging.RecordResponseDto;
 import com.backend.plogging.service.PloggingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.security.Principal;
 
 @RequiredArgsConstructor
 @RestController
@@ -18,16 +18,30 @@ public class PloggingController {
     private final PloggingService ploggingService;
 
     @PostMapping("")
-    public BaseResponseEntity createRecord(@RequestBody PloggingPostRequestDto dto) {
-        BaseResponseEntity response = ploggingService.create(dto);
+    public BaseResponseEntity createRecord(@RequestBody PloggingPostRequestDto dto,
+                                           Principal principal) {
+        BaseResponseEntity response = ploggingService.create(dto, principal.getName());
         return response;
     }
 
     @GetMapping("")
-    public BaseResponseEntity<List<RecordResponseDto>> getRecords() {
-        BaseResponseEntity<List<RecordResponseDto>> response = ploggingService.getList();
+    public BaseResponseEntity<Page<RecordResponseDto>> getAllRecords(
+            @RequestParam(value = "pagingIndex", defaultValue = "0") int pagingIndex,
+            @RequestParam(value = "pagingSize", defaultValue = "50") int pagingSize) {
+        BaseResponseEntity response = ploggingService.getAllRecords(pagingIndex, pagingSize);
         return response;
     }
 
+    @GetMapping("/{recordId}")
+    public BaseResponseEntity<?> getRecord(@PathVariable Long recordId) {
+        BaseResponseEntity response = ploggingService.getRecordById(recordId);
+        return response;
+    }
+
+    @DeleteMapping("/{recordId}")
+    public BaseResponseEntity<?> deleteRecord(@PathVariable Long recordId) {
+        BaseResponseEntity response = ploggingService.deleteRecordById(recordId);
+        return response;
+    }
 
 }

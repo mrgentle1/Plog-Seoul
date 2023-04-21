@@ -3,6 +3,8 @@ package com.backend.plogging.dto.response.user;
 import com.backend.plogging.domain.User;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @ToString
 @Getter
 @Builder
@@ -20,6 +22,8 @@ public class UserResponseDto {
     private Integer level;
     private String role;
     private Boolean isFirst;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public UserResponseDto(User user) {
         this.userId = user.getUserId();
@@ -32,6 +36,8 @@ public class UserResponseDto {
         this.level = user.getLevel();
         this.role = user.getRole();
         this.isFirst = user.getIsFirst();
+        this.createdAt = user.getCreatedAt();
+        this.updatedAt = user.getUpdatedAt();
     }
 
 }

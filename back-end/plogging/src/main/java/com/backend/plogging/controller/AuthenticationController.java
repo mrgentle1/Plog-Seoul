@@ -23,6 +23,7 @@ public class AuthenticationController {
     @Value("${kakao.uri}")
     private String uri;
 
+    // TODO: 회원 생성 후 JWT를 바로 반환하도록 수정
     @GetMapping("/login")
     public void kakaoRegistration(HttpServletResponse response) throws IOException {
         response.sendRedirect(uri);
