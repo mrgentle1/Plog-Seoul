@@ -21,10 +21,10 @@
 .disabled-button {
   width: 353px;
   height: 60px;
-  border: 1px solid #97b0de;
+  border: none;
   border-radius: 14px;
-  background-color: #f3f3f3;
-  color: #97b0de;
+  background-color: #e7e7e7;
+  color: #a0a0a0;
   font-family: "SUIT Variable";
   font-style: normal;
   font-weight: 600;
