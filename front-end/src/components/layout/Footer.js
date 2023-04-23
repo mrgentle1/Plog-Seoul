@@ -1,6 +1,7 @@
 import "./Footer.css";
+import * as S from "./FooterStyle";
 
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { Icon } from "@iconify/react";
 
 export const Footer = () => {
@@ -11,9 +12,9 @@ export const Footer = () => {
   };
 
   return (
-    <div className="footer">
-      <div className="imgBtn">
-        <div className="footerHome">
+    <S.footer>
+      <S.imgBtn>
+        <S.footerHome>
           <NavLink to={"/home"} className="footerHomeBtn">
             <Icon
               icon="material-symbols:home"
@@ -24,9 +25,9 @@ export const Footer = () => {
               }
             />
           </NavLink>
-        </div>
+        </S.footerHome>
 
-        <div className="footerCourse">
+        <S.footerCourse>
           <NavLink to={"/course"} className="footerCourseBtn">
             <Icon
               icon="mdi:image-filter-hdr"
@@ -37,9 +38,9 @@ export const Footer = () => {
               }
             />
           </NavLink>
-        </div>
+        </S.footerCourse>
 
-        <div className="footerRecord">
+        <S.footerRecord>
           <NavLink to={"/record"} className="footerRecordBtn">
             <Icon
               icon="material-symbols:directions-run"
@@ -50,9 +51,9 @@ export const Footer = () => {
               }
             />
           </NavLink>
-        </div>
+        </S.footerRecord>
 
-        <div className="footerPlog">
+        <S.footerPlog>
           <NavLink to={"/plog"} className="footerPlogBtn">
             <Icon
               icon="material-symbols:calendar-view-month-sharp"
@@ -63,9 +64,9 @@ export const Footer = () => {
               }
             />
           </NavLink>
-        </div>
+        </S.footerPlog>
 
-        <div className="footerMy">
+        <S.footerMy>
           <NavLink to={"/my"} className="footerMyBtn">
             <Icon
               icon="mdi:account"
@@ -74,48 +75,48 @@ export const Footer = () => {
               }
             />
           </NavLink>
-        </div>
-      </div>
+        </S.footerMy>
+      </S.imgBtn>
 
-      <div className="textBtn">
-        <div className="footerhome">
+      <S.textBtn>
+        <S.footerHome>
           <NavLink to={"/home"} className="footerHomeBtn">
             <p className={isCurrentPage("/home") ? "activeText" : null}>홈</p>
           </NavLink>
-        </div>
+        </S.footerHome>
 
-        <div className="footercourse">
+        <S.footerCourse>
           <NavLink to={"/course"} className="footerCourseBtn">
             <p className={isCurrentPage("/course") ? "activeText" : null}>
               코스 보기
             </p>
           </NavLink>
-        </div>
+        </S.footerCourse>
 
-        <div className="footerrecord">
+        <S.footerRecord>
           <NavLink to={"/record"} className="footerRecordBtn">
             <p className={isCurrentPage("/record") ? "activeText" : null}>
               기록하기
             </p>
           </NavLink>
-        </div>
+        </S.footerRecord>
 
-        <div className="footerplog">
+        <S.footerPlog>
           <NavLink to={"/plog"} className="footerPlogBtn">
             <p className={isCurrentPage("/plog") ? "activeText" : null}>
               플로그
             </p>
           </NavLink>
-        </div>
+        </S.footerPlog>
 
-        <div className="footermy">
+        <S.footerMy>
           <NavLink to={"/my"} className="footerMyBtn">
             <p className={isCurrentPage("/my") ? "activeText" : null}>
               마이페이지
             </p>
           </NavLink>
-        </div>
-      </div>
-    </div>
+        </S.footerMy>
+      </S.textBtn>
+    </S.footer>
   );
 };

@@ -3,7 +3,9 @@ import { useSetRecoilState } from "recoil";
 import { headerTitleState } from "../../core/headerTitle";
 import { HomeHeader } from "../../components/layout/Header";
 import { Footer } from "../../components/layout/Footer";
-import "./HomePage.css";
+
+import styled from "styled-components";
+import { COLOR } from "../../styles/color";
 
 function HomePage() {
   const setHeaderTitle = useSetRecoilState(headerTitleState);
@@ -13,17 +15,46 @@ function HomePage() {
   }, [setHeaderTitle]);
 
   return (
-    <div className="homePage">
+    <StHomePage>
       <HomeHeader />
       <div>
-        <div className="box1"></div>
-        <div className="box2"></div>
-        <div className="box3"></div>
-        <div className="box4"></div>
+        <Box1></Box1>
+        <Box2></Box2>
+        <Box3></Box3>
+        <Box4></Box4>
       </div>
       <Footer />
-    </div>
+    </StHomePage>
   );
 }
 
 export default HomePage;
+
+const StHomePage = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+`;
+const Box1 = styled.div`
+  width: 353px;
+  height: 300px;
+  background-color: ${COLOR.MEDIUM_GRAY};
+`;
+const Box2 = styled.div`
+  width: 353px;
+  height: 150px;
+  margin-top: 13px;
+  background-color: ${COLOR.MEDIUM_GRAY};
+`;
+const Box3 = styled.div`
+  width: 353px;
+  height: 100px;
+  margin-top: 13px;
+  background-color: ${COLOR.MEDIUM_GRAY};
+`;
+const Box4 = styled.div`
+  width: 353px;
+  height: 170px;
+  margin-top: 13px;
+  background-color: ${COLOR.MEDIUM_GRAY};
+`;

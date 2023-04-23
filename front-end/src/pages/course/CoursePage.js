@@ -3,7 +3,9 @@ import { useSetRecoilState } from "recoil";
 import { headerTitleState } from "../../core/headerTitle";
 import { Footer } from "../../components/layout/Footer";
 import { HomeHeader } from "../../components/layout/Header";
-import "./CoursePage.css";
+
+import styled from "styled-components";
+import { COLOR } from "../../styles/color";
 
 function CoursePage() {
   const setHeaderTitle = useSetRecoilState(headerTitleState);
@@ -13,12 +15,18 @@ function CoursePage() {
   }, [setHeaderTitle]);
 
   return (
-    <div className="coursePage">
+    <StCoursePage>
       <HomeHeader />
       <div>코스화면</div>
       <Footer />
-    </div>
+    </StCoursePage>
   );
 }
 
 export default CoursePage;
+
+const StCoursePage = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+`;
