@@ -30,7 +30,10 @@ public class Image {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @Column(name = "location")
-    private String location;
+    @Column(name = "img_lat")
+    private Float imgLat;
+
+    @Column(name = "img_lng")
+    private Float imgLng;
 
 }

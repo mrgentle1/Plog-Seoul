@@ -12,11 +12,6 @@ import javax.persistence.Column;
 @Setter
 public class PloggingPostRequestDto {
 
-    // @NotNull
-    // User 구현 후 NotNull 처리
-    @ApiModelProperty(hidden = true)
-    private User user;
-
     private Float distance;
     private Float startLat;
     private Float startLng;

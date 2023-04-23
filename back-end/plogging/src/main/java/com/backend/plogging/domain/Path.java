@@ -29,7 +29,7 @@ public class Path {
     @Column(name = "way_lng")
     private Float wayLng;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    @Column(name = "sequence")
+    private Long sequence;
 
 }
