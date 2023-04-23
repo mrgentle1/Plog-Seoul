@@ -40,8 +40,10 @@ public class AuthenticationController {
             // User가 있다면, login
             response = userService.login(user.get());
         } else {
-            // User가 없다면, registration
-            response = userService.createKakaoUser(accessToken);
+            // User가 없다면, registration 후 login
+            userService.createKakaoUser(accessToken);
+            Optional<User> newUser = userService.getKakaoUser(accessToken);
+            response = userService.login(newUser.get());
         }
 
         return response;
