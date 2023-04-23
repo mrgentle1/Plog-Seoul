@@ -7,16 +7,32 @@
   height: 100px;
   padding: 0;
   margin: 0;
-
+}
+.imgBtn {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
+}
+.textBtn {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.activeText {
+  color: black;
 }
 
 button {
   width: 32px;
   height: 46px;
   padding: 0;
+}
+p {
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 14px;
+  color: #a4a9ad;
 }
 
 .footerHome {
@@ -25,24 +41,33 @@ button {
   font-size: 11px;
   margin-top: 10.5px;
   padding: 0;
-  height: 46px;
+  width: 50px;
 }
 .footerHomeBtn {
   margin: 0;
   padding: 0;
+  text-align: center;
 }
 .footerHomeIcon {
   margin: 0;
   padding: 0;
-  width: 18.67px;
-  height: 21px;
+  width: 21.67px;
+  height: 24px;
+  color: #a4a9ad;
 }
-.footerHome p {
+.footerHomeIcon_active {
+  margin: 0;
+  padding: 0;
+  width: 21.67px;
+  height: 24px;
+  color: #000000;
+}
+.footerhome p {
   display: flex;
-  width: 100%;
+  width: 50px;
   justify-content: center;
   text-align: center;
-  margin-top: 5px;
+  margin-top: 4px;
 }
 
 .footerCourse {
@@ -51,24 +76,33 @@ button {
   font-size: 11px;
   margin-top: 10px;
   padding: 0;
-  height: 46px;
+  width: 50px;
 }
 .footerCourseBtn {
   margin: 0;
   padding: 0;
-  display: flex;
-  justify-content: center;
+  text-align: center;
 }
 .footerCourseIcon {
+  margin: 0;
+  padding: 0;
   width: 25.67px;
-  height: 21px;
+  height: 25px;
+  color: #a4a9ad;
 }
-.footerCourse p {
+.footerCourseIcon_active {
+  margin: 0;
+  padding: 0;
+  width: 25.67px;
+  height: 25px;
+  color: #000000;
+}
+.footercourse p {
   display: flex;
-  width: 100%;
+  width: 50px;
   justify-content: center;
   text-align: center;
-  margin-top: 8.9px;
+  margin-top: 4.5px;
 }
 
 .footerRecord {
@@ -77,24 +111,35 @@ button {
   font-size: 11px;
   margin-top: 8.75px;
   padding: 0;
-  height: 46px;
+  width: 50px;
 }
 .footerRecordBtn {
   margin: 0;
   padding: 0;
-  display: flex;
-  justify-content: center;
+  text-align: center;
 }
 .footerRecordIcon {
-  width: 21px;
-  height: 25.08px;
+  margin: 0;
+  padding: 0;
+  width: 25px;
+  height: 29.08px;
+  margin-top: 1.5px;
+  color: #a4a9ad;
 }
-.footerRecord p {
+.footerRecordIcon_active {
+  margin: 0;
+  padding: 0;
+  width: 25px;
+  height: 29.08px;
+  margin-top: 1.5px;
+  color: #000000;
+}
+.footerrecord p {
   display: flex;
-  width: 100%;
+  width: 50px;
   justify-content: center;
   text-align: center;
-  margin-top: 5px;
+  margin-top: 4.5px;
 }
 
 .footerPlog {
@@ -103,24 +148,33 @@ button {
   font-size: 11px;
   margin-top: 10.25px;
   padding: 0;
-  height: 46px;
+  width: 50px;
 }
 .footerPlogBtn {
   margin: 0;
   padding: 0;
-  display: flex;
-  justify-content: center;
+  text-align: center;
 }
 .footerPlogIcon {
-  width: 21px;
-  height: 21px;
+  margin: 0;
+  padding: 0;
+  width: 25px;
+  height: 25px;
+  color: #a4a9ad;
 }
-.footerPlog p {
+.footerPlogIcon_active {
+  margin: 0;
+  padding: 0;
+  width: 25px;
+  height: 25px;
+  color: #000000;
+}
+.footerplog p {
   display: flex;
-  width: 100%;
+  width: 50px;
   justify-content: center;
   text-align: center;
-  margin-top: 7.35px;
+  margin-top: 4.455px;
 }
 
 .footerMy {
@@ -129,26 +183,32 @@ button {
   font-size: 11px;
   margin-top: 10.5px;
   padding: 0;
-  height: 46px;
+  width: 50px;
 }
 .footerMyBtn {
   margin: 0;
   padding: 0;
-  display: flex;
-  justify-content: center;
+  text-align: center;
 }
 .footerMyIcon {
-  width: 21px;
-  height: 21px;
+  margin: 0;
+  padding: 0;
+  width: 25px;
+  height: 25px;
+  color: #a4a9ad;
 }
-.footerMy p {
+.footerMyIcon_active {
+  margin: 0;
+  padding: 0;
+  width: 25px;
+  height: 25px;
+  color: #000000;
+}
+.footermy p {
   display: flex;
-  width: 100%;
+  width: 50px;
   justify-content: center;
   text-align: center;
-  margin-top: 7.25px;
-}
-
-.footer > active {
-  fill: red;
+  margin-top: 4.5px;
+  color: #a4a9ad;
 }
