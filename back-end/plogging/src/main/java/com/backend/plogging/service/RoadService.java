@@ -51,6 +51,11 @@ public class RoadService {
         User user = userRepository.findByEmail(email).get();
         RouteData routeData = routeDataRepository.findById(roadId).get();
 
+        Optional<Review> optionalReview = reviewRepository.findByUserAndRouteData(user, routeData);
+        if (optionalReview.isPresent()) {
+            return new BaseResponseEntity<>(HttpStatus.BAD_REQUEST, "이미 작성한 리뷰가 있습니다.");
+        }
+
         Review review = Review.builder()
                 .user(user)
                 .content(dto.getContent())
@@ -71,11 +76,34 @@ public class RoadService {
         return new BaseResponseEntity<>(HttpStatus.OK, reviews.map(ReviewResponseDto::new));
     }
 
-    public BaseResponseEntity<?> updateReview(Long roadId, Long reviewId) {
-        return null;
+    public BaseResponseEntity<?> updateReview(Long reviewId, ReviewRequestDto dto) {
+        Optional<Review> reviewOptional = reviewRepository.findById(reviewId);
+        if (!reviewOptional.isPresent()) {
+            return new BaseResponseEntity<>(HttpStatus.BAD_REQUEST, "해당 리뷰를 찾을 수 없습니다.");
+        }
+
+        Review review = reviewOptional.get();
+        review.setContentAndStar(dto.getContent(), dto.getStar());
+
+        try {
+            reviewRepository.save(review);
+            return new BaseResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new BaseResponseEntity<>(e);
+        }
     }
 
-    public BaseResponseEntity<?> deleteReview(Long roadId, Long reviewId) {
-        return null;
+    public BaseResponseEntity<?> deleteReview(Long reviewId) {
+        Optional<Review> reviewOptional = reviewRepository.findById(reviewId);
+        if (!reviewOptional.isPresent()) {
+            return new BaseResponseEntity<>(HttpStatus.BAD_REQUEST, "해당 리뷰를 찾을 수 없습니다.");
+        }
+
+        try {
+            reviewRepository.delete(reviewOptional.get());
+            return new BaseResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new BaseResponseEntity<>(e);
+        }
     }
 }

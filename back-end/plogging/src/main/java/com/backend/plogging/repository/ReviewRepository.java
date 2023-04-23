@@ -19,7 +19,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     Integer countByRouteDataRouteId(Long routeId);
 
     Page<Review> findByRouteDataRouteId(Pageable pageable, Long routeId);
-    
-    // TODO: 이미 리뷰를 작성한 사람에 대한 처리
-    Optional<Review> findByUserAndAndRouteData(User user, RouteData routeData);
+
+    Optional<Review> findByUserAndRouteData(User user, RouteData routeData);
 }

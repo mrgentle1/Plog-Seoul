@@ -32,4 +32,9 @@ public class Review extends BaseEntity{
     @JoinColumn(name = "route_id")
     private RouteData routeData;
 
+    public void setContentAndStar(String content, Float star) {
+        this.content = content;
+        this.star = star;
+    }
+
 }

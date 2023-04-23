@@ -45,14 +45,15 @@ public class RoadController {
     }
 
     @PutMapping("/{roadId}/reviews/{reviewId}")
-    public BaseResponseEntity<?> updateReview(@PathVariable Long roadId, @PathVariable Long reviewId) {
-        BaseResponseEntity response = null;
+    public BaseResponseEntity<?> updateReview(@PathVariable Long roadId,
+                                              @PathVariable Long reviewId, @RequestBody ReviewRequestDto dto) {
+        BaseResponseEntity response = roadService.updateReview(reviewId, dto);
         return response;
     }
 
     @DeleteMapping("/{roadId}/reviews/{reviewId}")
     public BaseResponseEntity<?> deleteReview(@PathVariable Long roadId, @PathVariable Long reviewId) {
-        BaseResponseEntity response = null;
+        BaseResponseEntity response = roadService.deleteReview(reviewId);
         return response;
     }
 }
