@@ -1,23 +1,32 @@
 package com.backend.plogging.service;
 
 import com.backend.plogging.base.BaseResponseEntity;
+import com.backend.plogging.domain.Image;
 import com.backend.plogging.domain.Path;
 import com.backend.plogging.domain.PloggingRecord;
 import com.backend.plogging.domain.User;
+import com.backend.plogging.dto.request.plogging.ImageRequestDto;
 import com.backend.plogging.dto.request.plogging.PathRequestDto;
 import com.backend.plogging.dto.request.plogging.PloggingPostRequestDto;
+import com.backend.plogging.dto.response.plogging.ImageResponseDto;
 import com.backend.plogging.dto.response.plogging.PathResponseDto;
 import com.backend.plogging.dto.response.plogging.RecordResponseDto;
+import com.backend.plogging.repository.ImageRepository;
 import com.backend.plogging.repository.PathRepository;
 import com.backend.plogging.repository.PloggingRecordRepository;
 import com.backend.plogging.repository.UserRepository;
+import com.backend.plogging.service.firebase.FirebaseService;
+import com.google.firebase.auth.FirebaseAuthException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +37,9 @@ public class PloggingService {
     private final PloggingRecordRepository ploggingRecordRepository;
     private final UserRepository userRepository;
     private final PathRepository pathRepository;
+    private final ImageRepository imageRepository;
+
+    private final FirebaseService firebaseService;
 
     public BaseResponseEntity<?> createRecord(PloggingPostRequestDto dto, String email) {
 
@@ -73,6 +85,54 @@ public class PloggingService {
             ploggingRecordRepository.delete(record.get());
             return new BaseResponseEntity<>(HttpStatus.OK, "기록이 삭제되었습니다.");
         }
+    }
+
+    public BaseResponseEntity<?> uploadImage(Long recordId, ImageRequestDto dto, MultipartFile image) throws IOException, FirebaseAuthException {
+        String imgUrl = firebaseService.uploadFiles(image);
+        Optional<PloggingRecord> record = ploggingRecordRepository.findById(recordId);
+
+        if (!record.isPresent()) {
+            return new BaseResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            Image newImage = Image.builder()
+                    .ploggingRecord(record.get())
+                    .imgUrl(imgUrl)
+                    .createdAt(LocalDateTime.now())
+                    .imgLat(dto.getImgLat())
+                    .imgLng(dto.getImgLng()).build();
+
+            imageRepository.save(newImage);
+
+            return new BaseResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new BaseResponseEntity<>(e);
+        }
+    }
+
+    public BaseResponseEntity<?> getAllImages(Long recordId) {
+        Optional<PloggingRecord> record = ploggingRecordRepository.findById(recordId);
+        if (!record.isPresent()) {
+            return new BaseResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        List<Image> imageList = imageRepository.findByPloggingRecord(record.get());
+        return new BaseResponseEntity<>(HttpStatus.OK, imageList.stream().map(ImageResponseDto::new));
+    }
+
+    public BaseResponseEntity<?> deleteAllImages(Long recordId) {
+        Optional<PloggingRecord> record = ploggingRecordRepository.findById(recordId);
+        if (!record.isPresent()) {
+            return new BaseResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        List<Image> imageList = imageRepository.findByPloggingRecord(record.get());
+        for (Image image: imageList) {
+            imageRepository.delete(image);
+        }
+
+        return new BaseResponseEntity<>(HttpStatus.OK);
     }
 
     public BaseResponseEntity<?> createPath(Long recordId, PathRequestDto dto) {

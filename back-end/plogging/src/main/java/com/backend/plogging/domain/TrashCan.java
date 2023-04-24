@@ -13,17 +13,17 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Getter
 @Entity
-public class TrashCan {
+public class TrashCan extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long trashCanId;
 
-    @Column(name = "location")
-    private String location;
+    @Column(name = "lat")
+    private Float lat;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    @Column(name = "lng")
+    private Float lng;
 
     @Column(name = "name")
     private String name;
