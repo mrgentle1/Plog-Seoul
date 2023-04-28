@@ -56,12 +56,18 @@ public class UserService {
             StringBuilder sb = new StringBuilder();
             sb.append("grant_type=authorization_code");
             sb.append("&client_id=97f6cd86370313a5d237e69507c9b011");
-            sb.append("&redirect_uri=http://localhost:8080/api/auth/kakao");
+            sb.append("&redirect_uri=http://localhost:3000/auth/kakao-callback");
             sb.append("&code=" + code);
-            bw.write(sb.toString());
+            String requestBody = sb.toString();
+            bw.write(requestBody);
             bw.flush();
 
+            // Log the request URL and request body
+//            System.out.println("Request URL: " + requestURL);
+//            System.out.println("Request Body: " + requestBody);
+
             int responseCode = conn.getResponseCode();
+//            System.out.println("responseCode = " + responseCode);
 
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String line = "";
@@ -77,7 +83,6 @@ public class UserService {
             accessToken = rootNode.get("access_token").asText();
             refreshToken = rootNode.get("refresh_token").asText();
 
-            br.close();
             br.close();
             bw.close();
 
@@ -190,6 +195,13 @@ public class UserService {
         final UserDetails userDetails = userDetailsService.loadUserByUsername(email);
         final String jwt = jwtUtils.generateToken(userDetails);
         return new BaseResponseEntity<>(HttpStatus.OK, new AuthenticationResponse(jwt, user));
+    }
+
+    public String getToken(User user) {
+        String email = user.getEmail();
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+        final String jwt = jwtUtils.generateToken(userDetails);
+        return jwt;
     }
 
     public BaseResponseEntity<?> updateNickname(String nickname, String email) {

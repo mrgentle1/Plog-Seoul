@@ -49,6 +49,7 @@ public class AuthenticationController {
         return response;
     }
 
+
     @PostMapping("/registration")
     public BaseResponseEntity<?> registerNickname(@RequestBody NicknameDto nickname,
                                                   Principal principal) {

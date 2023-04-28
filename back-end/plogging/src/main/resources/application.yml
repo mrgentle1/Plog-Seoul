@@ -24,7 +24,7 @@ spring:
       max-request-size: 30MB
 
 kakao:
-  uri: https://kauth.kakao.com/oauth/authorize?client_id=97f6cd86370313a5d237e69507c9b011&redirect_uri=http://localhost:8080/api/auth/kakao&response_type=code
+  uri: https://kauth.kakao.com/oauth/authorize?client_id=97f6cd86370313a5d237e69507c9b011&redirect_uri=http://localhost:3000/auth/kakao-callback&response_type=code
 
 jwt:
   secret: '62ee24aa5950496692f0c633e26b58b062ee24aa5950496692f0c633e26b58b0'
