@@ -19,17 +19,29 @@ public class RouteData extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long routeId;
 
-    @Column(name = "location")
-    private String location;
+    @Column(name = "city")  // 자치구
+    private String city;
 
-    @Column(name = "name")
+    @Column(name = "name")  // 명칭
     private String name;
 
-    @Column(name = "distance")
+    @Column(name = "category")  // 코스 대분류
+    private String category;
+
+    @Column(name = "distance")  // 거리
     private Float distance;
 
-    @Column(name = "duration")
-    private Float duration;
+    @Column(name = "duration")  // 소요시간
+    private String duration;
+
+    @Column(name = "course_detail")  // 상세코스
+    private String courseDetail;
+
+    @Column(columnDefinition = "TEXT", name = "description")  // 코스 설명
+    private String description;
+
+    @Column(name = "difficulty")
+    private String difficulty;
 
 
     // reviews for this route

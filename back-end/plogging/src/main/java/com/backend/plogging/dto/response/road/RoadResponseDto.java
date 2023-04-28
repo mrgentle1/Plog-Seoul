@@ -9,20 +9,28 @@ import lombok.Setter;
 @Setter
 public class RoadResponseDto {
     private Long routeId;
-    private String location;
+    private String city;
     private String name;
+    private String category;
     private Float distance;
-    private Float duration;
+    private String duration;
+    private String courseDetail;
+    private String description;
+    private String difficulty;
 
     private Integer reviewCnt;
     private Float reviewSum;
 
     public RoadResponseDto(RouteData routeData) {
         this.routeId = routeData.getRouteId();
-        this.location = routeData.getLocation();
+        this.city = routeData.getCity();
         this.name = routeData.getName();
+        this.category = routeData.getCategory();
         this.distance = routeData.getDistance();
         this.duration = routeData.getDuration();
+        this.courseDetail = routeData.getCourseDetail();
+        this.description = routeData.getDescription();
+        this.difficulty = routeData.getDifficulty();
     }
 
     public void setReviewCntAndSum(ReviewRepository reviewRepository) {
