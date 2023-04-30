@@ -1,0 +1,34 @@
+spring:
+  profiles:
+    active: stage
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url : jdbc:mysql://localhost:3306/plogging?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=Asia/Seoul
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: false
+        default_batch_fetch_size: 1000
+
+  servlet:
+    multipart:
+      max-file-size: 30MB
+      max-request-size: 30MB
+
+kakao:
+  uri: https://kauth.kakao.com/oauth/authorize?client_id=97f6cd86370313a5d237e69507c9b011&redirect_uri=http://localhost:3000/auth/kakao-callback&response_type=code
+
+jwt:
+  secret: '62ee24aa5950496692f0c633e26b58b062ee24aa5950496692f0c633e26b58b0'
+
+app:
+  firebase-configuration-file: ./serviceAccountKey.json
+  firebase-bucket: seoulplog.appspot.com

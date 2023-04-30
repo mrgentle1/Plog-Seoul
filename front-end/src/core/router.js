@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import LoginPage from "../pages/login/LoginPage";
+import SignupPage from "../pages/signup/SignupPage";
 import HomePage from "../pages/home/HomePage";
 import CoursePage from "../pages/course/CoursePage";
 import RecordPage from "../pages/record/RecordPage";
@@ -13,6 +14,7 @@ function Router() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
         <Route element={<Layout />}>
           <Route path="/home" element={<HomePage />} />
           <Route path="/course" element={<CoursePage />} />
