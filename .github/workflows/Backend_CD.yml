@@ -25,7 +25,7 @@ jobs:
     - name: make application-stage.yml
       run: |
         ## create application-stage.yml
-        cd ./src/main/resources
+        cd ./back-end/plogging/src/main/resources
 
         # application-stage.yml 파일 생성
         touch ./application-stage.yml
