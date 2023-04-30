@@ -36,7 +36,10 @@ jobs:
 
     ## gradle build
     - name: 스프링부트 애플리케이션 빌드
-      run: ./back-end/plogging/gradlew clean build -x test
+      run: |
+        cd ./back-end/plogging
+        chmod +x ./gradlew
+        ./gradlew clean build -x test
       
     ## docker build image
     - name: 도커 이미지 빌드
