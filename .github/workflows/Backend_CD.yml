@@ -66,7 +66,7 @@ jobs:
         username: ec2-user
         key: ${{ secrets.KEY }}
         script: |
-          sudo docker stop $(docker ps -a -q) 
-          sudo docker rm $(docker ps -a -q) 
-          sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
-          sudo docker run -d -p 80:8080 --name seoulplog_backend ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
+          docker stop $(docker ps -a -q) 
+          docker rm $(docker ps -a -q) 
+          docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
+          docker run -d -p 80:8080 --name seoulplog_backend ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
