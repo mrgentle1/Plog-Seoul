@@ -43,7 +43,9 @@ jobs:
       
     ## docker build image
     - name: 도커 이미지 빌드
-      run: docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }} .
+      run: |
+        cd ./back-end/plogging
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }} .
       
     ## docker hub login
     - name: Docker Hub 로그인
