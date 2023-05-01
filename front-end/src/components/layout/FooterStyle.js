@@ -10,6 +10,7 @@ export const footer = styled.div`
   height: 100px;
   padding: 0;
   margin: 0;
+  z-index: 100;
 `;
 
 export const imgBtn = styled.div`
