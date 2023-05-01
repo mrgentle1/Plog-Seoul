@@ -5,6 +5,8 @@ import SignupPage from "../pages/signup/SignupPage";
 import HomePage from "../pages/home/HomePage";
 import CoursePage from "../pages/course/CoursePage";
 import RecordPage from "../pages/record/RecordPage";
+import RecordIng from "../pages/record/RecordIng";
+
 import PlogPage from "../pages/plog/PlogPage";
 import MyPage from "../pages/mypage/Mypage";
 import { Layout } from "../components/layout/Layout";
@@ -22,6 +24,7 @@ function Router() {
           <Route path="/plog" element={<PlogPage />} />
           <Route path="/my" element={<MyPage />} />
         </Route>
+        <Route path="/record/ing" element={<RecordIng />} />
       </Routes>
     </BrowserRouter>
   );
