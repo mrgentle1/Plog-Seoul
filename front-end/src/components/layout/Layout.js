@@ -21,7 +21,7 @@ export const Layout = () => {
 
   return (
     <StLayout>
-      {isHeaderV2 ? <HomeHeaderV2 /> : <HomeHeader />}
+      {isHeaderV2 ? null : <HomeHeader />}
       <Outlet />
       {isFooter ? <Footer /> : null}
     </StLayout>

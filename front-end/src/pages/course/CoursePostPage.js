@@ -106,7 +106,9 @@ function CoursePostPage() {
             </Box1>
             <Box2>
               <h5>+ 500 포인트</h5>
-              <Pencil className="pencil" />
+              <Link to={pathname + "/write"}>
+                <Pencil className="pencil" />
+              </Link>
             </Box2>
           </ReviewBox1>
           <ReviewBox2>

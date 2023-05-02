@@ -14,6 +14,10 @@ function ReviewPage() {
     navigate(-1);
   }, [navigate]);
 
+  // 경로
+  const pathname = window.location.pathname;
+  const real_pathname = pathname.substring(0, 9);
+
   const dummydata = [
     {
       id: 1,
@@ -57,7 +61,9 @@ function ReviewPage() {
         </ReviewBox1>
         <ReviewBox2>
           <h5>+ 500 포인트</h5>
-          <Pencil className="pencil" />
+          <Link to={real_pathname + "/write"}>
+            <Pencil className="pencil" />
+          </Link>
         </ReviewBox2>
       </ReviewHeader>
       <ReviewMain>
