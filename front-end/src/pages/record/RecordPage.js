@@ -58,6 +58,7 @@ function RecordPage() {
       }));
     }
   }, []);
+  console.log(state);
 
   return (
     <StRecordPage>
