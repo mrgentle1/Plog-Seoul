@@ -4,6 +4,7 @@ import { useSetRecoilState } from "recoil";
 import { headerTitleState } from "../../core/headerTitle";
 import { HomeHeaderV3 } from "../../components/layout/HeaderV3";
 import { ReactComponent as Star } from "../../assets/icons/star.svg";
+import StarRating from "../../components/common/StarRate";
 import { Button, DisabledButton } from "../../components/common/Button";
 import { Modal, ModalBackground } from "../../components/common/Modal";
 
@@ -37,11 +38,7 @@ function ReviewWritePage() {
         <HomeHeaderV3 headerBackground={headerBackground} />
         <ReviewWriteMain>
           <StarBox>
-            <Star className="star" />
-            <Star className="star" />
-            <Star className="star" />
-            <Star className="star" />
-            <Star className="star" />
+            <StarRating />
           </StarBox>
           <ReviewWriteBox
             placeholder="10글자 이상의 후기를 남겨주세요"
@@ -72,11 +69,6 @@ const ReviewWriteMain = styled.div`
 `;
 const StarBox = styled.div`
   margin-top: 12px;
-  .star {
-    width: 24px;
-    height: 23px;
-    color: ${COLOR.MAIN_ORANGE};
-  }
 `;
 const ReviewWriteBox = styled.textarea`
   margin-top: 38.5px;
