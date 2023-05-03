@@ -33,6 +33,8 @@ function MyPage() {
           <MyText>서울 두드림길 안내</MyText>
           <ForwardArrow className="forwardArrow" />
         </MyBox3>
+        <CourseLine />
+        <MyBox4>로그아웃</MyBox4>
       </StMyContent>
       <Footer />
     </StMyPage>
@@ -85,6 +87,22 @@ const MyBox3 = styled.div`
   display: flex;
   justify-content: space-between;
   margin-top: 29px;
+`;
+const CourseLine = styled.div`
+  width: 353px;
+  margin-top: 50px;
+  text-align: center;
+  line-height: 0.1px;
+  border: 0.35px solid ${COLOR.MEDIUM_GRAY};
+`;
+const MyBox4 = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 30px;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 19px;
+  color: ${COLOR.INPUT_BORDER_GRAY};
 `;
 const MyText = styled.div`
   font-weight: 600;
