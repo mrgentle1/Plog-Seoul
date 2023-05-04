@@ -3,6 +3,7 @@ export const COLOR = {
   MAIN_BLACK: "#050E04",
   MAIN_GREEN: "#72D763",
   MAIN_GREEN_HOVER: "#96E28B",
+  MAIN_DARK_GREEN: "#5CAF50",
   MAIN_LIME: "#DCFA5C",
   MAIN_ORANGE: "#F29E48",
   LIGHT_GRAY: "#E7E7E7", // 버튼 비활성화 배경 색
