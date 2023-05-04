@@ -12,7 +12,11 @@ import { ReactComponent as CamBtn } from "../../assets/icons/camera.svg";
 import MapRecording from "../../components/Record/MapRecordingComponent3";
 
 const { kakao } = window;
-
+let options = {
+  enableHighAccuracy: true,
+  timeout: 1000 * 10 * 1, // 1 min (1000 ms * 60 sec * 1 minute = 60 000ms),
+  maximumAge: 0,
+};
 function RecordIngPage() {
   const navigate = useNavigate();
   const goBack = useCallback(() => {
@@ -36,11 +40,11 @@ function RecordIngPage() {
 
   const [recording, setRecording] = useState(false); //기록 중
 
-  let options = {
-    enableHighAccuracy: true,
-    timeout: 1000 * 30 * 1, // 1 min (1000 ms * 60 sec * 1 minute = 60 000ms),
-    maximumAge: 1,
-  };
+  // let options = {
+  //   enableHighAccuracy: true,
+  //   timeout: 1000 * 30 * 1, // 1 min (1000 ms * 60 sec * 1 minute = 60 000ms),
+  //   maximumAge: 1,
+  // };
 
   useEffect(() => {
     run();
