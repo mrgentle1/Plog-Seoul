@@ -13,15 +13,39 @@ import MapRecording from "../../components/Record/MapRecordingComponent3";
 
 const { kakao } = window;
 let options = {
-  enableHighAccuracy: true,
-  timeout: 1000 * 10 * 1, // 1 min (1000 ms * 60 sec * 1 minute = 60 000ms),
-  maximumAge: 0,
+  enableHighAccuracy: false,
+  timeout: 1000 * 5 * 1, // 1 min (1000 ms * 60 sec * 1 minute = 60 000ms),
+  maximumAge: 3600,
 };
 function RecordIngPage() {
   const navigate = useNavigate();
   const goBack = useCallback(() => {
     navigate(-1);
   }, [navigate]);
+
+  // GET
+
+  // const [trashCanData, setTrashCanData] = useState([]);
+  // async function getTrashCanData() {
+  //   // async, await을 사용하는 경우
+  //   try {
+  //     // GET 요청은 params에 실어 보냄
+  //     const response = await axios.get("/api/trash-cans/");
+
+  //     // 응답 결과(response)를 변수에 저장하거나.. 등 필요한 처리를 해 주면 된다.
+  //     setTrashCanData({
+  //       trashcanId: response.trashCanId,
+  //       title: response.name,
+  //       latlng: { lat: response.lat, lng: response.lng },
+  //     });
+  //     console.log("trash" + trashCanData);
+
+  //     console.log("res" + response);
+  //   } catch (e) {
+  //     // 실패 시 처리
+  //     console.error(e);
+  //   }
+  // }
 
   //사용자 이동 기록
   const [state, setState] = useState([
@@ -59,6 +83,7 @@ function RecordIngPage() {
           console.log("여기");
           console.log(position);
           let updateFlag = true;
+
           setState((prev) => [
             ...prev,
             {
@@ -69,6 +94,7 @@ function RecordIngPage() {
               isLoading: false,
             },
           ]);
+
           //   {
           //   ...prev,
           //   center: {
@@ -84,27 +110,33 @@ function RecordIngPage() {
               lat2: state.center.lat,
               lon2: state.center.lng,
             });
+            console.log("re");
+            console.log(before_record);
             //이동거리가 50m미만이면 안바뀜
-            // if (dist < 0.005) {
-            //   updateFlag = false;
-            // }
-
+            if (dist > 0.1) {
+              updateFlag = false;
+            }
+            console.log(updateFlag);
             if (updateFlag) {
               // setcoords(new_record);
-              before_record = state.center;
+              before_record = state[state.length - 1].center;
               setLocationList((locationList) => [
                 ...locationList,
-                state.center,
+                { before_record },
               ]);
+              console.log("list");
+              console.log(locationList);
             }
           }
         },
         (err) => {
-          setState((prev) => ({
-            ...prev,
-            errMsg: err.message,
-            isLoading: false,
-          }));
+          // setState((prev) => ({
+          //   ...prev,
+          //   errMsg: err.message,
+          //   isLoading: false,
+          // }));
+          console.log(err);
+          console.log("err");
         },
         options
       );
@@ -147,34 +179,36 @@ function RecordIngPage() {
 
   const recordStopHandler = async (e) => {
     e.preventDefault();
-    // try {
-    //   if (watchId !== -1) {
-    //     navigator.geolocation.clearWatch(watchId);
-    //     setWatchId(-1);
-    //     //const finDist = getFinDist(locationList);
-    //     let finish = 1;
-    //     // if (locationList.length < 3 || finDist > 0.2) {
-    //     //   finish = 0;
-    //     // }
+    try {
+      if (watchId !== -1) {
+        navigator.geolocation.clearWatch(watchId);
+        setWatchId(-1);
+        //const finDist = getFinDist(locationList);
+        let finish = 1;
+        // if (locationList.length < 3 || finDist > 0.2) {
+        //   finish = 0;
+        // }
 
-    //     if (finish === 0) {
-    //       alert(
-    //         "정상적인 종료 조건이 아닙니다.(3곳 이상 방문, 시작점, 마지막점 200m이내)"
-    //       );
-    //     }
+        if (finish === 0) {
+          alert(
+            "정상적인 종료 조건이 아닙니다.(3곳 이상 방문, 시작점, 마지막점 200m이내)"
+          );
+        }
 
-    //     setLocationList([]);
-    //     // setRecordcode(-1);
-    //     // setReadyRecord(true);
-    //     setRecording(false);
-    //   }
-    // } catch (err) {
-    //   alert(err.message);
-    // }
+        setLocationList([]);
+        // setRecordcode(-1);
+        // setReadyRecord(true);
+        setRecording(false);
+      }
+    } catch (err) {
+      alert(err.message);
+    }
 
     clearInterval(interv);
   };
   console.log(state);
+  console.log("ff");
+  console.log(locationList);
 
   return (
     <StRecordIngPage>
