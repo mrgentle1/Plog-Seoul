@@ -15,7 +15,7 @@ function LoginPage() {
   };
 
   useEffect(() => {
-    const intervalId = setInterval(typing, 200);
+    const intervalId = setInterval(typing, 30);
 
     return () => clearInterval(intervalId);
   }, []);
