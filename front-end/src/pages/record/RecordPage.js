@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Map, MapMarker } from "react-kakao-maps-sdk";
-
+import { Map, MapMarker, CustomOverlayMap } from "react-kakao-maps-sdk";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 import current from "../../assets/icons/current2.svg";
+import { ReactComponent as StartBtn } from "../../assets/icons/recordStart.svg";
 const { kakao } = window;
 
 function RecordPage() {
@@ -17,6 +18,16 @@ function RecordPage() {
 
   //   var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
   // }, []);
+  const navigate = useNavigate();
+
+  const handleDetailRecord = ({ item }) => {
+    navigate("/record/ing", {
+      state: {
+        lat: `${item.lat}`,
+        lng: `${item.lng}`,
+      },
+    });
+  };
 
   const [state, setState] = useState({
     center: {
@@ -60,10 +71,15 @@ function RecordPage() {
   }, []);
   console.log(state);
 
+  const StartRecord = () =>
+    '<StartBtnWrapper onclick=" handleDetailRecord(state.center)">' +
+    "<StartBtn />" +
+    "</StartBtnWrapper>";
+
   return (
     <StRecordPage>
       <Map
-        center={state.center} // 지도의 중심 좌표
+        center={{ lat: state.center.lat - 0.0008, lng: state.center.lng }} // 지도의 중심 좌표
         style={{ width: "100%", height: "100%" }} // 지도 크기
         level={3} // 지도 확대 레벨
       >
@@ -87,7 +103,15 @@ function RecordPage() {
                   }, // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
                 },
               }}
-            ></MapMarker>
+            >
+              <StartBtnWrapper
+                onclick={() => {
+                  handleDetailRecord(state.center);
+                }}
+              >
+                <StartBtn />
+              </StartBtnWrapper>
+            </MapMarker>
           </div>
         )}
       </Map>
@@ -104,4 +128,8 @@ const StRecordPage = styled.div`
   align-items: center;
   width: 100vw;
   height: 100vh;
+`;
+
+const StartBtnWrapper = styled.div`
+  display: flex;
 `;
