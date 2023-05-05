@@ -197,7 +197,7 @@ const SearchItem1 = styled.div`
     font-size: 24px;
     line-height: 30px;
     text-align: center;
-    color: ${COLOR.MAIN_LIME};
+    color: ${COLOR.MAIN_GREEN};
   }
 
   h5 {

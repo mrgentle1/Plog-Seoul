@@ -205,7 +205,7 @@ const CourseLine = styled.div`
   margin-bottom: 24px;
   text-align: center;
   line-height: 0.1px;
-  border: 0.35px solid #8edf82;
+  border: 0.35px solid ${COLOR.MAIN_GREEN};
 `;
 const ReviewBox1 = styled.div`
   display: flex;
