@@ -14,6 +14,7 @@ function CourseMainPage() {
 
   const [courses, setCourses] = useState([]);
   const [category, setCategory] = useState("전체");
+  const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
   const goBack = useCallback(() => {
@@ -22,11 +23,10 @@ function CourseMainPage() {
 
   const categories = [
     "전체",
-    "한양도성길",
-    "서울둘레길",
+    "근교산자락길",
+    "생태문화길",
     "근자락길",
     "어쩌고저쩌고",
-    "땡땡길",
   ];
 
   const ClickCategory = (c) => {
@@ -43,44 +43,19 @@ function CourseMainPage() {
         },
       })
       .then((response) => {
-        setCourses(response.data);
+        setCourses(response.data.result.content);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.error(error);
       });
   }, []);
 
+  console.log("요거요거", courses);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  const dummydata = [
-    {
-      courseId: 1,
-      title: "이번주 가장 인기 많았던 코스",
-      coursename: "한양도성길",
-    },
-    {
-      courseId: 2,
-      title: "봄나들이 코스",
-      coursename: "한양도성길",
-    },
-    {
-      courseId: 3,
-      title: "더 늦기 전에 떠나는 플로깅 코스",
-      coursename: "한양도성길",
-    },
-    {
-      courseId: 4,
-      title: "MZ의 추천!",
-      coursename: "한양도성길",
-    },
-    {
-      courseId: 5,
-      title: "이번주 가장 인기 많았던 코스",
-      coursename: "한양도성길",
-    },
-  ];
 
   return (
     <StCourseMainPage>
@@ -101,9 +76,9 @@ function CourseMainPage() {
       </CourseMainCategory>
       <CourseMainContent>
         <CourseList>
-          {dummydata.map((data) =>
-            data ? <CourseCard key={data.courseId} c={data} /> : null
-          )}
+          {courses.map((data) => (
+            <CourseCard key={data.routeId} c={data} />
+          ))}
         </CourseList>
       </CourseMainContent>
     </StCourseMainPage>

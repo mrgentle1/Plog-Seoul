@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 import { useNavigate } from "react-router-dom";
+import { ReactComponent as Shop } from "../../assets/icons/shop.svg";
 
 export const CourseCard = ({ c }) => {
   const navigate = useNavigate();
@@ -14,10 +15,19 @@ export const CourseCard = ({ c }) => {
         <StCourseContent>
           <StCourseText>
             <CourseText>
-              <h3>{c.title}</h3>
-              <h6>{c.coursename}</h6>
+              <h3>{c.name}</h3>
+              <h6>{c.courseDetail}</h6>
             </CourseText>
-            <CourseTag></CourseTag>
+            <CourseTag>
+              <Tag>
+                <Shop className="shop" />
+                <p>{c.category}</p>
+              </Tag>
+              <Tag>
+                <Shop className="shop" />
+                <p>{c.difficulty}</p>
+              </Tag>
+            </CourseTag>
           </StCourseText>
           <StCourseImg></StCourseImg>
         </StCourseContent>
@@ -82,7 +92,36 @@ const CourseText = styled.div`
   align-items: flex-start;
   padding: 0px;
 `;
-const CourseTag = styled.div``;
+const CourseTag = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 6px;
+
+  height: 24px;
+`;
+const Tag = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 4px 8px 4px 6px;
+  height: 24px;
+  background: ${COLOR.INPUT_GRAY};
+  border-radius: 8px;
+  color: ${COLOR.DARK_GRAY};
+
+  .shop {
+    margin-right: 5.41px;
+  }
+  p {
+    margin-top: 1.5px;
+    font-weight: 500;
+    font-size: 11px;
+    line-height: 14px;
+    color: ${COLOR.DARK_GRAY};
+  }
+`;
 const StCourseImg = styled.div`
   float: right;
   padding: 0px;
