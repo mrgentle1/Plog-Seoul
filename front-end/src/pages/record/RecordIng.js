@@ -73,17 +73,13 @@ function RecordIngPage() {
   useEffect(() => {
     run();
     setInterv(setInterval(run, 10));
-    console.log("121233");
     if (navigator.geolocation) {
-      console.log("123");
       // GeoLocation을 이용해서 접속 위치를 얻어옵니다
       let before_record = null;
       const newId = navigator.geolocation.watchPosition(
         (position) => {
-          console.log("여기");
-          console.log(position);
+          console.log("watchPosition: %o", position);
           let updateFlag = true;
-
           setState((prev) => [
             ...prev,
             {
@@ -95,6 +91,14 @@ function RecordIngPage() {
             },
           ]);
 
+          setLocationList((prev) => [
+            ...prev,
+            {
+              lat: position.coords.latitude, // 위도
+              lng: position.coords.longitude,
+            },
+          ]);
+
           //   {
           //   ...prev,
           //   center: {
@@ -103,7 +107,7 @@ function RecordIngPage() {
           //   },
           //   isLoading: false,
           // }
-          if (before_record !== null) {
+          /*if (state && state.length > 1) {
             const dist = getDistance({
               lat1: before_record.lat,
               lon1: before_record.lng,
@@ -119,15 +123,13 @@ function RecordIngPage() {
             console.log(updateFlag);
             if (updateFlag) {
               // setcoords(new_record);
+              console.log("updateFlag 이후");
               before_record = state[state.length - 1].center;
-              setLocationList((locationList) => [
-                ...locationList,
-                { before_record },
-              ]);
+
               console.log("list");
               console.log(locationList);
             }
-          }
+          }*/
         },
         (err) => {
           // setState((prev) => ({
@@ -206,9 +208,9 @@ function RecordIngPage() {
 
     clearInterval(interv);
   };
-  console.log(state);
-  console.log("ff");
-  console.log(locationList);
+  // console.log(state);
+  // console.log("ff");
+  // console.log(locationList);
 
   return (
     <StRecordIngPage>
@@ -241,6 +243,13 @@ function RecordIngPage() {
                 },
               }}
             ></MapMarker>
+            <Polyline
+              path={locationList}
+              strokeWeight={5} // 선의 두께 입니다
+              strokeColor={"#FFAE00"} // 선의 색깔입니다
+              strokeOpacity={0.7} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+              strokeStyle={"solid"} // 선의 스타일입니다
+            />
           </div>
         )}
       </Map>
