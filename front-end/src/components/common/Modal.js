@@ -25,7 +25,7 @@ export const Modal = ({ setModalOpen }) => {
           <h3>소중한 후기 감사합니다!</h3>
           <h5>
             여러분의 소중한 후기로
-            <br />더 나은 서비스로 보답할게요
+            <br />더 나은 서비스를 보답할게요
           </h5>
         </ModalText>
         <ModalLine />
