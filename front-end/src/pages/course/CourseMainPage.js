@@ -34,6 +34,11 @@ function CourseMainPage() {
     console.log(c);
   };
 
+  let filteredCourses = courses;
+  if (category !== "전체") {
+    filteredCourses = courses.filter((data) => data.category === category);
+  }
+
   useEffect(() => {
     axios
       .get("http://3.37.14.183/api/roads", {
@@ -50,8 +55,6 @@ function CourseMainPage() {
         console.error(error);
       });
   }, []);
-
-  console.log("요거요거", courses);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -76,7 +79,7 @@ function CourseMainPage() {
       </CourseMainCategory>
       <CourseMainContent>
         <CourseList>
-          {courses.map((data) => (
+          {filteredCourses.map((data) => (
             <CourseCard key={data.routeId} c={data} />
           ))}
         </CourseList>
