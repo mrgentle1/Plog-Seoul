@@ -44,7 +44,7 @@ const StReviewCard = styled.div`
   width: 353px;
   height: 77px;
 
-  background: #ffffff;
+  background: ${COLOR.MAIN_WHITE};
 
   margin-bottom: 24px;
 `;
@@ -103,5 +103,5 @@ const CourseLine = styled.div`
   margin-bottom: 24px;
   text-align: center;
   line-height: 0.1px;
-  border: 0.35px solid #8edf82;
+  border: 0.35px solid ${COLOR.MAIN_GREEN};
 `;

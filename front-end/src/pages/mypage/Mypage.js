@@ -26,13 +26,18 @@ function MyPage() {
           <ForwardArrow className="forwardArrow" />
         </MyBox1>
         <MyBox2>
-          <MyText>알림 설정</MyText>
+          <MyText>공지사항</MyText>
           <ForwardArrow className="forwardArrow" />
         </MyBox2>
         <MyBox3>
-          <MyText>서울 두드림길 안내</MyText>
+          <MyText>문의하기</MyText>
           <ForwardArrow className="forwardArrow" />
         </MyBox3>
+        <MyBox4>
+          <MyText>서울 두드림길 안내</MyText>
+          <ForwardArrow className="forwardArrow" />
+        </MyBox4>
+        <MyBox5>로그아웃</MyBox5>
       </StMyContent>
       <Footer />
     </StMyPage>
@@ -74,7 +79,7 @@ const StMyContent = styled.div`
 const MyBox1 = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-top: 38px;
+  margin-top: 46px;
 `;
 const MyBox2 = styled.div`
   display: flex;
@@ -85,6 +90,19 @@ const MyBox3 = styled.div`
   display: flex;
   justify-content: space-between;
   margin-top: 29px;
+`;
+const MyBox4 = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 29px;
+`;
+const MyBox5 = styled.div`
+  display: flex;
+  margin-top: 46px;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 19px;
+  color: ${COLOR.INPUT_BORDER_GRAY};
 `;
 const MyText = styled.div`
   font-weight: 600;
