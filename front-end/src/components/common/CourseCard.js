@@ -6,7 +6,7 @@ import { ReactComponent as Shop } from "../../assets/icons/shop.svg";
 export const CourseCard = ({ c }) => {
   const navigate = useNavigate();
   const handlePageChange = () => {
-    navigate(`/course/${c.courseId}`);
+    navigate(`/course/${c.routeId}`);
   };
 
   return (

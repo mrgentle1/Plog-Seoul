@@ -1,9 +1,12 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { ReactComponent as BackArrow } from "../../assets/icons/backArrow.svg";
 import { ReactComponent as Pencil } from "../../assets/icons/pencil.svg";
 import { ReactComponent as Star } from "../../assets/icons/star.svg";
 import { ReviewCard } from "../../components/common/ReviewCard";
+
+import axios from "axios";
+import { user_token } from "../../core/user_token";
 
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
@@ -17,39 +20,28 @@ function ReviewPage() {
   // 경로
   const pathname = window.location.pathname;
   const real_pathname = pathname.substring(0, 9);
+  const url = pathname.substring(7);
+  const real_url = "http://3.37.14.183/api/roads" + url;
 
-  const dummydata = [
-    {
-      id: 1,
-      user: "user1",
-      date: "2023.05.02",
-      content: "어쩌구저쩌구 이것은 후기입니다",
-    },
-    {
-      id: 2,
-      user: "user12",
-      date: "2023.05.02",
-      content: "어쩌구저쩌구 이것은 후기입니다",
-    },
-    {
-      id: 3,
-      user: "user123",
-      date: "2023.05.03",
-      content: "리뷰의 예시",
-    },
-    {
-      id: 4,
-      user: "user124",
-      date: "2021.05.05",
-      content: "어쩌구저쩌구 이것은 후기입니다",
-    },
-    {
-      id: 5,
-      user: "user1235",
-      date: "2022.05.02",
-      content: "리이이이이이뷰우우우우우웅",
-    },
-  ];
+  const token = user_token.token;
+
+  const [reviews, setReviews] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(real_url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        setReviews(response.data.result.content);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   return (
     <StReviewPage>
@@ -61,7 +53,7 @@ function ReviewPage() {
         </ReviewBox1>
         <ReviewBox2>
           <h5>+ 500 포인트</h5>
-          <Link to={real_pathname + "/write"}>
+          <Link to={real_pathname + "/review"}>
             <Pencil className="pencil" />
           </Link>
         </ReviewBox2>
@@ -76,9 +68,9 @@ function ReviewPage() {
           <Star className="star" />
         </ReviewStar>
         <ReviewList>
-          {dummydata.map((data) =>
-            data ? <ReviewCard key={data.id} r={data} /> : null
-          )}
+          {reviews.map((data) => (
+            <ReviewCard key={data.userId} r={data} />
+          ))}
         </ReviewList>
       </ReviewMain>
     </StReviewPage>

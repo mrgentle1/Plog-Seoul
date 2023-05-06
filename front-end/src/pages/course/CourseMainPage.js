@@ -4,17 +4,16 @@ import { ReactComponent as BackArrow } from "../../assets/icons/backArrow.svg";
 import { CourseCard } from "../../components/common/CourseCard";
 
 import axios from "axios";
+import { user_token } from "../../core/user_token";
 
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 
 function CourseMainPage() {
-  const token =
-    "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwiaWF0IjoxNjgzMjUwNjYyLCJleHAiOjE2ODMyODY2NjJ9.BcFjHJuXiBUSk1-MQNGzfVBW7k8yRYwawf8JgGd5wh8";
+  const token = user_token.token;
 
   const [courses, setCourses] = useState([]);
   const [category, setCategory] = useState("전체");
-  const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
   const goBack = useCallback(() => {
@@ -31,7 +30,6 @@ function CourseMainPage() {
 
   const ClickCategory = (c) => {
     setCategory((prevCategory) => (prevCategory === c ? "" : c));
-    console.log(c);
   };
 
   let filteredCourses = courses;
@@ -49,7 +47,6 @@ function CourseMainPage() {
       })
       .then((response) => {
         setCourses(response.data.result.content);
-        setIsLoading(false);
       })
       .catch((error) => {
         console.error(error);
