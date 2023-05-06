@@ -3,6 +3,7 @@ import { useSetRecoilState } from "recoil";
 import { headerTitleState } from "../../core/headerTitle";
 import { HomeHeaderV2 } from "../../components/layout/HeaderV2";
 import { BorderButton } from "../../components/common/Button";
+import ImgSlider from "../../components/common/ImgSlider";
 
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
@@ -34,31 +35,34 @@ function CoursePage() {
     setHeaderTitle("걷기 코스"); // '홈' 값을 할당합니다.
   }, [setHeaderTitle]);
 
-  const dummydata = [
+  const updateData = [
     {
-      courseId: 1,
-      title: "이번주 가장 인기 많았던 코스",
-      coursename: "한양도성길",
+      routeId: 1,
+      title: "이번 달 가장 인기 있던 코스",
+      name: "고덕산 자락길",
+      category: "근교산자락길",
+      difficulty: "초급",
     },
     {
-      courseId: 2,
-      title: "봄나들이 코스",
-      coursename: "한양도성길",
+      routeId: 2,
+      title: "여름의 싱그러움을 느낄 수 있는 코스",
+      name: "관악산 자락길(무장애숲길)",
+      category: "근교산자락길",
+      difficulty: "초급",
     },
     {
-      courseId: 3,
-      title: "더 늦기 전에 떠나는 플로깅 코스",
-      coursename: "한양도성길",
+      routeId: 3,
+      title: "더 늦기 전에 떠나봐요",
+      name: "매봉산 자락길",
+      category: "근교산자락길",
+      difficulty: "초급",
     },
     {
-      courseId: 4,
-      title: "MZ의 추천!",
-      coursename: "한양도성길",
-    },
-    {
-      courseId: 5,
-      title: "이번주 가장 인기 많았던 코스",
-      coursename: "한양도성길",
+      routeId: 4,
+      title: "플로그 서울 개발자들의 추천!",
+      name: "배봉산 자락길",
+      category: "근교산자락길",
+      difficulty: "초급",
     },
   ];
 
@@ -66,17 +70,11 @@ function CoursePage() {
     <StCoursePage>
       <HomeHeaderV2 headerBackground={headerBackground} />
       <CourseMain>
-        <StImgSlide>
-          <StCarousel>
-            <StImg className="prev" />
-            <StImg />
-            <StImg className="next" />
-          </StCarousel>
-        </StImgSlide>
+        <StImgSlide></StImgSlide>
         <StCourseMain>
-          {dummydata.map((data) =>
-            data ? <CourseMainCard key={data.courseId} c={data} /> : null
-          )}
+          {updateData.map((data) => (
+            <CourseMainCard key={data.routeId} c={data} />
+          ))}
         </StCourseMain>
         <StCourseBottom>
           <Link to="/course/main">
@@ -102,23 +100,13 @@ const CourseMain = styled.div`
 const StImgSlide = styled.div`
   width: 393px;
   height: 356px;
-  background-color: ${COLOR.DARK_GRAY};
+  background-color: ${COLOR.MEDIUM_GRAY};
   margin-bottom: 21px;
 
   overflow: hidden;
   margin: auto;
 `;
-const StCarousel = styled.div`
-  -webkit-transform-style: preserve-3d;
-  -moz-transform-style: preserve-3d;
-  transform-style: preserve-3d;
-`;
-const StImg = styled.div`
-  .prev {
-  }
-  .next {
-  }
-`;
+
 const StCourseMain = styled.div`
   margin-left: 20px;
   margin-top: 21px;
