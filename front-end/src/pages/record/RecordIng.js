@@ -1,5 +1,6 @@
 /* global kakao */
 import React, { useCallback, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { Map, MapMarker, Polyline } from "react-kakao-maps-sdk";
 import { useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
@@ -46,6 +47,13 @@ function RecordIngPage() {
   //     console.error(e);
   //   }
   // }
+
+  // 1. useLocation 훅 취득
+  // const location = useLocation();
+
+  // // 2. location.state 에서 파라미터 취득
+  // const startLat = location.state.lat;
+  // const startLng = location.state.lng;
 
   //사용자 이동 기록
   const [state, setState] = useState([
