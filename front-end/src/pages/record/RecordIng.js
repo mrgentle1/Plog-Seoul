@@ -15,7 +15,7 @@ import MapRecording from "../../components/Record/MapRecordingComponent3";
 const { kakao } = window;
 let options = {
   enableHighAccuracy: false,
-  timeout: 1000 * 7 * 1, // 1 min (1000 ms * 60 sec * 1 minute = 60 000ms),
+  timeout: 1000 * 5 * 1, // 1 min (1000 ms * 60 sec * 1 minute = 60 000ms),
   maximumAge: 3600,
 };
 function RecordIngPage() {
@@ -48,26 +48,33 @@ function RecordIngPage() {
   //   }
   // }
 
-  // 1. useLocation 훅 취득
-  // const location = useLocation();
+  //1. useLocation 훅 취득
+  const location = useLocation();
 
-  // // 2. location.state 에서 파라미터 취득
-  // const startLat = location.state.lat;
-  // const startLng = location.state.lng;
+  // 2. location.state 에서 파라미터 취득
+  const startLat = location.state.lat;
+  const startLng = location.state.lng;
 
   //사용자 이동 기록
   const [state, setState] = useState([
     {
       center: {
-        lat: 33.450701,
-        lng: 126.570667,
+        lat: startLat,
+        lng: startLng,
       },
       errMsg: null,
       isLoading: true,
     },
   ]);
   const [coords, setcoords] = useState({});
-  const [locationList, setLocationList] = useState([]);
+  const [locationList, setLocationList] = useState([
+    {
+      center: {
+        lat: startLat,
+        lng: startLng,
+      },
+    },
+  ]);
   const [watchId, setWatchId] = useState(-1);
 
   const [recording, setRecording] = useState(false); //기록 중
@@ -83,29 +90,47 @@ function RecordIngPage() {
     setInterv(setInterval(run, 10));
     if (navigator.geolocation) {
       // GeoLocation을 이용해서 접속 위치를 얻어옵니다
-      let before_record = null;
+      // let before_record = state[state.length - 1];
+      // console.log("bef: %o", before_record);
       const newId = navigator.geolocation.watchPosition(
         (position) => {
+          let before_record = state[state.length - 1];
           console.log("watchPosition: %o", position);
-          let updateFlag = true;
-          setState((prev) => [
-            ...prev,
-            {
-              center: {
-                lat: position.coords.latitude, // 위도
-                lng: position.coords.longitude, // 경도
-              },
-              isLoading: false,
-            },
-          ]);
+          console.log("statelast: %o", state[state.length - 1]);
+          console.log("startlat: %o", startLat);
+          console.log("startlng: %o", startLng);
 
-          setLocationList((prev) => [
-            ...prev,
-            {
-              lat: position.coords.latitude, // 위도
-              lng: position.coords.longitude,
-            },
-          ]);
+          let updateFlag = true;
+
+          const dist = getDistance({
+            lat1: state[state.length - 1].center.lat,
+            lon1: state[state.length - 1].center.lng,
+            lat2: position.coords.latitude,
+            lon2: position.coords.longitude,
+          });
+          console.log("dist: %o", dist);
+          console.log("location: %o", locationList);
+          if (dist !== 0 && dist < 1) {
+            console.log("here");
+            setState((prev) => [
+              ...prev,
+              {
+                center: {
+                  lat: position.coords.latitude, // 위도
+                  lng: position.coords.longitude, // 경도
+                },
+                isLoading: false,
+              },
+            ]);
+
+            setLocationList((prev) => [
+              ...prev,
+              {
+                lat: position.coords.latitude, // 위도
+                lng: position.coords.longitude,
+              },
+            ]);
+          }
 
           //   {
           //   ...prev,
@@ -205,7 +230,6 @@ function RecordIngPage() {
           );
         }
 
-        setLocationList([]);
         // setRecordcode(-1);
         // setReadyRecord(true);
         setRecording(false);
@@ -218,7 +242,7 @@ function RecordIngPage() {
   };
   // console.log(state);
   // console.log("ff");
-  // console.log(locationList);
+  //   console.log("path: %o", locationList);
 
   return (
     <StRecordIngPage>
