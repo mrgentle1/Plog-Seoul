@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Map, MapMarker, CustomOverlayMap } from "react-kakao-maps-sdk";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 import current from "../../assets/icons/current2.svg";
@@ -99,22 +99,16 @@ function RecordPage() {
                   },
                 }}
               />
-              <CustomOverlayMap position={state.center} yAnchor={1}>
-                <div
-                  className="customoverlay"
-                  onClick={() => {
-                    navigate("/record/ing", {
-                      state: {
-                        lat: `${state.center.lat}`,
-                        lng: `${state.center.lng}`,
-                      },
-                    });
+              <CustomOverlayMap position={state.center} yAnchor={0.2}>
+                <Link
+                  to={"/record/ing"}
+                  state={{
+                    lat: `${state.center.lat}`,
+                    lng: `${state.center.lng}`,
                   }}
                 >
-                  <a href="#sd">
-                    <span className="title">구의야구공원</span>
-                  </a>
-                </div>
+                  <StartBtn />
+                </Link>
               </CustomOverlayMap>
             </div>
           )}
