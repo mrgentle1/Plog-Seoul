@@ -15,7 +15,7 @@ import MapRecording from "../../components/Record/MapRecordingComponent3";
 const { kakao } = window;
 let options = {
   enableHighAccuracy: false,
-  timeout: 1000 * 5 * 1, // 1 min (1000 ms * 60 sec * 1 minute = 60 000ms),
+  timeout: 1000 * 7 * 1, // 1 min (1000 ms * 60 sec * 1 minute = 60 000ms),
   maximumAge: 3600,
 };
 function RecordIngPage() {
