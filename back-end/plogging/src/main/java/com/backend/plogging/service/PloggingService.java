@@ -87,6 +87,17 @@ public class PloggingService {
         }
     }
 
+    public BaseResponseEntity<?> updateRecord(Long recordId, PloggingPostRequestDto dto) {
+        Optional<PloggingRecord> record = ploggingRecordRepository.findById(recordId);
+        if (!record.isPresent()) {
+            return new BaseResponseEntity<>(HttpStatus.BAD_REQUEST, "해당 기록이 존재하지 않습니다.");
+        } else {
+            record.get().update(dto.getDistance(), dto.getEndLat(), dto.getEndLng(), dto.getRunningTime());
+            ploggingRecordRepository.save(record.get());
+            return new BaseResponseEntity<>(HttpStatus.OK, new RecordResponseDto(record.get()));
+        }
+    }
+
     public BaseResponseEntity<?> uploadImage(Long recordId, ImageRequestDto dto, MultipartFile image) throws IOException, FirebaseAuthException {
         String imgUrl = firebaseService.uploadFiles(image);
         Optional<PloggingRecord> record = ploggingRecordRepository.findById(recordId);

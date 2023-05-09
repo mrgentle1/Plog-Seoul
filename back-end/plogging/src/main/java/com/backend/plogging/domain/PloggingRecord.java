@@ -52,4 +52,19 @@ public class PloggingRecord extends BaseEntity{
     @OneToMany(mappedBy = "ploggingRecord", orphanRemoval = true)
     private List<Path> paths;
 
+    public void update(Float distance, Float endLat, Float endLng, Float runningTime) {
+        if (distance != null) {
+            this.distance = distance;
+        }
+        if (endLat != null) {
+            this.endLat = endLat;
+        }
+        if (endLng != null) {
+            this.endLng = endLng;
+        }
+        if (runningTime != null) {
+            this.runningTime = runningTime;
+        }
+    }
+
 }

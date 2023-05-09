@@ -51,6 +51,13 @@ public class PloggingController {
         return response;
     }
 
+    @PatchMapping("/{recordId}")
+    public BaseResponseEntity<?> updateRecord(@PathVariable Long recordId,
+                                              @RequestBody PloggingPostRequestDto dto) {
+        BaseResponseEntity response = ploggingService.updateRecord(recordId, dto);
+        return response;
+    }
+
     @PostMapping(value = "/{recordId}/images", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public BaseResponseEntity<?> uploadImage(@PathVariable Long recordId,
                                              @RequestPart ImageRequestDto dto,
