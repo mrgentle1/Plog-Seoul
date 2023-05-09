@@ -10,6 +10,7 @@ import RecordIng from "../pages/record/RecordIng";
 import PlogPage from "../pages/plog/PlogPage";
 import MyPage from "../pages/mypage/Mypage";
 import { Layout } from "../components/layout/Layout";
+import RecordFinish from "../pages/record/RecordFinish";
 
 function Router() {
   return (
@@ -25,6 +26,7 @@ function Router() {
           <Route path="/my" element={<MyPage />} />
         </Route>
         <Route path="/record/ing" element={<RecordIng />} />
+        <Route path="/record/finish" element={<RecordFinish />} />
       </Routes>
     </BrowserRouter>
   );
