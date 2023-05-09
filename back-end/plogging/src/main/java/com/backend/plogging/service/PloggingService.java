@@ -56,7 +56,7 @@ public class PloggingService {
 
         try {
             this.ploggingRecordRepository.save(record);
-            return new BaseResponseEntity<>(HttpStatus.OK);
+            return new BaseResponseEntity<>(HttpStatus.OK, new RecordResponseDto(record));
         } catch (Exception e) {
             return new BaseResponseEntity<>(e);
         }
