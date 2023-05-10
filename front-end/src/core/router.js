@@ -11,6 +11,7 @@ import PlogPage from "../pages/plog/PlogPage";
 import MyPage from "../pages/mypage/Mypage";
 import { Layout } from "../components/layout/Layout";
 import RecordFinish from "../pages/record/RecordFinish";
+import ShowPointPage from "../pages/record/ShowPointPage";
 
 function Router() {
   return (
@@ -26,6 +27,7 @@ function Router() {
           <Route path="/my" element={<MyPage />} />
         </Route>
         <Route path="/record/ing" element={<RecordIng />} />
+        <Route path="/record/point" element={<ShowPointPage />} />
         <Route path="/record/finish" element={<RecordFinish />} />
       </Routes>
     </BrowserRouter>
