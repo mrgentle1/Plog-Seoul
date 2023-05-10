@@ -146,7 +146,7 @@ public class PloggingService {
         return new BaseResponseEntity<>(HttpStatus.OK);
     }
 
-    public BaseResponseEntity<?> createPath(Long recordId, PathRequestDto dto) {
+    public BaseResponseEntity<?> createPath(Long recordId, List<PathRequestDto> dtoList) {
         Optional<PloggingRecord> record = ploggingRecordRepository.findById(recordId);
         if (!record.isPresent()) {
             return new BaseResponseEntity<>(HttpStatus.BAD_REQUEST, "해당 기록이 존재하지 않습니다.");
@@ -154,14 +154,18 @@ public class PloggingService {
             Long maxSequence = pathRepository.findMaxSequenceByPloggingRecord(record.get());
             Long newSequence = maxSequence == null ? 1L : maxSequence + 1;
 
-            Path path = Path.builder()
-                    .ploggingRecord(record.get())
-                    .wayLat(dto.getWayLat())
-                    .wayLng(dto.getWayLng())
-                    .sequence(newSequence)
-                    .build();
+            for (PathRequestDto dto : dtoList) {
+                Path path = Path.builder()
+                        .ploggingRecord(record.get())
+                        .wayLat(dto.getLat())
+                        .wayLng(dto.getLng())
+                        .sequence(newSequence)
+                        .build();
 
-            pathRepository.save(path);
+                pathRepository.save(path);
+                newSequence++;
+            }
+
 
             return new BaseResponseEntity<>(HttpStatus.OK);
         }

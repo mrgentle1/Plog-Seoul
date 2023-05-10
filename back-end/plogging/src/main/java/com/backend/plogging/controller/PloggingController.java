@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -79,7 +80,7 @@ public class PloggingController {
     }
 
     @PostMapping("/{recordId}/paths")
-    public BaseResponseEntity<?> createPath(@PathVariable Long recordId, @RequestBody PathRequestDto dto) {
+    public BaseResponseEntity<?> createPath(@PathVariable Long recordId, @RequestBody List<PathRequestDto> dto) {
         BaseResponseEntity response = ploggingService.createPath(recordId, dto);
         return response;
     }
