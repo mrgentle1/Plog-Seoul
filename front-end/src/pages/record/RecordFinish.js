@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useMemo } from "react";
 import { Map, MapMarker, Polyline } from "react-kakao-maps-sdk";
-import { Button } from "../../components/common/Button";
+import { Button, GBorderButton } from "../../components/common/Button";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 import { ReactComponent as Close } from "../../assets/icons/close.svg";
@@ -39,6 +39,7 @@ function RecordFinish() {
         <span>
           {todayMonth}월 {todayDate}일
         </span>
+        <p>개운산 숲 나들길</p>
         <CloseWrapper>
           <Close className="headerClose" />
         </CloseWrapper>
@@ -77,15 +78,21 @@ function RecordFinish() {
             ))}
             <Polyline
               path={[
-                { lat: 33.45133510810506, lng: 126.57159381623066 },
-                { lat: 33.44955812811862, lng: 126.5713551811832 },
-                { lat: 33.449986291544086, lng: 126.57263296172184 },
-                { lat: 33.450682513554554, lng: 126.57321034054742 },
-                { lat: 33.451346760004206, lng: 126.57235740081413 },
+                { lat: 37.610265201223164, lng: 126.99707232277143 },
+                { lat: 37.61040935336232, lng: 126.99683447827957 },
+                { lat: 37.6106616386953, lng: 126.99716291281013 },
+                { lat: 37.61126530538697, lng: 126.99733277671196 },
+                { lat: 37.61154459907716, lng: 126.9968117784994 },
+                { lat: 37.61177884519635, lng: 126.99642668902881 },
+                { lat: 37.611959037372074, lng: 126.99624546610148 },
+                { lat: 37.61167068496873, lng: 126.99524880576455 },
+                { lat: 37.611391364679726, lng: 126.99492037510174 },
+                { lat: 37.611202149030625, lng: 126.99473917550203 },
+                { lat: 37.61098590653716, lng: 126.99462593326892 },
               ]}
-              strokeWeight={5} // 선의 두께 입니다
-              strokeColor={"#FFAE00"} // 선의 색깔입니다
-              strokeOpacity={0.7} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+              strokeWeight={6} // 선의 두께 입니다
+              strokeColor={"#DCFA5C"} // 선의 색깔입니다
+              strokeOpacity={1} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
               strokeStyle={"solid"} // 선의 스타일입니다
             />
           </Map>
@@ -123,6 +130,9 @@ function RecordFinish() {
         <PlogFinishBtnWrapper>
           <Button>플로깅 종료하기</Button>
         </PlogFinishBtnWrapper>
+        <PlogShareBtnWrapper>
+          <GBorderButton>공유하기</GBorderButton>
+        </PlogShareBtnWrapper>
       </RecordFinishFooter>
     </StRecordFinish>
   );
@@ -148,9 +158,9 @@ const SignupHeader = styled.div`
   width: 393px;
   height: 127px;
 
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 88px auto 14px;
+
   align-items: center;
 
   padding-left: 20px;
@@ -166,6 +176,14 @@ const SignupHeader = styled.div`
     font-size: 20px;
     line-height: 25px;
     color: ${COLOR.MAIN_BLACK};
+  }
+
+  p {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    color: ${COLOR.MAIN_GREEN};
   }
 
   .signupBackArrow {
@@ -285,6 +303,8 @@ const RecordFinishFooter = styled.div`
   justify-content: center;
   align-items: center;
   bottom: 0;
+  padding: 0px 6px 20px 20px;
+  gap: 12px;
 
   width: 393px;
   z-index: 200px;
@@ -299,4 +319,13 @@ const PlogFinishBtnWrapper = styled.div`
 
   text-align: center;
   color: ${COLOR.MAIN_BLACK};
+`;
+
+const PlogShareBtnWrapper = styled.div`
+  display: flex;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 19px;
+  text-align: center;
 `;
