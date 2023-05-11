@@ -1,5 +1,102 @@
+import { useEffect } from "react";
+import { useSetRecoilState } from "recoil";
+import { headerTitleState } from "../../core/headerTitle";
+import { ReactComponent as Level } from "../../assets/icons/level.svg";
+
+import styled from "styled-components";
+import { COLOR } from "../../styles/color";
+import { BorderThinButton } from "../../components/common/Button";
+
 function PlogPage() {
-  return <div>플로그화면</div>;
+  const setHeaderTitle = useSetRecoilState(headerTitleState);
+
+  useEffect(() => {
+    setHeaderTitle("이름님의 플로그");
+  }, [setHeaderTitle]);
+
+  return (
+    <StPlogPage>
+      <StPlogContent>
+        <PlogCalender></PlogCalender>
+        <PlogLevel>
+          <Plog1>
+            <Level className="level" />
+          </Plog1>
+          <Plog2>
+            <PlogText>
+              <Text1>Level 3</Text1>
+              <Text2>다음 레벨까지 3,000 포인트</Text2>
+            </PlogText>
+          </Plog2>
+          <Plog3></Plog3>
+        </PlogLevel>
+        <BorderThinButton>
+          달성한 업적
+          <p>6개</p>
+        </BorderThinButton>
+        <BorderThinButton>
+          랭킹 확인하기<p>126등</p>
+        </BorderThinButton>
+      </StPlogContent>
+    </StPlogPage>
+  );
 }
 
 export default PlogPage;
+
+const StPlogPage = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+`;
+const StPlogContent = styled.div`
+  p {
+    margin-left: 12px;
+  }
+`;
+const PlogCalender = styled.div``;
+const PlogLevel = styled.div`
+  margin-bottom: 12px;
+  padding-top: 14px;
+  width: 353px;
+  height: 103px;
+  background-color: ${COLOR.MAIN_GREEN_HOVER};
+  border-radius: 14px;
+`;
+const Plog1 = styled.div`
+  margin-left: 16px;
+
+  .level {
+    width: 20px;
+    height: 20px;
+  }
+`;
+const Plog2 = styled.div`
+  margin-top: 14px;
+  margin-left: 16px;
+  width: 321px;
+`;
+const PlogText = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+const Text1 = styled.div`
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 19px;
+  color: ${COLOR.MAIN_BLACK};
+`;
+const Text2 = styled.div`
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 16px;
+  color: ${COLOR.DARK_GRAY};
+`;
+const Plog3 = styled.div`
+  margin-top: 12px;
+  margin-left: 16px;
+  width: 321px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: ${COLOR.MAIN_WHITE};
+`;

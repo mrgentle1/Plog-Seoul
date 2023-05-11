@@ -7,7 +7,6 @@ import { ReviewCard } from "../../components/common/ReviewCard";
 import { ReactComponent as Shop } from "../../assets/icons/shop.svg";
 
 import axios from "axios";
-import { user_token } from "../../core/user_token";
 
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
@@ -25,7 +24,7 @@ function CoursePostPage() {
   const full_url = "http://3.37.14.183/api/roads" + url;
   const real_url = "http://3.37.14.183/api/roads" + url + "/reviews";
 
-  const token = user_token.token;
+  const token = localStorage.getItem("key");
 
   const [course, setCourse] = useState([]);
   const [reviews, setReviews] = useState([]);

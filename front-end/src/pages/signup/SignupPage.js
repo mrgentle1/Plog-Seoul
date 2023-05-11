@@ -5,9 +5,13 @@ import { Button, DisabledButton } from "../../components/common/Button";
 
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
+import axios from "axios";
+import { useCookies } from "react-cookie";
 
 function SignupPage() {
   const [name, setName] = useState("");
+  const [cookies] = useCookies(["accessToken"]);
+  const token = cookies.accessToken;
 
   const navigate = useNavigate();
   const goBack = useCallback(() => {
@@ -17,6 +21,30 @@ function SignupPage() {
   const onChangeName = (e) => {
     setName(e.target.value);
   };
+
+  const onSubmit = useCallback(() => {
+    axios
+      .post(
+        "http://3.37.14.183/api/auth/registration",
+        {
+          name: name,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((res) => {
+        localStorage.setItem("key", token);
+        navigate("/home");
+      })
+      .catch((err) => {
+        console.error(err);
+        // handle error
+      });
+  }, [name, navigate]);
 
   return (
     <StSignupPage>
@@ -41,9 +69,7 @@ function SignupPage() {
           {!name ? (
             <DisabledButton disabled="disabled">시작하기</DisabledButton>
           ) : (
-            <Link to={"/home"}>
-              <Button>시작하기</Button>
-            </Link>
+            <Button onClick={onSubmit}>시작하기</Button>
           )}
         </SignupButton>
       </SignupContent>

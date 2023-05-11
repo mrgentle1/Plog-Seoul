@@ -4,13 +4,12 @@ import { ReactComponent as BackArrow } from "../../assets/icons/backArrow.svg";
 import { CourseCard } from "../../components/common/CourseCard";
 
 import axios from "axios";
-import { user_token } from "../../core/user_token";
 
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 
 function CourseMainPage() {
-  const token = user_token.token;
+  const token = localStorage.getItem("key");
 
   const [courses, setCourses] = useState([]);
   const [category, setCategory] = useState("전체");
@@ -22,10 +21,11 @@ function CourseMainPage() {
 
   const categories = [
     "전체",
+    "서울둘레길",
+    "한양도성길",
     "근교산자락길",
     "생태문화길",
-    "근자락길",
-    "어쩌고저쩌고",
+    "한강/지천길",
   ];
 
   const ClickCategory = (c) => {
