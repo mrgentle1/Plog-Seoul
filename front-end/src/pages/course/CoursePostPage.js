@@ -1,0 +1,319 @@
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { HomeHeaderV3 } from "../../components/layout/HeaderV3";
+import { ReactComponent as Pencil } from "../../assets/icons/pencil.svg";
+import { ReactComponent as Star } from "../../assets/icons/star.svg";
+import { ReviewCard } from "../../components/common/ReviewCard";
+import { ReactComponent as Shop } from "../../assets/icons/shop.svg";
+
+import axios from "axios";
+import { user_token } from "../../core/user_token";
+
+import styled from "styled-components";
+import { COLOR } from "../../styles/color";
+import { BorderButton } from "../../components/common/Button";
+
+function CoursePostPage() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  // 경로
+  const pathname = window.location.pathname;
+  const url = pathname.substring(7);
+
+  const full_url = "http://3.37.14.183/api/roads" + url;
+  const real_url = "http://3.37.14.183/api/roads" + url + "/reviews";
+
+  const token = user_token.token;
+
+  const [course, setCourse] = useState([]);
+  const [reviews, setReviews] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(full_url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        setCourse(response.data.result);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get(real_url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        setReviews(response.data.result.content);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  const headerTitle = course.name;
+  // 헤더 배경색
+  const [headerBackground, setHeaderBackground] = useState("transparent");
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 206) {
+        setHeaderBackground(COLOR.MAIN_WHITE);
+      } else {
+        setHeaderBackground("transparent");
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [headerBackground]);
+
+  return (
+    <StCoursePostPage>
+      <HomeHeaderV3
+        headerBackground={headerBackground}
+        headerTitle={headerTitle}
+      />
+      <StCoursePostMain>
+        <CoursePostImg></CoursePostImg>
+        <CoursePostText>
+          <Text1>서울두드림길 포인트 1.5배 적립</Text1>
+          <Text2>
+            <Dis>{course.distance}km</Dis>
+            <Time>{course.duration}</Time>
+            <Level>{course.difficulty}</Level>
+          </Text2>
+          <Text3>{course.courseDetail}</Text3>
+          <Text4>{course.description}</Text4>
+          <CourseTag>
+            <Tag>
+              <Shop className="shop" />
+              <p>{course.city}</p>
+            </Tag>
+            <Tag>
+              <Shop className="shop" />
+              <p>{course.category}</p>
+            </Tag>
+            <Tag>
+              <Shop className="shop" />
+              <p>{course.difficulty}</p>
+            </Tag>
+          </CourseTag>
+        </CoursePostText>
+        <CoursePostReview>
+          <CourseLine />
+          <ReviewBox1>
+            <Box1>
+              <Review>후기</Review>
+              <h4>6</h4>
+            </Box1>
+            <Box2>
+              <h5>+ 500 포인트</h5>
+              <Link to={pathname + "/review"}>
+                <Pencil className="pencil" />
+              </Link>
+            </Box2>
+          </ReviewBox1>
+          <ReviewBox2>
+            <Star className="star" />
+            <Star className="star" />
+            <Star className="star" />
+            <Star className="star" />
+            <Star className="star" />
+          </ReviewBox2>
+          <ReviewList>
+            {reviews.map((data) => (
+              <ReviewCard key={data.userId} r={data} />
+            ))}
+          </ReviewList>
+        </CoursePostReview>
+      </StCoursePostMain>
+      <StCoursePostFooter>
+        <Link to={pathname + "/reviews"}>
+          <BorderButton>전체 후기 보기</BorderButton>
+        </Link>
+        <CourseLine />
+      </StCoursePostFooter>
+    </StCoursePostPage>
+  );
+}
+
+export default CoursePostPage;
+
+const StCoursePostPage = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+`;
+const StCoursePostMain = styled.div`
+  margin-bottom: 24px;
+`;
+const CoursePostImg = styled.div`
+  width: 393px;
+  height: 356px;
+  margin-top: 46px;
+  background-color: ${COLOR.DARK_GRAY};
+`;
+const CoursePostText = styled.div`
+  width: 353px;
+  margin-left: 20px;
+`;
+const Text1 = styled.div`
+  margin-top: 24px;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 19px;
+  color: ${COLOR.MAIN_DARK_GREEN};
+`;
+const Text2 = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 30px;
+`;
+const Dis = styled.div`
+  width: 90px;
+`;
+const Time = styled.div`
+  width: 115px;
+`;
+const Level = styled.div`
+  width: 98px;
+`;
+const Text3 = styled.div`
+  margin-top: 12px;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 14px;
+  color: ${COLOR.MAIN_DARK_GREEN};
+`;
+const Text4 = styled.div`
+  margin-top: 24px;
+  margin-bottom: 24px;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 18px;
+  color: ${COLOR.DARK_GRAY};
+`;
+const CourseTag = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 6px;
+
+  height: 24px;
+`;
+const Tag = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 4px 8px 4px 6px;
+  height: 24px;
+  background: ${COLOR.INPUT_GRAY};
+  border-radius: 8px;
+  color: ${COLOR.DARK_GRAY};
+
+  .shop {
+    margin-right: 5.41px;
+  }
+  p {
+    margin-top: 1.5px;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 14px;
+    color: ${COLOR.DARK_GRAY};
+  }
+`;
+
+const CoursePostReview = styled.div`
+  width: 353px;
+  margin-left: 20px;
+`;
+const CourseLine = styled.div`
+  width: 353px;
+  margin-top: 24px;
+  margin-bottom: 24px;
+  text-align: center;
+  line-height: 0.1px;
+  border: 0.35px solid ${COLOR.MAIN_GREEN};
+`;
+const ReviewBox1 = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  .pencil {
+    width: 23px;
+    height: 23px;
+  }
+`;
+const Box1 = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 53px;
+  align-items: center;
+
+  h4 {
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 21px;
+    color: ${COLOR.INPUT_BORDER_GRAY};
+  }
+`;
+const Box2 = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 105px;
+
+  h5 {
+    font-weight: 500;
+    font-size: 13.5px;
+    line-height: 21px;
+    text-align: center;
+    color: ${COLOR.MAIN_DARK_GREEN};
+  }
+  h6 {
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 16px;
+    color: ${COLOR.INPUT_BORDER_GRAY};
+  }
+  .dots {
+    margin-right: 10px;
+  }
+`;
+const ReviewBox2 = styled.div`
+  margin-top: 12px;
+  .star {
+    width: 24px;
+    height: 23px;
+    color: ${COLOR.MAIN_ORANGE};
+  }
+`;
+const Review = styled.div`
+  font-weight: 700;
+  font-size: 17px;
+  line-height: 21px;
+  color: ${COLOR.MAIN_BLACK};
+`;
+const ReviewList = styled.div``;
+const StCoursePostFooter = styled.div`
+  height: 100px;
+`;

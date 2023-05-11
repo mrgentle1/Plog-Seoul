@@ -4,6 +4,11 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+application-stage.yml
+autobuild.bat
+
+# Firebase Account Key
+serviceAccountKey.json
 
 ### STS ###
 .apt_generated
