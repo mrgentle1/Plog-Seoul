@@ -3,6 +3,7 @@ import { Layout } from "../components/layout/Layout";
 
 import LoginPage from "../pages/login/LoginPage";
 import SignupPage from "../pages/signup/SignupPage";
+import KakaoCallback from "../pages/signup/KakaoCallback";
 import HomePage from "../pages/home/HomePage";
 import CoursePage from "../pages/course/CoursePage";
 import RecordPage from "../pages/record/RecordPage";
@@ -20,6 +21,7 @@ function Router() {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/auth/kakao-callback" element={<KakaoCallback />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/course/:id" element={<CoursePostPage />} />
         <Route path="/course/main" element={<CourseMainPage />} />
