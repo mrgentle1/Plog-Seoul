@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
+import { ReactComponent as ArrowGreen } from "../../assets/icons/arrow_green.svg";
 
 export const Button = ({ children, onClick }) => {
   return <StButton onClick={onClick}>{children}</StButton>;
@@ -11,6 +12,14 @@ export const DisabledButton = ({ children, onClick }) => {
 
 export const BorderButton = ({ children, onClick }) => {
   return <StBorderButton onClick={onClick}>{children}</StBorderButton>;
+};
+
+export const BorderThinButton = ({ children, onClick }) => {
+  return (
+    <StBorderThinButton onClick={onClick}>
+      {children} <ArrowGreen className="arrow" />
+    </StBorderThinButton>
+  );
 };
 
 const StButton = styled.button`
@@ -58,4 +67,31 @@ const StBorderButton = styled.button`
   font-weight: 600;
   line-height: 19px;
   letter-spacing: 1.2px;
+`;
+
+const StBorderThinButton = styled.button`
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  text-align: left;
+  align-items: flex-start;
+  padding: 12px 16px;
+  width: 353px;
+  height: 54px;
+  background-color: ${COLOR.MAIN_WHITE};
+  border: 1px solid ${COLOR.MAIN_GREEN};
+  border-radius: 14px;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 27px;
+  color: ${COLOR.MAIN_BLACK};
+  p {
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 27px;
+    color: ${COLOR.MAIN_GREEN};
+  }
+  .arrow {
+    text-align: right;
+  }
 `;

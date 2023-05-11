@@ -3,10 +3,11 @@ import { Link } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { headerTitleState } from "../../core/headerTitle";
 import { HomeHeaderV3 } from "../../components/layout/HeaderV3";
-import { ReactComponent as Star } from "../../assets/icons/star.svg";
 import StarRating from "../../components/common/StarRate";
 import { Button, DisabledButton } from "../../components/common/Button";
 import { Modal, ModalBackground } from "../../components/common/Modal";
+
+import axios from "axios";
 
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
@@ -17,10 +18,36 @@ function ReviewWritePage() {
     setContent(e.target.value);
   };
 
+  const pathname = window.location.pathname;
+  const real_pathname = pathname.substring(7);
+
+  const token = localStorage.getItem("key");
+
+  const full_url = "http://3.37.14.183/api/roads" + real_pathname + "s";
+  console.log(full_url);
+
   // 모달창 호출
   const [modalOpen, setModalOpen] = useState(false);
   const showModal = () => {
-    setModalOpen(true);
+    axios
+      .post(
+        full_url,
+        {
+          content,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        setModalOpen(true);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   const [headerBackground, setHeaderBackground] = useState(COLOR.MAIN_WHITE);

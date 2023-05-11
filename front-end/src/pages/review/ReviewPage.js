@@ -6,7 +6,6 @@ import { ReactComponent as Star } from "../../assets/icons/star.svg";
 import { ReviewCard } from "../../components/common/ReviewCard";
 
 import axios from "axios";
-import { user_token } from "../../core/user_token";
 
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
@@ -23,7 +22,7 @@ function ReviewPage() {
   const url = pathname.substring(7);
   const real_url = "http://3.37.14.183/api/roads" + url;
 
-  const token = user_token.token;
+  const token = localStorage.getItem("key");
 
   const [reviews, setReviews] = useState([]);
 
@@ -69,7 +68,7 @@ function ReviewPage() {
         </ReviewStar>
         <ReviewList>
           {reviews.map((data) => (
-            <ReviewCard key={data.userId} r={data} />
+            <ReviewCard key={data.reviewId} r={data} />
           ))}
         </ReviewList>
       </ReviewMain>
