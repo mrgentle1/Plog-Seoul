@@ -56,7 +56,7 @@ public class PloggingService {
 
         try {
             this.ploggingRecordRepository.save(record);
-            return new BaseResponseEntity<>(HttpStatus.OK);
+            return new BaseResponseEntity<>(HttpStatus.OK, new RecordResponseDto(record));
         } catch (Exception e) {
             return new BaseResponseEntity<>(e);
         }
@@ -84,6 +84,26 @@ public class PloggingService {
         } else {
             ploggingRecordRepository.delete(record.get());
             return new BaseResponseEntity<>(HttpStatus.OK, "기록이 삭제되었습니다.");
+        }
+    }
+
+    public BaseResponseEntity<?> updateRecord(Long recordId, PloggingPostRequestDto dto) {
+        Optional<PloggingRecord> record = ploggingRecordRepository.findById(recordId);
+        if (!record.isPresent()) {
+            return new BaseResponseEntity<>(HttpStatus.BAD_REQUEST, "해당 기록이 존재하지 않습니다.");
+        } else {
+            record.get().update(dto.getDistance(), dto.getEndLat(), dto.getEndLng(), dto.getRunningTime());
+
+            Float weight;
+            if (record.get().getUser().getGender().equals("male")) {
+                weight = 74.1f;
+            } else {
+                weight = 57.8f;
+            }
+            record.get().setKcal((int) (record.get().getDistance() * weight * 0.6f));
+
+            ploggingRecordRepository.save(record.get());
+            return new BaseResponseEntity<>(HttpStatus.OK, new RecordResponseDto(record.get()));
         }
     }
 
@@ -135,7 +155,7 @@ public class PloggingService {
         return new BaseResponseEntity<>(HttpStatus.OK);
     }
 
-    public BaseResponseEntity<?> createPath(Long recordId, PathRequestDto dto) {
+    public BaseResponseEntity<?> createPath(Long recordId, List<PathRequestDto> dtoList) {
         Optional<PloggingRecord> record = ploggingRecordRepository.findById(recordId);
         if (!record.isPresent()) {
             return new BaseResponseEntity<>(HttpStatus.BAD_REQUEST, "해당 기록이 존재하지 않습니다.");
@@ -143,14 +163,18 @@ public class PloggingService {
             Long maxSequence = pathRepository.findMaxSequenceByPloggingRecord(record.get());
             Long newSequence = maxSequence == null ? 1L : maxSequence + 1;
 
-            Path path = Path.builder()
-                    .ploggingRecord(record.get())
-                    .wayLat(dto.getWayLat())
-                    .wayLng(dto.getWayLng())
-                    .sequence(newSequence)
-                    .build();
+            for (PathRequestDto dto : dtoList) {
+                Path path = Path.builder()
+                        .ploggingRecord(record.get())
+                        .wayLat(dto.getLat())
+                        .wayLng(dto.getLng())
+                        .sequence(newSequence)
+                        .build();
 
-            pathRepository.save(path);
+                pathRepository.save(path);
+                newSequence++;
+            }
+
 
             return new BaseResponseEntity<>(HttpStatus.OK);
         }

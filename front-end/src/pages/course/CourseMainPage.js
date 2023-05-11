@@ -4,13 +4,13 @@ import { ReactComponent as BackArrow } from "../../assets/icons/backArrow.svg";
 import { CourseCard } from "../../components/common/CourseCard";
 
 import axios from "axios";
+import { user_token } from "../../core/user_token";
 
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 
 function CourseMainPage() {
-  const token =
-    "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwiaWF0IjoxNjgzMjUwNjYyLCJleHAiOjE2ODMyODY2NjJ9.BcFjHJuXiBUSk1-MQNGzfVBW7k8yRYwawf8JgGd5wh8";
+  const token = user_token.token;
 
   const [courses, setCourses] = useState([]);
   const [category, setCategory] = useState("전체");
@@ -22,17 +22,20 @@ function CourseMainPage() {
 
   const categories = [
     "전체",
-    "한양도성길",
-    "서울둘레길",
+    "근교산자락길",
+    "생태문화길",
     "근자락길",
     "어쩌고저쩌고",
-    "땡땡길",
   ];
 
   const ClickCategory = (c) => {
     setCategory((prevCategory) => (prevCategory === c ? "" : c));
-    console.log(c);
   };
+
+  let filteredCourses = courses;
+  if (category !== "전체") {
+    filteredCourses = courses.filter((data) => data.category === category);
+  }
 
   useEffect(() => {
     axios
@@ -43,7 +46,7 @@ function CourseMainPage() {
         },
       })
       .then((response) => {
-        setCourses(response.data);
+        setCourses(response.data.result.content);
       })
       .catch((error) => {
         console.error(error);
@@ -53,34 +56,6 @@ function CourseMainPage() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  const dummydata = [
-    {
-      courseId: 1,
-      title: "이번주 가장 인기 많았던 코스",
-      coursename: "한양도성길",
-    },
-    {
-      courseId: 2,
-      title: "봄나들이 코스",
-      coursename: "한양도성길",
-    },
-    {
-      courseId: 3,
-      title: "더 늦기 전에 떠나는 플로깅 코스",
-      coursename: "한양도성길",
-    },
-    {
-      courseId: 4,
-      title: "MZ의 추천!",
-      coursename: "한양도성길",
-    },
-    {
-      courseId: 5,
-      title: "이번주 가장 인기 많았던 코스",
-      coursename: "한양도성길",
-    },
-  ];
 
   return (
     <StCourseMainPage>
@@ -101,9 +76,9 @@ function CourseMainPage() {
       </CourseMainCategory>
       <CourseMainContent>
         <CourseList>
-          {dummydata.map((data) =>
-            data ? <CourseCard key={data.courseId} c={data} /> : null
-          )}
+          {filteredCourses.map((data) => (
+            <CourseCard key={data.routeId} c={data} />
+          ))}
         </CourseList>
       </CourseMainContent>
     </StCourseMainPage>

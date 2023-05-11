@@ -6,7 +6,7 @@ import { ReactComponent as Shop } from "../../assets/icons/shop.svg";
 export const CourseMainCard = ({ c }) => {
   const navigate = useNavigate();
   const handlePageChange = () => {
-    navigate(`/course/${c.courseId}`);
+    navigate(`/course/${c.routeId}`);
   };
 
   return (
@@ -16,16 +16,16 @@ export const CourseMainCard = ({ c }) => {
         <StCourseText>
           <CourseText>
             <h3>{c.title}</h3>
-            <h6>{c.coursename}</h6>
+            <h6>{c.name}</h6>
           </CourseText>
           <CourseTag>
             <Tag>
               <Shop className="shop" />
-              <p>예시</p>
+              <p>{c.category}</p>
             </Tag>
             <Tag>
               <Shop className="shop" />
-              <p>예시입니다</p>
+              <p>{c.difficulty}</p>
             </Tag>
           </CourseTag>
         </StCourseText>

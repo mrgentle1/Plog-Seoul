@@ -1,11 +1,14 @@
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
-import { useNavigate } from "react-router-dom";
 
 import { ReactComponent as Star } from "../../assets/icons/star.svg";
 import { ReactComponent as Dots } from "../../assets/icons/threedots.svg";
 
 export const ReviewCard = ({ r }) => {
+  const createdAt = r.createdAt;
+  const date = createdAt.substring(0, 10);
+  const time = createdAt.substring(11, 16);
+
   return (
     <>
       <StReviewCard>
@@ -18,10 +21,12 @@ export const ReviewCard = ({ r }) => {
               <Star className="blackStar" />
               <Star className="blackStar" />
               <Star className="blackStar" />
-              <h5>{r.user}</h5>
+              <h5>{r.userNickname}</h5>
             </Box3>
             <Box2>
-              <h6>{r.date}</h6>
+              <h6>
+                {date} {time}
+              </h6>
               <Dots className="dots" />
             </Box2>
           </ReviewListInfo>
@@ -73,7 +78,7 @@ const Box2 = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 105px;
+  width: 130px;
 
   h6 {
     font-weight: 500;

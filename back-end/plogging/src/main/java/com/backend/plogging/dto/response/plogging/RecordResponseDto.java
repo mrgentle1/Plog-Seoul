@@ -21,6 +21,7 @@ public class RecordResponseDto {
     private Float endLat;
     private Float endLng;
     private Float runningTime;
+    private Integer kcal;
 
     private LocalDateTime createdAt;
 
@@ -34,6 +35,7 @@ public class RecordResponseDto {
         this.endLat = record.getEndLat();
         this.endLng = record.getEndLng();
         this.runningTime = record.getRunningTime();
+        this.kcal = record.getKcal();
         this.createdAt = record.getCreatedAt();
     }
 }

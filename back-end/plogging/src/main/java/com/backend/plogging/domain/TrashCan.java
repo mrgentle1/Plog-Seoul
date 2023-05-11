@@ -25,7 +25,7 @@ public class TrashCan extends BaseEntity{
     @Column(name = "lng")
     private Float lng;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "address")
+    private String address;  // 도로명 주소
 
 }
