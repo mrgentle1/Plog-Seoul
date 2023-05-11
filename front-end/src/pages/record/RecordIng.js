@@ -1,5 +1,5 @@
 /* global kakao */
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { Map, MapMarker, Polyline } from "react-kakao-maps-sdk";
 import { useNavigate, Link } from "react-router-dom";
@@ -9,8 +9,13 @@ import TimeComponent from "../../components/Record/TimeComponent";
 import { getDistance, getFinDist } from "../../components/utils/calc";
 import { ReactComponent as BackArrow } from "../../assets/icons/backArrow.svg";
 import current from "../../assets/icons/walk.svg";
+import trashCanImg from "../../assets/icons/trash.svg";
+
 import { ReactComponent as CamBtn } from "../../assets/icons/camera.svg";
 import MapRecording from "../../components/Record/MapRecordingComponent3";
+
+import axios from "axios";
+import { user_token } from "../../core/user_token.js";
 
 const { kakao } = window;
 let options = {
@@ -18,44 +23,20 @@ let options = {
   timeout: 1000 * 5 * 1, // 1 min (1000 ms * 60 sec * 1 minute = 60 000ms),
   maximumAge: 3600,
 };
+
 function RecordIngPage() {
+  const token = user_token.token;
   const navigate = useNavigate();
   const goBack = useCallback(() => {
     navigate(-1);
   }, [navigate]);
 
-  // GET
-
-  // const [trashCanData, setTrashCanData] = useState([]);
-  // async function getTrashCanData() {
-  //   // async, await을 사용하는 경우
-  //   try {
-  //     // GET 요청은 params에 실어 보냄
-  //     const response = await axios.get("/api/trash-cans/");
-
-  //     // 응답 결과(response)를 변수에 저장하거나.. 등 필요한 처리를 해 주면 된다.
-  //     setTrashCanData({
-  //       trashcanId: response.trashCanId,
-  //       title: response.name,
-  //       latlng: { lat: response.lat, lng: response.lng },
-  //     });
-  //     console.log("trash" + trashCanData);
-
-  //     console.log("res" + response);
-  //   } catch (e) {
-  //     // 실패 시 처리
-  //     console.error(e);
-  //   }
-  // }
-
-  //1. useLocation 훅 취득
+  /*main에서 현재 위치 값을 가져와 초기세팅 해줌 */
   const location = useLocation();
-
-  // 2. location.state 에서 파라미터 취득
   const startLat = location.state.lat;
   const startLng = location.state.lng;
 
-  //사용자 이동 기록
+  /*사용자 이동 기록*/
   const [state, setState] = useState([
     {
       center: {
@@ -66,7 +47,39 @@ function RecordIngPage() {
       isLoading: true,
     },
   ]);
-  const [coords, setcoords] = useState({});
+
+  /* GET - 쓰레기통 위치 */
+  const [trashCanData, setTrashCanData] = useState([
+    { trashcanId: 0, title: "쓰레기통", latlng: { lat: 0, lng: 0 } },
+  ]);
+
+  async function getTrashCanData() {
+    // async, await을 사용하는 경우
+    try {
+      // GET 요청은 params에 실어 보냄
+      const response = await axios.get("http://3.37.14.183:80/api/trash-cans", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      // 응답 결과(response)를 변수에 저장하거나.. 등 필요한 처리를 해 주면 된다.
+      const initTrash = response.data.result.map((it) => {
+        return {
+          trashCanId: it.trashCanId,
+          title: it.address,
+          latlng: { lat: it.lat, lng: it.lng },
+        };
+      });
+      setTrashCanData(initTrash);
+    } catch (e) {
+      // 실패 시 처리
+      console.error(e);
+    }
+  }
+
+  /*polyline path를 위함 */
   const [locationList, setLocationList] = useState([
     {
       center: {
@@ -75,17 +88,14 @@ function RecordIngPage() {
       },
     },
   ]);
-  const [watchId, setWatchId] = useState(-1);
+  const beforeRecord = useRef({ lat: startLat, lng: startLng });
+  const [watchId, setWatchId] = useState(-1); // watchPosition 중지를 위함
 
   const [recording, setRecording] = useState(false); //기록 중
 
-  // let options = {
-  //   enableHighAccuracy: true,
-  //   timeout: 1000 * 30 * 1, // 1 min (1000 ms * 60 sec * 1 minute = 60 000ms),
-  //   maximumAge: 1,
-  // };
-
   useEffect(() => {
+    getTrashCanData(); //쓰레기통 위치 정보
+
     run();
     setInterv(setInterval(run, 10));
     if (navigator.geolocation) {
@@ -94,24 +104,33 @@ function RecordIngPage() {
       // console.log("bef: %o", before_record);
       const newId = navigator.geolocation.watchPosition(
         (position) => {
-          let before_record = state[state.length - 1];
           console.log("watchPosition: %o", position);
-          console.log("statelast: %o", state[state.length - 1]);
           console.log("startlat: %o", startLat);
           console.log("startlng: %o", startLng);
 
-          let updateFlag = true;
+          console.log("befor: %o", beforeRecord.current);
 
-          const dist = getDistance({
-            lat1: state[state.length - 1].center.lat,
-            lon1: state[state.length - 1].center.lng,
-            lat2: position.coords.latitude,
-            lon2: position.coords.longitude,
+          const coordinates = [
+            new kakao.maps.LatLng(
+              beforeRecord.current.lat,
+              beforeRecord.current.lng
+            ),
+            new kakao.maps.LatLng(
+              position.coords.latitude,
+              position.coords.longitude
+            ),
+          ];
+
+          const linePatha = new kakao.maps.Polyline({
+            path: coordinates,
           });
-          console.log("dist: %o", dist);
+
+          const distDiff = linePatha.getLength();
+          console.log("이동거리:", distDiff.toFixed(2), "m");
+
           console.log("location: %o", locationList);
-          if (dist !== 0 && dist < 1) {
-            console.log("here");
+          if (distDiff !== 0 && distDiff < 800) {
+            console.log("이동함");
             setState((prev) => [
               ...prev,
               {
@@ -130,46 +149,11 @@ function RecordIngPage() {
                 lng: position.coords.longitude,
               },
             ]);
+
+            console.log("listlocation: %o", locationList);
           }
-
-          //   {
-          //   ...prev,
-          //   center: {
-          //     lat: position.coords.latitude, // 위도
-          //     lng: position.coords.longitude, // 경도
-          //   },
-          //   isLoading: false,
-          // }
-          /*if (state && state.length > 1) {
-            const dist = getDistance({
-              lat1: before_record.lat,
-              lon1: before_record.lng,
-              lat2: state.center.lat,
-              lon2: state.center.lng,
-            });
-            console.log("re");
-            console.log(before_record);
-            //이동거리가 50m미만이면 안바뀜
-            if (dist > 0.1) {
-              updateFlag = false;
-            }
-            console.log(updateFlag);
-            if (updateFlag) {
-              // setcoords(new_record);
-              console.log("updateFlag 이후");
-              before_record = state[state.length - 1].center;
-
-              console.log("list");
-              console.log(locationList);
-            }
-          }*/
         },
         (err) => {
-          // setState((prev) => ({
-          //   ...prev,
-          //   errMsg: err.message,
-          //   isLoading: false,
-          // }));
           console.log(err);
           console.log("err");
         },
@@ -274,7 +258,24 @@ function RecordIngPage() {
                   }, // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
                 },
               }}
-            ></MapMarker>
+            />
+            {trashCanData.map((position, index) => (
+              <MapMarker
+                key={`${position.trashCanId}-${position.title}`}
+                position={{
+                  lat: position.latlng.lat,
+                  lng: position.latlng.lng,
+                }} // 마커를 표시할 위치
+                image={{
+                  src: trashCanImg, // 마커이미지의 주소입니다
+                  size: {
+                    width: 64,
+                    height: 64,
+                  }, // 마커이미지의 크기입니다
+                }}
+                title={position.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+              />
+            ))}
             <Polyline
               path={locationList}
               strokeWeight={5} // 선의 두께 입니다
