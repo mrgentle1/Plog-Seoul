@@ -11,7 +11,7 @@ function MyPage() {
   const setHeaderTitle = useSetRecoilState(headerTitleState);
 
   useEffect(() => {
-    setHeaderTitle("이름님"); // '홈' 값을 할당합니다.
+    setHeaderTitle("이름님");
   }, [setHeaderTitle]);
 
   return (
