@@ -23,6 +23,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -249,8 +250,10 @@ public class UserService {
     public BaseResponseEntity<?> getPoint(Long userId) {
         Optional<User> user = userRepository.findById(userId);
         if (user.isPresent()) {
-            Map<String, Object> result = new HashMap<>();
+            Map<String, Object> result = new LinkedHashMap<>();
             result.put("point", user.get().getPoint());
+            result.put("level", user.get().getLevel());
+
             return new BaseResponseEntity<>(HttpStatus.OK, result);
         } else {
             return new BaseResponseEntity<>(HttpStatus.BAD_REQUEST, "해당 유저가 존재하지 않습니다.");

@@ -43,6 +43,9 @@ public class PloggingRecord extends BaseEntity{
     @Column(name = "running_time")
     private Float runningTime;
 
+    @Column(name = "kcal")
+    private Integer kcal;  // 소모 칼로리
+
 
     // photos for this plogging record
     @OneToMany(mappedBy = "ploggingRecord", orphanRemoval = true)
@@ -65,6 +68,10 @@ public class PloggingRecord extends BaseEntity{
         if (runningTime != null) {
             this.runningTime = runningTime;
         }
+    }
+
+    public void setKcal(Integer kcal) {
+        this.kcal = kcal;
     }
 
 }

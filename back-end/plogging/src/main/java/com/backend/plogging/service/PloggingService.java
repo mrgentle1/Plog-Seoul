@@ -93,6 +93,15 @@ public class PloggingService {
             return new BaseResponseEntity<>(HttpStatus.BAD_REQUEST, "해당 기록이 존재하지 않습니다.");
         } else {
             record.get().update(dto.getDistance(), dto.getEndLat(), dto.getEndLng(), dto.getRunningTime());
+
+            Float weight;
+            if (record.get().getUser().getGender().equals("male")) {
+                weight = 74.1f;
+            } else {
+                weight = 57.8f;
+            }
+            record.get().setKcal((int) (record.get().getDistance() * weight * 0.6f));
+
             ploggingRecordRepository.save(record.get());
             return new BaseResponseEntity<>(HttpStatus.OK, new RecordResponseDto(record.get()));
         }
