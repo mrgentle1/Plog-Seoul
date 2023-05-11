@@ -264,11 +264,19 @@ public class UserService {
         Optional<User> user = userRepository.findById(userId);
         
         if (user.isPresent()) {
+            // 1000점 단위로 레벨업
+            while (newPoint >= 1000) {
+                newPoint -= 1000;
+                user.get().setLevel(user.get().getLevel() + 1);
+            }
+
             user.get().setPoint(newPoint);
             userRepository.save(user.get());
 
-            Map<String, Object> result = new HashMap<>();
+            Map<String, Object> result = new LinkedHashMap<>();
             result.put("point", user.get().getPoint());
+            result.put("level", user.get().getLevel());
+
             return new BaseResponseEntity<>(HttpStatus.OK, result);
         } else {
             return new BaseResponseEntity<>(HttpStatus.BAD_REQUEST, "해당 유저가 존재하지 않습니다.");
