@@ -15,7 +15,7 @@ function KakaoCallback() {
           .get(`http://3.37.14.183/api/auth/kakao?code=${code}`)
           .then((res) => {
             console.log(res);
-            navigate("/");
+            navigate("/signup");
           });
       } catch (error) {
         console.error("Error fetching authentication:", error);
