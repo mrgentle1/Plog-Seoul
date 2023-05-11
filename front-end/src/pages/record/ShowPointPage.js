@@ -4,6 +4,8 @@ import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 
 import { ReactComponent as Fire } from "../../assets/icons/pointFire.svg";
+import ProgressBar from "../../components/Record/ProgressBar";
+import Bar from "../../components/Record/Bar";
 
 const point_list = [
   { level: "1", min: 0, max: 1500 },
@@ -12,47 +14,54 @@ const point_list = [
   { level: "4", min: 10000, max: 20000 },
 ];
 function ShowPointPage() {
+  const [isLoading, setIsLoading] = useState(false);
   const [isUpdate, setIsUpdate] = useState(false);
   const [isLevelUp, setIsLevelUp] = useState(false);
   const [isLast, setIsLast] = useState(false);
   const [myPoint, setMyPoint] = useState(80);
   const [maxPoint, setMaxPoint] = useState(100);
 
-  const myP = useRef(80);
+  const myP = useRef(800);
   const maxP = useRef(100);
+  const level = useRef(1);
   const update = useRef(false);
 
   const plusPoint = () => {
     // setMyPoint(myPoint + 250);
     myP.current = myP.current + 250;
-    setIsUpdate(true);
+    console.log("myp:", myP.current);
+    setIsLoading(true);
   };
 
   const levelUP = () => {
     console.log("levelUp");
     // setMaxPoint(800);
-    maxP.current = 800;
+    myP.current = myP.current - 1000;
+    console.log("mypLE:", myP.current);
+
     setIsLast(true);
   };
 
   useEffect(() => {
-    if (isUpdate) {
+    if (isLoading) {
       console.log("plus");
-      if (myP.current > maxP.current) {
-        // setIsLevelUp(true);
-        levelUP();
+      if (myP.current > 1000) {
+        level.current = level.current + 1;
+        console.log("le", level.current);
+        setIsLevelUp(true);
       } else {
         setIsLast(true);
       }
+    } else {
     }
-  }, [isUpdate]);
+  }, [isLoading]);
 
-  // useEffect(() => {
-  //   if (isLevelUp) {
-  //     console.log("levelUp");
-  //     setMaxPoint(800);
-  //   }
-  // }, [isLevelUp]);
+  useEffect(() => {
+    if (isLevelUp) {
+      console.log("levelUp");
+      levelUP();
+    }
+  }, [isLevelUp]);
 
   /*
   현재 포인트를 가져옴
@@ -82,17 +91,22 @@ function ShowPointPage() {
         <CurrentLevelWrapper>Level 5</CurrentLevelWrapper>
 
         <GetPointWrapper></GetPointWrapper>
-        <ProgressWrapper>
-          <progress
-            className="mypage_point_progress"
-            value={myP.current}
-            min={0}
-            max={maxP.current}
-          ></progress>
-        </ProgressWrapper>
+        {isLoading ? (
+          <Bar value={myP.current} />
+        ) : (
+          <ProgressWrapper>
+            <progress
+              className="mypage_point_progress"
+              value={myP.current}
+              min={0}
+              max={1000}
+            ></progress>
+          </ProgressWrapper>
+        )}
+
         {isLast && (
           <CommentWrapper>
-            <p>다음 레벨까지 500포인트 남았어요!</p>
+            <p>다음 레벨까지 {1000 - myP.current}포인트 남았어요!</p>
           </CommentWrapper>
         )}
 
@@ -150,6 +164,7 @@ const ShowPointContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 24px;
 `;
 
 const CurrentLevelWrapper = styled.p`
