@@ -34,7 +34,7 @@ function MyPage() {
 
   useEffect(() => {
     setHeaderTitle(user.name);
-  }, [setHeaderTitle]);
+  });
 
   return (
     <StMyPage>
