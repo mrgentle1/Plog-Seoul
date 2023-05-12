@@ -10,7 +10,6 @@ import { COLOR } from "../../styles/color";
 
 function MyPage() {
   const token = localStorage.getItem("key");
-
   const [user, setUser] = useState([]);
 
   const setHeaderTitle = useSetRecoilState(headerTitleState);
@@ -79,12 +78,16 @@ const StMyInfo = styled.div`
   width: 353px;
 `;
 const MyEmail = styled.div`
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 600;
   font-size: 16px;
   line-height: 19px;
   color: ${COLOR.MAIN_GREEN};
 `;
 const MyEdit = styled.div`
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 500;
   font-size: 14px;
   line-height: 16px;
@@ -121,12 +124,16 @@ const MyBox4 = styled.div`
 const MyBox5 = styled.div`
   display: flex;
   margin-top: 46px;
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 600;
   font-size: 14px;
   line-height: 19px;
   color: ${COLOR.INPUT_BORDER_GRAY};
 `;
 const MyText = styled.div`
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 600;
   font-size: 16px;
   line-height: 19px;

@@ -125,6 +125,8 @@ const ReviewListInfo = styled.div`
 `;
 const ReviewListContent = styled.div`
   margin-top: 16px;
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 500;
   font-size: 15px;
   line-height: 17px;
@@ -144,6 +146,8 @@ const Box2 = styled.div`
   width: 130px;
 
   h6 {
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-weight: 500;
     font-size: 13px;
     line-height: 16px;
@@ -180,6 +184,8 @@ const Box3 = styled.div`
   width: 138px;
   h5 {
     margin-left: 15px;
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-weight: 500;
     font-size: 12px;
     line-height: 14px;

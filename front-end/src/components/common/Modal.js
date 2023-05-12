@@ -93,6 +93,8 @@ const ModalText = styled.div`
   }
   h3 {
     margin-top: 28px;
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-weight: 700;
     font-size: 17px;
     line-height: 21px;
@@ -102,6 +104,8 @@ const ModalText = styled.div`
   h5 {
     margin-top: 12px;
     margin-bottom: 70px;
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-weight: 500;
     font-size: 15px;
     line-height: 19px;
@@ -124,6 +128,8 @@ const CloseButton = styled.button`
   background: ${COLOR.MAIN_WHITE};
   border-radius: 0px 0px 0px 14px;
   border: none;
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 500;
   font-size: 15px;
   line-height: 19px;
@@ -134,6 +140,8 @@ const CheckButton = styled.button`
   background: ${COLOR.MAIN_GREEN};
   border-radius: 0px 0px 14px 0px;
   border: none;
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 600;
   font-size: 15px;
   line-height: 19px;

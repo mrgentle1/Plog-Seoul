@@ -172,6 +172,8 @@ const CoursePostText = styled.div`
 `;
 const Text1 = styled.div`
   margin-top: 24px;
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 600;
   font-size: 15px;
   line-height: 19px;
@@ -181,7 +183,8 @@ const Text2 = styled.div`
   display: flex;
   justify-content: space-between;
   margin-top: 12px;
-
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 600;
   font-size: 24px;
   line-height: 30px;
@@ -197,6 +200,8 @@ const Level = styled.div`
 `;
 const Text3 = styled.div`
   margin-top: 12px;
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 500;
   font-size: 12px;
   line-height: 14px;
@@ -205,6 +210,8 @@ const Text3 = styled.div`
 const Text4 = styled.div`
   margin-top: 24px;
   margin-bottom: 24px;
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 500;
   font-size: 13px;
   line-height: 18px;
@@ -234,6 +241,8 @@ const Tag = styled.div`
   }
   p {
     margin-top: 1.5px;
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-weight: 500;
     font-size: 12px;
     line-height: 14px;
@@ -269,6 +278,8 @@ const Box1 = styled.div`
   align-items: center;
 
   h4 {
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-weight: 700;
     font-size: 17px;
     line-height: 21px;
@@ -282,6 +293,8 @@ const Box2 = styled.div`
   width: 105px;
 
   h5 {
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-weight: 500;
     font-size: 13.5px;
     line-height: 21px;
@@ -289,6 +302,8 @@ const Box2 = styled.div`
     color: ${COLOR.MAIN_DARK_GREEN};
   }
   h6 {
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-weight: 500;
     font-size: 13px;
     line-height: 16px;
@@ -307,6 +322,8 @@ const ReviewBox2 = styled.div`
   }
 `;
 const Review = styled.div`
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 700;
   font-size: 17px;
   line-height: 21px;

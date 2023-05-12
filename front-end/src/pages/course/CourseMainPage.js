@@ -116,6 +116,8 @@ const CourseMainHeader = styled.div`
 const HeaderText = styled.div`
   margin-top: 52.5px;
   margin-left: 22px;
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 700;
   font-size: 20px;
   line-height: 25px;
@@ -145,6 +147,8 @@ const CourseCategory = styled.button`
   border: none;
   border-radius: 8px;
   padding: 8.5px 12px;
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 600;
   font-size: 15px;
   line-height: 19px;

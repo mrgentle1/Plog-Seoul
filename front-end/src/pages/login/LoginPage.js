@@ -60,6 +60,8 @@ const LoginText = styled.div`
   }
   p {
     margin-top: 36px;
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-weight: 700;
     font-size: 20px;
     line-height: 32px;

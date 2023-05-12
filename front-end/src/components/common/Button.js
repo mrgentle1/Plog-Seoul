@@ -57,6 +57,8 @@ const StDisabledButton = styled.button`
 `;
 
 const StBorderButton = styled.button`
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 500;
   font-size: 14px;
   line-height: 17px;
@@ -112,6 +114,8 @@ const StBorderThinButton = styled.button`
   }
   p {
     text-align: left;
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-weight: 500;
     font-size: 15px;
     line-height: 27px;
