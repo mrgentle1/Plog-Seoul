@@ -1,18 +1,39 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSetRecoilState } from "recoil";
 import { headerTitleState } from "../../core/headerTitle";
 import { ReactComponent as Level } from "../../assets/icons/level.svg";
 
+import axios from "axios";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 import { BorderThinButton } from "../../components/common/Button";
 
 function PlogPage() {
+  const token = localStorage.getItem("key");
+  const [username, setUserName] = useState("");
+
   const setHeaderTitle = useSetRecoilState(headerTitleState);
 
   useEffect(() => {
-    setHeaderTitle("이름님의 플로그");
-  }, [setHeaderTitle]);
+    axios
+      .get("http://3.37.14.183/api/auth/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        setUserName(response.data.result.name);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+  const headertext = username + "님의 플로그";
+  useEffect(() => {
+    setHeaderTitle(headertext);
+  });
 
   return (
     <StPlogPage>
@@ -60,7 +81,8 @@ const PlogLevel = styled.div`
   padding-top: 14px;
   width: 353px;
   height: 103px;
-  background-color: ${COLOR.MAIN_GREEN_HOVER};
+  background-color: ${COLOR.MAIN_WHITE};
+  border: 1px solid ${COLOR.MAIN_GREEN};
   border-radius: 14px;
 `;
 const Plog1 = styled.div`
@@ -81,12 +103,16 @@ const PlogText = styled.div`
   justify-content: space-between;
 `;
 const Text1 = styled.div`
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 600;
   font-size: 15px;
   line-height: 19px;
-  color: ${COLOR.MAIN_BLACK};
+  color: ${COLOR.MAIN_GREEN};
 `;
 const Text2 = styled.div`
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 500;
   font-size: 13px;
   line-height: 16px;
