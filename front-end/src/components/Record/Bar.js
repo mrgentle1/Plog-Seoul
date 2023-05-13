@@ -1,15 +1,102 @@
-import React from "react";
-import styled from "styled-components";
+import React, { useEffect, useRef, useState } from "react";
+import styled, { keyframes } from "styled-components";
 import { COLOR } from "../../styles/color";
+const useLoading = () => {
+  const [loading, setLoading] = useState(false);
 
-function Bar({ value }) {
-  console.log("vv:", value);
-  const progress = value / 10;
+  // 컴포넌트 마운트 시 loading true로 업데이트
+  useEffect(() => setLoading(true), []);
+  return loading;
+};
+function Bar({ init, value, isUpdate, isLevelUp }) {
+  const loading = useLoading();
+  console.log("vv:", init, value);
+  const [point, setPoint] = useState(0);
+
+  const initPro = (init / 1000) * 321;
+  const progress = (value / 1000) * 321;
+  const [animationClass, setAnimationClass] = useState("fade-in");
+  const ani = useRef("fade-in");
+  const [update, setIsUpdate] = useState(isUpdate);
+  const [levelUp, setIsLevelUp] = useState(isLevelUp);
+  const [isInit, setIsInit] = useState(false);
+  useEffect(() => {
+    if (loading) {
+      console.log("????loading:", loading);
+      console.log("first:", value);
+      setIsUpdate(isUpdate);
+      setIsLevelUp(isLevelUp);
+      console.log("firstData:", update, levelUp);
+      console.log("FisrtcurrentBar::::", init, value);
+      ani.current = "init";
+    }
+  }, []);
+  useEffect(() => {
+    if (loading) {
+      ani.current = "init";
+    }
+    // console.log("?!!!!!loading:", loading);
+    // console.log("FaaacurrentBar::::", init, value);
+  }, [loading]);
+
+  //   useEffect(() => {
+  //     if (init === value) {
+  //       console.log("currentBar::::", init, value);
+  //     }
+  //   }, [point]);
+
+  useEffect(() => {
+    // console.log("????loading:", loading);
+    // setIsUpdate(isUpdate);
+    // setIsLevelUp(isLevelUp);
+
+    console.log("????USeData:", update, levelUp);
+    if (levelUp) {
+      console.log("#.Lee", value);
+      ani.current = "animate fade-in";
+
+      console.log("#.class:", ani.current);
+      console.log("#.LeeeData:", update, levelUp);
+    } else if (update) {
+      console.log("##.upup", value);
+      //   setTimeout(setAnimationClass("init"), 4000);
+      //   setAnimationClass("init");
+      ani.current = "animate fade-in";
+
+      setIsLevelUp(isLevelUp);
+      console.log("##UPUPData:", update, levelUp);
+      console.log("##.class:", ani.current);
+    } else {
+      console.log("###.no", value);
+      ani.current = "animate fade-in";
+      console.log("###.class:", ani.current);
+
+      console.log("###NoData:", update, levelUp);
+      setIsUpdate(isUpdate);
+    }
+  });
+
+  //   useEffect(() => {
+  //     if (isUpdate || isLevelUp) {
+  //       setAnimationClass("animate");
+
+  //       const time1 = setTimeout(() => {
+  //         setAnimationClass("animate fade-in");
+  //       }, 1000);
+  //       return () => {
+  //         clearTimeout(time1);
+  //       };
+  //     }
+  //   }, [isUpdate, isLevelUp]);
+
   return (
     <StProgressBar>
       <div className="skill-box">
         <div className="skill-bar">
-          <span className="skill-per nodejs" style={{ width: progress }}>
+          <span
+            className={`skill-per nodejs ${ani.current}`}
+            style={{ width: progress }}
+          >
             <span className="tooltip">+250</span>
           </span>
         </div>
@@ -55,16 +142,32 @@ const StProgressBar = styled.div`
     position: relative;
     display: block;
     height: 100%;
-    width: 95%;
+    width: 100%;
     border-radius: 6px;
     background: ${COLOR.MAIN_GREEN};
-    animation: progress 0.5s ease-in-out forwards;
-    opacity: 0;
+
+    &.init {
+      animation: progress 1s ease-in-out;
+      opacity: 1;
+      -webkit-animation-play-state: paused;
+      animation-play-state: paused;
+    }
+
+    &.animate {
+      animation: progress 3s ease-in-out;
+      -webkit-animation-play-state: running;
+      animation-play-state: running;
+
+      opacity: 0;
+    }
+
+    &.fade-in {
+      opacity: 1;
+    }
   }
 
   .skill-per.nodejs {
-    width: 40%;
-    animation-delay: 0.3s;
+    animation-delay: 0s;
   }
 
   @keyframes progress {
