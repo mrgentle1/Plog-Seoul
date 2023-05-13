@@ -1,25 +1,45 @@
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { Button } from "../../components/common/Button";
+import { ReactComponent as Logo } from "../../assets/icons/logo.svg";
 
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 
 function LoginPage() {
+  const [contentIndex, setContentIndex] = useState(0);
+  const content = "아름다운 서울을 위해\n우리 함께 주워봐요!";
+
+  // typing 함수
+  const typing = () => {
+    setContentIndex((index) => index + 1);
+  };
+
+  useEffect(() => {
+    const intervalId = setInterval(typing, 30);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
+  const kakaoLogin = () => {
+    window.location.href = "http://3.37.14.183/api/auth/login";
+  };
+
   return (
     <StLoginPage>
       <LoginText>
-        <h3>플로그 서울</h3>
-        <h6>
-          아름다운 서울을 위해
-          <br />
-          우리 함께 주워봐요!
-        </h6>
+        <Logo className="logo" />
+        <p
+          className="txt"
+          dangerouslySetInnerHTML={{
+            __html: content.substring(0, contentIndex).replace(/\n/g, "<br>"),
+          }}
+        ></p>
       </LoginText>
-      <LoginButton>
-        <Link to={"/signup"}>
-          <Button>카카오로 시작하기</Button>
-        </Link>
-      </LoginButton>
+      {contentIndex > content.length && (
+        <LoginButton>
+          <Button onClick={kakaoLogin}>카카오로 시작하기</Button>
+        </LoginButton>
+      )}
     </StLoginPage>
   );
 }
@@ -29,29 +49,25 @@ export default LoginPage;
 const StLoginPage = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  margin-left: 20px;
   width: 100%;
   height: 100%;
 `;
 
 const LoginText = styled.div`
-  h3 {
-    font-weight: 700;
-    font-size: 20px;
-    line-height: 25px;
-    text-align: center;
+  .logo {
+    margin-top: 143px;
   }
-  h6 {
+  p {
     margin-top: 36px;
     font-weight: 700;
-    font-size: 17px;
-    line-height: 21px;
-    text-align: center;
+    font-size: 20px;
+    line-height: 32px;
+    color: ${COLOR.MAIN_BLACK};
   }
 `;
+
 const LoginButton = styled.div`
-  display: flex;
   position: fixed;
   bottom: 0;
   margin-bottom: 40px;

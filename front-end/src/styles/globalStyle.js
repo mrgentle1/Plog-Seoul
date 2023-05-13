@@ -6,6 +6,9 @@ const GlobalStyle = createGlobalStyle`
 
   #root, 
   body,html {
+    margin: 0;
+    padding: 0;
+
     width: 393px;
     height: 100%;
     margin: 0 auto;
@@ -32,6 +35,9 @@ const GlobalStyle = createGlobalStyle`
     color: black;
   }
   input:focus {
+    outline: none;
+  }
+  textarea:focus {
     outline: none;
   }
 `;

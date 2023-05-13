@@ -5,9 +5,13 @@ import { Button, DisabledButton } from "../../components/common/Button";
 
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
+import axios from "axios";
+import { useCookies } from "react-cookie";
 
 function SignupPage() {
   const [name, setName] = useState("");
+  const [cookies] = useCookies(["accessToken"]);
+  const token = cookies.accessToken;
 
   const navigate = useNavigate();
   const goBack = useCallback(() => {
@@ -18,33 +22,57 @@ function SignupPage() {
     setName(e.target.value);
   };
 
+  const onSubmit = useCallback(() => {
+    axios
+      .post(
+        "http://3.37.14.183/api/auth/registration",
+        {
+          name: name,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((res) => {
+        localStorage.setItem("key", token);
+        navigate("/home");
+      })
+      .catch((err) => {
+        console.error(err);
+        // handle error
+      });
+  }, [name, navigate]);
+
   return (
     <StSignupPage>
       <SignupHeader>
         <BackArrow className="signupBackArrow" onClick={goBack} />
       </SignupHeader>
-      <SignupText>
-        <h2>
-          플로그 서울에서
-          <br />
-          사용할 이름을 알려주세요
-        </h2>
-      </SignupText>
-      <SignupInput>
-        <SignupInputBox
-          placeholder="이름을 입력해주세요"
-          onChange={onChangeName}
-        />
-      </SignupInput>
-      <SignupButton>
-        {!name ? (
-          <DisabledButton disabled="disabled">시작하기</DisabledButton>
-        ) : (
-          <Link to={"/home"}>
-            <Button>시작하기</Button>
-          </Link>
-        )}
-      </SignupButton>
+      <SignupContent>
+        <SignupText>
+          <h2>
+            플로그 서울에서
+            <br />
+            사용할 이름을 알려주세요
+          </h2>
+        </SignupText>
+        <SignupInput>
+          <SignupInputBox
+            placeholder="이름을 입력해주세요"
+            onChange={onChangeName}
+          />
+        </SignupInput>
+        <SignupButton>
+          {!name ? (
+            <DisabledButton disabled="disabled">시작하기</DisabledButton>
+          ) : (
+            <Button onClick={onSubmit}>시작하기</Button>
+          )}
+        </SignupButton>
+      </SignupContent>
     </StSignupPage>
   );
 }
@@ -70,25 +98,29 @@ const SignupHeader = styled.div`
   justify-content: flex-start;
   align-items: center;
 
-  z-index: 100;
-
   .signupBackArrow {
     margin-top: 50px;
     margin-left: 20px;
   }
 `;
+const SignupContent = styled.div`
+  width: 353px;
+  height: 100%;
+
+  margin-top: 20px;
+`;
 const SignupText = styled.div`
   width: 100%;
   text-align: left;
-  width: 100%;
-  margin-left: 45px;
-  margin-top: 50px;
+  margin: 0;
+  padding: 0;
   font-weight: 700;
   font-size: 20px;
   line-height: 25px;
 `;
 const SignupInput = styled.div`
   width: 100%;
+  height: 41px;
   text-align: center;
   margin-top: 36px;
 `;
@@ -111,11 +143,11 @@ const SignupInputBox = styled.input`
   }
 `;
 const SignupButton = styled.div`
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
   position: fixed;
   bottom: 0;
   margin-bottom: 40px;
+  padding: 0;
+
+  display: flex;
+  flex-direction: row;
 `;
