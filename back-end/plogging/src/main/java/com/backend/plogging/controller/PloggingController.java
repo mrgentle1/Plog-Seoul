@@ -61,9 +61,8 @@ public class PloggingController {
 
     @PostMapping(value = "/{recordId}/images", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public BaseResponseEntity<?> uploadImage(@PathVariable Long recordId,
-                                             @RequestPart ImageRequestDto dto,
-                                             @RequestPart MultipartFile image) throws IOException, FirebaseAuthException {
-        BaseResponseEntity response = ploggingService.uploadImage(recordId, dto, image);
+                                             @RequestBody ImageRequestDto dto) {
+        BaseResponseEntity response = ploggingService.uploadImage(recordId, dto);
         return response;
     }
 

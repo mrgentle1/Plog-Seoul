@@ -107,8 +107,7 @@ public class PloggingService {
         }
     }
 
-    public BaseResponseEntity<?> uploadImage(Long recordId, ImageRequestDto dto, MultipartFile image) throws IOException, FirebaseAuthException {
-        String imgUrl = firebaseService.uploadFiles(image);
+    public BaseResponseEntity<?> uploadImage(Long recordId, ImageRequestDto dto) {
         Optional<PloggingRecord> record = ploggingRecordRepository.findById(recordId);
 
         if (!record.isPresent()) {
@@ -118,7 +117,7 @@ public class PloggingService {
         try {
             Image newImage = Image.builder()
                     .ploggingRecord(record.get())
-                    .imgUrl(imgUrl)
+                    .imgUrl(dto.getImageUrl())
                     .createdAt(LocalDateTime.now())
                     .imgLat(dto.getImgLat())
                     .imgLng(dto.getImgLng()).build();
