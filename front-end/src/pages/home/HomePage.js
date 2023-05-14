@@ -28,7 +28,7 @@ function HomePage() {
       })
       .then((response) => {
         console.log(response);
-        setUserName(response.data.result.name);
+        setUserName(response.data.result.nickname);
       })
       .catch((error) => {
         console.error(error);
