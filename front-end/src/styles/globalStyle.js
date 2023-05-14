@@ -15,13 +15,7 @@ const GlobalStyle = createGlobalStyle`
     font-size: 62.5%;
 
   }
-
-  @font-face {
-    font-family: 'SUIT Variable';
-    font-weight: 100 900;
-    src: local('SUIT Variable Regular'), url('./SUIT-Variable.woff2') format('woff2-variations');
-  }
-
+ 
   * {
     box-sizing: border-box;
 	}
