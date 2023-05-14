@@ -275,6 +275,7 @@ const Box4 = styled.div`
   display: flex;
   width: 353px;
   height: 101px;
+  margin-bottom: 30px;
   background: ${COLOR.MAIN_GREEN};
   border: 2px solid ${COLOR.MAIN_GREEN_HOVER};
   border-radius: 14px;
