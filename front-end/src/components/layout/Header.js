@@ -2,12 +2,15 @@ import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 import { useRecoilValue } from "recoil";
 import { headerTitleState } from "../../core/headerTitle";
+import { useLocation } from "react-router-dom";
 
 export const HomeHeader = () => {
+  const location = useLocation();
+
   const headerTitle = useRecoilValue(headerTitleState);
 
   return (
-    <StHomeHeader>
+    <StHomeHeader isHome={location.pathname === "/home"}>
       <StHeaderTitle>{headerTitle}</StHeaderTitle>
     </StHomeHeader>
   );
@@ -20,6 +23,8 @@ const StHomeHeader = styled.div`
   width: 393px;
   height: 127px;
   padding: 66px 0 36px 20px;
+  background-color: ${({ isHome }) =>
+    isHome ? COLOR.INPUT_GRAY : "transparent"};
 
   font-family: "SUIT Variable";
   font-style: normal;

@@ -55,7 +55,7 @@ function HomePage() {
           <RightBox1>
             <Footprint className="footprint" />
             <Text2>서울두드림길이란?</Text2>
-            <div></div>
+            <Arrow className="arrow" />
           </RightBox1>
         </Box1>
         <Box2></Box2>
@@ -88,7 +88,7 @@ const LeftBox1 = styled.div`
   width: 170px;
   height: 121px;
   border-radius: 14px;
-  background-color: ${COLOR.LIGHT_GRAY};
+  background-color: ${COLOR.MAIN_WHITE};
   padding: 12px 16px;
 
   .flag {
@@ -101,7 +101,7 @@ const LeftBox1 = styled.div`
     margin-top: 15px;
     width: 25px;
     height: 25px;
-    color: ${COLOR.DARK_GRAY};
+    color: ${COLOR.MAIN_GREEN};
     margin-bottom: 10px;
   }
 `;
@@ -119,7 +119,7 @@ const RightBox1 = styled.div`
   width: 170px;
   height: 121px;
   border-radius: 14px;
-  border: 2px solid ${COLOR.INPUT_BORDER_GRAY};
+  background: ${COLOR.MAIN_WHITE};
   border-radius: 14px;
   padding: 12px 16px;
 
@@ -128,6 +128,13 @@ const RightBox1 = styled.div`
     height: 20px;
     color: ${COLOR.DARK_GRAY};
     margin-bottom: 12px;
+  }
+  .arrow {
+    margin-top: 15px;
+    width: 25px;
+    height: 25px;
+    color: ${COLOR.MAIN_GREEN};
+    margin-bottom: 10px;
   }
 `;
 const Text2 = styled.div`
@@ -143,7 +150,7 @@ const Box2 = styled.div`
   margin-bottom: 13px;
   width: 353px;
   height: 101px;
-  background: ${COLOR.MAIN_LIME};
+  background: ${COLOR.MAIN_WHITE};
   border-radius: 14px;
   padding: 12px 16px;
 `;
@@ -154,7 +161,7 @@ const Box3 = styled.div`
   // border: 2px solid ${COLOR.MAIN_GREEN_HOVER};
   border-radius: 14px;
   padding: 12px 16px;
-  background-color: ${COLOR.INPUT_GRAY};
+  background-color: ${COLOR.MAIN_WHITE};
 
   .tree {
     width: 20px;
