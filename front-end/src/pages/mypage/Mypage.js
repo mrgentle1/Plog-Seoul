@@ -1,23 +1,44 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSetRecoilState } from "recoil";
 import { headerTitleState } from "../../core/headerTitle";
 import { Footer } from "../../components/layout/Footer";
 import { ReactComponent as ForwardArrow } from "../../assets/icons/forwardArrow.svg";
 
+import axios from "axios";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 
 function MyPage() {
+  const token = localStorage.getItem("key");
+  const [user, setUser] = useState([]);
+
   const setHeaderTitle = useSetRecoilState(headerTitleState);
 
   useEffect(() => {
-    setHeaderTitle("이름님");
-  }, [setHeaderTitle]);
+    axios
+      .get("http://3.37.14.183/api/auth/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        setUser(response.data.result);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  useEffect(() => {
+    setHeaderTitle(user.name);
+  });
 
   return (
     <StMyPage>
       <StMyInfo>
-        <MyEmail>abcde123@gmail.com</MyEmail>
+        <MyEmail>{user.email}</MyEmail>
         <MyEdit>이름 변경</MyEdit>
       </StMyInfo>
       <StMyContent>
@@ -57,12 +78,16 @@ const StMyInfo = styled.div`
   width: 353px;
 `;
 const MyEmail = styled.div`
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 600;
   font-size: 16px;
   line-height: 19px;
   color: ${COLOR.MAIN_GREEN};
 `;
 const MyEdit = styled.div`
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 500;
   font-size: 14px;
   line-height: 16px;
@@ -99,12 +124,16 @@ const MyBox4 = styled.div`
 const MyBox5 = styled.div`
   display: flex;
   margin-top: 46px;
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 600;
   font-size: 14px;
   line-height: 19px;
   color: ${COLOR.INPUT_BORDER_GRAY};
 `;
 const MyText = styled.div`
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 600;
   font-size: 16px;
   line-height: 19px;

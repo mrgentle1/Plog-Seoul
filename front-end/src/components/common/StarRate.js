@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ReactComponent as Star } from "../../assets/icons/star.svg";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 
 export default function StarRating({ onClick }) {

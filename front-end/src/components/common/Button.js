@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
+import { ReactComponent as ArrowGreen } from "../../assets/icons/arrow_green.svg";
 
 export const Button = ({ children, onClick }) => {
   return <StButton onClick={onClick}>{children}</StButton>;
@@ -11,6 +12,17 @@ export const DisabledButton = ({ children, onClick }) => {
 
 export const BorderButton = ({ children, onClick }) => {
   return <StBorderButton onClick={onClick}>{children}</StBorderButton>;
+};
+
+export const BorderThinButton = ({ children, onClick }) => {
+  return (
+    <StBorderButtonWrapper>
+      <StBorderThinButton onClick={onClick}>
+        <div className="text">{children}</div>
+        <ArrowGreen className="arrow" />
+      </StBorderThinButton>
+    </StBorderButtonWrapper>
+  );
 };
 
 const StButton = styled.button`
@@ -45,6 +57,8 @@ const StDisabledButton = styled.button`
 `;
 
 const StBorderButton = styled.button`
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 500;
   font-size: 14px;
   line-height: 17px;
@@ -58,4 +72,58 @@ const StBorderButton = styled.button`
   font-weight: 600;
   line-height: 19px;
   letter-spacing: 1.2px;
+`;
+
+const StBorderButtonWrapper = styled.button`
+  display: flex;
+  align-items: center;
+  text-align: left;
+  align-items: flex-start;
+  padding: 12px 16px;
+  width: 353px;
+  height: 54px;
+  background-color: ${COLOR.MAIN_WHITE};
+  border: 1px solid ${COLOR.MAIN_GREEN};
+  border-radius: 14px;
+  margin-bottom: 12px;
+`;
+const StBorderThinButton = styled.button`
+  border: none;
+  background-color: ${COLOR.MAIN_WHITE};
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 27px;
+  color: ${COLOR.MAIN_BLACK};
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px;
+  gap: 12px;
+
+  width: 321px;
+  height: 30px;
+
+  font-family: "SUIT Variable";
+  font-style: normal;
+
+  .text {
+    display: flex;
+    flex-direction: row;
+  }
+  p {
+    text-align: left;
+    font-family: "SUIT Variable";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 27px;
+    color: ${COLOR.MAIN_GREEN};
+  }
+  .arrow {
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+  }
 `;

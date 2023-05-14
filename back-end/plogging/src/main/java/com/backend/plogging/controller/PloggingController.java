@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -51,6 +52,13 @@ public class PloggingController {
         return response;
     }
 
+    @PatchMapping("/{recordId}")
+    public BaseResponseEntity<?> updateRecord(@PathVariable Long recordId,
+                                              @RequestBody PloggingPostRequestDto dto) {
+        BaseResponseEntity response = ploggingService.updateRecord(recordId, dto);
+        return response;
+    }
+
     @PostMapping(value = "/{recordId}/images", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public BaseResponseEntity<?> uploadImage(@PathVariable Long recordId,
                                              @RequestPart ImageRequestDto dto,
@@ -72,7 +80,7 @@ public class PloggingController {
     }
 
     @PostMapping("/{recordId}/paths")
-    public BaseResponseEntity<?> createPath(@PathVariable Long recordId, @RequestBody PathRequestDto dto) {
+    public BaseResponseEntity<?> createPath(@PathVariable Long recordId, @RequestBody List<PathRequestDto> dto) {
         BaseResponseEntity response = ploggingService.createPath(recordId, dto);
         return response;
     }

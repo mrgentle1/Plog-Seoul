@@ -27,7 +27,7 @@ function LoginPage() {
   return (
     <StLoginPage>
       <LoginText>
-        <Logo />
+        <Logo className="logo" />
         <p
           className="txt"
           dangerouslySetInnerHTML={{
@@ -49,15 +49,19 @@ export default LoginPage;
 const StLoginPage = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 143px;
   margin-left: 20px;
   width: 100%;
   height: 100%;
 `;
 
 const LoginText = styled.div`
+  .logo {
+    margin-top: 143px;
+  }
   p {
     margin-top: 36px;
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-weight: 700;
     font-size: 20px;
     line-height: 32px;

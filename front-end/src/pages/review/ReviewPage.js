@@ -6,7 +6,6 @@ import { ReactComponent as Star } from "../../assets/icons/star.svg";
 import { ReviewCard } from "../../components/common/ReviewCard";
 
 import axios from "axios";
-import { user_token } from "../../core/user_token";
 
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
@@ -23,7 +22,7 @@ function ReviewPage() {
   const url = pathname.substring(7);
   const real_url = "http://3.37.14.183/api/roads" + url;
 
-  const token = user_token.token;
+  const token = localStorage.getItem("key");
 
   const [reviews, setReviews] = useState([]);
 
@@ -69,7 +68,7 @@ function ReviewPage() {
         </ReviewStar>
         <ReviewList>
           {reviews.map((data) => (
-            <ReviewCard key={data.userId} r={data} />
+            <ReviewCard key={data.reviewId} r={data} />
           ))}
         </ReviewList>
       </ReviewMain>
@@ -107,13 +106,17 @@ const ReviewBox1 = styled.div`
   h1 {
     margin-top: 74px;
     margin-left: 20px;
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-weight: 700;
     font-size: 20px;
     line-height: 25px;
   }
   h4 {
-    margin-top: 76px;
+    margin-top: 77px;
     margin-left: 6px;
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-weight: 700;
     font-size: 17px;
     line-height: 21px;
@@ -127,6 +130,8 @@ const ReviewBox2 = styled.div`
   margin-top: 76px;
 
   h5 {
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-weight: 500;
     font-size: 13.5px;
     line-height: 21px;
@@ -147,6 +152,8 @@ const ReviewStar = styled.div`
   h5 {
     margin-top: 5px;
     margin-right: 10px;
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-weight: 500;
     font-size: 15px;
     color: ${COLOR.MAIN_BLACK};

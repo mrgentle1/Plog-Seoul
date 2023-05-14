@@ -124,12 +124,16 @@ const SearchInputBox = styled.input`
   border-radius: 8px;
   padding: 12px;
   padding-right: 40px;
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 500;
   font-size: 14px;
   line-height: 17px;
 
   ::placeholder {
     color: ${COLOR.INPUT_BORDER_GRAY};
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-weight: 400;
     font-size: 14px;
     line-height: 17px;
@@ -142,6 +146,8 @@ const SearchContent = styled.div`
   margin-top: 40px;
   margin-left: 40px;
   h3 {
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-weight: 700;
     font-size: 17px;
     line-height: 21px;
@@ -169,7 +175,10 @@ const SearchItem0 = styled.div`
   h2 {
     width: 26px;
     height: 30px;
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-size: 24px;
+    font-weight: 600;
     line-height: 30px;
     text-align: center;
     color: ${COLOR.MAIN_ORANGE};
@@ -180,6 +189,8 @@ const SearchItem0 = styled.div`
     margin-left: 12px;
     width: 40px;
     height: 19px;
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-weight: 500;
     font-size: 15px;
     line-height: 19px;
@@ -194,6 +205,9 @@ const SearchItem1 = styled.div`
   h2 {
     width: 26px;
     height: 30px;
+    font-family: "SUIT Variable";
+    font-style: normal;
+    font-weight: 600;
     font-size: 24px;
     line-height: 30px;
     text-align: center;
@@ -205,6 +219,8 @@ const SearchItem1 = styled.div`
     margin-left: 12px;
     width: 40px;
     height: 19px;
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-weight: 500;
     font-size: 15px;
     line-height: 19px;

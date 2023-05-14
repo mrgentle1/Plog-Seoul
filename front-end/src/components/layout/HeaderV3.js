@@ -42,6 +42,8 @@ const StHomeHeader = styled.div`
   height: 127px;
   padding: 66px 0 36px 20px;
 
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 700;
   font-size: 20px;
   line-height: 15px;
@@ -61,6 +63,8 @@ const StHeaderTitle = styled.span`
   color: ${COLOR.MAIN_WHITE};
   width: 100%;
   height: 50px;
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 700;
   font-size: 20px;
   line-height: 25px;
