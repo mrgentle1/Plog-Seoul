@@ -27,7 +27,7 @@ function SignupPage() {
       .post(
         "http://3.37.14.183/api/auth/registration",
         {
-          name: name,
+          nickname: name,
         },
         {
           headers: {

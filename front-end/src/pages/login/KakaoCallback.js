@@ -17,6 +17,7 @@ function KakaoCallback() {
           .get(`http://3.37.14.183/api/auth/kakao?code=${code}`)
           .then((res) => {
             const accessToken = res.data.result.jwt;
+
             setCookie("accessToken", accessToken);
 
             navigate("/signup");
