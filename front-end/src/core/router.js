@@ -8,9 +8,10 @@ import HomePage from "../pages/home/HomePage";
 import CoursePage from "../pages/course/CoursePage";
 import RecordPage from "../pages/record/RecordPage";
 import RecordIng from "../pages/record/RecordIng";
-
+import RecordFinish from "../pages/record/RecordFinish";
 import PlogPage from "../pages/plog/PlogPage";
 import MyPage from "../pages/mypage/Mypage";
+
 import SearchPage from "../pages/search/Search";
 import CoursePostPage from "../pages/course/CoursePostPage";
 import CourseMainPage from "../pages/course/CourseMainPage";
@@ -38,6 +39,7 @@ function Router() {
           <Route path="/my" element={<MyPage />} />
         </Route>
         <Route path="/record/ing" element={<RecordIng />} />
+        <Route path="/record/finish" element={<RecordFinish />} />
       </Routes>
     </BrowserRouter>
   );

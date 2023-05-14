@@ -25,6 +25,14 @@ export const BorderThinButton = ({ children, onClick }) => {
   );
 };
 
+export const BorderGreenThinButton = ({ children, onClick }) => {
+  return (
+    <StBorderGreenThinButton onClick={onClick}>
+      {children}
+    </StBorderGreenThinButton>
+  );
+};
+
 const StButton = styled.button`
   width: 353px;
   height: 60px;
@@ -32,7 +40,7 @@ const StButton = styled.button`
   border-radius: 14px;
   background-color: ${COLOR.MAIN_GREEN};
   color: ${COLOR.MAIN_BLACK};
-  font-family: "SUIT Variable";
+  /* font-family: "SUIT Variable"; */
   font-style: normal;
   font-weight: 600;
   line-height: 19px;
@@ -126,4 +134,18 @@ const StBorderThinButton = styled.button`
     order: 1;
     flex-grow: 0;
   }
+`;
+
+const StBorderGreenThinButton = styled.button`
+  width: 353px;
+  height: 44px;
+  border: 1px solid ${COLOR.MAIN_GREEN};
+  border-radius: 14px;
+  background-color: ${COLOR.MAIN_WHITE};
+  color: ${COLOR.MAIN_GREEN};
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: center;
 `;
