@@ -22,8 +22,12 @@ export const BorderThinButton = ({ children, onClick }) => {
   );
 };
 
-export const GBorderButton = ({ children }) => {
-  return <StGBorderButton>{children}</StGBorderButton>;
+export const BorderGreenThinButton = ({ children, onClick }) => {
+  return (
+    <StBorderGreenThinButton onClick={onClick}>
+      {children}
+    </StBorderGreenThinButton>
+  );
 };
 
 const StButton = styled.button`
@@ -100,7 +104,7 @@ const StBorderThinButton = styled.button`
   }
 `;
 
-const StGBorderButton = styled.button`
+const StBorderGreenThinButton = styled.button`
   width: 353px;
   height: 44px;
   border: 1px solid ${COLOR.MAIN_GREEN};
