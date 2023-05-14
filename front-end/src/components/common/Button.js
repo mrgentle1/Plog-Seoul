@@ -16,9 +16,12 @@ export const BorderButton = ({ children, onClick }) => {
 
 export const BorderThinButton = ({ children, onClick }) => {
   return (
-    <StBorderThinButton onClick={onClick}>
-      {children} <ArrowGreen className="arrow" />
-    </StBorderThinButton>
+    <StBorderButtonWrapper>
+      <StBorderThinButton onClick={onClick}>
+        <div className="text">{children}</div>
+        <ArrowGreen className="arrow" />
+      </StBorderThinButton>
+    </StBorderButtonWrapper>
   );
 };
 
@@ -54,6 +57,8 @@ const StDisabledButton = styled.button`
 `;
 
 const StBorderButton = styled.button`
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 500;
   font-size: 14px;
   line-height: 17px;
@@ -69,8 +74,7 @@ const StBorderButton = styled.button`
   letter-spacing: 1.2px;
 `;
 
-const StBorderThinButton = styled.button`
-  margin-bottom: 12px;
+const StBorderButtonWrapper = styled.button`
   display: flex;
   align-items: center;
   text-align: left;
@@ -81,17 +85,45 @@ const StBorderThinButton = styled.button`
   background-color: ${COLOR.MAIN_WHITE};
   border: 1px solid ${COLOR.MAIN_GREEN};
   border-radius: 14px;
+  margin-bottom: 12px;
+`;
+const StBorderThinButton = styled.button`
+  border: none;
+  background-color: ${COLOR.MAIN_WHITE};
   font-weight: 600;
   font-size: 15px;
   line-height: 27px;
   color: ${COLOR.MAIN_BLACK};
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px;
+  gap: 12px;
+
+  width: 321px;
+  height: 30px;
+
+  font-family: "SUIT Variable";
+  font-style: normal;
+
+  .text {
+    display: flex;
+    flex-direction: row;
+  }
   p {
+    text-align: left;
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-weight: 500;
     font-size: 15px;
     line-height: 27px;
     color: ${COLOR.MAIN_GREEN};
   }
   .arrow {
-    text-align: right;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
   }
 `;

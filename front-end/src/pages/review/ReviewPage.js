@@ -106,13 +106,17 @@ const ReviewBox1 = styled.div`
   h1 {
     margin-top: 74px;
     margin-left: 20px;
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-weight: 700;
     font-size: 20px;
     line-height: 25px;
   }
   h4 {
-    margin-top: 76px;
+    margin-top: 77px;
     margin-left: 6px;
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-weight: 700;
     font-size: 17px;
     line-height: 21px;
@@ -126,6 +130,8 @@ const ReviewBox2 = styled.div`
   margin-top: 76px;
 
   h5 {
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-weight: 500;
     font-size: 13.5px;
     line-height: 21px;
@@ -146,6 +152,8 @@ const ReviewStar = styled.div`
   h5 {
     margin-top: 5px;
     margin-right: 10px;
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-weight: 500;
     font-size: 15px;
     color: ${COLOR.MAIN_BLACK};

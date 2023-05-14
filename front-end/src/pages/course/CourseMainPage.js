@@ -25,7 +25,7 @@ function CourseMainPage() {
     "한양도성길",
     "근교산자락길",
     "생태문화길",
-    "한강/지천길",
+    "한강지천길/계절길",
   ];
 
   const ClickCategory = (c) => {
@@ -39,13 +39,14 @@ function CourseMainPage() {
 
   useEffect(() => {
     axios
-      .get("http://3.37.14.183/api/roads", {
+      .get("http://3.37.14.183/api/roads?pagingIndex=0&pagingSize=150", {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       })
       .then((response) => {
+        console.log(response);
         setCourses(response.data.result.content);
       })
       .catch((error) => {
@@ -116,6 +117,8 @@ const CourseMainHeader = styled.div`
 const HeaderText = styled.div`
   margin-top: 52.5px;
   margin-left: 22px;
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 700;
   font-size: 20px;
   line-height: 25px;
@@ -140,11 +143,13 @@ const CourseMainCategory = styled.div`
 `;
 const CourseCategory = styled.button`
   margin-right: 6px;
-  width: 100px;
+  width: 140px;
   height: 36px;
   border: none;
   border-radius: 8px;
   padding: 8.5px 12px;
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 600;
   font-size: 15px;
   line-height: 19px;

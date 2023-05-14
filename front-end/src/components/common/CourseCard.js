@@ -73,6 +73,8 @@ const StCourseText = styled.div`
   height: 140px;
 
   h3 {
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-weight: 600;
     font-size: 15px;
     line-height: 19px;
@@ -80,6 +82,8 @@ const StCourseText = styled.div`
   }
   h6 {
     margin-top: 12px;
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-weight: 500;
     font-size: 13px;
     line-height: 16px;
@@ -116,6 +120,8 @@ const Tag = styled.div`
   }
   p {
     margin-top: 1.5px;
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-weight: 500;
     font-size: 11px;
     line-height: 14px;

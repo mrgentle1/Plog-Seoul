@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ReactComponent as BackArrow } from "../../assets/icons/backArrow.svg";
 import { Button, DisabledButton } from "../../components/common/Button";
 
@@ -27,7 +27,7 @@ function SignupPage() {
       .post(
         "http://3.37.14.183/api/auth/registration",
         {
-          name: name,
+          nickname: name,
         },
         {
           headers: {
@@ -114,6 +114,8 @@ const SignupText = styled.div`
   text-align: left;
   margin: 0;
   padding: 0;
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 700;
   font-size: 20px;
   line-height: 25px;
@@ -131,12 +133,16 @@ const SignupInputBox = styled.input`
   border: 1px solid ${COLOR.INPUT_BORDER_GRAY};
   border-radius: 8px;
   padding: 12px;
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 500;
   font-size: 14px;
   line-height: 17px;
 
   ::placeholder {
     color: ${COLOR.INPUT_BORDER_GRAY};
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-weight: 400;
     font-size: 14px;
     line-height: 17px;

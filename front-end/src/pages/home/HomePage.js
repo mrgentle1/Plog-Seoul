@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSetRecoilState } from "recoil";
 import { headerTitleState } from "../../core/headerTitle";
 import { HomeHeader } from "../../components/layout/Header";
@@ -8,15 +8,36 @@ import { ReactComponent as Arrow } from "../../assets/icons/arrow.svg";
 import { ReactComponent as Footprint } from "../../assets/icons/footprint.svg";
 import { ReactComponent as Tree } from "../../assets/icons/tree.svg";
 
+import axios from "axios";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 
 function HomePage() {
+  const token = localStorage.getItem("key");
+  const [username, setUserName] = useState("");
+
   const setHeaderTitle = useSetRecoilState(headerTitleState);
 
   useEffect(() => {
-    setHeaderTitle("안녕하세요, 이름님!"); // '홈' 값을 할당합니다.
-  }, [setHeaderTitle]);
+    axios
+      .get("http://3.37.14.183/api/auth/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        setUserName(response.data.result.name);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+  const headertext = "안녕하세요, " + username + "님!";
+  useEffect(() => {
+    setHeaderTitle(headertext); // '홈' 값을 할당합니다.
+  });
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -33,7 +54,7 @@ function HomePage() {
           </LeftBox1>
           <RightBox1>
             <Footprint className="footprint" />
-            <Text2>이번 주 평균 걸음</Text2>
+            <Text2>서울두드림길이란?</Text2>
             <div></div>
           </RightBox1>
         </Box1>
@@ -85,6 +106,8 @@ const LeftBox1 = styled.div`
   }
 `;
 const Text1 = styled.div`
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 600;
   font-size: 15px;
   line-height: 19px;
@@ -108,6 +131,8 @@ const RightBox1 = styled.div`
   }
 `;
 const Text2 = styled.div`
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 600;
   font-size: 15px;
   line-height: 19px;
@@ -153,6 +178,8 @@ const Text4 = styled.div`
   margin-top: 20px;
   margin-bottom: 15px;
   margin-left: 20px;
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 600;
   font-size: 16px;
   line-height: 19px;
