@@ -39,13 +39,14 @@ function CourseMainPage() {
 
   useEffect(() => {
     axios
-      .get("http://3.37.14.183/api/roads", {
+      .get("http://3.37.14.183/api/roads?pagingIndex=0&pagingSize=150", {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       })
       .then((response) => {
+        console.log(response);
         setCourses(response.data.result.content);
       })
       .catch((error) => {
