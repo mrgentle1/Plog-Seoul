@@ -25,7 +25,7 @@ function CourseMainPage() {
     "한양도성길",
     "근교산자락길",
     "생태문화길",
-    "한강/지천길",
+    "한강지천길/계절길",
   ];
 
   const ClickCategory = (c) => {
@@ -143,7 +143,7 @@ const CourseMainCategory = styled.div`
 `;
 const CourseCategory = styled.button`
   margin-right: 6px;
-  width: 100px;
+  width: 140px;
   height: 36px;
   border: none;
   border-radius: 8px;
