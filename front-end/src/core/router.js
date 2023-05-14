@@ -14,6 +14,7 @@ import CoursePostPage from "../pages/course/CoursePostPage";
 import CourseMainPage from "../pages/course/CourseMainPage";
 import ReviewPage from "../pages/review/ReviewPage";
 import ReviewWritePage from "../pages/review/ReviewWritePage";
+import NoticePage from "../pages/mypage/NoticePage";
 
 function Router() {
   return (
@@ -27,6 +28,7 @@ function Router() {
         <Route path="/course/main" element={<CourseMainPage />} />
         <Route path="/course/:id/reviews" element={<ReviewPage />} />
         <Route path="/course/:id/review" element={<ReviewWritePage />} />
+        <Route path="/my/notice" element={<NoticePage />} />
 
         <Route element={<Layout />}>
           <Route path="/home" element={<HomePage />} />
