@@ -38,6 +38,7 @@ function CoursePostPage() {
         },
       })
       .then((response) => {
+        console.log(response);
         setCourse(response.data.result);
       })
       .catch((error) => {
@@ -117,21 +118,22 @@ function CoursePostPage() {
           <ReviewBox1>
             <Box1>
               <Review>후기</Review>
-              <h4>6</h4>
+              <h4>{course.reviewCnt}</h4>
             </Box1>
             <Box2>
-              <h5>+ 500 포인트</h5>
+              <h5>+ 100 포인트</h5>
               <Link to={pathname + "/review"}>
                 <Pencil className="pencil" />
               </Link>
             </Box2>
           </ReviewBox1>
           <ReviewBox2>
-            <Star className="star" />
-            <Star className="star" />
-            <Star className="star" />
-            <Star className="star" />
-            <Star className="star" />
+            {[...Array(5)].map(
+              (_, index) =>
+                index < course.reviewSum && (
+                  <Star key={index} className="star" />
+                )
+            )}
           </ReviewBox2>
           <ReviewList>
             {reviews.map((data) => (
