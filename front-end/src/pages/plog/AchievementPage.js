@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { ReactComponent as BackArrow } from "../../assets/icons/backArrow.svg";
+import { ReactComponent as AchieveAll } from "../../assets/icons/achieveAll.svg";
 
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
@@ -18,7 +19,7 @@ function AchievementPage() {
         <HeaderText>달성한 업적</HeaderText>
       </NoticeHeader>
       <NoticeContent>
-        <div className="noticeText">아직 표시할 공지사항이 없어요</div>
+        <AchieveAll />
       </NoticeContent>
     </StNoticePage>
   );
@@ -60,7 +61,7 @@ const HeaderText = styled.div`
   color: ${COLOR.MAIN_BLACK};
 `;
 const NoticeContent = styled.div`
-  margin-top: 340px;
+  margin-top: 50px;
   .noticeText {
     font-family: "SUIT Variable";
     font-style: normal;

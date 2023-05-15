@@ -1,6 +1,8 @@
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { ReactComponent as BackArrow } from "../../assets/icons/backArrow.svg";
+import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
+import { PointCard } from "../../components/common/PointCard";
 
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
@@ -11,14 +13,56 @@ function LevelPage() {
     navigate(-1);
   }, [navigate]);
 
+  const data = [{ name: "level", value: 75 }];
+
+  const dummydata = [
+    { id: 1, course: "한강도성길", coursename: "낙산구간", date: "5월 2일" },
+    { id: 2, course: "한강도성길", coursename: "낙산구간", date: "5월 2일" },
+    { id: 3, course: "한강도성길", coursename: "낙산구간", date: "5월 2일" },
+    { id: 4, course: "한강도성길", coursename: "낙산구간", date: "5월 2일" },
+    { id: 5, course: "한강도성길", coursename: "낙산구간", date: "5월 2일" },
+    { id: 6, course: "한강도성길", coursename: "낙산구간", date: "5월 2일" },
+    { id: 7, course: "한강도성길", coursename: "낙산구간", date: "5월 2일" },
+    { id: 8, course: "한강도성길", coursename: "낙산구간", date: "5월 2일" },
+  ];
+
   return (
     <StNoticePage>
       <NoticeHeader>
         <BackArrow className="noticeBackArrow" onClick={goBack} />
         <HeaderText>Level 3</HeaderText>
       </NoticeHeader>
+
+      <ResponsiveContainer width="100%" height={240} className="graph">
+        <PieChart>
+          <Pie
+            data={data}
+            startAngle={90}
+            endAngle={-220}
+            cx="50%"
+            cy="50%"
+            innerRadius="55%"
+            outerRadius="90%"
+            animationDuration={1000}
+            animationBegin={0}
+          >
+            <Cell fill={COLOR.MAIN_GREEN} />
+            <Cell fill={COLOR.INPUT_BORDER_GRAY} />
+          </Pie>
+        </PieChart>
+      </ResponsiveContainer>
+      <Point>
+        <h5>800</h5>
+        <h6>/ 1,000 포인트</h6>
+      </Point>
+      <LevelLine />
       <NoticeContent>
-        <div className="noticeText">아직 표시할 공지사항이 없어요</div>
+        <PointText>포인트 내역</PointText>
+        <PointList>
+          {dummydata.map((data) =>
+            data ? <PointCard key={data.id} p={data} /> : null
+          )}
+        </PointList>
       </NoticeContent>
     </StNoticePage>
   );
@@ -32,12 +76,17 @@ const StNoticePage = styled.div`
   width: 100%;
   height: 100%;
   padding-top: 88px;
+  .graph {
+    margin-top: 40px;
+  }
 `;
 const NoticeHeader = styled.div`
   position: fixed;
   top: 0;
   width: 393px;
-  height: 88px;
+  height: 118px;
+  background: ${COLOR.MAIN_WHITE};
+  z-index: 100;
 
   display: flex;
   flex-direction: row;
@@ -45,12 +94,12 @@ const NoticeHeader = styled.div`
   align-items: center;
 
   .noticeBackArrow {
-    margin-top: 76px;
+    margin-top: 40px;
     margin-left: 20px;
   }
 `;
 const HeaderText = styled.div`
-  margin-top: 74px;
+  margin-top: 39px;
   margin-left: 22px;
   font-family: "SUIT Variable";
   font-style: normal;
@@ -59,14 +108,54 @@ const HeaderText = styled.div`
   line-height: 25px;
   color: ${COLOR.MAIN_BLACK};
 `;
-const NoticeContent = styled.div`
-  margin-top: 340px;
-  .noticeText {
+const Point = styled.div`
+  margin-top: -140px;
+  margin-bottom: 140px;
+  text-align: center;
+
+  h5 {
     font-family: "SUIT Variable";
     font-style: normal;
-    font-weight: 600;
+    font-weight: 700;
     font-size: 17px;
     line-height: 21px;
-    color: ${COLOR.INPUT_BORDER_GRAY};
+    color: ${COLOR.MAIN_BLACK};
   }
+  h6 {
+    margin-top: 6px;
+    font-family: "SUIT Variable";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 11px;
+    line-height: 14px;
+    color: ${COLOR.DARK_GRAY};
+  }
+`;
+const LevelLine = styled.div`
+  margin-top: 10px;
+  width: 353px;
+  text-align: center;
+  border: 0.35px solid ${COLOR.MAIN_GREEN};
+
+  line-height: 0.1px;
+`;
+const NoticeContent = styled.div`
+  margin-top: 24px;
+  width: 353px;
+`;
+const PointText = styled.text`
+  display: flex;
+  width: 100%;
+  text-align: left;
+  font-family: "SUIT Variable";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 19px;
+  color: ${COLOR.MAIN_BLACK};
+`;
+const PointList = styled.text`
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
 `;
