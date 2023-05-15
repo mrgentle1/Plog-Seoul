@@ -1,12 +1,16 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 import axios from "axios";
 
 import { ReactComponent as Star } from "../../assets/icons/star.svg";
 import { ReactComponent as Dots } from "../../assets/icons/threedots.svg";
+import { ReviewEditModal, ModalBackground } from "./ReviewEditModal";
 
 export const ReviewCard = ({ r }) => {
+  const navigate = useNavigate();
+
   const createdAt = r.createdAt;
   const date = createdAt.substring(0, 10);
   const time = createdAt.substring(11, 16);
@@ -18,25 +22,14 @@ export const ReviewCard = ({ r }) => {
 
   const token = localStorage.getItem("key");
 
-  const content = r.content;
   const pathname = window.location.pathname;
   const url = pathname.substring(7);
   const real_pathname = "http://3.37.14.183/api/roads" + url + `/${r.reviewId}`;
 
-  const onEdit = () => {
-    axios
-      .put(real_pathname, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      })
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+  // 모달창 호출
+  const [modalOpen, setModalOpen] = useState(false);
+  const showModal = () => {
+    setModalOpen(true);
   };
 
   const onDelete = () => {
@@ -49,6 +42,7 @@ export const ReviewCard = ({ r }) => {
       })
       .then((response) => {
         console.log(response);
+        navigate(-1);
       })
       .catch((error) => {
         console.error(error);
@@ -57,16 +51,17 @@ export const ReviewCard = ({ r }) => {
 
   return (
     <>
+      {modalOpen && <ReviewEditModal setModalOpen={setModalOpen} r={r} />}
+      {modalOpen && <ModalBackground />}
       <StReviewCard>
         <CourseLine />
         <ReviewList>
           <ReviewListInfo>
             <Box3>
-              <Star className="blackStar" />
-              <Star className="blackStar" />
-              <Star className="blackStar" />
-              <Star className="blackStar" />
-              <Star className="blackStar" />
+              {[...Array(5)].map(
+                (_, index) =>
+                  index < r.star && <Star key={index} className="blackStar" />
+              )}
               <h5>{r.userNickname}</h5>
             </Box3>
             <Box2>
@@ -77,7 +72,7 @@ export const ReviewCard = ({ r }) => {
                 <Dots className="dots" />
                 {isDropdownOpen && (
                   <DropdownBox>
-                    <EditButton onClick={onEdit}>수정</EditButton>
+                    <EditButton onClick={showModal}>수정</EditButton>
                     <DeleteButton onClick={onDelete}>삭제</DeleteButton>
                   </DropdownBox>
                 )}
