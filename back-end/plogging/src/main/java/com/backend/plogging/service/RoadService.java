@@ -11,12 +11,18 @@ import com.backend.plogging.repository.ReviewRepository;
 import com.backend.plogging.repository.RouteDataRepository;
 import com.backend.plogging.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -27,6 +33,9 @@ public class RoadService {
     private final ReviewRepository reviewRepository;
     private final UserRepository userRepository;
 
+    @Value("${seoul.api-key}")
+    private String KEY;
+
     public BaseResponseEntity<?> getAllRoads(int pagingIndex, int pagingSize) {
         Pageable pageable = PageRequest.of(pagingIndex, pagingSize);
         Page<RouteData> routes = routeDataRepository.findAll(pageable);
@@ -35,8 +44,55 @@ public class RoadService {
         return new BaseResponseEntity<>(HttpStatus.OK, roadResponses);
     }
 
+    /**
+     * 서울 두드림길 계절별 추천코스 정보
+     * https://data.seoul.go.kr/dataList/OA-15427/S/1/datasetView.do
+     */
     public BaseResponseEntity<?> getRecommendedRoads() {
-        return null;
+
+        String HOST = "http://openapi.seoul.go.kr:8088";
+        String TYPE = "json";
+        String SERVICE = "walkSesonInfo";
+        String START_INDEX = "1";
+        String END_INDEX = "40";
+
+        System.out.println("KEY = " + KEY);
+
+        try {
+            URL url = new URL(HOST + "/" + KEY + "/" + TYPE + "/" + SERVICE + "/" + START_INDEX + "/" + END_INDEX);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Accept", "application/json");
+
+            if (connection.getResponseCode() != 200) {
+                throw new RuntimeException("Failed : HTTP error code : " + connection.getResponseCode());
+            }
+
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String output;
+            StringBuilder response = new StringBuilder();
+
+            while ((output = bufferedReader.readLine()) != null) {
+                response.append(output);
+            }
+
+            String parsedResponse = parsingResponse(response.toString());
+
+            // String to JSON Object
+            JSONObject jsonObject = new JSONObject(parsedResponse);
+
+            connection.disconnect();
+            return new BaseResponseEntity<>(HttpStatus.OK, jsonObject.toMap());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new BaseResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private String parsingResponse(String input) {
+        String cleanedInput = input.replaceAll("<[^>]*>|\\\\r|\\\\n|\\\\t|\\|\\r\\n|\\n|\\r|\\t", "");
+        return cleanedInput.trim();
     }
 
     public BaseResponseEntity<?> getRoadById(Long roadId) {
