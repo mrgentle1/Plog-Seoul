@@ -14,10 +14,11 @@ import { ReactComponent as HomeButton } from "../../assets/icons/homeButton.svg"
 import axios from "axios";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
+import { Link } from "react-router-dom";
 
 function HomePage() {
   const token = localStorage.getItem("key");
-  const [username, setUserName] = useState("");
+  const [user, setUser] = useState("");
 
   const setHeaderTitle = useSetRecoilState(headerTitleState);
 
@@ -31,13 +32,13 @@ function HomePage() {
       })
       .then((response) => {
         console.log(response);
-        setUserName(response.data.result.nickname);
+        setUser(response.data.result);
       })
       .catch((error) => {
         console.error(error);
       });
   }, []);
-  const headertext = "안녕하세요, " + username + "님!";
+  const headertext = "안녕하세요, " + user.nickname + "님!";
   useEffect(() => {
     setHeaderTitle(headertext); // '홈' 값을 할당합니다.
   });
@@ -51,7 +52,7 @@ function HomePage() {
       <Box1>
         <LeftBox1>
           <Flag className="flag" />
-          <Text1>봄 추천 나들이길</Text1>
+          <Text1>계절별 추천 코스</Text1>
           <Arrow className="arrow" />
         </LeftBox1>
         <RightBox1>
@@ -60,15 +61,17 @@ function HomePage() {
           <Arrow className="arrow" />
         </RightBox1>
       </Box1>
-      <Box2>
-        <Level className="level" />
-        <LevelBox>
-          <Text3>Level 3</Text3>
-          <Text4>다음 레벨까지 3,000 포인트</Text4>
-        </LevelBox>
-        <LevelBar></LevelBar>
-        <LevelBar2></LevelBar2>
-      </Box2>
+      <Link to="/plog/level">
+        <Box2>
+          <Level className="level" />
+          <LevelBox>
+            <Text3>Level {user.level}</Text3>
+            <Text4>다음 레벨까지 1,000 포인트</Text4>
+          </LevelBox>
+          <LevelBar></LevelBar>
+          <LevelBar2></LevelBar2>
+        </Box2>
+      </Link>
       <Box3>
         <Tree className="tree" />
         <Text5>
@@ -82,13 +85,15 @@ function HomePage() {
           <Dis2>5.65km</Dis2>
         </Text6>
       </Box3>
-      <Box4>
-        <Record className="record" />
-        <div className="box4">
-          <Text7>오늘도 주워볼까요?</Text7>
-          <HomeButton className="homeButton" />
-        </div>
-      </Box4>
+      <Link to="/record">
+        <Box4>
+          <Record className="record" />
+          <div className="box4">
+            <Text7>오늘도 주워볼까요?</Text7>
+            <HomeButton className="homeButton" />
+          </div>
+        </Box4>
+      </Link>
       <Footer />
     </StHomePage>
   );
