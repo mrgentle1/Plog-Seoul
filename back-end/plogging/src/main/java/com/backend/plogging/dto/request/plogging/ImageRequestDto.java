@@ -9,10 +9,12 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ImageRequestDto {
+    private String imageUrl;
     private Float imgLat;
     private Float imgLng;
 
     public ImageRequestDto(Image image) {
+        this.imageUrl = image.getImgUrl();
         this.imgLat = image.getImgLat();
         this.imgLng = image.getImgLng();
     }
