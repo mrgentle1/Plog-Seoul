@@ -11,9 +11,12 @@ export const RecordModal = ({ setModalOpen, data }) => {
 
   // 모달 끄기
   const closeModal = () => {
+    console.log("close");
     setModalOpen(false);
   };
   const checkModal = () => {
+    console.log("check");
+
     setModalOpen(false);
   };
 
@@ -30,12 +33,9 @@ export const RecordModal = ({ setModalOpen, data }) => {
         </ModalText>
         <ModalLine />
         <ModalButton>
-          <Link to={real_pathname}>
-            <CloseButton onClick={closeModal}>닫기</CloseButton>
-          </Link>
-          <Link to={real_pathname}>
-            <CheckButton onClick={checkModal}>{data.btnText}</CheckButton>
-          </Link>
+          <CloseButton onClick={closeModal}>닫기</CloseButton>
+
+          <CheckButton onClick={checkModal}>{data.btnText}</CheckButton>
         </ModalButton>
       </ModalContainer>
     </>

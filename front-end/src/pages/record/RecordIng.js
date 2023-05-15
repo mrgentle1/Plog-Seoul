@@ -6,11 +6,14 @@ import { useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 import TimeComponent from "../../components/Record/TimeComponent";
-import { getDistance, getFinDist } from "../../components/utils/calc";
-import { ReactComponent as BackArrow } from "../../assets/icons/backArrow.svg";
 import current from "../../assets/icons/walk.svg";
 import trashCanImg from "../../assets/icons/trash.svg";
-
+import imgMarker from "../../assets/icons/imgMarker.svg";
+import { ReactComponent as Close } from "../../assets/icons/close.svg";
+import {
+  RecordModal,
+  ModalBackground,
+} from "../../components/common/RecordModal";
 import { ReactComponent as CamBtn } from "../../assets/icons/camera.svg";
 import MapRecording from "../../components/Record/MapRecordingComponent3";
 
@@ -23,9 +26,14 @@ let options = {
   timeout: 1000 * 5 * 1, // 1 min (1000 ms * 60 sec * 1 minute = 60 000ms),
   maximumAge: 3600,
 };
+const modalData = {
+  title: "플로깅 기록을 종료할까요?",
+  btnText: "계속하기",
+};
 
 function RecordIngPage() {
-  const token = user_token.token;
+  const token = localStorage.getItem("key");
+  // const token = user_token.token;
   const navigate = useNavigate();
   const goBack = useCallback(() => {
     navigate(-1);
@@ -47,6 +55,10 @@ function RecordIngPage() {
       isLoading: true,
     },
   ]);
+  // 오늘 날짜
+  let now = new Date();
+  let todayMonth = now.getMonth() + 1;
+  let todayDate = now.getDate();
 
   /* GET - 쓰레기통 위치 */
   const [trashCanData, setTrashCanData] = useState([
@@ -78,6 +90,32 @@ function RecordIngPage() {
       console.error(e);
     }
   }
+
+  // async function getRecordData() {
+  //   // async, await을 사용하는 경우
+  //   try {
+  //     // GET 요청은 params에 실어 보냄
+  //     const response = await axios.post("http://3.37.14.183:80/api/plogging", {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //         "Content-Type": "application/json",
+  //       },
+  //     });
+
+  //     // 응답 결과(response)를 변수에 저장하거나.. 등 필요한 처리를 해 주면 된다.
+  //     const initTrash = response.data.result.map((it) => {
+  //       return {
+  //         trashCanId: it.trashCanId,
+  //         title: it.address,
+  //         latlng: { lat: it.lat, lng: it.lng },
+  //       };
+  //     });
+  //     setTrashCanData(initTrash);
+  //   } catch (e) {
+  //     // 실패 시 처리
+  //     console.error(e);
+  //   }
+  // }
 
   /*polyline path를 위함 */
   const [locationList, setLocationList] = useState([
@@ -207,7 +245,7 @@ function RecordIngPage() {
         // if (locationList.length < 3 || finDist > 0.2) {
         //   finish = 0;
         // }
-
+        console.log("기록 종료 버튼 클릭");
         if (finish === 0) {
           alert(
             "정상적인 종료 조건이 아닙니다.(3곳 이상 방문, 시작점, 마지막점 200m이내)"
@@ -228,81 +266,103 @@ function RecordIngPage() {
   // console.log("ff");
   //   console.log("path: %o", locationList);
 
+  const [modalOpen, setModalOpen] = useState(false);
+  const showModal = () => {
+    setModalOpen(true);
+  };
+
   return (
-    <StRecordIngPage>
-      <SignupHeader>
-        <BackArrow className="signupBackArrow" onClick={goBack} />
-      </SignupHeader>
-      <Map
-        center={state[state.length - 1].center} // 지도의 중심 좌표
-        style={{ width: "100%", height: "100%" }} // 지도 크기
-        level={2} // 지도 확대 레벨
-      >
-        {!state.isLoading && (
-          <div>
-            <MapMarker // 마커를 생성합니다
-              position={
-                // 마커가 표시될 위치입니다
-                state[state.length - 1].center
-              }
-              image={{
-                src: current, // 마커이미지의 주소입니다
-                size: {
-                  width: 64,
-                  height: 69,
-                }, // 마커이미지의 크기입니다
-                options: {
-                  offset: {
-                    x: 27,
-                    y: 69,
-                  }, // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-                },
+    <>
+      {modalOpen && (
+        <RecordModal setModalOpen={setModalOpen} data={modalData} />
+      )}
+      {modalOpen && <ModalBackground />}
+      <StRecordIngPage>
+        <SignupHeader>
+          <span>
+            {todayMonth}월 {todayDate}일
+          </span>
+          <p></p>
+          <CloseWrapper>
+            <Close
+              className="headerClose"
+              onClick={() => {
+                showModal();
               }}
             />
-            {trashCanData.map((position, index) => (
-              <MapMarker
-                key={`${position.trashCanId}-${position.title}`}
-                position={{
-                  lat: position.latlng.lat,
-                  lng: position.latlng.lng,
-                }} // 마커를 표시할 위치
+          </CloseWrapper>
+        </SignupHeader>
+        <Map
+          center={state[state.length - 1].center} // 지도의 중심 좌표
+          style={{ width: "100%", height: "100%" }} // 지도 크기
+          level={2} // 지도 확대 레벨
+        >
+          {!state.isLoading && (
+            <div>
+              <MapMarker // 마커를 생성합니다
+                position={
+                  // 마커가 표시될 위치입니다
+                  state[state.length - 1].center
+                }
                 image={{
-                  src: trashCanImg, // 마커이미지의 주소입니다
+                  src: current, // 마커이미지의 주소입니다
                   size: {
                     width: 64,
-                    height: 64,
+                    height: 69,
                   }, // 마커이미지의 크기입니다
+                  options: {
+                    offset: {
+                      x: 27,
+                      y: 69,
+                    }, // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+                  },
                 }}
-                title={position.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
               />
-            ))}
-            <Polyline
-              path={locationList}
-              strokeWeight={5} // 선의 두께 입니다
-              strokeColor={"#FFAE00"} // 선의 색깔입니다
-              strokeOpacity={0.7} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-              strokeStyle={"solid"} // 선의 스타일입니다
-            />
-          </div>
-        )}
-      </Map>
-      <RecordDetailContainer>
-        <StopWatchContainer>
-          <TimeComponent time={time} />
-        </StopWatchContainer>
-        <RecordDetailTxt>
-          플로깅 사진을 함께 인증 기록으로 남겨요!
-        </RecordDetailTxt>
-        <RecordBtnContainer>
-          <RecordCamBtnWrapper>
-            <CamBtn />
-          </RecordCamBtnWrapper>
-          <RecordFinishBtn onClick={recordStopHandler}>
-            <p>완료하기</p>
-          </RecordFinishBtn>
-        </RecordBtnContainer>
-      </RecordDetailContainer>
-    </StRecordIngPage>
+              {trashCanData.map((position, index) => (
+                <MapMarker
+                  key={`${position.trashCanId}-${position.title}`}
+                  position={{
+                    lat: position.latlng.lat,
+                    lng: position.latlng.lng,
+                  }} // 마커를 표시할 위치
+                  image={{
+                    src: trashCanImg, // 마커이미지의 주소입니다
+                    size: {
+                      width: 64,
+                      height: 64,
+                    }, // 마커이미지의 크기입니다
+                  }}
+                  title={position.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+                />
+              ))}
+              <Polyline
+                path={locationList}
+                strokeWeight={5} // 선의 두께 입니다
+                strokeColor={"#FFAE00"} // 선의 색깔입니다
+                strokeOpacity={0.7} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+                strokeStyle={"solid"} // 선의 스타일입니다
+              />
+            </div>
+          )}
+        </Map>
+        <RecordDetailContainer>
+          <StopWatchContainer>
+            <TimeComponent time={time} />
+          </StopWatchContainer>
+          <RecordDetailTxt>
+            플로깅 사진을 함께 인증 기록으로 남겨요!
+          </RecordDetailTxt>
+          <RecordBtnContainer>
+            <RecordCamBtnWrapper>
+              <CamBtn />
+            </RecordCamBtnWrapper>
+            <RecordFinishBtn onClick={recordStopHandler}>
+              <p>완료하기</p>
+            </RecordFinishBtn>
+          </RecordBtnContainer>
+        </RecordDetailContainer>
+      </StRecordIngPage>
+    </>
   );
 }
 
@@ -323,16 +383,40 @@ const SignupHeader = styled.div`
   width: 393px;
   height: 127px;
 
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
+  display: grid;
+  grid-template-columns: 88px auto 14px;
+
   align-items: center;
+
+  padding-left: 20px;
+  padding-right: 25px;
+
+  background-color: ${COLOR.MAIN_WHITE};
 
   z-index: 100;
 
-  .signupBackArrow {
-    margin-top: 50px;
-    margin-left: 20px;
+  span {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 25px;
+    color: ${COLOR.MAIN_BLACK};
+  }
+
+  p {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    color: ${COLOR.MAIN_GREEN};
+  }
+`;
+
+const CloseWrapper = styled.div`
+  .headerClose {
+    width: 27px;
+    height: 27px;
+    color: ${COLOR.MAIN_BLACK};
   }
 `;
 
