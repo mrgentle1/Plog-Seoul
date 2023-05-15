@@ -17,8 +17,13 @@ import { COLOR } from "../../styles/color";
 import { Link } from "react-router-dom";
 
 function HomePage() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const token = localStorage.getItem("key");
   const [user, setUser] = useState("");
+  const [userPoint, setUserPoint] = useState(0);
 
   const setHeaderTitle = useSetRecoilState(headerTitleState);
 
@@ -33,6 +38,7 @@ function HomePage() {
       .then((response) => {
         console.log(response);
         setUser(response.data.result);
+        setUserPoint(response.data.result.point);
       })
       .catch((error) => {
         console.error(error);
@@ -43,18 +49,18 @@ function HomePage() {
     setHeaderTitle(headertext); // '홈' 값을 할당합니다.
   });
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  const levelBarWidth = userPoint >= 1000 ? 321 : (userPoint / 1000) * 321;
 
   return (
     <StHomePage>
       <Box1>
-        <LeftBox1>
-          <Flag className="flag" />
-          <Text1>계절별 추천 코스</Text1>
-          <Arrow className="arrow" />
-        </LeftBox1>
+        <Link to="/home/season">
+          <LeftBox1>
+            <Flag className="flag" />
+            <Text1>계절별 추천 코스</Text1>
+            <Arrow className="arrow" />
+          </LeftBox1>
+        </Link>
         <RightBox1>
           <Footprint className="footprint" />
           <Text2>서울두드림길이란?</Text2>
@@ -68,8 +74,8 @@ function HomePage() {
             <Text3>Level {user.level}</Text3>
             <Text4>다음 레벨까지 1,000 포인트</Text4>
           </LevelBox>
-          <LevelBar></LevelBar>
-          <LevelBar2></LevelBar2>
+          <LevelBar />
+          <LevelBar2 width={levelBarWidth} />
         </Box2>
       </Link>
       <Box3>
@@ -202,10 +208,11 @@ const LevelBar = styled.div`
 const LevelBar2 = styled.div`
   margin-top: 12px;
   position: absolute;
-  width: 196px;
+  width: ${(props) => props.levelBarWidth};
   height: 10px;
   background: ${COLOR.MAIN_GREEN};
   border-radius: 5px;
+  z-index: 1;
 `;
 const Text3 = styled.div`
   font-family: "SUIT Variable";
