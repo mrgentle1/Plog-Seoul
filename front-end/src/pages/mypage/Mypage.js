@@ -60,7 +60,9 @@ function MyPage() {
         <StMyContent>
           <MyBox1>
             <MyText>내 포인트</MyText>
-            <ForwardArrow className="forwardArrow" />
+            <Link to="/plog/level">
+              <ForwardArrow className="forwardArrow" />
+            </Link>
           </MyBox1>
           <MyBox2>
             <MyText>공지사항</MyText>

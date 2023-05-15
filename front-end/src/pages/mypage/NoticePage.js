@@ -1,7 +1,4 @@
 import { useEffect, useState, useCallback } from "react";
-import { useSetRecoilState } from "recoil";
-import { headerTitleState } from "../../core/headerTitle";
-import { Footer } from "../../components/layout/Footer";
 import { useNavigate } from "react-router-dom";
 import { ReactComponent as BackArrow } from "../../assets/icons/backArrow.svg";
 
