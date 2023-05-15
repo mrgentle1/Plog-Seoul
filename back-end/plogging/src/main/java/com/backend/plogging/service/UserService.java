@@ -2,10 +2,13 @@ package com.backend.plogging.service;
 
 
 import com.backend.plogging.base.BaseResponseEntity;
+import com.backend.plogging.domain.Point;
 import com.backend.plogging.domain.User;
 import com.backend.plogging.dto.request.user.KakaoUserDto;
 import com.backend.plogging.dto.response.user.AuthenticationResponse;
+import com.backend.plogging.dto.response.user.PointResponseDto;
 import com.backend.plogging.dto.response.user.UserResponseDto;
+import com.backend.plogging.repository.PointRepository;
 import com.backend.plogging.repository.UserRepository;
 import com.backend.plogging.util.JwtUtils;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -22,16 +25,14 @@ import org.springframework.stereotype.Service;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PointRepository pointRepository;
 
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
@@ -260,9 +261,11 @@ public class UserService {
         }
     }
 
-    public BaseResponseEntity<?> updatePoint(Long userId, int newPoint) {
+    public BaseResponseEntity<?> updatePoint(Long userId, int newPoint, String title, String type) {
         Optional<User> user = userRepository.findById(userId);
-        
+
+        Integer change = newPoint - user.get().getPoint();
+
         if (user.isPresent()) {
             // 1000점 단위로 레벨업
             while (newPoint >= 1000) {
@@ -270,14 +273,34 @@ public class UserService {
                 user.get().setLevel(user.get().getLevel() + 1);
             }
 
+            // Point 내역 저장
+            Point point = Point.builder()
+                    .changePoint(change)
+                    .title(title)
+                    .type(type)
+                    .user(user.get())
+                    .build();
+
             user.get().setPoint(newPoint);
             userRepository.save(user.get());
+            pointRepository.save(point);
 
             Map<String, Object> result = new LinkedHashMap<>();
             result.put("point", user.get().getPoint());
             result.put("level", user.get().getLevel());
 
             return new BaseResponseEntity<>(HttpStatus.OK, result);
+        } else {
+            return new BaseResponseEntity<>(HttpStatus.BAD_REQUEST, "해당 유저가 존재하지 않습니다.");
+        }
+    }
+
+    public BaseResponseEntity<?> getPointHistory(Long userId, int pagingIndex, int pagingSize) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isPresent()) {
+            Pageable pageable = PageRequest.of(pagingIndex, pagingSize);
+            Page<Point> points = pointRepository.findAllByUser(user.get(), pageable);
+            return new BaseResponseEntity<>(HttpStatus.OK, points.map(PointResponseDto::new));
         } else {
             return new BaseResponseEntity<>(HttpStatus.BAD_REQUEST, "해당 유저가 존재하지 않습니다.");
         }

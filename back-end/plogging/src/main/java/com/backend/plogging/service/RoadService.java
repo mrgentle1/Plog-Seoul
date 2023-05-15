@@ -111,11 +111,6 @@ public class RoadService {
         User user = userRepository.findByEmail(email).get();
         RouteData routeData = routeDataRepository.findById(roadId).get();
 
-        Optional<Review> optionalReview = reviewRepository.findByUserAndRouteData(user, routeData);
-        if (optionalReview.isPresent()) {
-            return new BaseResponseEntity<>(HttpStatus.BAD_REQUEST, "이미 작성한 리뷰가 있습니다.");
-        }
-
         Review review = Review.builder()
                 .user(user)
                 .content(dto.getContent())
