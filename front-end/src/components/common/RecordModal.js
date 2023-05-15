@@ -1,10 +1,13 @@
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 
 import { ReactComponent as ReviewCheck } from "../../assets/icons/reviewCheck.svg";
-import { Link } from "react-router-dom";
+import { ReactComponent as RecordAlert } from "../../assets/icons/closeAlert.svg";
+import { Link, useNavigate } from "react-router-dom";
 
 export const RecordModal = ({ setModalOpen, data }) => {
+  const navigate = useNavigate();
   // 경로
   const pathname = window.location.pathname;
   const real_pathname = pathname.substring(0, 7);
@@ -14,28 +17,65 @@ export const RecordModal = ({ setModalOpen, data }) => {
     console.log("close");
     setModalOpen(false);
   };
-  const checkModal = () => {
-    console.log("check");
+  const gotoModal = () => {
+    console.log("goto");
 
     setModalOpen(false);
+  };
+
+  const exitModal = () => {
+    console.log("check");
+    setModalOpen(false);
+    navigate("/record/");
   };
 
   return (
     <>
       <ModalContainer>
-        <ModalText>
-          <ReviewCheck className="reviewCheck" />
-          <h3>{data.title}</h3>
-          <h5>
-            여러분의 소중한 후기로
-            <br />더 나은 서비스를 보답할게요
-          </h5>
-        </ModalText>
+        <ModalContents>
+          {data.recording ? (
+            <>
+              <RecordAlert className="modalIcon" />
+              <ModalText>
+                <h3>{data.title}</h3>
+                <h5>
+                  지금 종료하면
+                  <br />
+                  오늘의 플로깅 기록이 사라져요
+                </h5>
+              </ModalText>
+            </>
+          ) : (
+            <>
+              <ReviewCheck className="modalIcon" />
+              <ModalText>
+                <h3>{data.title}</h3>
+                <h5>
+                  여러분의 소중한 후기로
+                  <br />더 나은 서비스를 보답할게요
+                </h5>
+              </ModalText>
+            </>
+          )}
+        </ModalContents>
+
         <ModalLine />
         <ModalButton>
-          <CloseButton onClick={closeModal}>닫기</CloseButton>
+          <CloseButton
+            onClick={() => {
+              data.recording ? exitModal() : closeModal();
+            }}
+          >
+            {data.btnText1}
+          </CloseButton>
 
-          <CheckButton onClick={checkModal}>{data.btnText}</CheckButton>
+          <CheckButton
+            onClick={() => {
+              data.isrecording ? closeModal() : gotoModal();
+            }}
+          >
+            {data.btnText2}
+          </CheckButton>
         </ModalButton>
       </ModalContainer>
     </>
@@ -61,7 +101,8 @@ const ModalContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 48px 0px 0px;
+  justify-content: center;
+  padding: 76px 0px 0px;
   z-index: 2000;
 
   position: absolute;
@@ -76,31 +117,45 @@ const ModalContainer = styled.div`
   background: ${COLOR.MAIN_WHITE};
   border-radius: 14px;
 `;
+
+const ModalContents = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+
+  gap: 15px;
+
+  .modalIcon {
+    width: 36px;
+    height: 36px;
+  }
+`;
 const ModalText = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 0px;
-  margin-top: 27px;
 
-  width: 168px;
-  height: 200px;
+  width: 100%;
+  height: 100%;
 
-  .reviewCheck {
-    width: 36px;
-    height: 36px;
-  }
+  gap: 12px;
+
   h3 {
-    margin-top: 28px;
+    /* font-family: "SUIT Variable"; */
+    font-style: normal;
     font-weight: 700;
     font-size: 17px;
     line-height: 21px;
     text-align: center;
+
     color: ${COLOR.MAIN_BLACK};
   }
   h5 {
-    margin-top: 12px;
     margin-bottom: 70px;
     font-weight: 500;
     font-size: 15px;
@@ -116,6 +171,7 @@ const ModalLine = styled.div`
 const ModalButton = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: flex-end;
 `;
 const CloseButton = styled.button`
   width: 150px;

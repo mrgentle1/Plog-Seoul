@@ -18,10 +18,13 @@ import {
   ImgModalBackground,
 } from "../../components/Record/ImgModal";
 const modalData = {
+  recording: false,
   title: "오늘의 플로깅은 어떠셨나요?",
-  btnText: "후기 남기기",
+  btnText1: "닫기",
+  btnText2: "후기 남기기",
 };
 function RecordFinish() {
+  const token = localStorage.getItem("key");
   const [isCourse, sestIsCourse] = useState(false);
 
   const mapRef = useRef();

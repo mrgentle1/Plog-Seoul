@@ -1,5 +1,6 @@
 /* global kakao */
 import React, { useCallback, useEffect, useState, useRef } from "react";
+import moment from "moment";
 import { useLocation } from "react-router-dom";
 import { Map, MapMarker, Polyline } from "react-kakao-maps-sdk";
 import { useNavigate, Link } from "react-router-dom";
@@ -18,7 +19,6 @@ import { ReactComponent as CamBtn } from "../../assets/icons/camera.svg";
 import MapRecording from "../../components/Record/MapRecordingComponent3";
 
 import axios from "axios";
-import { user_token } from "../../core/user_token.js";
 
 const { kakao } = window;
 let options = {
@@ -27,17 +27,23 @@ let options = {
   maximumAge: 3600,
 };
 const modalData = {
+  recording: true,
   title: "플로깅 기록을 종료할까요?",
-  btnText: "계속하기",
+  btnText1: "닫기",
+  btnText2: "계속하기",
 };
 
 function RecordIngPage() {
   const token = localStorage.getItem("key");
-  // const token = user_token.token;
+
   const navigate = useNavigate();
   const goBack = useCallback(() => {
     navigate(-1);
   }, [navigate]);
+
+  const [lastLocation, setLastLocation] = useState({ lat: 0, lng: 0 });
+  const [allDist, setAllDist] = useState(0);
+  const [runTime, setRunTime] = useState(0);
 
   /*main에서 현재 위치 값을 가져와 초기세팅 해줌 */
   const location = useLocation();
@@ -56,9 +62,11 @@ function RecordIngPage() {
     },
   ]);
   // 오늘 날짜
-  let now = new Date();
-  let todayMonth = now.getMonth() + 1;
-  let todayDate = now.getDate();
+  let today = new Date();
+  let todayMonth = today.getMonth() + 1;
+  let todayDate = today.getDate();
+
+  var now = moment();
 
   /* GET - 쓰레기통 위치 */
   const [trashCanData, setTrashCanData] = useState([
@@ -91,31 +99,166 @@ function RecordIngPage() {
     }
   }
 
-  // async function getRecordData() {
-  //   // async, await을 사용하는 경우
-  //   try {
-  //     // GET 요청은 params에 실어 보냄
-  //     const response = await axios.post("http://3.37.14.183:80/api/plogging", {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //         "Content-Type": "application/json",
-  //       },
-  //     });
+  /* POST - init Record data */
+  const [recordData, setRecordData] = useState([
+    {
+      userId: 0,
+      userName: "init",
+      recordId: 0,
+      distance: 0,
+      startLat: startLat,
+      startLng: startLng,
+      endLat: 0,
+      endLng: 0,
+      runningTime: 0,
+      createdAt: 0,
+    },
+  ]);
+  async function postRecordData() {
+    // async, await을 사용하는 경우
+    try {
+      // GET 요청은 params에 실어 보냄
+      const response = await axios.post(
+        "http://3.37.14.183:80/api/plogging",
+        {
+          distance: 0,
+          startLat: startLat,
+          startLng: startLng,
+          endLat: 0,
+          endLng: 0,
+          runningTime: 0,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-  //     // 응답 결과(response)를 변수에 저장하거나.. 등 필요한 처리를 해 주면 된다.
-  //     const initTrash = response.data.result.map((it) => {
-  //       return {
-  //         trashCanId: it.trashCanId,
-  //         title: it.address,
-  //         latlng: { lat: it.lat, lng: it.lng },
-  //       };
-  //     });
-  //     setTrashCanData(initTrash);
-  //   } catch (e) {
-  //     // 실패 시 처리
-  //     console.error(e);
-  //   }
-  // }
+      // 응답 결과(response)를 변수에 저장하거나.. 등 필요한 처리를 해 주면 된다.
+      const initRecord = response.data.result.map((it) => {
+        return {
+          userId: it.userId,
+          userName: it.userName,
+          recordId: it.recordId,
+          distance: it.distance,
+          startLat: it.startLat,
+          startLng: it.startLng,
+          endLat: it.endLat,
+          endLng: it.endLng,
+          runningTime: it.runningTime,
+        };
+      });
+      setRecordData(initRecord);
+    } catch (e) {
+      // 실패 시 처리
+      console.error(e);
+      alert("기록 시작 실패. 재시도해주세요.");
+    }
+  }
+
+  /* PATCH - Record data */
+
+  async function patchRecordData() {
+    // async, await을 사용하는 경우
+    try {
+      // GET 요청은 params에 실어 보냄
+      const response = await axios.patch(
+        "http://3.37.14.183:80/api/plogging/" + recordData.recordId,
+        {
+          distance: allDist,
+          endLat: lastLocation.lat,
+          endLng: lastLocation.lng,
+          runningTime: runTime,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      // 응답 결과(response)를 변수에 저장하거나.. 등 필요한 처리를 해 주면 된다.
+      // const initRecord = response.data.result.map((it) => {
+      //   return {
+      //     userId: it.userId,
+      //     userName: it.userName,
+      //     recordId: it.recordId,
+      //     distance: it.distance,
+      //     startLat: it.startLat,
+      //     startLng: it.startLng,
+      //     endLat: it.endLat,
+      //     endLng: it.endLng,
+      //     runningTime: it.runningTime,
+      //   };
+      // });
+      // setRecordData(initRecord);
+      navigate("/record/point", {
+        state: {
+          recordId: recordData.recordId,
+          userId: recordData.userId,
+        },
+      });
+    } catch (e) {
+      // 실패 시 처리
+      console.error(e);
+      alert("기록 저장 실패.");
+    }
+  }
+
+  /* POST - Record Img */
+  /*
+  const [imgData, setImgData] = useState([
+    {
+      img:""
+    },
+  ]);
+  async function postImgData() {
+    // async, await을 사용하는 경우
+    try {
+      // GET 요청은 params에 실어 보냄
+      const response = await axios.post(
+        "http://3.37.14.183:80/api/plogging",
+        {
+          distance: 0,
+          startLat: startLat,
+          startLng: startLng,
+          endLat: 0,
+          endLng: 0,
+          runningTime: 0,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      // 응답 결과(response)를 변수에 저장하거나.. 등 필요한 처리를 해 주면 된다.
+      const initRecord = response.data.result.map((it) => {
+        return {
+          userId: it.userId,
+          userName: it.userName,
+          recordId: it.recordId,
+          distance: it.distance,
+          startLat: it.startLat,
+          startLng: it.startLng,
+          endLat: it.endLat,
+          endLng: it.endLng,
+          runningTime: it.runningTime,
+        };
+      });
+      setRecordData(initRecord);
+    } catch (e) {
+      // 실패 시 처리
+      console.error(e);
+      alert("기록 시작 실패. 재시도해주세요.");
+    }
+  }
+  */
 
   /*polyline path를 위함 */
   const [locationList, setLocationList] = useState([
@@ -187,7 +330,11 @@ function RecordIngPage() {
                 lng: position.coords.longitude,
               },
             ]);
-
+            setLastLocation({
+              lat: position.coords.latitude, // 위도
+              lng: position.coords.longitude,
+            });
+            setAllDist(allDist + distDiff);
             console.log("listlocation: %o", locationList);
           }
         },

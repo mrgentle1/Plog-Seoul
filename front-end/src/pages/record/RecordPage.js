@@ -10,6 +10,7 @@ const { kakao } = window;
 
 function RecordPage() {
   const navigate = useNavigate();
+  const token = localStorage.getItem("key");
 
   const handleDetailRecord = ({ item }) => {
     navigate("/record/ing", {
