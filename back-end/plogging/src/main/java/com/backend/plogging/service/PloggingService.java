@@ -65,17 +65,29 @@ public class PloggingService {
         Page<PloggingRecord> records;
 
         if (date != null) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
-            YearMonth yearMonth = YearMonth.parse(date, formatter);
-            int year = yearMonth.getYear();
-            int month = yearMonth.getMonthValue();
+            DateTimeFormatter formatter;
+            LocalDate parsedDate;
+            LocalDate startDate;
+            LocalDateTime startDateTime;
+            LocalDateTime endDateTime;
 
-            LocalDate startDate = LocalDate.of(year, month, 1); // Start date of the month
-            LocalDate endDate = startDate.plusMonths(1).minusDays(1); // End date of the month
+            if(date.length() > 7) { // YYYY-MM-DD format
+                formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                parsedDate = LocalDate.parse(date, formatter);
+                startDate = parsedDate; // Start date of the day
+                endDateTime = startDate.atTime(23, 59, 59);     // End time of the day
+            } else { // YYYY-MM format
+                formatter = DateTimeFormatter.ofPattern("yyyy-MM");
+                YearMonth yearMonth = YearMonth.parse(date, formatter);
+                int year = yearMonth.getYear();
+                int month = yearMonth.getMonthValue();
 
-            LocalDateTime startDateTime = startDate.atStartOfDay(); // Convert to LocalDateTime (time set to 00:00:00)
-            LocalDateTime endDateTime = endDate.atTime(23, 59, 59); // Convert to LocalDateTime (time set to 23:59:59)
+                startDate = LocalDate.of(year, month, 1); // Start date of the month
+                LocalDate endDate = startDate.plusMonths(1).minusDays(1); // End date of the month
+                endDateTime = endDate.atTime(23, 59, 59); // End time of the month
+            }
 
+            startDateTime = startDate.atStartOfDay(); // Convert to LocalDateTime (time set to 00:00:00)
             records = ploggingRecordRepository.findByUserEmailAndCreatedAtBetween(email, startDateTime, endDateTime, pageable);
         } else {
             records = ploggingRecordRepository.findAllByUserEmail(email, pageable);
