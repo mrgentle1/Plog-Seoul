@@ -15,6 +15,8 @@ import CourseMainPage from "../pages/course/CourseMainPage";
 import ReviewPage from "../pages/review/ReviewPage";
 import ReviewWritePage from "../pages/review/ReviewWritePage";
 import NoticePage from "../pages/mypage/NoticePage";
+import LevelPage from "../pages/plog/LevelPage";
+import AchievementPage from "../pages/plog/AchievementPage";
 
 function Router() {
   return (
@@ -29,6 +31,8 @@ function Router() {
         <Route path="/course/:id/reviews" element={<ReviewPage />} />
         <Route path="/course/:id/review" element={<ReviewWritePage />} />
         <Route path="/my/notice" element={<NoticePage />} />
+        <Route path="/plog/level" element={<LevelPage />} />
+        <Route path="/plog/achievement" element={<AchievementPage />} />
 
         <Route element={<Layout />}>
           <Route path="/home" element={<HomePage />} />
