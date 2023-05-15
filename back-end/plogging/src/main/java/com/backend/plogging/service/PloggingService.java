@@ -62,6 +62,13 @@ public class PloggingService {
         }
     }
 
+    public BaseResponseEntity<Page<RecordResponseDto>> getRecordsByEmail(int pagingIndex, int pagingSize, String email) {
+        User user = userRepository.findByEmail(email).get();
+        Pageable pageable = PageRequest.of(pagingIndex, pagingSize);
+        Page<PloggingRecord> records = ploggingRecordRepository.findAllByUser(user, pageable);
+        return new BaseResponseEntity<>(HttpStatus.OK, records.map(RecordResponseDto::new));
+    }
+
     public BaseResponseEntity<Page<RecordResponseDto>> getAllRecords(int pagingIndex, int pagingSize) {
         Pageable pageable = PageRequest.of(pagingIndex, pagingSize);
         Page<PloggingRecord> records = ploggingRecordRepository.findAll(pageable);

@@ -33,6 +33,15 @@ public class PloggingController {
     }
 
     @GetMapping("")
+    public BaseResponseEntity<Page<RecordResponseDto>> getMyRecords(
+            @RequestParam(value = "pagingIndex", defaultValue = "0") int pagingIndex,
+            @RequestParam(value = "pagingSize", defaultValue = "50") int pagingSize,
+            Principal principal) {
+        BaseResponseEntity response = ploggingService.getRecordsByEmail(pagingIndex, pagingSize, principal.getName());
+        return response;
+    }
+
+    @GetMapping("/all")
     public BaseResponseEntity<Page<RecordResponseDto>> getAllRecords(
             @RequestParam(value = "pagingIndex", defaultValue = "0") int pagingIndex,
             @RequestParam(value = "pagingSize", defaultValue = "50") int pagingSize) {

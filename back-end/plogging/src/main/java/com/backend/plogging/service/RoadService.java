@@ -35,6 +35,10 @@ public class RoadService {
         return new BaseResponseEntity<>(HttpStatus.OK, roadResponses);
     }
 
+    public BaseResponseEntity<?> getRecommendedRoads() {
+        return null;
+    }
+
     public BaseResponseEntity<?> getRoadById(Long roadId) {
         Optional<RouteData> routeData = routeDataRepository.findById(roadId);
         if (routeData.isPresent()) {

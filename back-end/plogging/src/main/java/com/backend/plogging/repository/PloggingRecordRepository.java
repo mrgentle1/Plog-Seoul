@@ -8,4 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PloggingRecordRepository extends JpaRepository<PloggingRecord, Long> {
     Page<PloggingRecord> findAll(Pageable pageable);
+
+    Page<PloggingRecord> findAllByUser(User user, Pageable pageable);
 }
