@@ -17,6 +17,9 @@ function MyPage() {
   const token = localStorage.getItem("key");
   const [user, setUser] = useState([]);
 
+  const form_url =
+    "https://docs.google.com/forms/d/e/1FAIpQLSfVS54a7GgefELlOGcm6GSWRfD7XMD1sg4ar3421iG4PRfG-g/viewform?usp=sf_link";
+
   const setHeaderTitle = useSetRecoilState(headerTitleState);
 
   // 모달창 호출
@@ -72,7 +75,12 @@ function MyPage() {
           </MyBox2>
           <MyBox3>
             <MyText>문의하기</MyText>
-            <ForwardArrow className="forwardArrow" />
+            <ForwardArrow
+              className="forwardArrow"
+              onClick={() => {
+                window.open(form_url, "_blank");
+              }}
+            />
           </MyBox3>
           <MyBox4>
             <MyText>서울 두드림길 안내</MyText>
