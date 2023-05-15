@@ -3,7 +3,7 @@ import { Map, MapMarker, CustomOverlayMap } from "react-kakao-maps-sdk";
 import { useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
-import current from "../../assets/icons/current2.svg";
+import current from "../../assets/icons/currentMarker.svg";
 import { ReactComponent as StartBtn } from "../../assets/icons/recordStart.svg";
 import { ReactComponent as RelocateBtn } from "../../assets/icons/relocateInactivate.svg";
 const { kakao } = window;
@@ -173,15 +173,6 @@ const StartBtn2 = styled.div`
 
   box-shadow: 0px 0px 16px 2px rgba(0, 0, 0, 0.12);
   border-radius: 30px;
-`;
-
-const ico_comm_ico_coffee = styled.span`
-  display: block;
-  margin: 0 auto 2px;
-  width: 22px;
-  height: 26px;
-  background: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/category.png)
-    no-repeat;
 `;
 
 const RelocateWrapper = styled.div`

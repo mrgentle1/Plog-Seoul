@@ -5,7 +5,9 @@ import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 import { ReactComponent as Close } from "../../assets/icons/close.svg";
 import PlogImg from "../../assets/icons/certification.svg";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
+import axios from "axios";
+
 import {
   RecordModal,
   ModalBackground,
@@ -21,10 +23,16 @@ const modalData = {
   recording: false,
   title: "오늘의 플로깅은 어떠셨나요?",
   btnText1: "닫기",
-  btnText2: "후기 남기기",
+  btnText2: "내 포인트 확인",
 };
 function RecordFinish() {
   const token = localStorage.getItem("key");
+
+  /*point에서 현재 위치 값을 가져와 초기세팅 해줌 */
+  const plogRecord = useLocation();
+  const recordId = plogRecord.state.recordId;
+  const userId = plogRecord.state.userId;
+
   const [isCourse, sestIsCourse] = useState(false);
 
   const mapRef = useRef();
@@ -34,6 +42,40 @@ function RecordFinish() {
     { lat: 33.452671, lng: 126.574792 },
     { lat: 33.451744, lng: 126.572441 },
   ]);
+
+  /* GET - 쓰레기통 위치 */
+  const [thisRecordData, setThisRecordData] = useState([
+    { trashcanId: 0, title: "쓰레기통", latlng: { lat: 0, lng: 0 } },
+  ]);
+
+  async function getRecordData() {
+    // async, await을 사용하는 경우
+    try {
+      // GET 요청은 params에 실어 보냄
+      const response = await axios.get(
+        "http://3.37.14.183:80/api/" + recordId,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      // 응답 결과(response)를 변수에 저장하거나.. 등 필요한 처리를 해 주면 된다.
+      const recordData = response.data.result.map((it) => {
+        return {
+          trashCanId: it.trashCanId,
+          title: it.address,
+          latlng: { lat: it.lat, lng: it.lng },
+        };
+      });
+      setThisRecordData(recordData);
+    } catch (e) {
+      // 실패 시 처리
+      console.error(e);
+    }
+  }
 
   //   const bounds = useMemo(() => {
   //     const bounds = new kakao.maps.LatLngBounds();

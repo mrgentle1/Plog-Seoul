@@ -100,18 +100,10 @@ function RecordIngPage() {
   }
 
   /* POST - init Record data */
-  const [recordData, setRecordData] = useState([
+  const [recordUserData, setRecordUserData] = useState([
     {
       userId: 0,
-      userName: "init",
       recordId: 0,
-      distance: 0,
-      startLat: startLat,
-      startLng: startLng,
-      endLat: 0,
-      endLng: 0,
-      runningTime: 0,
-      createdAt: 0,
     },
   ]);
   async function postRecordData() {
@@ -140,17 +132,11 @@ function RecordIngPage() {
       const initRecord = response.data.result.map((it) => {
         return {
           userId: it.userId,
-          userName: it.userName,
+
           recordId: it.recordId,
-          distance: it.distance,
-          startLat: it.startLat,
-          startLng: it.startLng,
-          endLat: it.endLat,
-          endLng: it.endLng,
-          runningTime: it.runningTime,
         };
       });
-      setRecordData(initRecord);
+      setRecordUserData(initRecord);
     } catch (e) {
       // 실패 시 처리
       console.error(e);
@@ -165,7 +151,7 @@ function RecordIngPage() {
     try {
       // GET 요청은 params에 실어 보냄
       const response = await axios.patch(
-        "http://3.37.14.183:80/api/plogging/" + recordData.recordId,
+        "http://3.37.14.183:80/api/plogging/" + recordUserData.recordId,
         {
           distance: allDist,
           endLat: lastLocation.lat,
@@ -197,8 +183,8 @@ function RecordIngPage() {
       // setRecordData(initRecord);
       navigate("/record/point", {
         state: {
-          recordId: recordData.recordId,
-          userId: recordData.userId,
+          recordId: `${recordUserData.recordId}`,
+          userId: `${recordUserData.userId}`,
         },
       });
     } catch (e) {
@@ -402,6 +388,7 @@ function RecordIngPage() {
         // setRecordcode(-1);
         // setReadyRecord(true);
         setRecording(false);
+        navigate("/record/point", { state: { recordUserData } });
       }
     } catch (err) {
       alert(err.message);

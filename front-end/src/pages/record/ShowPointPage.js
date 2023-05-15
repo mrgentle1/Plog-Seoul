@@ -1,12 +1,13 @@
 import { useEffect, useState, useRef } from "react";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
+import { Button, BorderGreenThinButton } from "../../components/common/Button";
 
 import { ReactComponent as Fire } from "../../assets/icons/pointFire.svg";
 import Bar from "../../components/Record/Bar";
 import axios from "axios";
-import { user_token } from "../../core/user_token.js";
 
 const user = { point: 800, level: 1 };
 
@@ -18,7 +19,11 @@ const useLoading = () => {
   return loading;
 };
 function ShowPointPage() {
-  const token = user_token.token;
+  const token = localStorage.getItem("key");
+  /*ing에서 현재 위치 값을 가져와 초기세팅 해줌 */
+  const plogRecord = useLocation();
+  const recordId = plogRecord.state.recordId;
+  const userId = plogRecord.state.userId;
 
   const loading = useLoading();
   const [isLoading, setIsLoading] = useState(false);
@@ -27,7 +32,9 @@ function ShowPointPage() {
   const [isLast, setIsLast] = useState(false);
   const [myPoint, setMyPoint] = useState(80);
   const [maxPoint, setMaxPoint] = useState(100);
+
   // 기존 포인트값 따로 레벨업에 따른 포인트 차 값 따로
+
   const myP = useRef(0);
   const currentP = useRef(0);
   const maxP = useRef(100);
@@ -35,12 +42,11 @@ function ShowPointPage() {
   const update = useRef(false);
 
   /* GET - 포인트 및 레벨 정보 */
-  const usesrId = 1;
   const [pointData, setPointData] = useState([
     { currentPoint: 900, currentLevel: 1 },
   ]);
 
-  async function getPointData(userId) {
+  async function getPointData() {
     const real_url = "http://3.37.14.183:80/api/users/" + userId + "/point";
     // async, await을 사용하는 경우
     try {
@@ -51,6 +57,37 @@ function ShowPointPage() {
           "Content-Type": "application/json",
         },
       });
+
+      // 응답 결과(response)를 변수에 저장하거나.. 등 필요한 처리를 해 주면 된다.
+      const initPoint = response.data.result.map((it) => {
+        return {
+          currentPoint: it.point,
+          currentLevel: it.level,
+        };
+      });
+      setPointData(initPoint);
+    } catch (e) {
+      // 실패 시 처리
+      console.error(e);
+    }
+  }
+
+  /* PUT - 포인트 및 레벨 정보 */
+  async function putPointData() {
+    const real_url = "http://3.37.14.183:80/api/users/" + userId + "/point";
+    // async, await을 사용하는 경우
+    try {
+      // GET 요청은 params에 실어 보냄
+      const response = await axios.put(
+        real_url,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       // 응답 결과(response)를 변수에 저장하거나.. 등 필요한 처리를 해 주면 된다.
       const initPoint = response.data.result.map((it) => {
@@ -217,6 +254,18 @@ function ShowPointPage() {
           </CommentWrapper>
         )}
       </ShowPointContainer>
+      <RecordFinishFooter>
+        <Link
+          to={"/record/finish"}
+          state={{
+            recordId: `${recordId}`,
+          }}
+        >
+          <Button>플로깅 종료하기</Button>
+        </Link>
+
+        <BorderGreenThinButton>공유하기</BorderGreenThinButton>
+      </RecordFinishFooter>
     </StShowPointPage>
   );
 }
@@ -314,4 +363,18 @@ const CommentWrapper = styled.div`
     line-height: 19px;
     color: ${COLOR.DARK_GRAY};
   }
+`;
+
+const RecordFinishFooter = styled.div`
+  display: flex;
+  position: fixed;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  bottom: 0;
+  padding: 0px 6px 20px 20px;
+  gap: 12px;
+
+  width: 393px;
+  z-index: 200px;
 `;
