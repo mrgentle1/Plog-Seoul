@@ -1,0 +1,317 @@
+import { useEffect, useState, useRef } from "react";
+
+import styled from "styled-components";
+import { COLOR } from "../../styles/color";
+
+import { ReactComponent as Fire } from "../../assets/icons/pointFire.svg";
+import Bar from "../../components/Record/Bar";
+import axios from "axios";
+import { user_token } from "../../core/user_token.js";
+
+const user = { point: 800, level: 1 };
+
+const useLoading = () => {
+  const [loading, setLoading] = useState(false);
+
+  // 컴포넌트 마운트 시 loading true로 업데이트
+  useEffect(() => setLoading(true), []);
+  return loading;
+};
+function ShowPointPage() {
+  const token = user_token.token;
+
+  const loading = useLoading();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isUpdate, setIsUpdate] = useState(false);
+  const [isLevelUp, setIsLevelUp] = useState(false);
+  const [isLast, setIsLast] = useState(false);
+  const [myPoint, setMyPoint] = useState(80);
+  const [maxPoint, setMaxPoint] = useState(100);
+  // 기존 포인트값 따로 레벨업에 따른 포인트 차 값 따로
+  const myP = useRef(0);
+  const currentP = useRef(0);
+  const maxP = useRef(100);
+  const level = useRef(1);
+  const update = useRef(false);
+
+  /* GET - 포인트 및 레벨 정보 */
+  const usesrId = 1;
+  const [pointData, setPointData] = useState([
+    { currentPoint: 900, currentLevel: 1 },
+  ]);
+
+  async function getPointData(userId) {
+    const real_url = "http://3.37.14.183:80/api/users/" + userId + "/point";
+    // async, await을 사용하는 경우
+    try {
+      // GET 요청은 params에 실어 보냄
+      const response = await axios.get(real_url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      // 응답 결과(response)를 변수에 저장하거나.. 등 필요한 처리를 해 주면 된다.
+      const initPoint = response.data.result.map((it) => {
+        return {
+          currentPoint: it.point,
+          currentLevel: it.level,
+        };
+      });
+      setPointData(initPoint);
+    } catch (e) {
+      // 실패 시 처리
+      console.error(e);
+    }
+  }
+
+  const plusPoint = () => {
+    // setMyPoint(myPoint + 250);
+    setIsUpdate(true);
+    currentP.current = currentP.current + 550;
+    if (currentP.current > 1000) {
+      myP.current = currentP.current;
+      currentP.current = 1000;
+    }
+
+    console.log("PPloading:", loading);
+    console.log("PPmyp:", myP.current);
+    console.log("ppcurrrrp:", currentP.current);
+
+    if (currentP.current === 1000) {
+      setTimeout(levelUP, 2000);
+      // levelUP();
+      // level.current = level.current + 1;
+      // console.log("le", level.current);
+      // setIsLevelUp(true);
+    } else {
+      setIsLast(true);
+    }
+    // setIsLoading(true);
+  };
+
+  const levelUP = () => {
+    console.log("levelUp");
+    // setMaxPoint(800);
+    currentP.current = myP.current - 1000;
+    level.current = level.current + 1;
+    console.log("3.level", level.current);
+    console.log("3.myp:", myP.current);
+    console.log("3.currrrp:", currentP.current);
+    setIsLevelUp(true);
+    setIsLast(true);
+  };
+
+  // useEffect(() => {
+  //   if (loading) {
+  //     console.log("plus");
+  //     if (myP.current > 1000) {
+  //       level.current = level.current + 1;
+  //       console.log("le", level.current);
+  //       setIsLevelUp(true);
+  //     } else {
+  //       setIsLast(true);
+  //     }
+  //   } else {
+  //     myP.current = user.point;
+  //     console.log("user:", myP.current);
+  //   }
+  // }, []);
+
+  useEffect(() => {
+    if (!loading) {
+      myP.current = user.point;
+      currentP.current = user.point;
+      level.current = user.level;
+      console.log("1. user:", myP.current);
+      console.log("1. loading:", loading);
+      // plusPoint();
+      setTimeout(plusPoint, 2000);
+    }
+  }, []);
+
+  // useEffect(() => {
+  //   if (loading) {
+  //     console.log("2.loading:", loading);
+  //     console.log("plus");
+  //     // myP.current = myP.current + 250;
+  //     console.log("2.myp:", myP.current);
+  //     console.log("2.currenPp:", currentP.current);
+
+  //     if (currentP.current === 1000) {
+  //       setTimeout(levelUP, 2000);
+  //       // levelUP();
+  //       // level.current = level.current + 1;
+  //       // console.log("le", level.current);
+  //       // setIsLevelUp(true);
+  //     } else {
+  //       setIsLast(true);
+  //     }
+  //   }
+  // }, [isUpdate]);
+
+  // useEffect(() => {
+  //   if (isLevelUp) {
+  //     console.log("4.levelUp True");
+  //     setIsLast(true);
+  //   }
+  // }, [isLevelUp]);
+
+  /*
+  현재 포인트를 가져옴
+  포인트에 조건에 따라 값을 더함
+  set 포인트 하면
+  프로그레스바 증가
+
+  만약 증가한 포인트값이 현재 레벨의 max보다 크다면
+  max를 다음 레벨의 max값으로 업데이트 set max
+  레벨업 글씨 + 포인트 추가된 현재의 레벨 
+  + 컨페티와 함께 프로그레스바 max늘어나며 색부분 감소
+
+  증가된 현재 포인트값 넘김
+
+  각 레벨 별로 max 값은 
+
+  다음 레벨까지 남은 포인트는 마지막에 나와야함
+  */
+
+  return (
+    <StShowPointPage>
+      <ShowPointHeader>
+        <span>오늘의 포인트</span>
+      </ShowPointHeader>
+      <ShowPointContainer>
+        <Fire />
+        <CurrentLevelWrapper>Level {level.current}</CurrentLevelWrapper>
+
+        <GetPointWrapper></GetPointWrapper>
+
+        {/* {isUpdate ? (
+          <Bar
+            init={myP.current - 250}
+            value={currentP.current}
+            isUpdate={isUpdate}
+            isLevelUp={isLevelUp}
+          />
+        ) : (
+          <ProgressWrapper>
+            <progress
+              className="mypage_point_progress"
+              value={currentP.current}
+              min={0}
+              max={1000}
+            ></progress>
+          </ProgressWrapper>
+        )} */}
+        <Bar
+          init={myP.current}
+          value={currentP.current}
+          isUpdate={isUpdate}
+          isLevelUp={isLevelUp}
+        />
+
+        {isLast && (
+          <CommentWrapper>
+            <p>다음 레벨까지 {1000 - currentP.current}포인트 남았어요!</p>
+          </CommentWrapper>
+        )}
+      </ShowPointContainer>
+    </StShowPointPage>
+  );
+}
+
+export default ShowPointPage;
+
+const StShowPointPage = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  max-width: 393px;
+  padding-top: 127px;
+  padding-bottom: 200px;
+  padding-left: 20px;
+  padding-right: 20px;
+`;
+
+const ShowPointHeader = styled.div`
+  position: fixed;
+  top: 0;
+  width: 393px;
+  height: 127px;
+
+  display: grid;
+  grid-template-columns: 88px auto 14px;
+
+  align-items: center;
+
+  padding-left: 20px;
+  padding-right: 25px;
+
+  background-color: ${COLOR.MAIN_WHITE};
+
+  z-index: 100;
+
+  span {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 25px;
+    color: ${COLOR.MAIN_BLACK};
+    white-space: nowrap;
+  }
+`;
+
+const ShowPointContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+`;
+
+const CurrentLevelWrapper = styled.p`
+  display: flex;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 17px;
+  line-height: 21px;
+  text-align: center;
+  color: ${COLOR.MAIN_BLACK};
+`;
+
+const GetPointWrapper = styled.p``;
+
+const ProgressWrapper = styled.div`
+  .mypage_point_progress {
+    display: flex;
+
+    appearance: none;
+    width: 321px;
+    height: 10px;
+    margin-top: 18px;
+    ::-webkit-progress-bar {
+      background: ${COLOR.LIGHT_GRAY};
+      border-radius: 50px;
+    }
+
+    ::-webkit-progress-value {
+      background: ${COLOR.MAIN_GREEN};
+      border-radius: 50px;
+    }
+  }
+`;
+
+const CommentWrapper = styled.div`
+  p {
+    text-align: center;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 19px;
+    color: ${COLOR.DARK_GRAY};
+  }
+`;

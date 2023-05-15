@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Layout } from "../components/layout/Layout";
 
-import KakaoCallback from "../pages/login/KakaoCallback";
+// import KakaoCallback from "../pages/login/KakaoCallback";
 import LoginPage from "../pages/login/LoginPage";
 import SignupPage from "../pages/signup/SignupPage";
 import HomePage from "../pages/home/HomePage";
@@ -11,6 +11,8 @@ import RecordIng from "../pages/record/RecordIng";
 import RecordFinish from "../pages/record/RecordFinish";
 import PlogPage from "../pages/plog/PlogPage";
 import MyPage from "../pages/mypage/Mypage";
+
+import ShowPointPage from "../pages/record/ShowPointPage";
 
 import SearchPage from "../pages/search/Search";
 import CoursePostPage from "../pages/course/CoursePostPage";
@@ -23,7 +25,7 @@ function Router() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LoginPage />} />
-        <Route path="/auth/kakao-callback" element={<KakaoCallback />} />
+        {/* <Route path="/auth/kakao-callback" element={<KakaoCallback />} /> */}
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/course/:id" element={<CoursePostPage />} />
@@ -39,6 +41,7 @@ function Router() {
           <Route path="/my" element={<MyPage />} />
         </Route>
         <Route path="/record/ing" element={<RecordIng />} />
+        <Route path="/record/point" element={<ShowPointPage />} />
         <Route path="/record/finish" element={<RecordFinish />} />
       </Routes>
     </BrowserRouter>

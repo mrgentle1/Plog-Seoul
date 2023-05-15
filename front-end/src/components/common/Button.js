@@ -67,6 +67,7 @@ const StDisabledButton = styled.button`
 const StBorderButton = styled.button`
   font-family: "SUIT Variable";
   font-style: normal;
+
   font-weight: 500;
   font-size: 14px;
   line-height: 17px;
@@ -144,6 +145,7 @@ const StBorderGreenThinButton = styled.button`
   background-color: ${COLOR.MAIN_WHITE};
   color: ${COLOR.MAIN_GREEN};
   font-style: normal;
+
   font-weight: 500;
   font-size: 14px;
   line-height: 17px;
