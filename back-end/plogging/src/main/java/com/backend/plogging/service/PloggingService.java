@@ -15,18 +15,17 @@ import com.backend.plogging.repository.ImageRepository;
 import com.backend.plogging.repository.PathRepository;
 import com.backend.plogging.repository.PloggingRecordRepository;
 import com.backend.plogging.repository.UserRepository;
-import com.backend.plogging.service.firebase.FirebaseService;
-import com.google.firebase.auth.FirebaseAuthException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,8 +37,6 @@ public class PloggingService {
     private final UserRepository userRepository;
     private final PathRepository pathRepository;
     private final ImageRepository imageRepository;
-
-    private final FirebaseService firebaseService;
 
     public BaseResponseEntity<?> createRecord(PloggingPostRequestDto dto, String email) {
 
@@ -62,10 +59,28 @@ public class PloggingService {
         }
     }
 
-    public BaseResponseEntity<Page<RecordResponseDto>> getRecordsByEmail(int pagingIndex, int pagingSize, String email) {
-        User user = userRepository.findByEmail(email).get();
+    public BaseResponseEntity<Page<RecordResponseDto>> getRecordsByEmail(int pagingIndex, int pagingSize,
+                                                                         String date, String email) {
         Pageable pageable = PageRequest.of(pagingIndex, pagingSize);
-        Page<PloggingRecord> records = ploggingRecordRepository.findAllByUser(user, pageable);
+        Page<PloggingRecord> records;
+
+        if (date != null) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
+            YearMonth yearMonth = YearMonth.parse(date, formatter);
+            int year = yearMonth.getYear();
+            int month = yearMonth.getMonthValue();
+
+            LocalDate startDate = LocalDate.of(year, month, 1); // Start date of the month
+            LocalDate endDate = startDate.plusMonths(1).minusDays(1); // End date of the month
+
+            LocalDateTime startDateTime = startDate.atStartOfDay(); // Convert to LocalDateTime (time set to 00:00:00)
+            LocalDateTime endDateTime = endDate.atTime(23, 59, 59); // Convert to LocalDateTime (time set to 23:59:59)
+
+            records = ploggingRecordRepository.findByUserEmailAndCreatedAtBetween(email, startDateTime, endDateTime, pageable);
+        } else {
+            records = ploggingRecordRepository.findAllByUserEmail(email, pageable);
+        }
+
         return new BaseResponseEntity<>(HttpStatus.OK, records.map(RecordResponseDto::new));
     }
 
