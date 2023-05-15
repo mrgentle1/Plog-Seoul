@@ -33,7 +33,7 @@ export const Modal = ({ setModalOpen }) => {
           <Link to={real_pathname}>
             <CloseButton onClick={closeModal}>닫기</CloseButton>
           </Link>
-          <Link to={real_pathname}>
+          <Link to="/plog/level">
             <CheckButton onClick={checkModal}>내 포인트 확인</CheckButton>
           </Link>
         </ModalButton>
