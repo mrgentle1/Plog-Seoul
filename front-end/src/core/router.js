@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Layout } from "../components/layout/Layout";
 
-// import KakaoCallback from "../pages/login/KakaoCallback";
+import KakaoCallback from "../pages/login/KakaoCallback";
 import LoginPage from "../pages/login/LoginPage";
 import SignupPage from "../pages/signup/SignupPage";
 import HomePage from "../pages/home/HomePage";
@@ -25,7 +25,7 @@ function Router() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LoginPage />} />
-        {/* <Route path="/auth/kakao-callback" element={<KakaoCallback />} /> */}
+        <Route path="/auth/kakao-callback" element={<KakaoCallback />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="/course/:id" element={<CoursePostPage />} />
