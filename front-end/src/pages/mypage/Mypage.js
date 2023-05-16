@@ -84,7 +84,9 @@ function MyPage() {
           </MyBox3>
           <MyBox4>
             <MyText>서울 두드림길 안내</MyText>
-            <ForwardArrow className="forwardArrow" />
+            <Link to="/info">
+              <ForwardArrow className="forwardArrow" />
+            </Link>
           </MyBox4>
           <MyBox5>로그아웃</MyBox5>
         </StMyContent>

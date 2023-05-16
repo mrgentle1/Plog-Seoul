@@ -61,11 +61,13 @@ function HomePage() {
             <Arrow className="arrow" />
           </LeftBox1>
         </Link>
-        <RightBox1>
-          <Footprint className="footprint" />
-          <Text2>서울두드림길이란?</Text2>
-          <Arrow className="arrow" />
-        </RightBox1>
+        <Link to="/info">
+          <RightBox1>
+            <Footprint className="footprint" />
+            <Text2>서울두드림길이란?</Text2>
+            <Arrow className="arrow" />
+          </RightBox1>
+        </Link>
       </Box1>
       <Link to="/plog/level">
         <Box2>
