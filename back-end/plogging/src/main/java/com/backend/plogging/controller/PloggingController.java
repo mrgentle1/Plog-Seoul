@@ -6,15 +6,12 @@ import com.backend.plogging.dto.request.plogging.PathRequestDto;
 import com.backend.plogging.dto.request.plogging.PloggingPostRequestDto;
 import com.backend.plogging.dto.response.plogging.RecordResponseDto;
 import com.backend.plogging.service.PloggingService;
-import com.backend.plogging.service.firebase.FirebaseService;
-import com.google.firebase.auth.FirebaseAuthException;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
@@ -33,6 +30,16 @@ public class PloggingController {
     }
 
     @GetMapping("")
+    public BaseResponseEntity<Page<RecordResponseDto>> getMyRecords(
+            @RequestParam(value = "pagingIndex", defaultValue = "0") int pagingIndex,
+            @RequestParam(value = "pagingSize", defaultValue = "50") int pagingSize,
+            @ApiParam(value = "The date to filter records (format: YYYY-MM)"    )
+            @RequestParam(required = false) String date, Principal principal) {
+        BaseResponseEntity response = ploggingService.getRecordsByEmail(pagingIndex, pagingSize, date, principal.getName());
+        return response;
+    }
+
+    @GetMapping("/all")
     public BaseResponseEntity<Page<RecordResponseDto>> getAllRecords(
             @RequestParam(value = "pagingIndex", defaultValue = "0") int pagingIndex,
             @RequestParam(value = "pagingSize", defaultValue = "50") int pagingSize) {
@@ -61,9 +68,8 @@ public class PloggingController {
 
     @PostMapping(value = "/{recordId}/images", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public BaseResponseEntity<?> uploadImage(@PathVariable Long recordId,
-                                             @RequestPart ImageRequestDto dto,
-                                             @RequestPart MultipartFile image) throws IOException, FirebaseAuthException {
-        BaseResponseEntity response = ploggingService.uploadImage(recordId, dto, image);
+                                             @RequestBody ImageRequestDto dto) {
+        BaseResponseEntity response = ploggingService.uploadImage(recordId, dto);
         return response;
     }
 

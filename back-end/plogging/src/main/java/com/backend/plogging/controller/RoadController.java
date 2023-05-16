@@ -23,6 +23,12 @@ public class RoadController {
         return response;
     }
 
+    @GetMapping("/recommended")
+    public BaseResponseEntity<?> getRecommendedRoads() {
+        BaseResponseEntity response = roadService.getRecommendedRoads();
+        return response;
+    }
+
     @GetMapping("/{roadId}")
     public BaseResponseEntity<?> getRoad(@PathVariable Long roadId) {
         BaseResponseEntity response = roadService.getRoadById(roadId);
