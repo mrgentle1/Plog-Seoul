@@ -39,6 +39,12 @@ public class PloggingController {
         return response;
     }
 
+    @GetMapping("/ranking")
+    public BaseResponseEntity<?> getRanking() {
+        BaseResponseEntity response = ploggingService.getWeeklyRankings();
+        return response;
+    }
+
     @GetMapping("/all")
     public BaseResponseEntity<Page<RecordResponseDto>> getAllRecords(
             @RequestParam(value = "pagingIndex", defaultValue = "0") int pagingIndex,
