@@ -11,6 +11,7 @@ import com.backend.plogging.dto.request.plogging.PloggingPostRequestDto;
 import com.backend.plogging.dto.response.plogging.ImageResponseDto;
 import com.backend.plogging.dto.response.plogging.PathResponseDto;
 import com.backend.plogging.dto.response.plogging.RecordResponseDto;
+import com.backend.plogging.dto.response.plogging.WeeklyRankingDto;
 import com.backend.plogging.repository.ImageRepository;
 import com.backend.plogging.repository.PathRepository;
 import com.backend.plogging.repository.PloggingRecordRepository;
@@ -22,10 +23,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -226,5 +230,25 @@ public class PloggingService {
             pathRepository.delete(path);
         }
         return new BaseResponseEntity<>(HttpStatus.OK);
+    }
+
+    public BaseResponseEntity<List<WeeklyRankingDto>> getWeeklyRankings() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime startOfWeek = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        LocalDateTime endOfWeek = now.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+
+        List<Object[]> weeklyDistances = ploggingRecordRepository.findWeeklyDistanceByUser(startOfWeek, endOfWeek);
+
+        List<WeeklyRankingDto> rankings = new ArrayList<>();
+        int rank = 1;
+        for (Object[] record : weeklyDistances) {
+            User user = (User) record[0];
+            Float totalDistance = ((Number) record[1]).floatValue();
+
+            rankings.add(new WeeklyRankingDto(rank, user.getUserId(), user.getNickname(), user.getLevel(), totalDistance));
+            rank++;
+        }
+
+        return new BaseResponseEntity<>(HttpStatus.OK, rankings);
     }
 }
