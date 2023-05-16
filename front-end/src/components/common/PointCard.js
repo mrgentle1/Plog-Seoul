@@ -5,23 +5,24 @@ import { useNavigate } from "react-router-dom";
 export const PointCard = ({ p }) => {
   const navigate = useNavigate();
 
+  const createdAt = p.createdAt;
+  const date = createdAt.substring(0, 10);
+
   return (
     <>
       <StPointCard>
         <StPointContent>
           <StPointText>
             <PointText>
-              <h3>
-                {p.course} - {p.coursename}
-              </h3>
-              <h6>+3,000</h6>
+              <h3>{p.title}</h3>
+              <h6>+{p.changePoint}</h6>
             </PointText>
             <PointTag>
               <Tag>
-                <p>플로깅</p>
+                <p>{p.type}</p>
               </Tag>
               <Tag>
-                <p>{p.date}</p>
+                <p>{date}</p>
               </Tag>
             </PointTag>
           </StPointText>
