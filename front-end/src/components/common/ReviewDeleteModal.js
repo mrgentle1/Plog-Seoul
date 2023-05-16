@@ -3,80 +3,59 @@ import { COLOR } from "../../styles/color";
 
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect, useCallback } from "react";
-import { ReactComponent as Star } from "../../assets/icons/star.svg";
+import { ReactComponent as Notice } from "../../assets/icons/notice.svg";
 import axios from "axios";
 
-export const ReviewEditModal = ({ setModalOpen, r }) => {
+export const ReviewDeleteModal = ({ setModal2Open, r }) => {
   const token = localStorage.getItem("key");
-  const [content, setContent] = useState("");
-  const [star, setStar] = useState(0);
-
-  const navigate = useNavigate();
-
-  // 모달 끄기
-  const closeModal = () => {
-    setModalOpen(false);
-  };
 
   const pathname = window.location.pathname;
   const url = pathname.substring(7);
   const real_pathname = "http://3.37.14.183/api/roads" + url + `/${r.reviewId}`;
 
-  const changeReview = useCallback(() => {
+  const navigate = useNavigate();
+
+  // 모달 끄기
+  const closeModal = () => {
+    setModal2Open(false);
+  };
+
+  const onDelete = () => {
     axios
-      .put(
-        real_pathname,
-        { content: content, star: star },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      .delete(real_pathname, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
       .then((response) => {
-        setModalOpen(false);
+        console.log(response);
+        navigate(-1);
       })
       .catch((error) => {
         console.error(error);
       });
-  });
-
-  const handleStarClick = (index) => {
-    if (star === index) {
-      setStar(0);
-    } else {
-      setStar(index);
-    }
   };
 
   return (
     <>
       <ModalContainer>
         <ModalText>
-          <h3>수정할 후기 내용을 적어주세요</h3>
-          <StarBox>
-            {[...Array(5)].map((_, index) => (
-              <Star
-                key={index}
-                className={index + 1 <= star ? "selected" : "unselected"}
-                onClick={() => handleStarClick(index + 1)}
-              />
-            ))}
-          </StarBox>
-          <ModalInput onChange={(e) => setContent(e.target.value)} />
+          <Notice className="notice" />
+          <h3>후기를 삭제할까요?</h3>
+          <h5>삭제하면 적립된 포인트도 함께 사라집니다.</h5>
         </ModalText>
         <ModalLine />
         <ModalButton>
           <CloseButton onClick={closeModal}>취소하기</CloseButton>
-          <CheckButton onClick={changeReview}>수정하기</CheckButton>
+          <CheckButton onClick={onDelete}>삭제하기</CheckButton>
         </ModalButton>
       </ModalContainer>
     </>
   );
 };
 
-export const ModalBackground = styled.div`
+export const ModalBackground3 = styled.div`
   position: fixed;
   z-index: 1000;
 
@@ -94,7 +73,6 @@ const ModalContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 48px 0px 0px;
   z-index: 2000;
 
   position: absolute;
@@ -114,11 +92,12 @@ const ModalText = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 0px;
-  width: 207px;
+  width: 260px;
   height: 230px;
+  margin-top: 20px;
 
   h3 {
+    margin-top: 27px;
     font-family: "SUIT Variable";
     font-style: normal;
     font-weight: 700;
@@ -127,44 +106,16 @@ const ModalText = styled.div`
     text-align: center;
     color: ${COLOR.MAIN_BLACK};
   }
-`;
-const StarBox = styled.div`
-  margin-top: 20px;
-  .selected {
-    width: 26px;
-    height: 25px;
-    color: ${COLOR.MAIN_ORANGE};
-  }
-
-  .unselected {
-    width: 26px;
-    height: 25px;
-    color: ${COLOR.LIGHT_GRAY};
-  }
-`;
-const ModalInput = styled.textarea`
-  margin-top: 24px;
-  margin-bottom: 40px;
-  width: 250px;
-  height: 90px;
-  background: ${COLOR.INPUT_GRAY};
-  border: 1px solid ${COLOR.INPUT_BORDER_GRAY};
-  border-radius: 8px;
-  padding: 12px;
-  font-family: "SUIT Variable";
-  font-style: normal;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 17px;
-  resize: none;
-
-  ::placeholder {
-    color: ${COLOR.INPUT_BORDER_GRAY};
+  h5 {
+    margin-top: 12px;
+    margin-bottom: 10px;
     font-family: "SUIT Variable";
     font-style: normal;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 17px;
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 19px;
+    text-align: center;
+    color: ${COLOR.INPUT_BORDER_GRAY};
   }
 `;
 const ModalLine = styled.div`
