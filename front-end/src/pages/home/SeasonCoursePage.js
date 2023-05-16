@@ -1,15 +1,41 @@
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { ReactComponent as BackArrow } from "../../assets/icons/backArrow.svg";
+import { CourseSeasonCard } from "../../components/common/CourseSeasonCard";
 
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
+import axios from "axios";
 
 function SeasonCoursePage() {
+  const token = localStorage.getItem("key");
+  const [courses, setCourses] = useState([]);
+
   const navigate = useNavigate();
   const goBack = useCallback(() => {
     navigate(-1);
   }, [navigate]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get("http://3.37.14.183/api/roads/recommended", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        setCourses(response.data.result.walkSesonInfo.row);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+  console.log(courses);
 
   return (
     <StSeasonCoursePage>
@@ -17,7 +43,11 @@ function SeasonCoursePage() {
         <BackArrow className="noticeBackArrow" onClick={goBack} />
         <HeaderText>계절별 추천 코스</HeaderText>
       </SeasonHeader>
-      <SeasonContent></SeasonContent>
+      <SeasonContent>
+        {courses.map((data) => (
+          <CourseSeasonCard key={data.RNUM} c={data} />
+        ))}
+      </SeasonContent>
     </StSeasonCoursePage>
   );
 }
