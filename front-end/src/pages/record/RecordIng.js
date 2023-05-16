@@ -11,6 +11,8 @@ import current from "../../assets/icons/walk.svg";
 import trashCanImg from "../../assets/icons/trash.svg";
 import imgMarker from "../../assets/icons/imgMarker.svg";
 import { ReactComponent as Close } from "../../assets/icons/close.svg";
+import { ReactComponent as RelocateBtn } from "../../assets/icons/relocateInactivate.svg";
+import { ReactComponent as RelocateAtiveBtn } from "../../assets/icons/relocateActivate.svg";
 import {
   RecordModal,
   ModalBackground,
@@ -259,6 +261,20 @@ function RecordIngPage() {
   const [watchId, setWatchId] = useState(-1); // watchPosition 중지를 위함
 
   const [recording, setRecording] = useState(false); //기록 중
+  const [isMove, setIsMove] = useState(false);
+  const mapRef = useRef();
+
+  const handleRelocate = () => {
+    //지도 중심좌표 이동
+    const map = mapRef.current;
+    if (map)
+      map.setCenter(
+        new kakao.maps.LatLng(
+          state[state.length - 1].center.lat,
+          state[state.length - 1].center.lng
+        )
+      );
+  };
 
   useEffect(() => {
     getTrashCanData(); //쓰레기통 위치 정보
@@ -426,59 +442,81 @@ function RecordIngPage() {
             />
           </CloseWrapper>
         </SignupHeader>
-        <Map
-          center={state[state.length - 1].center} // 지도의 중심 좌표
-          style={{ width: "100%", height: "100%" }} // 지도 크기
-          level={2} // 지도 확대 레벨
-        >
-          {!state.isLoading && (
-            <div>
-              <MapMarker // 마커를 생성합니다
-                position={
-                  // 마커가 표시될 위치입니다
-                  state[state.length - 1].center
-                }
-                image={{
-                  src: current, // 마커이미지의 주소입니다
-                  size: {
-                    width: 64,
-                    height: 69,
-                  }, // 마커이미지의 크기입니다
-                  options: {
-                    offset: {
-                      x: 27,
-                      y: 69,
-                    }, // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-                  },
-                }}
-              />
-              {trashCanData.map((position, index) => (
-                <MapMarker
-                  key={`${position.trashCanId}-${position.title}`}
-                  position={{
-                    lat: position.latlng.lat,
-                    lng: position.latlng.lng,
-                  }} // 마커를 표시할 위치
+        <MapContainer>
+          <Map
+            center={state[state.length - 1].center} // 지도의 중심 좌표
+            style={{ width: "100%", height: "100%" }} // 지도 크기
+            level={2} // 지도 확대 레벨
+            isPanto={true}
+            onDragEnd={() => setIsMove(true)}
+            ref={mapRef}
+          >
+            {!state.isLoading && (
+              <div>
+                <MapMarker // 마커를 생성합니다
+                  position={
+                    // 마커가 표시될 위치입니다
+                    state[state.length - 1].center
+                  }
                   image={{
-                    src: trashCanImg, // 마커이미지의 주소입니다
+                    src: current, // 마커이미지의 주소입니다
                     size: {
                       width: 64,
-                      height: 64,
+                      height: 69,
                     }, // 마커이미지의 크기입니다
+                    options: {
+                      offset: {
+                        x: 27,
+                        y: 69,
+                      }, // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+                    },
                   }}
-                  title={position.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
                 />
-              ))}
-              <Polyline
-                path={locationList}
-                strokeWeight={5} // 선의 두께 입니다
-                strokeColor={"#FFAE00"} // 선의 색깔입니다
-                strokeOpacity={0.7} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-                strokeStyle={"solid"} // 선의 스타일입니다
+                {trashCanData.map((position, index) => (
+                  <MapMarker
+                    key={`${position.trashCanId}-${position.title}`}
+                    position={{
+                      lat: position.latlng.lat,
+                      lng: position.latlng.lng,
+                    }} // 마커를 표시할 위치
+                    image={{
+                      src: trashCanImg, // 마커이미지의 주소입니다
+                      size: {
+                        width: 64,
+                        height: 64,
+                      }, // 마커이미지의 크기입니다
+                    }}
+                    title={position.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+                  />
+                ))}
+                <Polyline
+                  path={locationList}
+                  strokeWeight={5} // 선의 두께 입니다
+                  strokeColor={"#FFAE00"} // 선의 색깔입니다
+                  strokeOpacity={0.7} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+                  strokeStyle={"solid"} // 선의 스타일입니다
+                />
+              </div>
+            )}
+          </Map>
+          {/* Reloacate-지도 이동 확인 O -> activate Btn */}
+          <RelocateWrapper>
+            {isMove ? (
+              <RelocateBtn
+                onClick={() => {
+                  handleRelocate();
+                  setIsMove(false);
+                }}
               />
-            </div>
-          )}
-        </Map>
+            ) : (
+              <RelocateAtiveBtn
+                onClick={() => {
+                  // handleRelocate();
+                }}
+              />
+            )}
+          </RelocateWrapper>
+        </MapContainer>
         <RecordDetailContainer>
           <StopWatchContainer>
             <TimeComponent time={time} />
@@ -552,6 +590,33 @@ const CloseWrapper = styled.div`
     height: 27px;
     color: ${COLOR.MAIN_BLACK};
   }
+`;
+
+const MapContainer = styled.div`
+  display: flex;
+  position: relative;
+  overflow: hidden;
+
+  width: 100%;
+  height: 100%;
+
+  & > .MapWrapper {
+    position: relative;
+    overflow: hidden;
+  }
+  .startBtn {
+    margin-top: 28px;
+  }
+`;
+
+const RelocateWrapper = styled.div`
+  display: flex;
+  position: absolute;
+  overflow: hidden;
+  top: 10px;
+  right: 10px;
+
+  z-index: 10;
 `;
 
 const RecordDetailContainer = styled.div`
