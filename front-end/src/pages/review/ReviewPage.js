@@ -20,11 +20,32 @@ function ReviewPage() {
   const pathname = window.location.pathname;
   const real_pathname = pathname.substring(0, 9);
   const url = pathname.substring(7);
+  const url2 = url.substring(0, url.length - "/reviews".length);
+
+  const course_url = "http://3.37.14.183/api/roads" + url2;
   const real_url = "http://3.37.14.183/api/roads" + url;
 
   const token = localStorage.getItem("key");
 
+  const [course, setCourse] = useState([]);
   const [reviews, setReviews] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(course_url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        console.log("코스", response);
+        setCourse(response.data.result);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   useEffect(() => {
     axios
@@ -40,7 +61,7 @@ function ReviewPage() {
       .catch((error) => {
         console.error(error);
       });
-  }, []);
+  }, [reviews]);
 
   return (
     <StReviewPage>
@@ -48,29 +69,38 @@ function ReviewPage() {
         <ReviewBox1>
           <BackArrow className="backArrow" onClick={goBack} />
           <h1>후기</h1>
-          <h4>6</h4>
+          <h4>{course.reviewCnt}</h4>
         </ReviewBox1>
         <ReviewBox2>
-          <h5>+ 500 포인트</h5>
+          <h5>+ 100 포인트</h5>
           <Link to={real_pathname + "/review"}>
             <Pencil className="pencil" />
           </Link>
         </ReviewBox2>
       </ReviewHeader>
       <ReviewMain>
-        <ReviewStar>
-          <h5>평점</h5>
-          <Star className="star" />
-          <Star className="star" />
-          <Star className="star" />
-          <Star className="star" />
-          <Star className="star" />
-        </ReviewStar>
-        <ReviewList>
-          {reviews.map((data) => (
-            <ReviewCard key={data.reviewId} r={data} />
-          ))}
-        </ReviewList>
+        {course.reviewCnt === 0 ? (
+          <div className="noReview">
+            <h5>아직 후기가 없어요</h5>
+            <h3>첫 후기를 남겨주세요!</h3>
+          </div>
+        ) : (
+          <>
+            <ReviewStar>
+              {[...Array(5)].map(
+                (_, index) =>
+                  index < course.reviewSum && (
+                    <Star key={index} className="star" />
+                  )
+              )}
+            </ReviewStar>
+            <ReviewList>
+              {reviews.map((data) => (
+                <ReviewCard key={data.reviewId} r={data} />
+              ))}
+            </ReviewList>
+          </>
+        )}
       </ReviewMain>
     </StReviewPage>
   );
@@ -145,6 +175,29 @@ const ReviewBox2 = styled.div`
 `;
 const ReviewMain = styled.div`
   margin-top: 24px;
+  .noReview {
+    margin-top: 300px;
+
+    h5 {
+      font-family: "SUIT Variable";
+      font-style: normal;
+      font-weight: 700;
+      font-size: 17px;
+      line-height: 21px;
+      text-align: center;
+      color: ${COLOR.INPUT_BORDER_GRAY};
+    }
+    h3 {
+      margin-top: 12px;
+      font-family: "SUIT Variable";
+      font-style: normal;
+      font-weight: 700;
+      font-size: 17px;
+      line-height: 21px;
+      text-align: center;
+      color: ${COLOR.DARK_GRAY};
+    }
+  }
 `;
 const ReviewStar = styled.div`
   display: flex;

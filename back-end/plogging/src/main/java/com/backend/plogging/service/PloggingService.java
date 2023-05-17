@@ -11,22 +11,25 @@ import com.backend.plogging.dto.request.plogging.PloggingPostRequestDto;
 import com.backend.plogging.dto.response.plogging.ImageResponseDto;
 import com.backend.plogging.dto.response.plogging.PathResponseDto;
 import com.backend.plogging.dto.response.plogging.RecordResponseDto;
+import com.backend.plogging.dto.response.plogging.WeeklyRankingDto;
 import com.backend.plogging.repository.ImageRepository;
 import com.backend.plogging.repository.PathRepository;
 import com.backend.plogging.repository.PloggingRecordRepository;
 import com.backend.plogging.repository.UserRepository;
-import com.backend.plogging.service.firebase.FirebaseService;
-import com.google.firebase.auth.FirebaseAuthException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,8 +41,6 @@ public class PloggingService {
     private final UserRepository userRepository;
     private final PathRepository pathRepository;
     private final ImageRepository imageRepository;
-
-    private final FirebaseService firebaseService;
 
     public BaseResponseEntity<?> createRecord(PloggingPostRequestDto dto, String email) {
 
@@ -60,6 +61,43 @@ public class PloggingService {
         } catch (Exception e) {
             return new BaseResponseEntity<>(e);
         }
+    }
+
+    public BaseResponseEntity<Page<RecordResponseDto>> getRecordsByEmail(int pagingIndex, int pagingSize,
+                                                                         String date, String email) {
+        Pageable pageable = PageRequest.of(pagingIndex, pagingSize);
+        Page<PloggingRecord> records;
+
+        if (date != null) {
+            DateTimeFormatter formatter;
+            LocalDate parsedDate;
+            LocalDate startDate;
+            LocalDateTime startDateTime;
+            LocalDateTime endDateTime;
+
+            if(date.length() > 7) { // YYYY-MM-DD format
+                formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                parsedDate = LocalDate.parse(date, formatter);
+                startDate = parsedDate; // Start date of the day
+                endDateTime = startDate.atTime(23, 59, 59);     // End time of the day
+            } else { // YYYY-MM format
+                formatter = DateTimeFormatter.ofPattern("yyyy-MM");
+                YearMonth yearMonth = YearMonth.parse(date, formatter);
+                int year = yearMonth.getYear();
+                int month = yearMonth.getMonthValue();
+
+                startDate = LocalDate.of(year, month, 1); // Start date of the month
+                LocalDate endDate = startDate.plusMonths(1).minusDays(1); // End date of the month
+                endDateTime = endDate.atTime(23, 59, 59); // End time of the month
+            }
+
+            startDateTime = startDate.atStartOfDay(); // Convert to LocalDateTime (time set to 00:00:00)
+            records = ploggingRecordRepository.findByUserEmailAndCreatedAtBetween(email, startDateTime, endDateTime, pageable);
+        } else {
+            records = ploggingRecordRepository.findAllByUserEmail(email, pageable);
+        }
+
+        return new BaseResponseEntity<>(HttpStatus.OK, records.map(RecordResponseDto::new));
     }
 
     public BaseResponseEntity<Page<RecordResponseDto>> getAllRecords(int pagingIndex, int pagingSize) {
@@ -107,8 +145,7 @@ public class PloggingService {
         }
     }
 
-    public BaseResponseEntity<?> uploadImage(Long recordId, ImageRequestDto dto, MultipartFile image) throws IOException, FirebaseAuthException {
-        String imgUrl = firebaseService.uploadFiles(image);
+    public BaseResponseEntity<?> uploadImage(Long recordId, ImageRequestDto dto) {
         Optional<PloggingRecord> record = ploggingRecordRepository.findById(recordId);
 
         if (!record.isPresent()) {
@@ -118,7 +155,7 @@ public class PloggingService {
         try {
             Image newImage = Image.builder()
                     .ploggingRecord(record.get())
-                    .imgUrl(imgUrl)
+                    .imgUrl(dto.getImageUrl())
                     .createdAt(LocalDateTime.now())
                     .imgLat(dto.getImgLat())
                     .imgLng(dto.getImgLng()).build();
@@ -193,5 +230,25 @@ public class PloggingService {
             pathRepository.delete(path);
         }
         return new BaseResponseEntity<>(HttpStatus.OK);
+    }
+
+    public BaseResponseEntity<List<WeeklyRankingDto>> getWeeklyRankings() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime startOfWeek = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        LocalDateTime endOfWeek = now.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+
+        List<Object[]> weeklyDistances = ploggingRecordRepository.findWeeklyDistanceByUser(startOfWeek, endOfWeek);
+
+        List<WeeklyRankingDto> rankings = new ArrayList<>();
+        int rank = 1;
+        for (Object[] record : weeklyDistances) {
+            User user = (User) record[0];
+            Float totalDistance = ((Number) record[1]).floatValue();
+
+            rankings.add(new WeeklyRankingDto(rank, user.getUserId(), user.getNickname(), user.getLevel(), totalDistance));
+            rank++;
+        }
+
+        return new BaseResponseEntity<>(HttpStatus.OK, rankings);
     }
 }

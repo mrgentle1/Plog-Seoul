@@ -28,8 +28,8 @@ public class Badge extends BaseEntity{
     @Column(name = "description")
     private String description;  // Badge description
 
-    @Column(name = "icon")
-    private String icon;  // Badge icon
+    @Column(name = "badge_number")
+    private Integer badge_number;  // 뱃지 고유번호
 
     @Column(name = "is_achieved")
     private Boolean isAchieved;  // Badge achieved

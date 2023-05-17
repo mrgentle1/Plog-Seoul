@@ -1,41 +1,54 @@
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 
-import { ReactComponent as ReviewCheck } from "../../assets/icons/reviewCheck.svg";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect, useCallback } from "react";
+import axios from "axios";
 
-export const Modal = ({ setModalOpen }) => {
-  // 경로
-  const pathname = window.location.pathname;
-  const real_pathname = pathname.substring(0, 7);
+export const NickNameModal = ({ setModalOpen }) => {
+  const token = localStorage.getItem("key");
+  const [nickname, setNickname] = useState("");
+
+  const navigate = useNavigate();
 
   // 모달 끄기
   const closeModal = () => {
     setModalOpen(false);
   };
-  const checkModal = () => {
-    setModalOpen(false);
-  };
+
+  const changeNickname = useCallback(() => {
+    axios
+      .post(
+        "http://3.37.14.183/api/auth/registration",
+        {
+          nickname: nickname,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        setModalOpen(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [nickname]);
 
   return (
     <>
       <ModalContainer>
         <ModalText>
-          <ReviewCheck className="reviewCheck" />
-          <h3>소중한 후기 감사합니다!</h3>
-          <h5>
-            여러분의 소중한 후기로
-            <br />더 나은 서비스를 보답할게요
-          </h5>
+          <h3>변경할 닉네임을 알려주세요</h3>
+          <ModalInput onChange={(e) => setNickname(e.target.value)} />
         </ModalText>
         <ModalLine />
         <ModalButton>
-          <Link to={real_pathname}>
-            <CloseButton onClick={closeModal}>닫기</CloseButton>
-          </Link>
-          <Link to="/plog/level">
-            <CheckButton onClick={checkModal}>내 포인트 확인</CheckButton>
-          </Link>
+          <CloseButton onClick={closeModal}>취소하기</CloseButton>
+          <CheckButton onClick={changeNickname}>변경하기</CheckButton>
         </ModalButton>
       </ModalContainer>
     </>
@@ -50,11 +63,9 @@ export const ModalBackground = styled.div`
 
   width: 400px;
   height: 100%;
+  margin-top: -130px;
 
   background: rgba(190, 194, 198, 0.9);
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 
 const ModalContainer = styled.div`
@@ -66,7 +77,7 @@ const ModalContainer = styled.div`
 
   position: absolute;
   width: 300px;
-  height: 324px;
+  height: 230px;
 
   position: fixed;
   top: 50%;
@@ -82,17 +93,10 @@ const ModalText = styled.div`
   justify-content: center;
   align-items: center;
   padding: 0px;
-  margin-top: 27px;
-
-  width: 168px;
+  width: 187px;
   height: 200px;
 
-  .reviewCheck {
-    width: 36px;
-    height: 36px;
-  }
   h3 {
-    margin-top: 28px;
     font-family: "SUIT Variable";
     font-style: normal;
     font-weight: 700;
@@ -101,16 +105,29 @@ const ModalText = styled.div`
     text-align: center;
     color: ${COLOR.MAIN_BLACK};
   }
-  h5 {
-    margin-top: 12px;
-    margin-bottom: 70px;
+`;
+const ModalInput = styled.input`
+  margin-top: 24px;
+  margin-bottom: 40px;
+  width: 250px;
+  height: 41px;
+  background: ${COLOR.INPUT_GRAY};
+  border: 1px solid ${COLOR.INPUT_BORDER_GRAY};
+  border-radius: 8px;
+  padding: 12px;
+  font-family: "SUIT Variable";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+
+  ::placeholder {
+    color: ${COLOR.INPUT_BORDER_GRAY};
     font-family: "SUIT Variable";
     font-style: normal;
     font-weight: 500;
-    font-size: 15px;
-    line-height: 19px;
-    text-align: center;
-    color: ${COLOR.INPUT_BORDER_GRAY};
+    font-size: 14px;
+    line-height: 17px;
   }
 `;
 const ModalLine = styled.div`

@@ -1,72 +1,83 @@
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 
-import { ReactComponent as ReviewCheck } from "../../assets/icons/reviewCheck.svg";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect, useCallback } from "react";
+import { ReactComponent as Notice } from "../../assets/icons/notice.svg";
+import axios from "axios";
 
-export const Modal = ({ setModalOpen }) => {
-  // 경로
+export const ReviewDeleteModal = ({ setModal2Open, r }) => {
+  const token = localStorage.getItem("key");
+
   const pathname = window.location.pathname;
-  const real_pathname = pathname.substring(0, 7);
+  const url = pathname.substring(7);
+  const real_pathname = "http://3.37.14.183/api/roads" + url + `/${r.reviewId}`;
+
+  const navigate = useNavigate();
 
   // 모달 끄기
   const closeModal = () => {
-    setModalOpen(false);
+    setModal2Open(false);
   };
-  const checkModal = () => {
-    setModalOpen(false);
+
+  const onDelete = () => {
+    axios
+      .delete(real_pathname, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        navigate(-1);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
     <>
       <ModalContainer>
         <ModalText>
-          <ReviewCheck className="reviewCheck" />
-          <h3>소중한 후기 감사합니다!</h3>
-          <h5>
-            여러분의 소중한 후기로
-            <br />더 나은 서비스를 보답할게요
-          </h5>
+          <Notice className="notice" />
+          <h3>후기를 삭제할까요?</h3>
+          <h5>삭제하면 적립된 포인트도 함께 사라집니다.</h5>
         </ModalText>
         <ModalLine />
         <ModalButton>
-          <Link to={real_pathname}>
-            <CloseButton onClick={closeModal}>닫기</CloseButton>
-          </Link>
-          <Link to="/plog/level">
-            <CheckButton onClick={checkModal}>내 포인트 확인</CheckButton>
-          </Link>
+          <CloseButton onClick={closeModal}>취소하기</CloseButton>
+          <CheckButton onClick={onDelete}>삭제하기</CheckButton>
         </ModalButton>
       </ModalContainer>
     </>
   );
 };
 
-export const ModalBackground = styled.div`
+export const ModalBackground3 = styled.div`
   position: fixed;
   z-index: 1000;
 
   /* 우선은 393px로 하는데 추후에 100%로 바꿔야 할 듯 */
 
-  width: 400px;
-  height: 100%;
+  width: 393px;
+  height: 100vh;
+  margin-left: -20px;
+  margin-top: -145px;
 
   background: rgba(190, 194, 198, 0.9);
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 
 const ModalContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 48px 0px 0px;
   z-index: 2000;
 
   position: absolute;
   width: 300px;
-  height: 324px;
+  height: 297px;
 
   position: fixed;
   top: 50%;
@@ -81,18 +92,12 @@ const ModalText = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 0px;
-  margin-top: 27px;
+  width: 260px;
+  height: 230px;
+  margin-top: 20px;
 
-  width: 168px;
-  height: 200px;
-
-  .reviewCheck {
-    width: 36px;
-    height: 36px;
-  }
   h3 {
-    margin-top: 28px;
+    margin-top: 27px;
     font-family: "SUIT Variable";
     font-style: normal;
     font-weight: 700;
@@ -103,10 +108,10 @@ const ModalText = styled.div`
   }
   h5 {
     margin-top: 12px;
-    margin-bottom: 70px;
+    margin-bottom: 10px;
     font-family: "SUIT Variable";
     font-style: normal;
-    font-weight: 500;
+    font-weight: 600;
     font-size: 15px;
     line-height: 19px;
     text-align: center;
