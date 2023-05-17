@@ -26,7 +26,7 @@ export const RecordModal = ({ setModalOpen, data }) => {
   const exitModal = () => {
     console.log("check");
     setModalOpen(false);
-    navigate("/record/");
+    navigate("/record");
   };
 
   return (
