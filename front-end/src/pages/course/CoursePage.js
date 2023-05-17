@@ -70,7 +70,10 @@ function CoursePage() {
     <StCoursePage>
       <HomeHeaderV2 headerBackground={headerBackground} />
       <CourseMain>
-        <StImgSlide></StImgSlide>
+        <StImgSlide>
+          <ImgGradation />
+          <ImgSlider />
+        </StImgSlide>
         <StCourseMain>
           {updateData.map((data) => (
             <CourseMainCard key={data.routeId} c={data} />
@@ -98,15 +101,27 @@ const CourseMain = styled.div`
   margin-top: -81px;
 `;
 const StImgSlide = styled.div`
+  position: relative;
   width: 393px;
   height: 356px;
   background-color: ${COLOR.MEDIUM_GRAY};
+  margin-top: 46px;
   margin-bottom: 21px;
 
   overflow: hidden;
   margin: auto;
 `;
-
+const ImgGradation = styled.div`
+  position: absolute;
+  width: 393px;
+  height: 177px;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.3) 36.1%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  z-index: 1;
+`;
 const StCourseMain = styled.div`
   margin-left: 20px;
   margin-top: 21px;

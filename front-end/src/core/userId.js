@@ -12,7 +12,7 @@ export const usePersistRecoilState = (atom) => {
 
   useEffect(() => {
     const savedState = localStorage.getItem(atom.key);
-    if (savedState !== null) {
+    if (savedState !== null && savedState !== undefined) {
       setState(JSON.parse(savedState));
     }
   }, []);

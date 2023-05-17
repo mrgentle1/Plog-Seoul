@@ -28,6 +28,10 @@ function CourseMainPage() {
     "한강지천길/계절길",
   ];
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const ClickCategory = (c) => {
     setCategory((prevCategory) => (prevCategory === c ? "" : c));
   };
@@ -52,10 +56,6 @@ function CourseMainPage() {
       .catch((error) => {
         console.error(error);
       });
-  }, []);
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
   }, []);
 
   return (

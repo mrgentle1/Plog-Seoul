@@ -36,6 +36,8 @@ function HomePage() {
     month = `0${todayMonth}`;
   }
 
+  console.log(userId);
+
   useEffect(() => {
     axios
       .get("http://3.37.14.183/api/auth/me", {
@@ -45,14 +47,16 @@ function HomePage() {
         },
       })
       .then((response) => {
-        console.log(response);
         setUser(response.data.result);
+        console.log(user);
         setPoint(response.data.result.point);
       })
       .catch((error) => {
         console.error(error);
       });
+  }, []);
 
+  useEffect(() => {
     axios
       .get(`http://3.37.14.183/api/plogging?date=${year}-${month}`, {
         headers: {
@@ -61,13 +65,12 @@ function HomePage() {
         },
       })
       .then((response) => {
-        console.log(response);
         setPlogging(response.data.result.content);
       })
       .catch((error) => {
         console.error(error);
       });
-  }, []);
+  });
 
   const headertext = "안녕하세요, " + user.nickname + "님!";
   useEffect(() => {
@@ -76,7 +79,6 @@ function HomePage() {
   });
 
   const levelBarWidth = point >= 1000 ? 321 : (point / 1000) * 321;
-  console.log("levet", levelBarWidth);
   const runningTime = 0;
   const distance = 0;
   plogging.map(
