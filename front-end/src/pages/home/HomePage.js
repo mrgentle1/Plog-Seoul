@@ -76,6 +76,7 @@ function HomePage() {
   });
 
   const levelBarWidth = point >= 1000 ? 321 : (point / 1000) * 321;
+  console.log("levet", levelBarWidth);
   const runningTime = 0;
   const distance = 0;
   plogging.map(
@@ -105,7 +106,7 @@ function HomePage() {
           <Level className="level" />
           <LevelBox>
             <Text3>Level {user.level}</Text3>
-            <Text4>다음 레벨까지 1,000 포인트</Text4>
+            <Text4>다음 레벨까지 {1000 - point} 포인트</Text4>
           </LevelBox>
           <LevelBar />
           <LevelBar2 width={levelBarWidth} />
@@ -241,7 +242,7 @@ const LevelBar = styled.div`
 const LevelBar2 = styled.div`
   margin-top: 12px;
   position: absolute;
-  width: ${(props) => props.levelBarWidth}px;
+  width: ${(props) => props.width}px;
   height: 10px;
   background: ${COLOR.MAIN_GREEN};
   border-radius: 5px;
