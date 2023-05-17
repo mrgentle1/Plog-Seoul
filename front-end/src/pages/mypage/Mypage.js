@@ -7,6 +7,10 @@ import {
   ModalBackground,
   NickNameModal,
 } from "../../components/common/NickNameModal";
+import {
+  LogoutModal,
+  ModalBackground2,
+} from "../../components/common/modal/LogoutModal";
 
 import axios from "axios";
 import styled from "styled-components";
@@ -22,10 +26,16 @@ function MyPage() {
 
   const setHeaderTitle = useSetRecoilState(headerTitleState);
 
-  // 모달창 호출
+  // 닉네임 변경 모달창 호출
   const [modalOpen, setModalOpen] = useState(false);
   const showModal = () => {
     setModalOpen(true);
+  };
+
+  // 로그아웃 모달창 호출
+  const [modalOpen2, setModalOpen2] = useState(false);
+  const showModal2 = () => {
+    setModalOpen2(true);
   };
 
   useEffect(() => {
@@ -52,6 +62,8 @@ function MyPage() {
     <>
       {modalOpen && <NickNameModal setModalOpen={setModalOpen} />}
       {modalOpen && <ModalBackground />}
+      {modalOpen2 && <LogoutModal setModalOpen2={setModalOpen2} />}
+      {modalOpen2 && <ModalBackground2 />}
       <StMyPage>
         <StHeader>
           <MyEdit onClick={showModal}>닉네임 변경</MyEdit>
@@ -88,7 +100,7 @@ function MyPage() {
               <ForwardArrow className="forwardArrow" />
             </Link>
           </MyBox4>
-          <MyBox5>로그아웃</MyBox5>
+          <MyBox5 onClick={showModal2}>로그아웃</MyBox5>
         </StMyContent>
         <Footer />
       </StMyPage>

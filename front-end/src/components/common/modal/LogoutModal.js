@@ -1,68 +1,53 @@
 import styled from "styled-components";
-import { COLOR } from "../../styles/color";
+import { COLOR } from "../../../styles/color";
 
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect, useCallback } from "react";
+import { ReactComponent as Notice } from "../../../assets/icons/notice.svg";
 import axios from "axios";
 
-export const NickNameModal = ({ setModalOpen }) => {
-  const token = localStorage.getItem("key");
-  const [nickname, setNickname] = useState("");
-
+export const LogoutModal = ({ setModalOpen2, r }) => {
   const navigate = useNavigate();
 
   // 모달 끄기
   const closeModal = () => {
-    setModalOpen(false);
+    setModalOpen2(false);
   };
 
-  const changeNickname = useCallback(() => {
-    axios
-      .post(
-        "http://3.37.14.183/api/auth/registration",
-        {
-          nickname: nickname,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .then((response) => {
-        setModalOpen(false);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [nickname]);
+  const logout = () => {
+    sessionStorage.removeItem("user_id");
+    navigate("/");
+  };
 
   return (
     <>
       <ModalContainer>
         <ModalText>
-          <h3>변경할 닉네임을 알려주세요</h3>
-          <ModalInput onChange={(e) => setNickname(e.target.value)} />
+          <Notice className="notice" />
+          <h3>로그아웃할까요?</h3>
+          <h5>
+            동일한 카카오 계정으로
+            <br />
+            로그인하면 다시 이용할 수 있어요
+          </h5>
         </ModalText>
         <ModalLine />
         <ModalButton>
-          <CloseButton onClick={closeModal}>취소하기</CloseButton>
-          <CheckButton onClick={changeNickname}>변경하기</CheckButton>
+          <CloseButton onClick={logout}>로그아웃</CloseButton>
+          <CheckButton onClick={closeModal}>취소하기</CheckButton>
         </ModalButton>
       </ModalContainer>
     </>
   );
 };
 
-export const ModalBackground = styled.div`
+export const ModalBackground2 = styled.div`
   position: fixed;
   z-index: 1000;
 
   /* 우선은 393px로 하는데 추후에 100%로 바꿔야 할 듯 */
 
-  width: 400px;
-  height: 100%;
+  width: 393px;
+  height: 100vh;
   margin-top: -127px;
 
   background: rgba(190, 194, 198, 0.9);
@@ -72,12 +57,11 @@ const ModalContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 48px 0px 0px;
   z-index: 2000;
 
   position: absolute;
   width: 300px;
-  height: 230px;
+  height: 297px;
 
   position: fixed;
   top: 50%;
@@ -92,11 +76,12 @@ const ModalText = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 0px;
-  width: 187px;
-  height: 200px;
+  width: 260px;
+  height: 230px;
+  margin-top: 20px;
 
   h3 {
+    margin-top: 27px;
     font-family: "SUIT Variable";
     font-style: normal;
     font-weight: 700;
@@ -105,29 +90,16 @@ const ModalText = styled.div`
     text-align: center;
     color: ${COLOR.MAIN_BLACK};
   }
-`;
-const ModalInput = styled.input`
-  margin-top: 24px;
-  margin-bottom: 40px;
-  width: 250px;
-  height: 41px;
-  background: ${COLOR.INPUT_GRAY};
-  border: 1px solid ${COLOR.INPUT_BORDER_GRAY};
-  border-radius: 8px;
-  padding: 12px;
-  font-family: "SUIT Variable";
-  font-style: normal;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 17px;
-
-  ::placeholder {
-    color: ${COLOR.INPUT_BORDER_GRAY};
+  h5 {
+    margin-top: 15px;
+    margin-bottom: 10px;
     font-family: "SUIT Variable";
     font-style: normal;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 17px;
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 19px;
+    text-align: center;
+    color: ${COLOR.INPUT_BORDER_GRAY};
   }
 `;
 const ModalLine = styled.div`
