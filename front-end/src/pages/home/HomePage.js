@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSetRecoilState } from "recoil";
 import { headerTitleState } from "../../core/headerTitle";
-import { HomeHeader } from "../../components/layout/Header";
 import { Footer } from "../../components/layout/Footer";
 import { ReactComponent as Flag } from "../../assets/icons/flag.svg";
 import { ReactComponent as Arrow } from "../../assets/icons/arrow.svg";
@@ -10,17 +9,32 @@ import { ReactComponent as Tree } from "../../assets/icons/tree.svg";
 import { ReactComponent as Level } from "../../assets/icons/level.svg";
 import { ReactComponent as Record } from "../../assets/icons/record.svg";
 import { ReactComponent as HomeButton } from "../../assets/icons/homeButton.svg";
+import { todayMonth, year } from "../../core/date.js";
 
 import axios from "axios";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 import { Link } from "react-router-dom";
+import { userIdNumber, usePersistRecoilState } from "../../core/userId";
 
 function HomePage() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const token = localStorage.getItem("key");
   const [user, setUser] = useState("");
+  const [point, setPoint] = useState(0);
+  const [plogging, setPlogging] = useState([]);
 
+  const [userId, setUserId] = usePersistRecoilState(userIdNumber);
   const setHeaderTitle = useSetRecoilState(headerTitleState);
+
+  // month가 한자리인지 두자리인지 판별
+  let month = 0;
+  if (todayMonth < 10) {
+    month = `0${todayMonth}`;
+  }
 
   useEffect(() => {
     axios
@@ -33,56 +47,82 @@ function HomePage() {
       .then((response) => {
         console.log(response);
         setUser(response.data.result);
+        setPoint(response.data.result.point);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
+    axios
+      .get(`http://3.37.14.183/api/plogging?date=${year}-${month}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        setPlogging(response.data.result.content);
       })
       .catch((error) => {
         console.error(error);
       });
   }, []);
+
   const headertext = "안녕하세요, " + user.nickname + "님!";
   useEffect(() => {
+    setUserId(user.userId);
     setHeaderTitle(headertext); // '홈' 값을 할당합니다.
   });
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  const levelBarWidth = point >= 1000 ? 321 : (point / 1000) * 321;
+  console.log("levet", levelBarWidth);
+  const runningTime = 0;
+  const distance = 0;
+  plogging.map(
+    (data) => ((runningTime += data.runningTime), (distance += data.distance))
+  );
 
   return (
     <StHomePage>
       <Box1>
-        <LeftBox1>
-          <Flag className="flag" />
-          <Text1>계절별 추천 코스</Text1>
-          <Arrow className="arrow" />
-        </LeftBox1>
-        <RightBox1>
-          <Footprint className="footprint" />
-          <Text2>서울두드림길이란?</Text2>
-          <Arrow className="arrow" />
-        </RightBox1>
+        <Link to="/home/season">
+          <LeftBox1>
+            <Flag className="flag" />
+            <Text1>계절별 추천 코스</Text1>
+            <Arrow className="arrow" />
+          </LeftBox1>
+        </Link>
+        <Link to="/info">
+          <RightBox1>
+            <Footprint className="footprint" />
+            <Text2>서울두드림길이란?</Text2>
+            <Arrow className="arrow" />
+          </RightBox1>
+        </Link>
       </Box1>
       <Link to="/plog/level">
         <Box2>
           <Level className="level" />
           <LevelBox>
             <Text3>Level {user.level}</Text3>
-            <Text4>다음 레벨까지 1,000 포인트</Text4>
+            <Text4>다음 레벨까지 {1000 - point} 포인트</Text4>
           </LevelBox>
-          <LevelBar></LevelBar>
-          <LevelBar2></LevelBar2>
+          <LevelBar />
+          <LevelBar2 width={levelBarWidth} />
         </Box2>
       </Link>
       <Box3>
         <Tree className="tree" />
         <Text5>
-          <Ploging>4월 플로깅</Ploging>
+          <Ploging>{todayMonth}월 플로깅</Ploging>
           <Time>걸은 시간</Time>
           <Dis>걸은 거리</Dis>
         </Text5>
         <Text6>
-          <Ploging2>5번</Ploging2>
-          <Time2>342분</Time2>
-          <Dis2>5.65km</Dis2>
+          <Ploging2>{plogging.length}번</Ploging2>
+          <Time2>{runningTime}분</Time2>
+          <Dis2>{distance}km</Dis2>
         </Text6>
       </Box3>
       <Link to="/record">
@@ -202,10 +242,11 @@ const LevelBar = styled.div`
 const LevelBar2 = styled.div`
   margin-top: 12px;
   position: absolute;
-  width: 196px;
+  width: ${(props) => props.width}px;
   height: 10px;
   background: ${COLOR.MAIN_GREEN};
   border-radius: 5px;
+  z-index: 1;
 `;
 const Text3 = styled.div`
   font-family: "SUIT Variable";

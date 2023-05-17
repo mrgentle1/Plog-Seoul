@@ -6,7 +6,7 @@ import axios from "axios";
 
 import { ReactComponent as Star } from "../../assets/icons/star.svg";
 import { ReactComponent as Dots } from "../../assets/icons/threedots.svg";
-import { ReviewEditModal, ModalBackground } from "./ReviewEditModal";
+import { PopupModal, ModalBackground2 } from "./PopupModal";
 
 export const ReviewCard = ({ r }) => {
   const navigate = useNavigate();
@@ -15,44 +15,22 @@ export const ReviewCard = ({ r }) => {
   const date = createdAt.substring(0, 10);
   const time = createdAt.substring(11, 16);
 
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
-
   const token = localStorage.getItem("key");
 
   const pathname = window.location.pathname;
   const url = pathname.substring(7);
   const real_pathname = "http://3.37.14.183/api/roads" + url + `/${r.reviewId}`;
 
-  // 모달창 호출
-  const [modalOpen, setModalOpen] = useState(false);
-  const showModal = () => {
-    setModalOpen(true);
-  };
-
-  const onDelete = () => {
-    axios
-      .delete(real_pathname, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      })
-      .then((response) => {
-        console.log(response);
-        navigate(-1);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+  // 수정/삭제 팝업창 호출
+  const [popupOpen, setPopupOpen] = useState(false);
+  const popupModal = () => {
+    setPopupOpen(!popupOpen);
   };
 
   return (
     <>
-      {modalOpen && <ReviewEditModal setModalOpen={setModalOpen} r={r} />}
-      {modalOpen && <ModalBackground />}
+      {popupOpen && <PopupModal setPopupOpen={setPopupOpen} r={r} />}
+      {popupOpen && <ModalBackground2 onClick={popupModal} />}
       <StReviewCard>
         <CourseLine />
         <ReviewList>
@@ -68,14 +46,8 @@ export const ReviewCard = ({ r }) => {
               <h6>
                 {date} {time}
               </h6>
-              <div onClick={toggleDropdown}>
+              <div onClick={popupModal}>
                 <Dots className="dots" />
-                {isDropdownOpen && (
-                  <DropdownBox>
-                    <EditButton onClick={showModal}>수정</EditButton>
-                    <DeleteButton onClick={onDelete}>삭제</DeleteButton>
-                  </DropdownBox>
-                )}
               </div>
             </Box2>
           </ReviewListInfo>

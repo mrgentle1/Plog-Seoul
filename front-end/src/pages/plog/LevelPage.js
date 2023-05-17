@@ -3,34 +3,65 @@ import { useNavigate } from "react-router-dom";
 import { ReactComponent as BackArrow } from "../../assets/icons/backArrow.svg";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import { PointCard } from "../../components/common/PointCard";
+import { useRecoilValue } from "recoil";
+import { userIdNumber, usePersistRecoilState } from "../../core/userId";
 
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
+import axios from "axios";
 
 function LevelPage() {
+  const token = localStorage.getItem("key");
+  const [user, setUser] = useState("");
+  const [point, setPoint] = useState([]);
+
+  const [userId, setUserId] = usePersistRecoilState(userIdNumber);
+
   const navigate = useNavigate();
   const goBack = useCallback(() => {
     navigate(-1);
   }, [navigate]);
 
-  const data = [{ name: "level", value: 75 }];
+  const url = "http://3.37.14.183/api/users/" + userId;
+  const url2 = url + "/point/history";
 
-  const dummydata = [
-    { id: 1, course: "한강도성길", coursename: "낙산구간", date: "5월 2일" },
-    { id: 2, course: "한강도성길", coursename: "낙산구간", date: "5월 2일" },
-    { id: 3, course: "한강도성길", coursename: "낙산구간", date: "5월 2일" },
-    { id: 4, course: "한강도성길", coursename: "낙산구간", date: "5월 2일" },
-    { id: 5, course: "한강도성길", coursename: "낙산구간", date: "5월 2일" },
-    { id: 6, course: "한강도성길", coursename: "낙산구간", date: "5월 2일" },
-    { id: 7, course: "한강도성길", coursename: "낙산구간", date: "5월 2일" },
-    { id: 8, course: "한강도성길", coursename: "낙산구간", date: "5월 2일" },
-  ];
+  useEffect(() => {
+    axios
+      .get(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        setUser(response.data.result);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
+    axios
+      .get(url2, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        setPoint(response.data.result.content);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  });
+
+  const data = [{ name: "level", value: 75 }];
 
   return (
     <StNoticePage>
       <NoticeHeader>
         <BackArrow className="noticeBackArrow" onClick={goBack} />
-        <HeaderText>Level 3</HeaderText>
+        <HeaderText>Level {user.level}</HeaderText>
       </NoticeHeader>
 
       <ResponsiveContainer width="100%" height={240} className="graph">
@@ -38,12 +69,12 @@ function LevelPage() {
           <Pie
             data={data}
             startAngle={90}
-            endAngle={-220}
+            endAngle={-260}
             cx="50%"
             cy="50%"
             innerRadius="55%"
             outerRadius="90%"
-            animationDuration={1000}
+            animationDuration={10000}
             animationBegin={0}
           >
             <Cell fill={COLOR.MAIN_GREEN} />
@@ -52,14 +83,14 @@ function LevelPage() {
         </PieChart>
       </ResponsiveContainer>
       <Point>
-        <h5>800</h5>
+        <h5>{user.point}</h5>
         <h6>/ 1,000 포인트</h6>
       </Point>
       <LevelLine />
       <NoticeContent>
         <PointText>포인트 내역</PointText>
         <PointList>
-          {dummydata.map((data) =>
+          {point.map((data) =>
             data ? <PointCard key={data.id} p={data} /> : null
           )}
         </PointList>

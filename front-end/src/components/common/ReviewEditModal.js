@@ -22,7 +22,7 @@ export const ReviewEditModal = ({ setModalOpen, r }) => {
   const url = pathname.substring(7);
   const real_pathname = "http://3.37.14.183/api/roads" + url + `/${r.reviewId}`;
 
-  const changeNickname = useCallback(() => {
+  const changeReview = useCallback(() => {
     axios
       .put(
         real_pathname,
@@ -69,7 +69,7 @@ export const ReviewEditModal = ({ setModalOpen, r }) => {
         <ModalLine />
         <ModalButton>
           <CloseButton onClick={closeModal}>취소하기</CloseButton>
-          <CheckButton onClick={changeNickname}>수정하기</CheckButton>
+          <CheckButton onClick={changeReview}>수정하기</CheckButton>
         </ModalButton>
       </ModalContainer>
     </>
@@ -82,10 +82,10 @@ export const ModalBackground = styled.div`
 
   /* 우선은 393px로 하는데 추후에 100%로 바꿔야 할 듯 */
 
-  width: 450px;
-  height: 100%;
-  margin-left: -50px;
-  margin-top: -130px;
+  width: 393px;
+  height: 100vh;
+  margin-left: -20px;
+  margin-top: -145px;
 
   background: rgba(190, 194, 198, 0.9);
 `;
