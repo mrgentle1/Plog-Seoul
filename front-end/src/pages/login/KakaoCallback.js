@@ -18,6 +18,7 @@ function KakaoCallback() {
           .then((res) => {
             const accessToken = res.data.result.jwt;
 
+            console.log(accessToken);
             setCookie("accessToken", accessToken);
 
             navigate("/signup");
