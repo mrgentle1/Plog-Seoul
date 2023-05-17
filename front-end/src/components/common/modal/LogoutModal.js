@@ -14,6 +14,7 @@ export const LogoutModal = ({ setModalOpen2, r }) => {
   };
 
   const logout = () => {
+    // sessionStorage?? 추후에 수정
     sessionStorage.removeItem("user_id");
     navigate("/");
   };
