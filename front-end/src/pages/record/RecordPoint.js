@@ -9,8 +9,6 @@ import { ReactComponent as Fire } from "../../assets/icons/pointFire.svg";
 import Bar from "../../components/Record/Bar";
 import axios from "axios";
 
-const user = { point: 800, level: 1 };
-
 const useLoading = () => {
   const [loading, setLoading] = useState(false);
 
@@ -30,25 +28,19 @@ function ShowPointPage() {
   const [userData, setUserData] = useState({
     recordId: getRecordId,
     userId: getUserId,
+    isCourse: false,
   });
 
   const loading = useLoading();
-  // const [isLoading, setIsLoading] = useState(false);
-  const [isUpdate, setIsUpdate] = useState(false);
-  const [isLevelUp, setIsLevelUp] = useState(false);
-  const [isLast, setIsLast] = useState(false);
-  const [myPoint, setMyPoint] = useState(80);
-  const [maxPoint, setMaxPoint] = useState(100);
 
   // 기존 포인트값 따로 레벨업에 따른 포인트 차 값 따로
-
-  const myP = useRef(0);
-  const currentP = useRef(0);
-  const level = useRef(1);
-  const update = useRef(false);
+  const [nowPoint, setNowPoint] = useState(0);
+  const [showStartPoint, setShowStartPoint] = useState(0);
+  const [isLevelUp, setIsLevelUp] = useState(false);
+  const [isLast, setIsLast] = useState(false);
 
   /* GET - 포인트 및 레벨 정보 */
-  const [pointData, setPointData] = useState(null);
+  const [pointData, setPointData] = useState([]);
 
   async function getPointData() {
     const real_url = `http://3.37.14.183:80/api/users/${userData.userId}/point`;
@@ -63,38 +55,25 @@ function ShowPointPage() {
       });
 
       // 응답 결과(response)를 변수에 저장하거나.. 등 필요한 처리를 해 주면 된다.
-      const initPoint = () => {
-        return {
-          currentPoint: response.data.result.point,
-          currentLevel: response.data.result.level,
-        };
+      const initPoint = {
+        initPoint: response.data.result.point,
+        initLevel: response.data.result.level,
       };
-      setPointData({
-        currentPoint: response.data.result.point,
-        currentLevel: response.data.result.level,
-      });
+      setPointData(initPoint);
       console.log(
-        `get포인트: ${response.data.result.point}, get레벨: ${response.data.result.level}`
+        `포인트: ${pointData.initPoint}, 레벨: ${pointData.initLevel}`
       );
-      console.log(
-        `포인트: ${pointData.currentPoint}, 레벨: ${pointData.currentLevel}`
-      );
-      myP.current = pointData.currentPoint;
-      currentP.current = pointData.currentPoint;
-      level.current = pointData.currentLevel;
+      plusPoint();
     } catch (e) {
       // 실패 시 처리
       console.error(e);
       alert("포인트 get 실패.");
     }
-    plusPoint();
   }
 
   /* PUT - 포인트 및 레벨 정보 */
   async function putPointData() {
-    const real_url = `http://3.37.14.183:80/api/users/${
-      userData.userId
-    }/point?newPoint=${Number(myP.current)}&title=서울둘레길-3코스&type=플로깅`;
+    const real_url = `http://3.37.14.183:80/api/users/${userData.userId}/point?newPoint=${myP.current}&title=서울둘레길-3코스&type=플로깅`;
     // async, await을 사용하는 경우
     try {
       // GET 요청은 params에 실어 보냄
@@ -116,38 +95,22 @@ function ShowPointPage() {
   }
 
   const plusPoint = () => {
-    // setMyPoint(myPoint + 250);
-    setIsUpdate(true);
-    currentP.current = currentP.current + 550;
-    if (currentP.current > 1000) {
-      myP.current = currentP.current;
-      currentP.current = 1000;
+    if (userData.isCourse) {
+      const calPoint = pointData.initPoint + 250 * 1.5;
+      setNowPoint(calPoint);
+    } else {
+      const calPoint = pointData.initPoint + 250;
+      setNowPoint(calPoint);
     }
-
-    console.log("PPloading:", loading);
-    console.log("PPmyp:", myP.current);
-    console.log("ppcurrrrp:", currentP.current);
-
-    if (currentP.current === 1000) {
+    if (nowPoint > 1000) {
       setTimeout(levelUP, 2000);
-      // levelUP();
-      // level.current = level.current + 1;
-      // console.log("le", level.current);
-      // setIsLevelUp(true);
     } else {
       setIsLast(true);
     }
-    // setIsLoading(true);
   };
 
   const levelUP = () => {
-    console.log("levelUp");
-    // setMaxPoint(800);
-    currentP.current = myP.current - 1000;
-    level.current = level.current + 1;
-    console.log("3.level", level.current);
-    console.log("3.myp:", myP.current);
-    console.log("3.currrrp:", currentP.current);
+    setShowStartPoint(nowPoint - 1000);
     setIsLevelUp(true);
     setIsLast(true);
   };
@@ -155,22 +118,6 @@ function ShowPointPage() {
   useEffect(() => {
     getPointData();
   }, []);
-
-  // useEffect(() => {
-  //   if (!loading) {
-  //     getPointData();
-  //     console.log("!loading");
-  //   } else {
-  //     console.log("plus");
-  //     if (myP.current > 1000) {
-  //       level.current = level.current + 1;
-  //       console.log("le", level.current);
-  //       setIsLevelUp(true);
-  //     } else {
-  //       setIsLast(true);
-  //     }
-  //   }
-  // }, [pointData]);
 
   // useEffect(() => {
   //   if (loading) {
@@ -254,21 +201,19 @@ function ShowPointPage() {
       },
     });
   };
-  const isLoading = pointData == null;
 
   return (
     <StShowPointPage>
       <ShowPointHeader>
         <span>오늘의 포인트</span>
       </ShowPointHeader>
-      {!isLoading && (
-        <ShowPointContainer>
-          <Fire />
-          <CurrentLevelWrapper>Level {level.current}</CurrentLevelWrapper>
+      <ShowPointContainer>
+        <Fire />
+        <CurrentLevelWrapper>Level {userData.initLevel}</CurrentLevelWrapper>
 
-          <GetPointWrapper></GetPointWrapper>
+        <GetPointWrapper></GetPointWrapper>
 
-          {/* {isUpdate ? (
+        {/* {isUpdate ? (
           <Bar
             init={myP.current - 250}
             value={currentP.current}
@@ -285,21 +230,17 @@ function ShowPointPage() {
             ></progress>
           </ProgressWrapper>
         )} */}
-          <Bar
-            init={pointData.currentPoint}
-            value={currentP.current}
-            isUpdate={isUpdate}
-            isLevelUp={isLevelUp}
-          />
+        <Bar
+          init={isLevelUp ? 0 : userData.initPoint}
+          value={isLevelUp ? showStartPoint : nowPoint}
+        />
 
-          {isLast && (
-            <CommentWrapper>
-              <p>다음 레벨까지 {1000 - currentP.current}포인트 남았어요!</p>
-            </CommentWrapper>
-          )}
-        </ShowPointContainer>
-      )}
-
+        {isLast && (
+          <CommentWrapper>
+            <p>다음 레벨까지 {1000 - nowPoint}포인트 남았어요!</p>
+          </CommentWrapper>
+        )}
+      </ShowPointContainer>
       <RecordFinishFooter>
         <Link
           to={"/record/finish"}

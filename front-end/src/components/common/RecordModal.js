@@ -1,16 +1,42 @@
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 import React, { useCallback, useEffect, useState, useRef } from "react";
-
+import axios from "axios";
 import { ReactComponent as ReviewCheck } from "../../assets/icons/reviewCheck.svg";
 import { ReactComponent as RecordAlert } from "../../assets/icons/closeAlert.svg";
 import { Link, useNavigate } from "react-router-dom";
 
-export const RecordModal = ({ setModalOpen, data }) => {
+export const RecordModal = ({ setModalOpen, data, id }) => {
+  const token = localStorage.getItem("key");
   const navigate = useNavigate();
   // 경로
   const pathname = window.location.pathname;
   const real_pathname = pathname.substring(0, 7);
+
+  /* DELETE - DELETE Record data */
+
+  async function deleteRecordData() {
+    // async, await을 사용하는 경우
+    try {
+      // GET 요청은 params에 실어 보냄
+      const response = await axios.delete(
+        `http://3.37.14.183:80/api/plogging/${id}/`,
+
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("success Delete");
+      // 응답 결과(response)를 변수에 저장하거나.. 등 필요한 처리를 해 주면 된다.
+    } catch (e) {
+      // 실패 시 처리
+      console.error(e);
+      alert("기록 삭제 실패. 재시도해주세요.");
+    }
+  }
 
   // 모달 끄기
   const closeModal = () => {
@@ -26,7 +52,8 @@ export const RecordModal = ({ setModalOpen, data }) => {
   const exitModal = () => {
     console.log("check");
     setModalOpen(false);
-    navigate("/record/");
+    deleteRecordData();
+    navigate("/record");
   };
 
   return (

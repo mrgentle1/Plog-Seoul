@@ -102,12 +102,10 @@ function RecordIngPage() {
   }
 
   /* POST - init Record data */
-  const [recordUserData, setRecordUserData] = useState([
-    {
-      userId: 0,
-      recordId: 0,
-    },
-  ]);
+  const [recordUserData, setRecordUserData] = useState({
+    userId: 0,
+    recordId: 0,
+  });
   async function postRecordData() {
     // async, await을 사용하는 경우
     try {
@@ -129,16 +127,40 @@ function RecordIngPage() {
           },
         }
       );
-
+      console.log(response);
       // 응답 결과(response)를 변수에 저장하거나.. 등 필요한 처리를 해 주면 된다.
-      const initRecord = response.data.result.map((it) => {
-        return {
-          userId: it.userId,
-
-          recordId: it.recordId,
-        };
-      });
+      const initRecord = {
+        userId: response.data.result.userId,
+        recordId: response.data.result.recordId,
+      };
       setRecordUserData(initRecord);
+
+      console.log(initRecord);
+    } catch (e) {
+      // 실패 시 처리
+      console.error(e);
+      alert("기록 시작 실패. 재시도해주세요.");
+    }
+  }
+
+  /* DELETE - DELETE Record data */
+
+  async function deleteRecordData() {
+    // async, await을 사용하는 경우
+    try {
+      // GET 요청은 params에 실어 보냄
+      const response = await axios.delete(
+        `http://3.37.14.183:80/api/plogging/${recordUserData.recordId}/`,
+
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("success Delete");
+      // 응답 결과(response)를 변수에 저장하거나.. 등 필요한 처리를 해 주면 된다.
     } catch (e) {
       // 실패 시 처리
       console.error(e);
@@ -151,9 +173,8 @@ function RecordIngPage() {
   async function patchRecordData() {
     // async, await을 사용하는 경우
     try {
-      // GET 요청은 params에 실어 보냄
       const response = await axios.patch(
-        "http://3.37.14.183:80/api/plogging/" + recordUserData.recordId,
+        `http://3.37.14.183:80/api/plogging/${recordUserData.recordId}/`,
         {
           distance: allDist,
           endLat: lastLocation.lat,
@@ -183,15 +204,20 @@ function RecordIngPage() {
       //   };
       // });
       // setRecordData(initRecord);
-      navigate("/record/point", {
-        state: {
-          recordId: `${recordUserData.recordId}`,
-          userId: `${recordUserData.userId}`,
-        },
-      });
+      console.log(`distance: ${allDist},
+        endLat: ${lastLocation.lat},
+        endLng: ${lastLocation.lng},
+        runningTime: ${runTime}`);
+      // navigate("/record/point", {
+      //   state: {
+      //     recordId: `${recordUserData.recordId}`,
+      //     userId: `${recordUserData.userId}`,
+      //   },
+      // });
     } catch (e) {
       // 실패 시 처리
       console.error(e);
+      deleteRecordData();
       alert("기록 저장 실패.");
     }
   }
@@ -277,6 +303,7 @@ function RecordIngPage() {
   };
 
   useEffect(() => {
+    postRecordData();
     getTrashCanData(); //쓰레기통 위치 정보
 
     run();
@@ -404,7 +431,13 @@ function RecordIngPage() {
         // setRecordcode(-1);
         // setReadyRecord(true);
         setRecording(false);
-        navigate("/record/point", { state: { recordUserData } });
+        patchRecordData();
+        navigate("/record/point", {
+          state: {
+            recordId: `${recordUserData.recordId}`,
+            userId: `${recordUserData.userId}`,
+          },
+        });
       }
     } catch (err) {
       alert(err.message);
@@ -424,7 +457,11 @@ function RecordIngPage() {
   return (
     <>
       {modalOpen && (
-        <RecordModal setModalOpen={setModalOpen} data={modalData} />
+        <RecordModal
+          setModalOpen={setModalOpen}
+          data={modalData}
+          id={recordUserData.recordId}
+        />
       )}
       {modalOpen && <ModalBackground />}
       <StRecordIngPage>

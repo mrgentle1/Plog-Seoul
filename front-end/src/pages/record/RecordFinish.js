@@ -31,7 +31,9 @@ function RecordFinish() {
   /*point에서 현재 위치 값을 가져와 초기세팅 해줌 */
   const plogRecord = useLocation();
   const recordId = plogRecord.state.recordId;
-  const userId = plogRecord.state.userId;
+  const [userData, setUserData] = useState({
+    recordId: recordId,
+  });
 
   const [isCourse, sestIsCourse] = useState(false);
 
@@ -43,17 +45,23 @@ function RecordFinish() {
     { lat: 33.451744, lng: 126.572441 },
   ]);
 
-  /* GET - 쓰레기통 위치 */
-  const [thisRecordData, setThisRecordData] = useState([
-    { trashcanId: 0, title: "쓰레기통", latlng: { lat: 0, lng: 0 } },
-  ]);
+  /* GET -  */
+  const [thisRecordData, setThisRecordData] = useState({
+    distance: 0,
+    startLat: 0,
+    startLng: 0,
+    endLat: 0,
+    endLng: 0,
+    runningTime: 0,
+    kcal: 0,
+  });
 
   async function getRecordData() {
     // async, await을 사용하는 경우
     try {
       // GET 요청은 params에 실어 보냄
       const response = await axios.get(
-        "http://3.37.14.183:80/api/" + recordId,
+        "http://3.37.14.183:80/api/plogging/" + userData.recordId,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -63,17 +71,22 @@ function RecordFinish() {
       );
 
       // 응답 결과(response)를 변수에 저장하거나.. 등 필요한 처리를 해 주면 된다.
-      const recordData = response.data.result.map((it) => {
-        return {
-          trashCanId: it.trashCanId,
-          title: it.address,
-          latlng: { lat: it.lat, lng: it.lng },
-        };
-      });
+      const recordData = {
+        distance: response.data.result.distance,
+        startLat: response.data.result.startLat,
+        startLng: response.data.result.startLng,
+        endLat: response.data.result.endLat,
+        endLng: response.data.result.endLng,
+        runningTime: response.data.result.runningTime,
+        kcal: response.data.result.kcal,
+      };
+
       setThisRecordData(recordData);
+      console.log("get성공?:", thisRecordData);
     } catch (e) {
       // 실패 시 처리
       console.error(e);
+      alert("기록 get 실패.");
     }
   }
 
@@ -126,6 +139,11 @@ function RecordFinish() {
       ></MapMarker>
     );
   };
+
+  useEffect(() => {
+    getRecordData();
+    console.log("기록가져옴");
+  }, []);
 
   return (
     <>
@@ -219,11 +237,11 @@ function RecordFinish() {
             </TimeDataContainer>
             <OtherDataContainer>
               <DistDataContainer>
-                <span>1.24</span>
+                <span>{thisRecordData.distance}</span>
                 <p>걸은 킬로미터</p>
               </DistDataContainer>
               <CalorieDataContainer>
-                <span>130</span>
+                <span>{thisRecordData.kcal}</span>
                 <p>소모한 칼로리</p>
               </CalorieDataContainer>
               <PhotoCountDataContainer>
@@ -234,7 +252,7 @@ function RecordFinish() {
           </DetailDataContainer>
           <PhotoGridContainer>
             {dummyImg.recordImgData.map((img) => (
-              <PhotoWrapper>
+              <PhotoWrapper key={`${img.recordId}-${img.imageId}`}>
                 <img
                   src={img.imgUrl}
                   alt="img"
