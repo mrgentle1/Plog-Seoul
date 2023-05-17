@@ -1,12 +1,15 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { ReactComponent as BackArrow } from "../../assets/icons/backArrow.svg";
 import { ReactComponent as Search } from "../../assets/icons/search.svg";
-
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
+import axios from "axios";
+import { CourseMainCard } from "../../components/common/CourseMainCard";
 
 function SearchPage() {
+  const token = localStorage.getItem("key");
+
   const navigate = useNavigate();
   const goBack = useCallback(() => {
     navigate(-1);
@@ -29,47 +32,110 @@ function SearchPage() {
     { id: "10", keyword: "플로깅" },
   ];
 
+  const [isFirst, setIsFirst] = useState(true);
+  const [courses, setCourses] = useState([]); // 코스
+  const [searchTerm, setSearchTerm] = useState(""); // 검색어
+
+  const handleSearchInputChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const [searchResults, setSearchResults] = useState([]); // 검색 결과
+
+  // 검색 버튼 클릭 이벤트 핸들러
+  const onSearch = () => {
+    if (searchTerm) {
+      const filteredCourses = courses.filter(
+        (data) => data.name && data.name.includes(searchTerm)
+      );
+      setSearchResults(filteredCourses);
+    } else {
+      setSearchResults([]); // 검색어가 없을 때는 검색 결과를 초기화
+    }
+    setIsFirst(false);
+  };
+
+  // API request using axios
+  const fetchCourses = () => {
+    axios
+      .get("http://3.37.14.183/api/roads?pagingIndex=0&pagingSize=150", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        setCourses(response.data.result.content);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  // Fetch courses when the component mounts
+  useEffect(() => {
+    fetchCourses();
+  }, []);
+
   return (
     <StSearchPage>
       <SearchHeader>
         <BackArrow className="signupBackArrow" onClick={goBack} />
         <SearchInput>
-          <SearchInputBox placeholder="검색어를 입력해주세요" />
-          <Search className="inputSearch" />
+          <SearchInputBox
+            placeholder="검색어를 입력해주세요"
+            value={searchTerm}
+            onChange={handleSearchInputChange}
+          />
+          <Search className="inputSearch" onClick={onSearch} />
         </SearchInput>
       </SearchHeader>
-      <SearchContent>
-        <h3>인기 검색</h3>
-        <SearchList>
-          <SearchLeftList>
-            <SearchItemList>
-              {popular0.map((item) => (
-                <SearchItem0>
-                  <h2>{item.id}</h2>
-                  <h5>{item.keyword}</h5>
-                </SearchItem0>
-              ))}
-              {popular1.map((item) => (
-                <SearchItem1>
-                  <h2>{item.id}</h2>
-                  <h5>{item.keyword}</h5>
-                </SearchItem1>
-              ))}
-            </SearchItemList>
-          </SearchLeftList>
-          <SearchRightList>
-            <SearchItemList>
-              {popular2.map((item) => (
-                <SearchItem1>
-                  <h2>{item.id}</h2>
-                  <h5>{item.keyword}</h5>
-                </SearchItem1>
-              ))}
-            </SearchItemList>
-          </SearchRightList>
-        </SearchList>
-        <SearchLine />
-      </SearchContent>
+      {isFirst === true ? (
+        <SearchContent>
+          <h3>인기 검색</h3>
+          <SearchList>
+            <SearchLeftList>
+              <SearchItemList>
+                {popular0.map((item) => (
+                  <SearchItem0 key={item.id}>
+                    <h2>{item.id}</h2>
+                    <h5>{item.keyword}</h5>
+                  </SearchItem0>
+                ))}
+                {popular1.map((item) => (
+                  <SearchItem1 key={item.id}>
+                    <h2>{item.id}</h2>
+                    <h5>{item.keyword}</h5>
+                  </SearchItem1>
+                ))}
+              </SearchItemList>
+            </SearchLeftList>
+            <SearchRightList>
+              <SearchItemList>
+                {popular2.map((item) => (
+                  <SearchItem1 key={item.id}>
+                    <h2>{item.id}</h2>
+                    <h5>{item.keyword}</h5>
+                  </SearchItem1>
+                ))}
+              </SearchItemList>
+            </SearchRightList>
+          </SearchList>
+          <SearchLine />
+        </SearchContent>
+      ) : searchResults.length === 0 ? (
+        <SearchContent>
+          <h1>관련 검색어가 없습니다.</h1>
+        </SearchContent>
+      ) : (
+        <SearchContent>
+          {searchResults.map((data) => (
+            <CourseMainCard key={data.routeId} c={data} />
+          ))}
+          <SearchLine />
+        </SearchContent>
+      )}
     </StSearchPage>
   );
 }
@@ -88,24 +154,24 @@ const SearchHeader = styled.div`
   position: fixed;
   top: 0;
   width: 393px;
-  height: 88px;
+  height: 118px;
+  background: ${COLOR.MAIN_WHITE};
+  z-index: 100;
 
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
 
-  z-index: 100;
-
   .signupBackArrow {
-    margin-top: 70px;
+    margin-top: 50px;
     margin-left: 20px;
   }
 `;
 const SearchInput = styled.div`
   position: relative;
   width: 80%;
-  margin-top: 66px;
+  margin-top: 46px;
   margin-left: 25px;
 
   .inputSearch {
@@ -151,6 +217,18 @@ const SearchContent = styled.div`
     font-weight: 700;
     font-size: 17px;
     line-height: 21px;
+    color: ${COLOR.MAIN_BLACK};
+  }
+  h1 {
+    margin-top: 20px;
+    margin-left: -20px;
+    text-align: center;
+    font-family: "SUIT Variable";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 17px;
+    line-height: 21px;
+    color: ${COLOR.INPUT_BORDER_GRAY};
   }
 `;
 const SearchList = styled.div`
