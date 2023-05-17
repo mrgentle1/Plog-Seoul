@@ -1,0 +1,60 @@
+{
+  "recordImgData": [
+    {
+      "imageId": 1,
+      "recordId": 1,
+      "imgUrl": "https://dummyimage.com/600x400/000/fff",
+      "createdAt": "2023-05-01T10:30:00.000000",
+      "imgLat": 37.61026520122316,
+      "imgLng": 126.99707232277143
+    },
+    {
+      "imageId": 2,
+      "recordId": 1,
+      "imgUrl": "https://dummyimage.com/600x400/000/fff",
+      "createdAt": "2023-05-03T16:45:00.000000",
+      "imgLat": 37.61126530538697,
+      "imgLng": 126.9973327767119
+    },
+    {
+      "imageId": 3,
+      "recordId": 1,
+      "imgUrl": "https://dummyimage.com/600x400/000/fff",
+      "createdAt": "2023-05-03T16:45:00.000000",
+      "imgLat": 37.611959037372074,
+      "imgLng": 126.99624546610148
+    },
+    {
+      "imageId": 4,
+      "recordId": 1,
+      "imgUrl": "https://dummyimage.com/600x400/000/fff",
+      "createdAt": "2023-05-03T16:45:00.000000",
+      "imgLat": 37.61098590653716,
+      "imgLng": 126.99462593326892
+    },
+    {
+      "imageId": 1,
+      "recordId": 2,
+      "imgUrl": "https://dummyimage.com/600x400/000/fff",
+      "createdAt": "2023-05-04T12:10:00.000000",
+      "imgLat": 37.531912,
+      "imgLng": 127.025019
+    },
+    {
+      "imageId": 2,
+      "recordId": 2,
+      "imgUrl": "https://dummyimage.com/600x400/000/fff",
+      "createdAt": "2023-05-03T16:45:00.000000",
+      "imgLat": 37.532708,
+      "imgLng": 127.024727
+    },
+    {
+      "imageId": 1,
+      "recordId": 3,
+      "imgUrl": "https://dummyimage.com/600x400/000/fff",
+      "createdAt": "2023-04-24T17:12:09.733897",
+      "imgLat": 1.67765,
+      "imgLng": 1.9865
+    }
+  ]
+}
