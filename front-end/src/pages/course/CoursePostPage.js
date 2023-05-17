@@ -11,6 +11,7 @@ import axios from "axios";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 import { BorderButton } from "../../components/common/Button";
+import ImgSlider from "../../components/common/ImgSlider";
 
 function CoursePostPage() {
   useEffect(() => {
@@ -88,7 +89,10 @@ function CoursePostPage() {
         headerTitle={headerTitle}
       />
       <StCoursePostMain>
-        <CoursePostImg></CoursePostImg>
+        <CoursePostImg>
+          <ImgGradation />
+          <ImgSlider />
+        </CoursePostImg>
         <CoursePostText>
           <Text1>서울두드림길 포인트 1.5배 적립</Text1>
           <Text2>
@@ -163,10 +167,24 @@ const StCoursePostMain = styled.div`
   margin-bottom: 24px;
 `;
 const CoursePostImg = styled.div`
+  position: relative;
   width: 393px;
   height: 356px;
   margin-top: 46px;
   background-color: ${COLOR.DARK_GRAY};
+
+  overflow: hidden;
+`;
+const ImgGradation = styled.div`
+  position: absolute;
+  width: 393px;
+  height: 177px;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.3) 36.1%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  z-index: 1;
 `;
 const CoursePostText = styled.div`
   width: 353px;
