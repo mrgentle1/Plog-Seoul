@@ -36,7 +36,7 @@ function RecordFinish() {
   });
 
   const [isCourse, sestIsCourse] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(true);
   const mapRef = useRef();
 
   const [points, setPoints] = useState([
@@ -142,8 +142,13 @@ function RecordFinish() {
 
   useEffect(() => {
     getRecordData();
-    console.log("기록가져옴");
+    console.log("기록가져오는 중");
   }, []);
+
+  useEffect(() => {
+    console.log("기록가져옴");
+    setIsLoading(false);
+  }, [thisRecordData]);
 
   return (
     <>
@@ -155,40 +160,42 @@ function RecordFinish() {
 
       {imgOpen && <ImgModalBackground />}
       <StRecordFinish>
-        <SignupHeader>
-          <span>
-            {todayMonth}월 {todayDate}일
-          </span>
-          <p>개운산 숲 나들길</p>
-          <CloseWrapper>
-            <Close
-              className="headerClose"
-              onClick={() => {
-                isCourse ? showModal() : finish();
-              }}
-            />
-          </CloseWrapper>
-        </SignupHeader>
-        {/* <RecordHeader /> */}
-        <ContentsContainer>
-          <MapContainer>
-            <Map // 지도를 표시할 Container
-              id="MapWrapper"
-              center={{
-                // 지도의 중심좌표
-                lat: 37.61177884519635,
-                lng: 126.99642668902881,
-              }}
-              style={{
-                width: "100%",
-                height: "236px",
-              }}
-              level={3} // 지도의 확대 레벨
-              zoomable={false}
-              draggable={false}
-              ref={mapRef}
-            >
-              {/* {dummyImg.recordImgData.map((position, index) => (
+        {!isLoading && (
+          <>
+            <SignupHeader>
+              <span>
+                {todayMonth}월 {todayDate}일
+              </span>
+              <p>개운산 숲 나들길</p>
+              <CloseWrapper>
+                <Close
+                  className="headerClose"
+                  onClick={() => {
+                    isCourse ? showModal() : finish();
+                  }}
+                />
+              </CloseWrapper>
+            </SignupHeader>
+            {/* <RecordHeader /> */}
+            <ContentsContainer>
+              <MapContainer>
+                <Map // 지도를 표시할 Container
+                  id="MapWrapper"
+                  center={{
+                    // 지도의 중심좌표
+                    lat: 37.61177884519635,
+                    lng: 126.99642668902881,
+                  }}
+                  style={{
+                    width: "100%",
+                    height: "236px",
+                  }}
+                  level={3} // 지도의 확대 레벨
+                  zoomable={false}
+                  draggable={false}
+                  ref={mapRef}
+                >
+                  {/* {dummyImg.recordImgData.map((position, index) => (
                 <MapMarker
                   key={`${position.recordId}-${position.imageId}`}
                   position={{ lat: position.imgLat, lng: position.imgLng }} // 마커를 표시할 위치
@@ -202,70 +209,72 @@ function RecordFinish() {
                   title={position.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
                 />
               ))} */}
-              {dummyImg.recordImgData.map((value) => (
-                <EventMarkerContainer
-                  key={`EventMarkerContainer-${value.recordId}-${value.imageId}`}
-                  position={{ lat: value.imgLat, lng: value.imgLng }}
-                  content={value.imgUrl}
-                />
-              ))}
-              <Polyline
-                path={[
-                  { lat: 37.610265201223164, lng: 126.99707232277143 },
-                  { lat: 37.61040935336232, lng: 126.99683447827957 },
-                  { lat: 37.6106616386953, lng: 126.99716291281013 },
-                  { lat: 37.61126530538697, lng: 126.99733277671196 },
-                  { lat: 37.61154459907716, lng: 126.9968117784994 },
-                  { lat: 37.61177884519635, lng: 126.99642668902881 },
-                  { lat: 37.611959037372074, lng: 126.99624546610148 },
-                  { lat: 37.61167068496873, lng: 126.99524880576455 },
-                  { lat: 37.611391364679726, lng: 126.99492037510174 },
-                  { lat: 37.611202149030625, lng: 126.99473917550203 },
-                  { lat: 37.61098590653716, lng: 126.99462593326892 },
-                ]}
-                strokeWeight={6} // 선의 두께 입니다
-                strokeColor={"#DCFA5C"} // 선의 색깔입니다
-                strokeOpacity={1} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-                strokeStyle={"solid"} // 선의 스타일입니다
-              />
-            </Map>
-          </MapContainer>
-          <DetailDataContainer>
-            <TimeDataContainer>
-              <span>01:40:30</span>
-              <p>걸은 시간</p>
-            </TimeDataContainer>
-            <OtherDataContainer>
-              <DistDataContainer>
-                <span>{thisRecordData.distance}</span>
-                <p>걸은 킬로미터</p>
-              </DistDataContainer>
-              <CalorieDataContainer>
-                <span>{thisRecordData.kcal}</span>
-                <p>소모한 칼로리</p>
-              </CalorieDataContainer>
-              <PhotoCountDataContainer>
-                <span>4</span>
-                <p>남긴 사진</p>
-              </PhotoCountDataContainer>
-            </OtherDataContainer>
-          </DetailDataContainer>
-          <PhotoGridContainer>
-            {dummyImg.recordImgData.map((img) => (
-              <PhotoWrapper key={`${img.recordId}-${img.imageId}`}>
-                <img
-                  src={img.imgUrl}
-                  alt="img"
-                  onClick={() => {
-                    console.log(img.imgUrl);
-                    setClickImg(img.imgUrl);
-                    showImgModal();
-                  }}
-                ></img>
-              </PhotoWrapper>
-            ))}
-          </PhotoGridContainer>
-        </ContentsContainer>
+                  {dummyImg.recordImgData.map((value) => (
+                    <EventMarkerContainer
+                      key={`EventMarkerContainer-${value.recordId}-${value.imageId}`}
+                      position={{ lat: value.imgLat, lng: value.imgLng }}
+                      content={value.imgUrl}
+                    />
+                  ))}
+                  <Polyline
+                    path={[
+                      { lat: 37.610265201223164, lng: 126.99707232277143 },
+                      { lat: 37.61040935336232, lng: 126.99683447827957 },
+                      { lat: 37.6106616386953, lng: 126.99716291281013 },
+                      { lat: 37.61126530538697, lng: 126.99733277671196 },
+                      { lat: 37.61154459907716, lng: 126.9968117784994 },
+                      { lat: 37.61177884519635, lng: 126.99642668902881 },
+                      { lat: 37.611959037372074, lng: 126.99624546610148 },
+                      { lat: 37.61167068496873, lng: 126.99524880576455 },
+                      { lat: 37.611391364679726, lng: 126.99492037510174 },
+                      { lat: 37.611202149030625, lng: 126.99473917550203 },
+                      { lat: 37.61098590653716, lng: 126.99462593326892 },
+                    ]}
+                    strokeWeight={6} // 선의 두께 입니다
+                    strokeColor={"#DCFA5C"} // 선의 색깔입니다
+                    strokeOpacity={1} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+                    strokeStyle={"solid"} // 선의 스타일입니다
+                  />
+                </Map>
+              </MapContainer>
+              <DetailDataContainer>
+                <TimeDataContainer>
+                  <span>01:40:30</span>
+                  <p>걸은 시간</p>
+                </TimeDataContainer>
+                <OtherDataContainer>
+                  <DistDataContainer>
+                    <span>{thisRecordData.distance}</span>
+                    <p>걸은 킬로미터</p>
+                  </DistDataContainer>
+                  <CalorieDataContainer>
+                    <span>{thisRecordData.kcal}</span>
+                    <p>소모한 칼로리</p>
+                  </CalorieDataContainer>
+                  <PhotoCountDataContainer>
+                    <span>4</span>
+                    <p>남긴 사진</p>
+                  </PhotoCountDataContainer>
+                </OtherDataContainer>
+              </DetailDataContainer>
+              <PhotoGridContainer>
+                {dummyImg.recordImgData.map((img) => (
+                  <PhotoWrapper key={`${img.recordId}-${img.imageId}`}>
+                    <img
+                      src={img.imgUrl}
+                      alt="img"
+                      onClick={() => {
+                        console.log(img.imgUrl);
+                        setClickImg(img.imgUrl);
+                        showImgModal();
+                      }}
+                    ></img>
+                  </PhotoWrapper>
+                ))}
+              </PhotoGridContainer>
+            </ContentsContainer>
+          </>
+        )}
 
         <RecordFinishFooter>
           <Button

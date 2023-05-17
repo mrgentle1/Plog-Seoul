@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 const useLoading = () => {
   const [loading, setLoading] = useState(false);
@@ -8,96 +8,85 @@ const useLoading = () => {
   useEffect(() => setLoading(true), []);
   return loading;
 };
-function Bar({ init, value, isUpdate, isLevelUp }) {
+function Bar({ init, value }) {
   const loading = useLoading();
   console.log("vv:", init, value);
-  const [point, setPoint] = useState(0);
+  const [point, setPoint] = useState(init);
 
   const initPro = (init / 1000) * 321;
-  const progress = (value / 1000) * 321;
-  const [animationClass, setAnimationClass] = useState("fade-in");
-  const ani = useRef("fade-in");
-  const [update, setIsUpdate] = useState(isUpdate);
-  const [levelUp, setIsLevelUp] = useState(isLevelUp);
-  const [isInit, setIsInit] = useState(false);
-  useEffect(() => {
-    if (loading) {
-      console.log("????loading:", loading);
-      console.log("first:", value);
-      setIsUpdate(isUpdate);
-      setIsLevelUp(isLevelUp);
-      console.log("firstData:", update, levelUp);
-      console.log("FisrtcurrentBar::::", init, value);
-      ani.current = "init";
-    }
-  }, []);
-  useEffect(() => {
-    if (loading) {
-      ani.current = "init";
-    }
-    // console.log("?!!!!!loading:", loading);
-    // console.log("FaaacurrentBar::::", init, value);
-  }, [loading]);
+  //   const progress = (point / 1000) * 321;
+  const [animationClass, setAnimationClass] = useState("init fade-in");
 
-  //   useEffect(() => {
-  //     if (init === value) {
-  //       console.log("currentBar::::", init, value);
-  //     }
-  //   }, [point]);
+  //   const [isUpdate, setIsUpdate] = useState(false);
+  const isUpdate = useRef(false);
+  const isLevelUp = useRef(false);
 
-  useEffect(() => {
-    // console.log("????loading:", loading);
-    // setIsUpdate(isUpdate);
-    // setIsLevelUp(isLevelUp);
-
-    console.log("????USeData:", update, levelUp);
-    if (levelUp) {
-      console.log("#.Lee", value);
-      ani.current = "animate fade-in";
-
-      console.log("#.class:", ani.current);
-      console.log("#.LeeeData:", update, levelUp);
-    } else if (update) {
-      console.log("##.upup", value);
-      //   setTimeout(setAnimationClass("init"), 4000);
-      //   setAnimationClass("init");
-      ani.current = "animate fade-in";
-
-      setIsLevelUp(isLevelUp);
-      console.log("##UPUPData:", update, levelUp);
-      console.log("##.class:", ani.current);
-    } else {
-      console.log("###.no", value);
-      ani.current = "animate fade-in";
-      console.log("###.class:", ani.current);
-
-      console.log("###NoData:", update, levelUp);
-      setIsUpdate(isUpdate);
-    }
+  const cal = (it) => {
+    const calValue = (it / 1000) * 321;
+    return calValue;
+  };
+  const [progress, setProgress] = useState(() => {
+    const initValue = cal(init);
+    return initValue;
   });
+  useEffect(() => {
+    console.log("init");
+    console.log("width:", progress);
+    if (value > 1000) {
+      isLevelUp.current = true;
+    }
 
-  //   useEffect(() => {
-  //     if (isUpdate || isLevelUp) {
-  //       setAnimationClass("animate");
+    setTimeout(() => {
+      update(value);
+    }, 1500);
+  }, []);
 
-  //       const time1 = setTimeout(() => {
-  //         setAnimationClass("animate fade-in");
-  //       }, 1000);
-  //       return () => {
-  //         clearTimeout(time1);
-  //       };
-  //     }
-  //   }, [isUpdate, isLevelUp]);
+  const levelUpInit = () => {
+    isLevelUp.current = false;
+    setProgress(cal(0));
+    setTimeout(() => {
+      update(1000 - value);
+    }, 1500);
+  };
+
+  const update = (it) => {
+    // setPoint(value);
+    isUpdate.current = true;
+
+    setAnimationClass("animate fade-in");
+    if (it > 1000) {
+      setProgress(cal(1000));
+      isLevelUp.current = true;
+    } else {
+      setProgress(cal(it));
+    }
+
+    // setIsUpdate(true);
+  };
+
+  useEffect(() => {
+    if (isUpdate.current) {
+      console.log("움직여라");
+      console.log("width:", progress);
+    }
+
+    // if (isLevelUp.current) {
+    //   const restart = () => {
+    //     setTimeout(levelUpInit(), 6000);
+    //   };
+    //   return restart;
+    // }
+  }, [progress]);
 
   return (
     <StProgressBar>
       <div className="skill-box">
         <div className="skill-bar">
           <span
-            className={`skill-per nodejs ${ani.current}`}
+            className={`skill-per ani ${animationClass}`}
             style={{ width: progress }}
           >
-            <span className="tooltip">+250</span>
+            {isUpdate.current && <span className="tooltip">+250</span>}
           </span>
         </div>
       </div>
@@ -147,16 +136,12 @@ const StProgressBar = styled.div`
     background: ${COLOR.MAIN_GREEN};
 
     &.init {
-      animation: progress 1s ease-in-out;
+      animation: progress 0s ease-in-out;
       opacity: 1;
-      -webkit-animation-play-state: paused;
-      animation-play-state: paused;
     }
 
     &.animate {
       animation: progress 3s ease-in-out;
-      -webkit-animation-play-state: running;
-      animation-play-state: running;
 
       opacity: 0;
     }
@@ -166,8 +151,8 @@ const StProgressBar = styled.div`
     }
   }
 
-  .skill-per.nodejs {
-    animation-delay: 0s;
+  .skill-per.ani {
+    animation-delay: 1s;
   }
 
   @keyframes progress {
@@ -194,6 +179,7 @@ const StProgressBar = styled.div`
     border-radius: 3px;
     background: ${COLOR.MAIN_WHITE};
     z-index: 1;
+    transition: all 1s;
   }
 
   .tooltip::before {
@@ -206,6 +192,6 @@ const StProgressBar = styled.div`
     z-index: -1;
     background-color: ${COLOR.MAIN_GREEN};
     border-radius: 20px;
-    /* transform: translateX(-50%) rotate(45deg); */
+    transition: all 1s;
   }
 `;
