@@ -13,6 +13,7 @@
     "react-cookie": "^4.1.1",
     "react-dom": "^18.2.0",
     "react-query": "^3.39.3",
+    "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "^6.10.0",
     "react-scripts": "5.0.1",
     "react-slick": "^0.29.0",
