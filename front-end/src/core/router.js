@@ -7,18 +7,25 @@ import SignupPage from "../pages/signup/SignupPage";
 import HomePage from "../pages/home/HomePage";
 import CoursePage from "../pages/course/CoursePage";
 import RecordPage from "../pages/record/RecordPage";
+import RecordIng from "../pages/record/RecordIng";
+import RecordFinish from "../pages/record/RecordFinish";
 import PlogPage from "../pages/plog/PlogPage";
 import MyPage from "../pages/mypage/Mypage";
+
 import SearchPage from "../pages/search/Search";
 import CoursePostPage from "../pages/course/CoursePostPage";
 import CourseMainPage from "../pages/course/CourseMainPage";
 import ReviewPage from "../pages/review/ReviewPage";
 import ReviewWritePage from "../pages/review/ReviewWritePage";
+
+import RecordPoint from "../pages/record/RecordPoint";
+
 import NoticePage from "../pages/mypage/NoticePage";
 import LevelPage from "../pages/plog/LevelPage";
 import AchievementPage from "../pages/plog/AchievementPage";
 import SeasonCoursePage from "../pages/home/SeasonCoursePage";
 import InformationPage from "../pages/home/InformationPage";
+
 
 function Router() {
   return (
@@ -45,6 +52,9 @@ function Router() {
           <Route path="/plog" element={<PlogPage />} />
           <Route path="/my" element={<MyPage />} />
         </Route>
+        <Route path="/record/ing" element={<RecordIng />} />
+        <Route path="/record/point" element={<RecordPoint />} />
+        <Route path="/record/finish" element={<RecordFinish />} />
       </Routes>
     </BrowserRouter>
   );
