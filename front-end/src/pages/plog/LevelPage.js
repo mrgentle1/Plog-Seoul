@@ -13,7 +13,7 @@ import axios from "axios";
 function LevelPage() {
   const token = localStorage.getItem("key");
   const [user, setUser] = useState("");
-  const [point, setPoint] = useState([]);
+  const [points, setPoints] = useState([]);
 
   const [userId, setUserId] = usePersistRecoilState(userIdNumber);
 
@@ -22,7 +22,7 @@ function LevelPage() {
     navigate(-1);
   }, [navigate]);
 
-  const url = "http://3.37.14.183/api/users/" + userId;
+  const url = `http://3.37.14.183/api/users/${userId}`;
   const url2 = url + "/point/history";
 
   useEffect(() => {
@@ -39,7 +39,9 @@ function LevelPage() {
       .catch((error) => {
         console.error(error);
       });
+  }, [url, token]);
 
+  useEffect(() => {
     axios
       .get(url2, {
         headers: {
@@ -48,14 +50,17 @@ function LevelPage() {
         },
       })
       .then((response) => {
-        setPoint(response.data.result.content);
+        setPoints(response.data.result.content);
       })
       .catch((error) => {
         console.error(error);
       });
-  });
+  }, [url2, token]);
 
-  const data = [{ name: "level", value: 75 }];
+  const data = [
+    { name: "level", value: user.point },
+    { name: "remaining", value: 1000 - user.point },
+  ];
 
   return (
     <StNoticePage>
@@ -69,19 +74,20 @@ function LevelPage() {
           <Pie
             data={data}
             startAngle={90}
-            endAngle={-260}
+            endAngle={-270}
             cx="50%"
             cy="50%"
             innerRadius="55%"
             outerRadius="90%"
-            animationDuration={10000}
+            animationDuration={1000}
             animationBegin={0}
           >
             <Cell fill={COLOR.MAIN_GREEN} />
-            <Cell fill={COLOR.INPUT_BORDER_GRAY} />
+            <Cell fill={COLOR.FOOTER_GRAY} />
           </Pie>
         </PieChart>
       </ResponsiveContainer>
+
       <Point>
         <h5>{user.point}</h5>
         <h6>/ 1,000 포인트</h6>
@@ -90,14 +96,19 @@ function LevelPage() {
       <NoticeContent>
         <PointText>포인트 내역</PointText>
         <PointList>
-          {point.map((data) =>
-            data ? <PointCard key={data.id} p={data} /> : null
+          {points.map((data) =>
+            data ? (
+              <PointCard key={data.id} p={data} />
+            ) : (
+              <div>포인트 내역이 없어요</div>
+            )
           )}
         </PointList>
       </NoticeContent>
     </StNoticePage>
   );
 }
+
 export default LevelPage;
 
 const StNoticePage = styled.div`
