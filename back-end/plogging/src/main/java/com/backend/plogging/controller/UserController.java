@@ -41,8 +41,17 @@ public class UserController {
     }
 
     @PutMapping("/{userId}/point")
-    public BaseResponseEntity<?> updatePoint(@PathVariable Long userId, @RequestParam int newPoint) {
-        BaseResponseEntity response = userService.updatePoint(userId, newPoint);
+    public BaseResponseEntity<?> updatePoint(@PathVariable Long userId, @RequestParam int newPoint,
+                                             @RequestParam String title, @RequestParam String type) {
+        BaseResponseEntity response = userService.updatePoint(userId, newPoint, title, type);
+        return response;
+    }
+
+    @GetMapping("/{userId}/point/history")
+    public BaseResponseEntity<?> getPointHistory(@PathVariable Long userId,
+                                                 @RequestParam(value = "pagingIndex", defaultValue = "0") int pagingIndex,
+                                                 @RequestParam(value = "pagingSize", defaultValue = "50") int pagingSize) {
+        BaseResponseEntity response = userService.getPointHistory(userId, pagingIndex, pagingSize);
         return response;
     }
 }

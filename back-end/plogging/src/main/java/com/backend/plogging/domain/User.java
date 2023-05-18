@@ -56,6 +56,9 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<Badge> badges;
 
+    // point for this user
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    private List<Point> points;
 
     public void updateNickname(String nickname) {
         this.nickname = nickname;

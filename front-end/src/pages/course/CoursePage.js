@@ -1,9 +1,9 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useSetRecoilState } from "recoil";
 import { headerTitleState } from "../../core/headerTitle";
 import { HomeHeaderV2 } from "../../components/layout/HeaderV2";
 import { BorderButton } from "../../components/common/Button";
-// import ImgSlider from "../../components/common/ImgSlider";
+import ImgSlider from "../../components/common/ImgSlider";
 
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
@@ -70,7 +70,10 @@ function CoursePage() {
     <StCoursePage>
       <HomeHeaderV2 headerBackground={headerBackground} />
       <CourseMain>
-        <StImgSlide></StImgSlide>
+        <StImgSlide>
+          <ImgGradation />
+          <ImgSlider />
+        </StImgSlide>
         <StCourseMain>
           {updateData.map((data) => (
             <CourseMainCard key={data.routeId} c={data} />
@@ -92,21 +95,35 @@ const StCoursePage = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
+  width: 100%;
 `;
 
 const CourseMain = styled.div`
   margin-top: -81px;
+  width: 100%;
 `;
 const StImgSlide = styled.div`
-  width: 393px;
+  position: relative;
+  width: 100%;
   height: 356px;
   background-color: ${COLOR.MEDIUM_GRAY};
+  margin-top: 46px;
   margin-bottom: 21px;
 
   overflow: hidden;
   margin: auto;
 `;
-
+const ImgGradation = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 177px;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.3) 36.1%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  z-index: 1;
+`;
 const StCourseMain = styled.div`
   margin-left: 20px;
   margin-top: 21px;

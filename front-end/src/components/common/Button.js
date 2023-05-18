@@ -83,7 +83,7 @@ const StBorderButton = styled.button`
   letter-spacing: 1.2px;
 `;
 
-const StBorderButtonWrapper = styled.button`
+const StBorderButtonWrapper = styled.div`
   display: flex;
   align-items: center;
   text-align: left;

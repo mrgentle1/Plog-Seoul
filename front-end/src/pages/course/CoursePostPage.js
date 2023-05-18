@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { HomeHeaderV3 } from "../../components/layout/HeaderV3";
 import { ReactComponent as Pencil } from "../../assets/icons/pencil.svg";
 import { ReactComponent as Star } from "../../assets/icons/star.svg";
-import { ReviewCard } from "../../components/common/ReviewCard";
+import { NReviewCard } from "../../components/common/NReviewCard";
 import { ReactComponent as Shop } from "../../assets/icons/shop.svg";
 
 import axios from "axios";
@@ -11,6 +11,7 @@ import axios from "axios";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 import { BorderButton } from "../../components/common/Button";
+import ImgSlider from "../../components/common/ImgSlider";
 
 function CoursePostPage() {
   useEffect(() => {
@@ -38,6 +39,7 @@ function CoursePostPage() {
         },
       })
       .then((response) => {
+        console.log(response);
         setCourse(response.data.result);
       })
       .catch((error) => {
@@ -87,7 +89,10 @@ function CoursePostPage() {
         headerTitle={headerTitle}
       />
       <StCoursePostMain>
-        <CoursePostImg></CoursePostImg>
+        <CoursePostImg>
+          <ImgGradation />
+          <ImgSlider />
+        </CoursePostImg>
         <CoursePostText>
           <Text1>서울두드림길 포인트 1.5배 적립</Text1>
           <Text2>
@@ -117,25 +122,26 @@ function CoursePostPage() {
           <ReviewBox1>
             <Box1>
               <Review>후기</Review>
-              <h4>6</h4>
+              <h4>{course.reviewCnt}</h4>
             </Box1>
             <Box2>
-              <h5>+ 500 포인트</h5>
+              <h5>+ 100 포인트</h5>
               <Link to={pathname + "/review"}>
                 <Pencil className="pencil" />
               </Link>
             </Box2>
           </ReviewBox1>
           <ReviewBox2>
-            <Star className="star" />
-            <Star className="star" />
-            <Star className="star" />
-            <Star className="star" />
-            <Star className="star" />
+            {[...Array(5)].map(
+              (_, index) =>
+                index < course.reviewSum && (
+                  <Star key={index} className="star" />
+                )
+            )}
           </ReviewBox2>
           <ReviewList>
             {reviews.map((data) => (
-              <ReviewCard key={data.userId} r={data} />
+              <NReviewCard key={data.userId} r={data} />
             ))}
           </ReviewList>
         </CoursePostReview>
@@ -161,10 +167,24 @@ const StCoursePostMain = styled.div`
   margin-bottom: 24px;
 `;
 const CoursePostImg = styled.div`
+  position: relative;
   width: 393px;
   height: 356px;
   margin-top: 46px;
   background-color: ${COLOR.DARK_GRAY};
+
+  overflow: hidden;
+`;
+const ImgGradation = styled.div`
+  position: absolute;
+  width: 393px;
+  height: 177px;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.3) 36.1%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  z-index: 1;
 `;
 const CoursePostText = styled.div`
   width: 353px;
