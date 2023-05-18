@@ -32,7 +32,7 @@ const StLayout = styled.div`
   display: flex;
   justify-content: center;
   overflow-x: hidden;
-  width: 393px;
+  width: 100%;
   padding-top: 127px;
   padding-bottom: 100px;
   overflow-y: scroll;

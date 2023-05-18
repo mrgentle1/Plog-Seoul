@@ -188,7 +188,7 @@ const NoticeContent = styled.div`
   margin-top: 24px;
   width: 353px;
 `;
-const PointText = styled.text`
+const PointText = styled.div`
   display: flex;
   width: 100%;
   text-align: left;
@@ -199,7 +199,7 @@ const PointText = styled.text`
   line-height: 19px;
   color: ${COLOR.MAIN_BLACK};
 `;
-const PointList = styled.text`
+const PointList = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 20px;

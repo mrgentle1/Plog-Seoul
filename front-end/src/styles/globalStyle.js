@@ -9,7 +9,7 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
 
-    width: 393px;
+    width: 400px;
     height: 100%;
     margin: 0 auto;
     font-size: 62.5%;
