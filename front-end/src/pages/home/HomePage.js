@@ -79,11 +79,10 @@ function HomePage() {
   });
 
   const levelBarWidth = point >= 1000 ? 321 : (point / 1000) * 321;
-  const runningTime = 0;
-  const distance = 0;
-  plogging.map(
-    (data) => ((runningTime += data.runningTime), (distance += data.distance))
-  );
+  let runningTime = 0;
+  let distance = 0;
+  plogging.map((data) => (runningTime += data.runningTime));
+  plogging.map((data) => (distance += data.distance));
 
   return (
     <StHomePage>
