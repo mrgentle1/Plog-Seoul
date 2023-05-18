@@ -7,6 +7,7 @@ import axios from "axios";
 import { ReactComponent as Star } from "../../assets/icons/star.svg";
 import { ReactComponent as Dots } from "../../assets/icons/threedots.svg";
 import { PopupModal, ModalBackground2 } from "./PopupModal";
+import { userIdNumber, usePersistRecoilState } from "../../core/userId";
 
 export const ReviewCard = ({ r }) => {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ export const ReviewCard = ({ r }) => {
   const time = createdAt.substring(11, 16);
 
   const token = localStorage.getItem("key");
+  const [userId, setUserId] = usePersistRecoilState(userIdNumber);
 
   const pathname = window.location.pathname;
   const url = pathname.substring(7);
@@ -35,7 +37,7 @@ export const ReviewCard = ({ r }) => {
         <CourseLine />
         <ReviewList>
           <ReviewListInfo>
-            <Box3>
+            <Box3 isCurrentUser={userId === r.userId}>
               {[...Array(5)].map(
                 (_, index) =>
                   index < r.star && <Star key={index} className="blackStar" />
@@ -47,7 +49,7 @@ export const ReviewCard = ({ r }) => {
                 {date} {time}
               </h6>
               <div onClick={popupModal}>
-                <Dots className="dots" />
+                {userId === r.userId && <Dots className="dots" />}
               </div>
             </Box2>
           </ReviewListInfo>
@@ -127,23 +129,6 @@ const Box2 = styled.div`
     }
   }
 `;
-const EditButton = styled.button`
-  font-size: 13px;
-  color: ${COLOR.MAIN_BLACK};
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 5px;
-  margin-bottom: 5px;
-`;
-const DeleteButton = styled.button`
-  font-size: 13px;
-  color: ${COLOR.MAIN_BLACK};
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 5px;
-`;
 
 const Box3 = styled.div`
   display: flex;
@@ -156,7 +141,8 @@ const Box3 = styled.div`
     font-weight: 500;
     font-size: 12px;
     line-height: 14px;
-    color: ${COLOR.INPUT_BORDER_GRAY};
+    color: ${(props) =>
+      props.isCurrentUser ? COLOR.MAIN_DARK_GREEN : COLOR.INPUT_BORDER_GRAY};
   }
 `;
 const CourseLine = styled.div`

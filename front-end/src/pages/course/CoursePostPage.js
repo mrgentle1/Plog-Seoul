@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { HomeHeaderV3 } from "../../components/layout/HeaderV3";
 import { ReactComponent as Pencil } from "../../assets/icons/pencil.svg";
 import { ReactComponent as Star } from "../../assets/icons/star.svg";
-import { ReviewCard } from "../../components/common/ReviewCard";
+import { NReviewCard } from "../../components/common/NReviewCard";
 import { ReactComponent as Shop } from "../../assets/icons/shop.svg";
 
 import axios from "axios";
@@ -141,7 +141,7 @@ function CoursePostPage() {
           </ReviewBox2>
           <ReviewList>
             {reviews.map((data) => (
-              <ReviewCard key={data.userId} r={data} />
+              <NReviewCard key={data.userId} r={data} />
             ))}
           </ReviewList>
         </CoursePostReview>

@@ -22,7 +22,7 @@ function InformationPage() {
         <HeaderText>서울 두드림길</HeaderText>
       </InfoHeader>
       <InfoContent>
-        <img src={require("../../assets/images/info1.png")} />
+        <img className="image" src={require("../../assets/images/info1.jpg")} />
         <InfoText>
           서울의 아름다운 생태, 역사, 문화자원을 천천히 걸으면서 느끼고 배우고
           체험할 수 있는 도보중심의 길로서 도심에서
@@ -36,7 +36,7 @@ function InformationPage() {
           로 크게 구분됩니다.
         </InfoText>
 
-        <img src={require("../../assets/images/info2.png")} />
+        <img className="image" src={require("../../assets/images/info2.jpg")} />
         <InfoText>
           <h1>서울둘레길</h1>
           서울을 한 바퀴 휘감는 총 연장 156.5km의 서울둘레길은 <span>8개</span>
@@ -55,7 +55,7 @@ function InformationPage() {
           있어 누구나 안전하고 편안하게 이용할 수 있습니다.
         </InfoText>
 
-        <img src={require("../../assets/images/info3.png")} />
+        <img className="image" src={require("../../assets/images/info3.jpg")} />
         <InfoText>
           <h1>한양 도성길</h1>
           한양도성은 1396년 현재{" "}
@@ -77,7 +77,7 @@ function InformationPage() {
           터에서 창의문까지 이어지는 인왕산 구간으로 나뉘어진다.
         </InfoText>
 
-        <img src={require("../../assets/images/info4.png")} />
+        <img className="image" src={require("../../assets/images/info4.jpg")} />
         <InfoText>
           <h1>근교산자락길</h1>
           주택가 주변 풍경이 아름다운 곳에 경사가 완만한 등산로를 조성하여
@@ -92,7 +92,7 @@ function InformationPage() {
           53.4Km의 자락길을 조성 할 계획입니다.
         </InfoText>
 
-        <img src={require("../../assets/images/info5.png")} />
+        <img className="image" src={require("../../assets/images/info5.jpg")} />
         <InfoText>
           <h1>생태문화길</h1>
           주민 및 트래킹 전문가가 참여하여{" "}
@@ -161,6 +161,9 @@ const InfoContent = styled.div`
   margin-top: 30px;
   margin-bottom: 33px;
   width: 353px;
+  .image {
+    width: 353px;
+  }
 `;
 const InfoText = styled.div`
   margin-top: 16px;
