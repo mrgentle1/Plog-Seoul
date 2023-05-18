@@ -5,11 +5,8 @@ import { COLOR } from "../../styles/color";
 import axios from "axios";
 
 import { ReactComponent as Star } from "../../assets/icons/star.svg";
-import { ReactComponent as Dots } from "../../assets/icons/threedots.svg";
-import { PopupModal, ModalBackground2 } from "./PopupModal";
-import { userIdNumber, usePersistRecoilState } from "../../core/userId";
 
-export const ReviewCard = ({ r }) => {
+export const NReviewCard = ({ r }) => {
   const navigate = useNavigate();
 
   const createdAt = r.createdAt;
@@ -17,27 +14,18 @@ export const ReviewCard = ({ r }) => {
   const time = createdAt.substring(11, 16);
 
   const token = localStorage.getItem("key");
-  const [userId, setUserId] = usePersistRecoilState(userIdNumber);
 
   const pathname = window.location.pathname;
   const url = pathname.substring(7);
   const real_pathname = "http://3.37.14.183/api/roads" + url + `/${r.reviewId}`;
 
-  // 수정/삭제 팝업창 호출
-  const [popupOpen, setPopupOpen] = useState(false);
-  const popupModal = () => {
-    setPopupOpen(!popupOpen);
-  };
-
   return (
     <>
-      {popupOpen && <PopupModal setPopupOpen={setPopupOpen} r={r} />}
-      {popupOpen && <ModalBackground2 onClick={popupModal} />}
       <StReviewCard>
         <CourseLine />
         <ReviewList>
           <ReviewListInfo>
-            <Box3 isCurrentUser={userId === r.userId}>
+            <Box3>
               {[...Array(5)].map(
                 (_, index) =>
                   index < r.star && <Star key={index} className="blackStar" />
@@ -48,9 +36,6 @@ export const ReviewCard = ({ r }) => {
               <h6>
                 {date} {time}
               </h6>
-              <div onClick={popupModal}>
-                {userId === r.userId && <Dots className="dots" />}
-              </div>
             </Box2>
           </ReviewListInfo>
           <ReviewListContent>
@@ -141,8 +126,7 @@ const Box3 = styled.div`
     font-weight: 500;
     font-size: 12px;
     line-height: 14px;
-    color: ${(props) =>
-      props.isCurrentUser ? COLOR.MAIN_DARK_GREEN : COLOR.INPUT_BORDER_GRAY};
+    color: ${COLOR.INPUT_BORDER_GRAY};
   }
 `;
 const CourseLine = styled.div`
