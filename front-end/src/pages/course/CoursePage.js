@@ -95,14 +95,16 @@ const StCoursePage = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
+  width: 100%;
 `;
 
 const CourseMain = styled.div`
   margin-top: -81px;
+  width: 100%;
 `;
 const StImgSlide = styled.div`
   position: relative;
-  width: 393px;
+  width: 100%;
   height: 356px;
   background-color: ${COLOR.MEDIUM_GRAY};
   margin-top: 46px;
@@ -113,7 +115,7 @@ const StImgSlide = styled.div`
 `;
 const ImgGradation = styled.div`
   position: absolute;
-  width: 393px;
+  width: 100%;
   height: 177px;
   background: linear-gradient(
     180deg,
