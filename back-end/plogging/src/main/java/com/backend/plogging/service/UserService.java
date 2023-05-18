@@ -261,10 +261,11 @@ public class UserService {
         }
     }
 
-    public BaseResponseEntity<?> updatePoint(Long userId, int newPoint, String title, String type) {
+    public BaseResponseEntity<?> updatePoint(Long userId, int change, String title, String type) {
         Optional<User> user = userRepository.findById(userId);
 
-        Integer change = newPoint - user.get().getPoint();
+        Integer currentPoint = user.get().getPoint();
+        Integer newPoint = currentPoint + change;
 
         if (user.isPresent()) {
             // 1000점 단위로 레벨업
@@ -280,6 +281,7 @@ public class UserService {
                     .type(type)
                     .user(user.get())
                     .build();
+
 
             user.get().setPoint(newPoint);
             userRepository.save(user.get());
