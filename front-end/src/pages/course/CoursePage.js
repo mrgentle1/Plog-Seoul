@@ -1,9 +1,9 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useSetRecoilState } from "recoil";
 import { headerTitleState } from "../../core/headerTitle";
 import { HomeHeaderV2 } from "../../components/layout/HeaderV2";
 import { BorderButton } from "../../components/common/Button";
-// import ImgSlider from "../../components/common/ImgSlider";
+import ImgSlider from "../../components/common/ImgSlider";
 
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";

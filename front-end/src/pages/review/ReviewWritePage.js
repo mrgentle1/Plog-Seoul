@@ -6,6 +6,7 @@ import { HomeHeaderV3 } from "../../components/layout/HeaderV3";
 import { ReactComponent as Star } from "../../assets/icons/star.svg";
 import { Button, DisabledButton } from "../../components/common/Button";
 import { Modal, ModalBackground } from "../../components/common/Modal";
+import { userIdNumber, usePersistRecoilState } from "../../core/userId";
 
 import axios from "axios";
 
@@ -15,9 +16,14 @@ import { COLOR } from "../../styles/color";
 function ReviewWritePage() {
   const [content, setContent] = useState("");
   const [star, setStar] = useState(0);
+  const [user, setUser] = useState("");
+  const [nowPoint, setNowPoint] = useState(0);
+  const [nowLevel, setNowLevel] = useState(0);
+  const [course, setCourse] = useState([]);
 
   const token = localStorage.getItem("key");
-  const [course, setCourse] = useState([]);
+  const [userId, setUserId] = usePersistRecoilState(userIdNumber);
+  console.log(userId);
 
   const pathname = window.location.pathname;
   const real_pathname = pathname.substring(7);
@@ -28,10 +34,11 @@ function ReviewWritePage() {
     real_pathname.length - "/reviews".length + 1
   );
   const course_url = "http://3.37.14.183/api/roads" + url2;
+  const user_url = "http://3.37.14.183/api/users/" + userId + "/point";
+  console.log("유저 api", user_url);
 
   const setHeaderTitle = useSetRecoilState(headerTitleState);
   const headerTitle = course.name + " 후기";
-  console.log("헤더", headerTitle);
 
   const [headerBackground, setHeaderBackground] = useState(COLOR.MAIN_WHITE);
 
@@ -56,6 +63,30 @@ function ReviewWritePage() {
       });
   }, []);
 
+  useEffect(() => {
+    axios
+      .get(user_url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        setUser(response.data.result);
+        setNowPoint(user.point);
+        setNowLevel(user.level);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, [user]);
+
+  console.log("포인트", user);
+  console.log(nowPoint);
+  console.log(nowLevel);
+  const real_point = nowPoint + 100;
+  console.log(real_point);
+
   const handleStarClick = (index) => {
     if (star === index) {
       setStar(0);
@@ -68,8 +99,17 @@ function ReviewWritePage() {
     setContent(e.target.value);
   };
 
+  const title1 = course.category;
+  const title2 = course.name;
+  const real_title = title1 + " - " + title2;
+  const url3 = `http://3.37.14.183/api/users/${userId}/point?newPoint=${real_point}&title=${real_title}&type=후기작성`;
   // 모달창 호출
   const [modalOpen, setModalOpen] = useState(false);
+
+  console.log(title1);
+  console.log(title2);
+  console.log(real_title);
+
   const showModal = () => {
     axios
       .post(
@@ -87,6 +127,29 @@ function ReviewWritePage() {
       )
       .then((response) => {
         setModalOpen(true);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
+    axios
+      .put(
+        url3,
+        {
+          userId: userId,
+          newPoint: nowPoint,
+          title: real_title,
+          type: "후기작성",
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        console.log("포인트 적립 성공!");
       })
       .catch((error) => {
         console.error(error);
