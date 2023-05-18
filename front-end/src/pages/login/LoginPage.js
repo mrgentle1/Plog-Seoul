@@ -56,10 +56,17 @@ const StLoginPage = styled.div`
 
 const LoginText = styled.div`
   .logo {
-    margin-top: 143px;
+    position: absolute;
+    width: 171px;
+    height: 119px;
+    left: calc(50% - 171px / 2 - 91px);
+    top: calc(50% - 119px / 2 - 223.5px);
   }
   p {
-    margin-top: 36px;
+    position: absolute;
+    top: 34.98%;
+    bottom: 59.15%;
+
     font-family: "SUIT Variable";
     font-style: normal;
     font-weight: 700;

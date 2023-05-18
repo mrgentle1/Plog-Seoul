@@ -25,6 +25,8 @@ function LevelPage() {
   const url = `http://3.37.14.183/api/users/${userId}`;
   const url2 = url + "/point/history";
 
+  console.log(userId);
+
   useEffect(() => {
     axios
       .get(url, {
@@ -39,7 +41,7 @@ function LevelPage() {
       .catch((error) => {
         console.error(error);
       });
-  }, [url, token]);
+  });
 
   useEffect(() => {
     axios
@@ -55,7 +57,7 @@ function LevelPage() {
       .catch((error) => {
         console.error(error);
       });
-  }, [url2, token]);
+  });
 
   const data = [
     { name: "level", value: user.point },
@@ -80,7 +82,8 @@ function LevelPage() {
             innerRadius="55%"
             outerRadius="90%"
             animationDuration={1000}
-            animationBegin={0}
+            animationBegin={0.5}
+            dataKey="value"
           >
             <Cell fill={COLOR.MAIN_GREEN} />
             <Cell fill={COLOR.FOOTER_GRAY} />
@@ -96,11 +99,11 @@ function LevelPage() {
       <NoticeContent>
         <PointText>포인트 내역</PointText>
         <PointList>
-          {points.map((data) =>
+          {points.map((data, index) =>
             data ? (
               <PointCard key={data.id} p={data} />
             ) : (
-              <div>포인트 내역이 없어요</div>
+              <div key={index}>포인트 내역이 없어요</div>
             )
           )}
         </PointList>
@@ -185,7 +188,7 @@ const NoticeContent = styled.div`
   margin-top: 24px;
   width: 353px;
 `;
-const PointText = styled.text`
+const PointText = styled.div`
   display: flex;
   width: 100%;
   text-align: left;
@@ -196,7 +199,7 @@ const PointText = styled.text`
   line-height: 19px;
   color: ${COLOR.MAIN_BLACK};
 `;
-const PointList = styled.text`
+const PointList = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 20px;

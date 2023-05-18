@@ -83,6 +83,7 @@ function HomePage() {
   let distance = 0;
   plogging.map((data) => (runningTime += data.runningTime));
   plogging.map((data) => (distance += data.distance));
+  distance = distance.toFixed(2);
 
   return (
     <StHomePage>
