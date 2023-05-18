@@ -17,8 +17,6 @@ function ReviewWritePage() {
   const [content, setContent] = useState("");
   const [star, setStar] = useState(0);
   const [user, setUser] = useState("");
-  const [nowPoint, setNowPoint] = useState(0);
-  const [nowLevel, setNowLevel] = useState(0);
   const [course, setCourse] = useState([]);
 
   const token = localStorage.getItem("key");
@@ -73,8 +71,6 @@ function ReviewWritePage() {
       })
       .then((response) => {
         setUser(response.data.result);
-        setNowPoint(user.point);
-        setNowLevel(user.level);
       })
       .catch((error) => {
         console.error(error);
@@ -82,10 +78,6 @@ function ReviewWritePage() {
   }, [user]);
 
   console.log("포인트", user);
-  console.log(nowPoint);
-  console.log(nowLevel);
-  const real_point = nowPoint + 100;
-  console.log(real_point);
 
   const handleStarClick = (index) => {
     if (star === index) {
@@ -99,6 +91,7 @@ function ReviewWritePage() {
     setContent(e.target.value);
   };
 
+  const real_point = 100;
   const title1 = course.category;
   const title2 = course.name;
   const real_title = title1 + " - " + title2;
@@ -137,7 +130,7 @@ function ReviewWritePage() {
         url3,
         {
           userId: userId,
-          newPoint: nowPoint,
+          newPoint: real_point,
           title: real_title,
           type: "후기작성",
         },
