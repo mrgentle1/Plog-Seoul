@@ -40,7 +40,7 @@ public class UserService {
     @Autowired
     private JwtUtils jwtUtils;
 
-    public String getKakaoAccessToken(String code) {
+    public String getKakaoAccessToken(String host, String code) {
         String accessToken = "";
         String refreshToken = "";
         String requestURL = "https://kauth.kakao.com/oauth/token";
@@ -58,7 +58,7 @@ public class UserService {
             StringBuilder sb = new StringBuilder();
             sb.append("grant_type=authorization_code");
             sb.append("&client_id=97f6cd86370313a5d237e69507c9b011");
-            sb.append("&redirect_uri=http://localhost:3000/auth/kakao-callback");
+            sb.append("&redirect_uri="+host+"/auth/kakao-callback");
             sb.append("&code=" + code);
             String requestBody = sb.toString();
             bw.write(requestBody);
