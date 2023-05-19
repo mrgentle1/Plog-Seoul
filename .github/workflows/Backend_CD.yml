@@ -34,6 +34,7 @@ jobs:
         cd ./back-end/plogging/src/main/resources
         # GitHub-Actions 에서 설정한 값을 application.yml 파일에 쓰기
         echo "${{ secrets.APPLICATION_STAGE }}" > ./application.yml
+        echo "${{ secrets.KEYSTORE }}" | base64 --decode > ./keystore.p12
       shell: bash
 
     ## gradle build
