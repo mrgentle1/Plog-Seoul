@@ -7,6 +7,8 @@ build/
 application-stage.yml
 autobuild.bat
 
+keystore.p12
+
 # Firebase Account Key
 serviceAccountKey.json
 
