@@ -5,11 +5,13 @@ import android.webkit.DownloadListener;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class WebViewActivity extends AppCompatActivity {
     private String TAG = WebViewActivity.class.getSimpleName();
+    private long backBtnTime = 0;
 
     private WebView webView;
 
@@ -40,6 +42,20 @@ public class WebViewActivity extends AppCompatActivity {
         //웹페이지 호출
 //        webView.loadUrl("http://www.naver.com");
         webView.loadUrl("https://plog-seoul-git-develop-mrgentle1.vercel.app/");
+    }
+
+    @Override
+    public void onBackPressed() {
+        long curTime = System.currentTimeMillis();
+        long gapTime = curTime - backBtnTime;
+        if (webView.canGoBack()) {
+            webView.goBack();
+        } else if (0 <= gapTime && 2000 >= gapTime) {
+            super.onBackPressed();
+        } else {
+            backBtnTime = curTime;
+            Toast.makeText(this, "한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }
