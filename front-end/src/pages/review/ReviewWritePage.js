@@ -32,7 +32,8 @@ function ReviewWritePage() {
     real_pathname.length - "/reviews".length + 1
   );
   const course_url = `${process.env.REACT_APP_API_ROOT}/api/roads` + url2;
-  const user_url = `${process.env.REACT_APP_API_ROOT}/api/users/` + userId + "/point";
+  const user_url =
+    `${process.env.REACT_APP_API_ROOT}/api/users/` + userId + "/point";
   console.log("유저 api", user_url);
 
   const setHeaderTitle = useSetRecoilState(headerTitleState);
@@ -169,7 +170,7 @@ function ReviewWritePage() {
             ))}
           </StarBox>
           <ReviewWriteBox
-            placeholder="10글자 이상의 후기를 남겨주세요"
+            placeholder="코스 후기를 남겨주세요"
             onChange={onChangeContent}
           />
           <ReviewButton>
