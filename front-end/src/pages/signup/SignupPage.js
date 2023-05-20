@@ -15,7 +15,7 @@ function SignupPage() {
 
   const navigate = useNavigate();
   const goBack = useCallback(() => {
-    navigate(-1);
+    navigate("/");
   }, [navigate]);
 
   const onChangeName = (e) => {
