@@ -21,7 +21,7 @@ function LoginPage() {
   }, []);
 
   const kakaoLogin = () => {
-    window.location.href = "http://3.37.14.183/api/auth/login";
+    window.location.href = process.env.REACT_APP_KAKAO_LOGIN_URL;
   };
 
   return (

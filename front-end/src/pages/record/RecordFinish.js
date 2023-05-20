@@ -61,7 +61,7 @@ function RecordFinish() {
     try {
       // GET 요청은 params에 실어 보냄
       const response = await axios.get(
-        "http://3.37.14.183:80/api/plogging/" + userData.recordId,
+        `${process.env.REACT_APP_API_ROOT}/api/plogging/` + userData.recordId,
         {
           headers: {
             Authorization: `Bearer ${token}`,

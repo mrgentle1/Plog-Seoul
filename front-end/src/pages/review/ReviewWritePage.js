@@ -25,14 +25,14 @@ function ReviewWritePage() {
 
   const pathname = window.location.pathname;
   const real_pathname = pathname.substring(7);
-  const url = "http://3.37.14.183/api/roads" + real_pathname;
+  const url = `${process.env.REACT_APP_API_ROOT}/api/roads` + real_pathname;
   const url1 = url + "s";
   const url2 = real_pathname.substring(
     0,
     real_pathname.length - "/reviews".length + 1
   );
-  const course_url = "http://3.37.14.183/api/roads" + url2;
-  const user_url = "http://3.37.14.183/api/users/" + userId + "/point";
+  const course_url = `${process.env.REACT_APP_API_ROOT}/api/roads` + url2;
+  const user_url = `${process.env.REACT_APP_API_ROOT}/api/users/` + userId + "/point";
   console.log("유저 api", user_url);
 
   const setHeaderTitle = useSetRecoilState(headerTitleState);
@@ -95,7 +95,7 @@ function ReviewWritePage() {
   const title1 = course.category;
   const title2 = course.name;
   const real_title = title1 + " - " + title2;
-  const url3 = `http://3.37.14.183/api/users/${userId}/point?newPoint=${real_point}&title=${real_title}&type=후기작성`;
+  const url3 = `${process.env.REACT_APP_API_ROOT}/api/users/${userId}/point?newPoint=${real_point}&title=${real_title}&type=후기작성`;
   // 모달창 호출
   const [modalOpen, setModalOpen] = useState(false);
 

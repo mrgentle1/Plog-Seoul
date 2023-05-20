@@ -30,10 +30,10 @@ public class AuthenticationController {
     }
 
     @GetMapping("/kakao")
-    public BaseResponseEntity<?> kakaoCallback(@RequestParam String code) {
+    public BaseResponseEntity<?> kakaoCallback(@RequestParam String host, @RequestParam String code) {
         BaseResponseEntity response;
 
-        String accessToken = userService.getKakaoAccessToken(code);
+        String accessToken = userService.getKakaoAccessToken(host, code);
         Optional<User> user = userService.getKakaoUser(accessToken);
 
         if (user.isPresent()) {

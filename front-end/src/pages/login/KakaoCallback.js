@@ -10,11 +10,12 @@ function KakaoCallback() {
 
   useEffect(() => {
     async function authenticate() {
+      const host = window.location.origin;
       const code = new URL(window.location.href).searchParams.get("code");
 
       try {
         axios
-          .get(`http://3.37.14.183/api/auth/kakao?code=${code}`)
+          .get(`https://seoul-plog.shop/api/auth/kakao?host=${host}&code=${code}`)
           .then((res) => {
             const accessToken = res.data.result.jwt;
 

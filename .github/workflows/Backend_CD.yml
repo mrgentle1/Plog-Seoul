@@ -34,6 +34,7 @@ jobs:
         cd ./back-end/plogging/src/main/resources
         # GitHub-Actions 에서 설정한 값을 application.yml 파일에 쓰기
         echo "${{ secrets.APPLICATION_STAGE }}" > ./application.yml
+        echo "${{ secrets.KEYSTORE }}" | base64 --decode > ./keystore.p12
       shell: bash
 
     ## gradle build
@@ -71,4 +72,4 @@ jobs:
           docker stop $(docker ps -a -q) 
           docker rm $(docker ps -a -q) 
           docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
-          docker run -d -p 80:8080 --name seoulplog_backend ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
+          docker run -d -p 443:443 --name seoulplog_backend ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
