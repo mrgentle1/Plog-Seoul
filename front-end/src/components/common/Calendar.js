@@ -6,11 +6,13 @@ import { todayMonth, year } from "../../core/date.js";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export const Calendar = () => {
   const token = localStorage.getItem("key");
 
   const [plogging, setPlogging] = useState([]);
+  const navigate = useNavigate();
 
   // month가 한자리인지 두자리인지 판별
   let month = 0;
@@ -58,6 +60,13 @@ export const Calendar = () => {
     );
   };
 
+  const handleDayClick = (formattedDate) => {
+    if (ploggingDate.includes(formattedDate)) {
+      const path = `/plog/${formattedDate}`;
+      navigate(path);
+    }
+  };
+
   const getMonthCalendar = () => {
     const year = selectedDate.getFullYear();
     const month = selectedDate.getMonth();
@@ -96,7 +105,12 @@ export const Calendar = () => {
       const isSunday = currentDate.getUTCDay() === 0; // 일요일인 경우
 
       calendar.push(
-        <CalendarDay key={day} isSpecial={isSpecial} isSunday={isSunday}>
+        <CalendarDay
+          key={day}
+          isSpecial={isSpecial}
+          isSunday={isSunday}
+          onClick={() => handleDayClick(formattedDate)}
+        >
           {day}
         </CalendarDay>
       );
@@ -209,4 +223,5 @@ const CalendarDay = styled.div`
       : isSunday
       ? COLOR.MAIN_ORANGE
       : "inherit"};
+  cursor: ${({ isSpecial }) => (isSpecial ? "pointer" : "default")};
 `;
