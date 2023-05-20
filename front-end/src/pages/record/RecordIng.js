@@ -79,7 +79,7 @@ function RecordIngPage() {
     // async, await을 사용하는 경우
     try {
       // GET 요청은 params에 실어 보냄
-      const response = await axios.get("http://3.37.14.183:80/api/trash-cans", {
+      const response = await axios.get(`${process.env.REACT_APP_API_ROOT}/api/trash-cans`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -111,7 +111,7 @@ function RecordIngPage() {
     try {
       // GET 요청은 params에 실어 보냄
       const response = await axios.post(
-        "http://3.37.14.183:80/api/plogging",
+        `${process.env.REACT_APP_API_ROOT}/api/plogging`,
         {
           distance: 0,
           startLat: startLat,
@@ -150,7 +150,7 @@ function RecordIngPage() {
     try {
       // GET 요청은 params에 실어 보냄
       const response = await axios.delete(
-        `http://3.37.14.183:80/api/plogging/${recordUserData.recordId}/`,
+        `${process.env.REACT_APP_API_ROOT}/api/plogging/${recordUserData.recordId}/`,
 
         {
           headers: {
@@ -174,7 +174,7 @@ function RecordIngPage() {
     // async, await을 사용하는 경우
     try {
       const response = await axios.patch(
-        `http://3.37.14.183:80/api/plogging/${recordUserData.recordId}/`,
+        `${process.env.REACT_APP_API_ROOT}/api/plogging/${recordUserData.recordId}/`,
         {
           distance: allDist,
           endLat: lastLocation.lat,
@@ -234,7 +234,7 @@ function RecordIngPage() {
     try {
       // GET 요청은 params에 실어 보냄
       const response = await axios.post(
-        "http://3.37.14.183:80/api/plogging",
+        `${process.env.REACT_APP_API_ROOT}/api/plogging`,
         {
           distance: 0,
           startLat: startLat,

@@ -19,7 +19,7 @@ export const NickNameModal = ({ setModalOpen }) => {
   const changeNickname = useCallback(() => {
     axios
       .post(
-        "http://3.37.14.183/api/auth/registration",
+        "${process.env.REACT_APP_API_ROOT}/api/auth/registration",
         {
           nickname: nickname,
         },

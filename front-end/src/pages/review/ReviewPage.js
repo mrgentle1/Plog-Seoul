@@ -22,8 +22,8 @@ function ReviewPage() {
   const url = pathname.substring(7);
   const url2 = url.substring(0, url.length - "/reviews".length);
 
-  const course_url = "http://3.37.14.183/api/roads" + url2;
-  const real_url = "http://3.37.14.183/api/roads" + url;
+  const course_url = `${process.env.REACT_APP_API_ROOT}/api/roads` + url2;
+  const real_url = `${process.env.REACT_APP_API_ROOT}/api/roads` + url;
 
   const token = localStorage.getItem("key");
 

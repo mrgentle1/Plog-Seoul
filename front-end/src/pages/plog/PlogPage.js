@@ -19,7 +19,7 @@ function PlogPage() {
   const [userId, setUserId] = usePersistRecoilState(userIdNumber);
   const setHeaderTitle = useSetRecoilState(headerTitleState);
 
-  const url = `http://3.37.14.183/api/users/${userId}`;
+  const url = `${process.env.REACT_APP_API_ROOT}/api/users/${userId}`;
 
   useEffect(() => {
     axios
