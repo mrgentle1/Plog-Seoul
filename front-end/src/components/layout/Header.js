@@ -24,7 +24,7 @@ const StHomeHeader = styled.div`
   height: 127px;
   padding: 66px 0 36px 20px;
   background-color: ${({ isHome }) =>
-    isHome ? COLOR.INPUT_GRAY : "transparent"};
+    isHome ? COLOR.INPUT_GRAY : COLOR.MAIN_WHITE};
 
   font-family: "SUIT Variable";
   font-style: normal;
