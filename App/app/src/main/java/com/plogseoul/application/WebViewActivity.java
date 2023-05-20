@@ -14,21 +14,42 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 public class WebViewActivity extends AppCompatActivity {
     private String TAG = WebViewActivity.class.getSimpleName();
     private long backBtnTime = 0;
 
     private WebView webView;
 
-    private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 1234;
+    private static final int PERMISSION_REQUEST_CODE = 1234;
+
+    // 필요한 권한들을 배열에 추가
+    String[] appPermissions = {
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.CAMERA,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+
     private String rootUrl = "https://plog-seoul-git-develop-mrgentle1.vercel.app/";
 
     private void checkPermissions() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
+        ArrayList<String> permissionsNeeded = new ArrayList<>();
+
+        // 권한이 허용되지 않은 것이 있는지 확인
+        for (String perm : appPermissions){
+            if (ContextCompat.checkSelfPermission(this, perm) != PackageManager.PERMISSION_GRANTED) {
+                permissionsNeeded.add(perm);
+            }
+        }
+
+        // 필요한 권한이 있는 경우 요청
+        if (!permissionsNeeded.isEmpty()) {
             ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    MY_PERMISSIONS_REQUEST_FINE_LOCATION);
+                    permissionsNeeded.toArray(new String[0]),
+                    PERMISSION_REQUEST_CODE);
         }
     }
 
@@ -88,17 +109,28 @@ public class WebViewActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_FINE_LOCATION: {
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // 권한이 허용된 경우 실행할 코드
-                } else {
-                    // 권한이 거부된 경우 실행할 코드
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            HashMap<String, Integer> permissionResults = new HashMap<>();
+            int deniedCount = 0;
+
+            // 사용자의 응답을 받아 권한이 거부된 경우 계산
+            for (int i=0; i<grantResults.length; i++){
+                // 거부된 권한을 계산
+                if (grantResults[i] == PackageManager.PERMISSION_DENIED){
+                    permissionResults.put(permissions[i], grantResults[i]);
+                    deniedCount++;
                 }
-                return;
             }
-            // 다른 'case' 줄을 이곳에 추가하여 다른 권한 요청을 확인할 수 있습니다.
+
+            // 거부된 권한이 있을 경우
+            if (deniedCount != 0){
+                // 사용자에게 권한이 필요한 이유를 설명하고, 설정으로 이동하게 유도하는 다이얼로그 표시
+                // 여기에 자신의 로직을 추가하세요
+            } else {
+                // 모든 권한이 허용된 경우, 원하는 로직을 수행
+                // 여기에 자신의 로직을 추가하세요
+            }
         }
     }
 
