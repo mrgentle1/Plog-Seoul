@@ -15,6 +15,8 @@ public class WebViewActivity extends AppCompatActivity {
 
     private WebView webView;
 
+    private String rootUrl = "https://plog-seoul-git-develop-mrgentle1.vercel.app/";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,14 +43,15 @@ public class WebViewActivity extends AppCompatActivity {
 
         //웹페이지 호출
 //        webView.loadUrl("http://www.naver.com");
-        webView.loadUrl("https://plog-seoul-git-develop-mrgentle1.vercel.app/");
+        webView.loadUrl(rootUrl);
     }
 
     @Override
     public void onBackPressed() {
         long curTime = System.currentTimeMillis();
         long gapTime = curTime - backBtnTime;
-        if (webView.canGoBack()) {
+        String nowUrl = webView.getUrl();
+        if (webView.canGoBack() && !nowUrl.equals(rootUrl+"home")) {
             webView.goBack();
         } else if (0 <= gapTime && 2000 >= gapTime) {
             super.onBackPressed();
