@@ -39,7 +39,7 @@ public class WebViewActivity extends AppCompatActivity {
 
         //웹페이지 호출
 //        webView.loadUrl("http://www.naver.com");
-        webView.loadUrl("https://plog-seoul-git-develop-mrgentle1.vercel.app/course/main");
+        webView.loadUrl("https://plog-seoul-git-develop-mrgentle1.vercel.app/");
     }
 
 }
