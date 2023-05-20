@@ -33,8 +33,8 @@ const StLayout = styled.div`
   justify-content: center;
   overflow-x: hidden;
   width: 100%;
+  height: 100%;
   padding-top: 127px;
-  padding-bottom: 100px;
   overflow-y: scroll;
   background-color: ${({ isHome }) =>
     isHome ? COLOR.INPUT_GRAY : "transparent"};
