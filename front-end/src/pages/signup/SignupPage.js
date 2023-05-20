@@ -15,7 +15,7 @@ function SignupPage() {
 
   const navigate = useNavigate();
   const goBack = useCallback(() => {
-    navigate(-1);
+    navigate("/");
   }, [navigate]);
 
   const onChangeName = (e) => {
@@ -25,7 +25,7 @@ function SignupPage() {
   const onSubmit = useCallback(() => {
     axios
       .post(
-        "http://3.37.14.183/api/auth/registration",
+        `${process.env.REACT_APP_API_ROOT}/api/auth/registration`,
         {
           nickname: name,
         },
