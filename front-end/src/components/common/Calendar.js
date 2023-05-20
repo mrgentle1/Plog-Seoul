@@ -1,11 +1,49 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { ReactComponent as BackArrow } from "../../assets/icons/backArrow.svg";
 import { ReactComponent as ForwardArrow } from "../../assets/icons/forwardArrow.svg";
+import { todayMonth, year } from "../../core/date.js";
 
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
+import axios from "axios";
 
 export const Calendar = () => {
+  const token = localStorage.getItem("key");
+
+  const [plogging, setPlogging] = useState([]);
+
+  // month가 한자리인지 두자리인지 판별
+  let month = 0;
+  if (todayMonth < 10) {
+    month = `0${todayMonth}`;
+  }
+
+  useEffect(() => {
+    axios
+      .get(
+        `${process.env.REACT_APP_API_ROOT}/api/plogging?date=${year}-${month}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        setPlogging(response.data.result.content);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  const ploggingDate = [];
+  plogging.map((data) => {
+    ploggingDate.push(data.createdAt.substring(0, 10));
+  });
+
+  console.log(ploggingDate);
+
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   const handlePrevMonth = () => {
@@ -45,9 +83,17 @@ export const Calendar = () => {
     }
 
     for (let day = 1; day <= daysInMonth; day++) {
-      const currentDate = new Date(year, month, day);
-      const isSpecial = day === 18; // Customize the condition for special dates
-      const isSunday = currentDate.getDay() === 0; // 일요일인 경우
+      const currentDate = new Date(Date.UTC(year, month, day));
+      const formattedDate = `${currentDate.getFullYear()}-${(
+        currentDate.getMonth() + 1
+      )
+        .toString()
+        .padStart(2, "0")}-${currentDate
+        .getDate()
+        .toString()
+        .padStart(2, "0")}`;
+      const isSpecial = ploggingDate.includes(formattedDate);
+      const isSunday = currentDate.getUTCDay() === 0; // 일요일인 경우
 
       calendar.push(
         <CalendarDay key={day} isSpecial={isSpecial} isSunday={isSunday}>
@@ -146,6 +192,7 @@ const CalendarDay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 1.5px;
   width: 40px;
   height: 40px;
   font-family: "SUIT Variable";
