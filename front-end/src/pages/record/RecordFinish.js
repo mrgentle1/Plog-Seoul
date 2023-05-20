@@ -15,10 +15,9 @@ import {
 
 import dummyImg from "../../dummys/recordImgData.json";
 import { RecordHeader } from "../../components/layout/RecordHeader";
-import {
-  RecordImgModal,
-  ImgModalBackground,
-} from "../../components/Record/ImgModal";
+import { RecordImgModal } from "../../components/Record/ImgModal";
+import { EditImgModal } from "./EditImg";
+
 const modalData = {
   recording: false,
   title: "오늘의 플로깅은 어떠셨나요?",
@@ -61,7 +60,7 @@ function RecordFinish() {
     try {
       // GET 요청은 params에 실어 보냄
       const response = await axios.get(
-        "http://3.37.14.183:80/api/plogging/" + userData.recordId,
+        `${process.env.REACT_APP_API_ROOT}/api/plogging/` + userData.recordId,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -104,7 +103,6 @@ function RecordFinish() {
   let todayMonth = now.getMonth() + 1;
   let todayDate = now.getDate();
 
-  // const modalData = { title: "플로깅", btnText: "후기 남기기" };
   const [modalOpen, setModalOpen] = useState(false);
   const showModal = () => {
     setModalOpen(true);
@@ -117,6 +115,12 @@ function RecordFinish() {
   const [imgOpen, setImgOpen] = useState(false);
   const showImgModal = () => {
     setImgOpen(true);
+  };
+
+  const [clickEditImg, setClickEditImg] = useState("");
+  const [imgEditOpen, setImgEditOpen] = useState(false);
+  const showEditImgModal = () => {
+    setImgEditOpen(true);
   };
 
   const EventMarkerContainer = ({ position, content }) => {
@@ -156,9 +160,11 @@ function RecordFinish() {
         <RecordModal setModalOpen={setModalOpen} data={modalData} />
       )}
       {imgOpen && <RecordImgModal setImgOpen={setImgOpen} data={clickImg} />}
-      {modalOpen && <ModalBackground />}
+      {imgEditOpen && (
+        <EditImgModal setImgOpen={setImgEditOpen} data={clickEditImg} />
+      )}
 
-      {imgOpen && <ImgModalBackground />}
+      {(modalOpen || imgOpen || imgEditOpen) && <ModalBackground />}
       <StRecordFinish>
         {!isLoading && (
           <>
@@ -195,20 +201,6 @@ function RecordFinish() {
                   draggable={false}
                   ref={mapRef}
                 >
-                  {/* {dummyImg.recordImgData.map((position, index) => (
-                <MapMarker
-                  key={`${position.recordId}-${position.imageId}`}
-                  position={{ lat: position.imgLat, lng: position.imgLng }} // 마커를 표시할 위치
-                  image={{
-                    src: PlogImg, // 마커이미지의 주소입니다
-                    size: {
-                      width: 24,
-                      height: 35,
-                    }, // 마커이미지의 크기입니다
-                  }}
-                  title={position.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
-                />
-              ))} */}
                   {dummyImg.recordImgData.map((value) => (
                     <EventMarkerContainer
                       key={`EventMarkerContainer-${value.recordId}-${value.imageId}`}
@@ -265,8 +257,8 @@ function RecordFinish() {
                       alt="img"
                       onClick={() => {
                         console.log(img.imgUrl);
-                        setClickImg(img.imgUrl);
-                        showImgModal();
+                        setClickEditImg(img.imgUrl);
+                        showEditImgModal();
                       }}
                     ></img>
                   </PhotoWrapper>

@@ -34,6 +34,7 @@ function CourseMainPage() {
 
   const ClickCategory = (c) => {
     setCategory((prevCategory) => (prevCategory === c ? "" : c));
+    window.scrollTo(0, 0);
   };
 
   let filteredCourses = courses;
@@ -43,12 +44,15 @@ function CourseMainPage() {
 
   useEffect(() => {
     axios
-      .get("http://3.37.14.183/api/roads?pagingIndex=0&pagingSize=150", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      })
+      .get(
+        `${process.env.REACT_APP_API_ROOT}/api/roads?pagingIndex=0&pagingSize=150`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((response) => {
         console.log(response);
         setCourses(response.data.result.content);
@@ -94,13 +98,13 @@ const StCourseMainPage = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
-  padding-top: 88px;
+  padding-top: 8.8rem;
 `;
 const CourseMainHeader = styled.div`
   position: fixed;
   top: 0;
-  width: 393px;
-  height: 88px;
+  width: 39.3rem;
+  height: 8.8rem;
 
   display: flex;
   flex-direction: row;
@@ -109,30 +113,31 @@ const CourseMainHeader = styled.div`
   background-color: ${COLOR.MAIN_WHITE};
 
   .courseBackArrow {
-    margin-top: 50px;
-    margin-left: 20px;
+    margin-top: 5rem;
+    margin-left: 2rem;
   }
   z-index: 100;
 `;
 const HeaderText = styled.div`
-  margin-top: 52.5px;
-  margin-left: 22px;
+  margin-top: 5.25rem;
+  margin-left: 2.2rem;
   font-family: "SUIT Variable";
   font-style: normal;
   font-weight: 700;
-  font-size: 20px;
-  line-height: 25px;
+  font-size: 2rem;
+  line-height: 2.5rem;
   color: ${COLOR.MAIN_BLACK};
 `;
 const CourseMainCategory = styled.div`
   display: flex;
   overflow: auto;
   white-space: nowrap;
-  width: 393px;
-  height: 76px;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  padding-left: 20px;
+  width: 39.3rem;
+  height: 7.6rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  padding-left: 2rem;
+  padding-right: 0.5rem;
   background-color: ${COLOR.MAIN_WHITE};
 
   z-index: 100;
@@ -142,33 +147,33 @@ const CourseMainCategory = styled.div`
   }
 `;
 const CourseCategory = styled.button`
-  margin-right: 6px;
-  width: 140px;
-  height: 36px;
+  margin-right: 0.6rem;
+  width: 14rem;
+  height: 3.6rem;
   border: none;
-  border-radius: 8px;
-  padding: 8.5px 12px;
+  border-radius: 0.8rem;
+  padding: 0.85rem 1.2rem;
   font-family: "SUIT Variable";
   font-style: normal;
   font-weight: 600;
-  font-size: 15px;
-  line-height: 19px;
+  font-size: 1.5rem;
+  line-height: 1.9rem;
   text-align: left;
 
   background-color: ${(props) =>
     props.isSelected ? COLOR.MAIN_GREEN : COLOR.MAIN_WHITE};
   border: ${(props) =>
     props.isSelected
-      ? `1px solid ${COLOR.MAIN_GREEN}`
-      : `1px solid ${COLOR.MEDIUM_GRAY}`};
+      ? `0.1rem solid ${COLOR.MAIN_GREEN}`
+      : `0.1rem solid ${COLOR.MEDIUM_GRAY}`};
   color: ${(props) =>
     props.isSelected ? COLOR.MAIN_BLACK : COLOR.MEDIUM_GRAY};
   cursor: pointer;
 `;
 
 const CourseMainContent = styled.div`
-  width: 353px;
-  margin-top: 80px;
+  width: 35.3rem;
+  margin-top: 8rem;
 `;
 
 const CourseList = styled.div``;

@@ -9,7 +9,7 @@
 
   background: #ffffff;
   box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.06);
-  width: 393px;
+  width: 100%;
   height: 100px;
   padding: 0;
   margin: 0;
@@ -48,7 +48,7 @@ p {
   font-size: 11px;
   margin-top: 9.9px;
   padding: 0;
-  width: 50px;
+  width: 55px;
 }
 .footerHomeBtn {
   margin: 0;
@@ -71,7 +71,7 @@ p {
 }
 .footerhome p {
   display: flex;
-  width: 50px;
+  width: 55px;
   justify-content: center;
   text-align: center;
 }
@@ -82,7 +82,7 @@ p {
   font-size: 11px;
   margin-top: 10.5px;
   padding: 0;
-  width: 50px;
+  width: 55px;
 }
 .footerCourseBtn {
   margin: 0;
@@ -105,7 +105,7 @@ p {
 }
 .footercourse p {
   display: flex;
-  width: 50px;
+  width: 55px;
   justify-content: center;
   text-align: center;
   margin-top: 5px;
@@ -117,7 +117,7 @@ p {
   font-size: 11px;
   margin-top: 9.9px;
   padding: 0;
-  width: 50px;
+  width: 55px;
 }
 .footerRecordBtn {
   margin: 0;
@@ -142,7 +142,7 @@ p {
 }
 .footerrecord p {
   display: flex;
-  width: 50px;
+  width: 55px;
   justify-content: center;
   text-align: center;
   margin-top: 4.5px;
@@ -154,7 +154,7 @@ p {
   font-size: 11px;
   margin-top: 10px;
   padding: 0;
-  width: 50px;
+  width: 55px;
 }
 .footerPlogBtn {
   margin: 0;
@@ -179,7 +179,7 @@ p {
 }
 .footerplog p {
   display: flex;
-  width: 50px;
+  width: 55px;
   justify-content: center;
   text-align: center;
   margin-top: 4px;
@@ -191,7 +191,7 @@ p {
   font-size: 11px;
   margin-top: 10.5px;
   padding: 0;
-  width: 50px;
+  width: 55px;
 }
 .footerMyBtn {
   margin: 0;
@@ -214,7 +214,7 @@ p {
 }
 .footermy p {
   display: flex;
-  width: 50px;
+  width: 55px;
   justify-content: center;
   text-align: center;
   margin-top: 4.5px;

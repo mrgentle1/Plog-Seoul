@@ -36,11 +36,9 @@ function HomePage() {
     month = `0${todayMonth}`;
   }
 
-  console.log(userId);
-
   useEffect(() => {
     axios
-      .get("http://3.37.14.183/api/auth/me", {
+      .get(`${process.env.REACT_APP_API_ROOT}/api/auth/me`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -58,12 +56,15 @@ function HomePage() {
 
   useEffect(() => {
     axios
-      .get(`http://3.37.14.183/api/plogging?date=${year}-${month}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      })
+      .get(
+        `${process.env.REACT_APP_API_ROOT}/api/plogging?date=${year}-${month}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((response) => {
         setPlogging(response.data.result.content);
       })
@@ -78,11 +79,12 @@ function HomePage() {
     setHeaderTitle(headertext); // '홈' 값을 할당합니다.
   });
 
-  const levelBarWidth = point >= 1000 ? 321 : (point / 1000) * 321;
+  const levelBarWidth = point >= 1000 ? 32.1 : (point / 1000) * 32.1;
   let runningTime = 0;
   let distance = 0;
   plogging.map((data) => (runningTime += data.runningTime));
   plogging.map((data) => (distance += data.distance));
+  distance = distance.toFixed(2);
 
   return (
     <StHomePage>
@@ -149,82 +151,82 @@ const StHomePage = styled.div`
 `;
 const Box1 = styled.div`
   width: 100%;
-  height: 121px;
-  margin-bottom: 13px;
+  height: 12.1rem;
+  margin-bottom: 1.3rem;
 `;
 const LeftBox1 = styled.div`
   float: left;
-  width: 170px;
-  height: 121px;
-  border-radius: 14px;
+  width: 17rem;
+  height: 12.1rem;
+  border-radius: 1.4rem;
   background-color: ${COLOR.MAIN_WHITE};
-  padding: 12px 16px;
+  padding: 1.2rem 1.6rem;
 
   .flag {
-    width: 23px;
-    height: 23px;
-    margin-bottom: 12px;
+    width: 2.3rem;
+    height: 2.3rem;
+    margin-bottom: 1.2rem;
     color: ${COLOR.DARK_GRAY};
   }
   .arrow {
-    margin-top: 15px;
-    width: 25px;
-    height: 25px;
+    margin-top: 1.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
     color: ${COLOR.MAIN_GREEN};
-    margin-bottom: 10px;
+    margin-bottom: 1rem;
   }
 `;
 const Text1 = styled.div`
   font-family: "SUIT Variable";
   font-style: normal;
   font-weight: 600;
-  font-size: 15px;
-  line-height: 19px;
+  font-size: 1.5rem;
+  line-height: 1.9rem;
   color: ${COLOR.MAIN_BLACK};
 `;
 
 const RightBox1 = styled.div`
   float: right;
-  width: 170px;
-  height: 121px;
-  border-radius: 14px;
+  width: 17rem;
+  height: 12.1rem;
+  border-radius: 1.4rem;
   background: ${COLOR.MAIN_WHITE};
-  border-radius: 14px;
-  padding: 12px 16px;
+  border-radius: 1.4rem;
+  padding: 1.2rem 1.6rem;
 
   .footprint {
-    width: 23px;
-    height: 23px;
+    width: 2.3rem;
+    height: 2.3rem;
     color: ${COLOR.DARK_GRAY};
-    margin-bottom: 12px;
+    margin-bottom: 1.2rem;
   }
   .arrow {
-    margin-top: 15px;
-    width: 25px;
-    height: 25px;
+    margin-top: 1.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
     color: ${COLOR.MAIN_GREEN};
-    margin-bottom: 10px;
+    margin-bottom: 1rem;
   }
 `;
 const Text2 = styled.div`
   font-family: "SUIT Variable";
   font-style: normal;
   font-weight: 600;
-  font-size: 15px;
-  line-height: 19px;
+  font-size: 1.5rem;
+  line-height: 1.9rem;
   color: ${COLOR.MAIN_BLACK};
 `;
 const Box2 = styled.div`
-  margin-bottom: 13px;
-  width: 353px;
-  height: 101px;
+  margin-bottom: 1.3rem;
+  width: 35.3rem;
+  height: 10.1rem;
   background: ${COLOR.MAIN_WHITE};
-  border-radius: 14px;
-  padding: 15px 16px;
+  border-radius: 1.4rem;
+  padding: 1.5rem 1.6rem;
   .level {
-    width: 19px;
-    height: 20px;
-    margin-bottom: 12px;
+    width: 1.9rem;
+    height: 2rem;
+    margin-bottom: 1.2rem;
     color: ${COLOR.DARK_GRAY};
   }
 `;
@@ -233,51 +235,49 @@ const LevelBox = styled.div`
   justify-content: space-between;
 `;
 const LevelBar = styled.div`
-  margin-top: 12px;
-  position: absolute;
-  width: 321px;
-  height: 10px;
+  margin-top: 1.2rem;
+  width: 32.1rem;
+  height: 1rem;
   background: ${COLOR.INPUT_GRAY};
-  border-radius: 5px;
+  border-radius: 0.5rem;
 `;
 const LevelBar2 = styled.div`
-  margin-top: 12px;
-  position: absolute;
-  width: ${(props) => props.width}px;
-  height: 10px;
+  margin-top: -1rem;
+  width: ${(props) => props.width}rem;
+  height: 1rem;
   background: ${COLOR.MAIN_GREEN};
-  border-radius: 5px;
+  border-radius: 0.5rem;
   z-index: 1;
 `;
 const Text3 = styled.div`
   font-family: "SUIT Variable";
   font-style: normal;
   font-weight: 600;
-  font-size: 15px;
-  line-height: 19px;
+  font-size: 1.5rem;
+  line-height: 1.9rem;
   color: ${COLOR.MAIN_GREEN};
 `;
 const Text4 = styled.div`
   font-family: "SUIT Variable";
   font-style: normal;
   font-weight: 500;
-  font-size: 13px;
-  line-height: 16px;
+  font-size: 1.3rem;
+  line-height: 1.6rem;
   color: ${COLOR.DARK_GRAY};
 `;
 const Box3 = styled.div`
-  margin-bottom: 13px;
-  width: 353px;
-  height: 121px;
-  border-radius: 14px;
-  padding: 14px 19px;
+  margin-bottom: 1.3rem;
+  width: 35.3rem;
+  height: 12.1rem;
+  border-radius: 1.4rem;
+  padding: 1.4rem 1.9rem;
   background-color: ${COLOR.MAIN_WHITE};
 
   .tree {
-    width: 25px;
-    height: 25px;
+    width: 2.5rem;
+    height: 2.5rem;
     color: ${COLOR.DARK_GRAY};
-    margin-bottom: 10px;
+    margin-bottom: 1rem;
   }
 `;
 const Text5 = styled.div`
@@ -286,69 +286,69 @@ const Text5 = styled.div`
   font-family: "SUIT Variable";
   font-style: normal;
   font-weight: 600;
-  font-size: 15px;
-  line-height: 19px;
+  font-size: 1.5rem;
+  line-height: 1.9rem;
 `;
 const Ploging = styled.div`
-  width: 99px;
+  width: 9.9rem;
 `;
 const Time = styled.div`
-  width: 99px;
+  width: 9.9rem;
 `;
 const Dis = styled.div`
-  width: 99px;
+  width: 9.9rem;
 `;
 const Text6 = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-top: 10px;
+  margin-top: 1rem;
   font-family: "SUIT Variable";
   font-style: normal;
   font-weight: 600;
-  font-size: 24px;
-  line-height: 30px;
+  font-size: 2.4rem;
+  line-height: 3rem;
   color: ${COLOR.MAIN_GREEN};
 `;
 const Ploging2 = styled.div`
-  width: 99px;
+  width: 9.9rem;
 `;
 const Time2 = styled.div`
-  width: 99px;
+  width: 9.9rem;
 `;
 const Dis2 = styled.div`
-  width: 99px;
+  width: 9.9rem;
 `;
 const Box4 = styled.div`
   display: flex;
-  width: 353px;
-  height: 101px;
-  margin-bottom: 30px;
+  width: 35.3rem;
+  height: 10.1rem;
+  margin-bottom: 11rem;
   background: ${COLOR.MAIN_GREEN};
-  border: 2px solid ${COLOR.MAIN_GREEN_HOVER};
-  border-radius: 14px;
-  padding: 13.5px 19px;
+  border: 0.2rem solid ${COLOR.MAIN_GREEN};
+  border-radius: 1.4rem;
+  padding: 1.35rem 1.9rem;
   .record {
-    width: 27px;
-    height: 27px;
+    width: 2.7rem;
+    height: 2.7rem;
     color: ${COLOR.MAIN_BLACK};
-    margin-bottom: 10px;
+    margin-bottom: 1rem;
   }
   .box4 {
-    margin-top: 24px;
+    margin-top: 2.4rem;
     display: flex;
     flex-direction: row;
   }
   .homeButton {
-    margin-left: 149px;
+    margin-left: 14.9rem;
   }
 `;
 const Text7 = styled.div`
-  margin-top: 14.5px;
-  margin-left: -25px;
+  margin-top: 1.45rem;
+  margin-left: -2.5rem;
   font-family: "SUIT Variable";
   font-style: normal;
   font-weight: 600;
-  font-size: 15px;
-  line-height: 19px;
+  font-size: 1.5rem;
+  line-height: 1.9rem;
   color: ${COLOR.MAIN_BLACK};
 `;

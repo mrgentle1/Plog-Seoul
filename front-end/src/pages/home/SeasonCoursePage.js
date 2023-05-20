@@ -22,7 +22,7 @@ function SeasonCoursePage() {
 
   useEffect(() => {
     axios
-      .get("http://3.37.14.183/api/roads/recommended", {
+      .get(`${process.env.REACT_APP_API_ROOT}/api/roads/recommended`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",

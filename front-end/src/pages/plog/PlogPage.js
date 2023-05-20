@@ -3,6 +3,7 @@ import { useSetRecoilState } from "recoil";
 import { headerTitleState } from "../../core/headerTitle";
 import { ReactComponent as Level } from "../../assets/icons/level.svg";
 import { userIdNumber, usePersistRecoilState } from "../../core/userId";
+import { Calendar } from "../../components/common/Calendar";
 
 import axios from "axios";
 import styled from "styled-components";
@@ -19,7 +20,7 @@ function PlogPage() {
   const [userId, setUserId] = usePersistRecoilState(userIdNumber);
   const setHeaderTitle = useSetRecoilState(headerTitleState);
 
-  const url = `http://3.37.14.183/api/users/${userId}`;
+  const url = `${process.env.REACT_APP_API_ROOT}/api/users/${userId}`;
 
   useEffect(() => {
     axios
@@ -49,7 +50,9 @@ function PlogPage() {
   return (
     <StPlogPage>
       <StPlogContent>
-        <PlogCalender></PlogCalender>
+        <PlogCalender>
+          <Calendar />
+        </PlogCalender>
         <PlogLevel>
           <Plog1>
             <Level className="level" />
@@ -70,7 +73,7 @@ function PlogPage() {
         <Link to="/plog/achievement">
           <BorderThinButton>
             달성한 업적
-            <p>6개</p>
+            <p>0개</p>
           </BorderThinButton>
         </Link>
         <BorderThinButton>

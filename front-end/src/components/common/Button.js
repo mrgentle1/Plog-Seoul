@@ -40,7 +40,7 @@ const StButton = styled.button`
   border-radius: 14px;
   background-color: ${COLOR.MAIN_GREEN};
   color: ${COLOR.MAIN_BLACK};
-  /* font-family: "SUIT Variable"; */
+  font-family: "SUIT Variable";
   font-style: normal;
   font-weight: 600;
   line-height: 19px;
@@ -83,7 +83,7 @@ const StBorderButton = styled.button`
   letter-spacing: 1.2px;
 `;
 
-const StBorderButtonWrapper = styled.button`
+const StBorderButtonWrapper = styled.div`
   display: flex;
   align-items: center;
   text-align: left;

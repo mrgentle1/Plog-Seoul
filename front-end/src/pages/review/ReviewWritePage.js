@@ -17,8 +17,6 @@ function ReviewWritePage() {
   const [content, setContent] = useState("");
   const [star, setStar] = useState(0);
   const [user, setUser] = useState("");
-  const [nowPoint, setNowPoint] = useState(0);
-  const [nowLevel, setNowLevel] = useState(0);
   const [course, setCourse] = useState([]);
 
   const token = localStorage.getItem("key");
@@ -27,14 +25,14 @@ function ReviewWritePage() {
 
   const pathname = window.location.pathname;
   const real_pathname = pathname.substring(7);
-  const url = "http://3.37.14.183/api/roads" + real_pathname;
+  const url = `${process.env.REACT_APP_API_ROOT}/api/roads` + real_pathname;
   const url1 = url + "s";
   const url2 = real_pathname.substring(
     0,
     real_pathname.length - "/reviews".length + 1
   );
-  const course_url = "http://3.37.14.183/api/roads" + url2;
-  const user_url = "http://3.37.14.183/api/users/" + userId + "/point";
+  const course_url = `${process.env.REACT_APP_API_ROOT}/api/roads` + url2;
+  const user_url = `${process.env.REACT_APP_API_ROOT}/api/users/` + userId + "/point";
   console.log("유저 api", user_url);
 
   const setHeaderTitle = useSetRecoilState(headerTitleState);
@@ -73,8 +71,6 @@ function ReviewWritePage() {
       })
       .then((response) => {
         setUser(response.data.result);
-        setNowPoint(user.point);
-        setNowLevel(user.level);
       })
       .catch((error) => {
         console.error(error);
@@ -82,10 +78,6 @@ function ReviewWritePage() {
   }, [user]);
 
   console.log("포인트", user);
-  console.log(nowPoint);
-  console.log(nowLevel);
-  const real_point = nowPoint + 100;
-  console.log(real_point);
 
   const handleStarClick = (index) => {
     if (star === index) {
@@ -99,10 +91,11 @@ function ReviewWritePage() {
     setContent(e.target.value);
   };
 
+  const real_point = 100;
   const title1 = course.category;
   const title2 = course.name;
   const real_title = title1 + " - " + title2;
-  const url3 = `http://3.37.14.183/api/users/${userId}/point?newPoint=${real_point}&title=${real_title}&type=후기작성`;
+  const url3 = `${process.env.REACT_APP_API_ROOT}/api/users/${userId}/point?newPoint=${real_point}&title=${real_title}&type=후기작성`;
   // 모달창 호출
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -137,7 +130,7 @@ function ReviewWritePage() {
         url3,
         {
           userId: userId,
-          newPoint: nowPoint,
+          newPoint: real_point,
           title: real_title,
           type: "후기작성",
         },

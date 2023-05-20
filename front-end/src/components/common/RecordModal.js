@@ -20,7 +20,7 @@ export const RecordModal = ({ setModalOpen, data, id }) => {
     try {
       // GET 요청은 params에 실어 보냄
       const response = await axios.delete(
-        `http://3.37.14.183:80/api/plogging/${id}/`,
+        `${process.env.REACT_APP_API_ROOT}/api/plogging/${id}/`,
 
         {
           headers: {

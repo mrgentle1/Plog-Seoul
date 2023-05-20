@@ -58,7 +58,7 @@ function SearchPage() {
   // API request using axios
   const fetchCourses = () => {
     axios
-      .get("http://3.37.14.183/api/roads?pagingIndex=0&pagingSize=150", {
+      .get(`${process.env.REACT_APP_API_ROOT}/api/roads?pagingIndex=0&pagingSize=150`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
