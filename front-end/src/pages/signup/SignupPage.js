@@ -25,7 +25,7 @@ function SignupPage() {
   const onSubmit = useCallback(() => {
     axios
       .post(
-        `${process.env.REACT_APP_API_ROOT}/api/auth/registration`,
+        "http://3.37.14.183/api/auth/registration",
         {
           nickname: name,
         },
@@ -121,13 +121,13 @@ const SignupText = styled.div`
   line-height: 25px;
 `;
 const SignupInput = styled.div`
-  width: 100%;
+  width: 353px;
   height: 41px;
   text-align: center;
   margin-top: 36px;
 `;
 const SignupInputBox = styled.input`
-  width: 353px;
+  width: 100%;
   height: 41px;
   background: ${COLOR.INPUT_GRAY};
   border: 1px solid ${COLOR.INPUT_BORDER_GRAY};
