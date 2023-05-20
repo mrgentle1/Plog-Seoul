@@ -40,7 +40,7 @@ function HomePage() {
 
   useEffect(() => {
     axios
-      .get("http://3.37.14.183/api/auth/me", {
+      .get(`${process.env.REACT_APP_API_ROOT}/api/auth/me`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -58,7 +58,7 @@ function HomePage() {
 
   useEffect(() => {
     axios
-      .get(`http://3.37.14.183/api/plogging?date=${year}-${month}`, {
+      .get(`${process.env.REACT_APP_API_ROOT}/api/plogging?date=${year}-${month}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",

@@ -21,7 +21,7 @@ export const ReviewCard = ({ r }) => {
 
   const pathname = window.location.pathname;
   const url = pathname.substring(7);
-  const real_pathname = "http://3.37.14.183/api/roads" + url + `/${r.reviewId}`;
+  const real_pathname = `${process.env.REACT_APP_API_ROOT}/api/roads` + url + `/${r.reviewId}`;
 
   // 수정/삭제 팝업창 호출
   const [popupOpen, setPopupOpen] = useState(false);

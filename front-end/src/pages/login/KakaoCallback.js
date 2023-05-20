@@ -15,7 +15,7 @@ function KakaoCallback() {
 
       try {
         axios
-          .get(`http://localhost:8080/api/auth/kakao?host=${host}&code=${code}`)
+          .get(`https://seoul-plog.shop/api/auth/kakao?host=${host}&code=${code}`)
           .then((res) => {
             const accessToken = res.data.result.jwt;
 

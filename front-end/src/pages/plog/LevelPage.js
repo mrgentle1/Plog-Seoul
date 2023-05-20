@@ -22,7 +22,7 @@ function LevelPage() {
     navigate(-1);
   }, [navigate]);
 
-  const url = `http://3.37.14.183/api/users/${userId}`;
+  const url = `${process.env.REACT_APP_API_ROOT}/api/users/${userId}`;
   const url2 = url + "/point/history";
 
   console.log(userId);
