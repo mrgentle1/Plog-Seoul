@@ -563,7 +563,7 @@ function RecordIngPage() {
           </RecordDetailTxt>
           <RecordBtnContainer>
             <RecordCamBtnWrapper>
-              <CamBtn />
+              <CamBtn onClick={() => window.Android?.openCamera()}/>
             </RecordCamBtnWrapper>
             <RecordFinishBtn onClick={recordStopHandler}>
               <p>완료하기</p>
