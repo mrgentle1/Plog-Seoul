@@ -123,6 +123,7 @@ const StHeader = styled.div`
   z-index: 100;
 `;
 const MyEdit = styled.div`
+  position: fixed;
   display: flex;
   align-items: center;
   width: 60px;

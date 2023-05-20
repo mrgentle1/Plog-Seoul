@@ -322,7 +322,7 @@ const Box4 = styled.div`
   display: flex;
   width: 35.3rem;
   height: 10.1rem;
-  margin-bottom: 11rem;
+  margin-bottom: 12rem;
   background: ${COLOR.MAIN_GREEN};
   border: 0.2rem solid ${COLOR.MAIN_GREEN};
   border-radius: 1.4rem;

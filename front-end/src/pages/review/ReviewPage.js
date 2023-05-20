@@ -119,22 +119,27 @@ const StReviewPage = styled.div`
 const ReviewHeader = styled.div`
   position: fixed;
   top: 0;
-  width: 353px;
-  height: 88px;
+  width: 100%;
+  height: 127px;
+  padding-left: 20px;
+  padding-right: 20px;
 
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+
+  background-color: ${COLOR.MAIN_WHITE};
+  z-index: 1;
 `;
 const ReviewBox1 = styled.div`
   display: flex;
 
   .backArrow {
-    margin-top: 76px;
+    margin-top: 45px;
   }
   h1 {
-    margin-top: 74px;
+    margin-top: 42px;
     margin-left: 20px;
     font-family: "SUIT Variable";
     font-style: normal;
@@ -143,7 +148,7 @@ const ReviewBox1 = styled.div`
     line-height: 25px;
   }
   h4 {
-    margin-top: 77px;
+    margin-top: 44px;
     margin-left: 6px;
     font-family: "SUIT Variable";
     font-style: normal;
@@ -157,7 +162,7 @@ const ReviewBox2 = styled.div`
   display: flex;
   justify-content: space-between;
   width: 110px;
-  margin-top: 76px;
+  margin-top: 44px;
 
   h5 {
     font-family: "SUIT Variable";
@@ -174,7 +179,8 @@ const ReviewBox2 = styled.div`
   }
 `;
 const ReviewMain = styled.div`
-  margin-top: 24px;
+  margin-top: 44px;
+  padding-bottom: 30px;
   .noReview {
     margin-top: 300px;
 

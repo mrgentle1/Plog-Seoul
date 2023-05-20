@@ -11,7 +11,10 @@ import { CourseMainCard } from "../../components/common/CourseMainCard";
 import { Link } from "react-router-dom";
 
 function CoursePage() {
-  // 헤더 배경색
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const [headerBackground, setHeaderBackground] = useState("transparent");
 
   useEffect(() => {
@@ -99,16 +102,16 @@ const StCoursePage = styled.div`
 `;
 
 const CourseMain = styled.div`
-  margin-top: -8.1rem;
+  margin-top: -81px;
   width: 100%;
 `;
 const StImgSlide = styled.div`
   position: relative;
   width: 100%;
-  height: 35.6rem;
+  height: 356px;
   background-color: ${COLOR.MEDIUM_GRAY};
-  margin-top: 4.6rem;
-  margin-bottom: 2.1rem;
+  margin-top: 46px;
+  margin-bottom: 21px;
 
   overflow: hidden;
   margin: auto;
@@ -116,7 +119,7 @@ const StImgSlide = styled.div`
 const ImgGradation = styled.div`
   position: absolute;
   width: 100%;
-  height: 17.7rem;
+  height: 177px;
   background: linear-gradient(
     180deg,
     rgba(0, 0, 0, 0.3) 36.1%,
@@ -129,12 +132,12 @@ const StCourseMain = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 2.1rem;
+  margin-top: 21px;
 `;
 const StCourseBottom = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-bottom: 12rem;
+  margin-bottom: 120px;
 `;
