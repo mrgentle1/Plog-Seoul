@@ -34,12 +34,12 @@ function LoginPage() {
             __html: content.substring(0, contentIndex).replace(/\n/g, "<br>"),
           }}
         ></p>
+        {contentIndex > content.length && (
+          <LoginButton>
+            <Button onClick={kakaoLogin}>카카오로 시작하기</Button>
+          </LoginButton>
+        )}
       </LoginText>
-      {contentIndex > content.length && (
-        <LoginButton>
-          <Button onClick={kakaoLogin}>카카오로 시작하기</Button>
-        </LoginButton>
-      )}
     </StLoginPage>
   );
 }
@@ -49,17 +49,20 @@ export default LoginPage;
 const StLoginPage = styled.div`
   display: flex;
   flex-direction: column;
-  margin-left: 20px;
+  align-items: center;
   width: 100%;
   height: 100%;
 `;
 
 const LoginText = styled.div`
+  width: 353px;
+  height: 100%;
+
+  margin-top: 20px;
   .logo {
     position: absolute;
     width: 171px;
     height: 119px;
-    left: calc(50% - 171px / 2 - 91px);
     top: calc(50% - 119px / 2 - 223.5px);
   }
   p {

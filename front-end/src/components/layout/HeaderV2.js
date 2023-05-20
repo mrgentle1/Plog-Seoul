@@ -37,7 +37,7 @@ export const HomeHeaderV2 = ({ headerBackground }) => {
 const StHomeHeader = styled.div`
   position: fixed;
   top: 0;
-  width: 393px;
+  width: 400px;
   height: 127px;
   padding: 66px 0 36px 20px;
 
