@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
-
 import { useCallback, useState } from "react";
 import { ReactComponent as Close } from "../../assets/icons/close.svg";
 import { useNavigate } from "react-router-dom";
@@ -38,7 +37,7 @@ export const HomeHeaderV3 = ({ headerBackground, headerTitle }) => {
 const StHomeHeader = styled.div`
   position: fixed;
   top: 0;
-  width: 400px;
+  width: 100%;
   height: 127px;
   padding: 66px 0 36px 20px;
 

@@ -99,16 +99,16 @@ const StCoursePage = styled.div`
 `;
 
 const CourseMain = styled.div`
-  margin-top: -81px;
+  margin-top: -8.1rem;
   width: 100%;
 `;
 const StImgSlide = styled.div`
   position: relative;
   width: 100%;
-  height: 356px;
+  height: 35.6rem;
   background-color: ${COLOR.MEDIUM_GRAY};
-  margin-top: 46px;
-  margin-bottom: 21px;
+  margin-top: 4.6rem;
+  margin-bottom: 2.1rem;
 
   overflow: hidden;
   margin: auto;
@@ -116,7 +116,7 @@ const StImgSlide = styled.div`
 const ImgGradation = styled.div`
   position: absolute;
   width: 100%;
-  height: 177px;
+  height: 17.7rem;
   background: linear-gradient(
     180deg,
     rgba(0, 0, 0, 0.3) 36.1%,
@@ -125,10 +125,16 @@ const ImgGradation = styled.div`
   z-index: 1;
 `;
 const StCourseMain = styled.div`
-  margin-left: 20px;
-  margin-top: 21px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2.1rem;
 `;
 const StCourseBottom = styled.div`
-  margin-left: 20px;
-  margin-bottom: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 12rem;
 `;
