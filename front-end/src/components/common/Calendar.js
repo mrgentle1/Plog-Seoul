@@ -25,12 +25,23 @@ export const Calendar = () => {
     const month = selectedDate.getMonth();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const firstDayOfWeek = new Date(year, month, 1).getDay();
-
     const calendar = [];
+
+    const daysOfWeek = ["일", "월", "화", "수", "목", "금", "토"];
+
+    // Add day labels
+    for (let i = 0; i < 7; i++) {
+      calendar.push(<DayLabel key={`day_${i}`}>{daysOfWeek[i]}</DayLabel>);
+    }
 
     // Add empty cells for the days before the first day of the month
     for (let i = 0; i < firstDayOfWeek; i++) {
-      calendar.push(<CalendarDay key={`empty_${i}`} />);
+      const prevMonthDate = new Date(year, month, 0 - (firstDayOfWeek - i - 1));
+      calendar.push(
+        <CalendarDay key={`empty_${i}`} isPreviousMonth>
+          {prevMonthDate.getDate()}
+        </CalendarDay>
+      );
     }
 
     // Add cells for each day of the month
@@ -45,7 +56,18 @@ export const Calendar = () => {
       );
     }
 
-    return calendar;
+    // Add empty cells for the days after the last day of the month
+    const lastDayOfWeek = new Date(year, month, daysInMonth).getDay();
+    for (let i = 0; i < 6 - lastDayOfWeek; i++) {
+      const nextMonthDate = new Date(year, month + 1, i + 1);
+      calendar.push(
+        <CalendarDay key={`empty_${daysInMonth + i + 1}`} isNextMonth>
+          {nextMonthDate.getDate()}
+        </CalendarDay>
+      );
+    }
+
+    return calendar; // Return the calendar elements
   };
 
   return (
@@ -57,7 +79,7 @@ export const Calendar = () => {
         </YearMonthText>
         <ForwardArrow className="arrow2" onClick={handleNextMonth} />
       </CalendarHeader>
-      <PlogCalendar>{getMonthCalendar()}</PlogCalendar>
+      <DayLabels>{getMonthCalendar()}</DayLabels>
     </CalendarContainer>
   );
 };
@@ -94,12 +116,29 @@ const YearMonthText = styled.div`
   line-height: 19px;
 `;
 
-const PlogCalendar = styled.div`
+const DayLabel = styled.div`
+  margin-top: 12px;
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: row;
-  flex-wrap: wrap;
+  width: 40px;
+  height: 40px;
+  font-family: "SUIT Variable";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 14px;
+  color: ${COLOR.MAIN_BLACK};
+`;
+
+const DayLabels = styled.div`
+  margin-top: 12px;
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(7, 1fr);
+  justify-items: center;
+  align-items: center;
+  margin-bottom: 8px;
 `;
 
 const CalendarDay = styled.div`
@@ -109,6 +148,8 @@ const CalendarDay = styled.div`
   width: 40px;
   height: 40px;
   background-color: ${({ isSpecial }) =>
-    isSpecial ? COLOR.SPECIAL_BACKGROUND : COLOR.MAIN_WHITE};
-  /* Add any additional styling for each day of the calendar */
+    isSpecial ? COLOR.MAIN_GREEN_HOVER : COLOR.MAIN_WHITE};
+  border-radius: 8px;
+  color: ${({ isPreviousMonth, isNextMonth }) =>
+    isPreviousMonth || isNextMonth ? COLOR.LIGHT_GRAY : "inherit"};
 `;
