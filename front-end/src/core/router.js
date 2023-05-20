@@ -25,7 +25,7 @@ import LevelPage from "../pages/plog/LevelPage";
 import AchievementPage from "../pages/plog/AchievementPage";
 import SeasonCoursePage from "../pages/home/SeasonCoursePage";
 import InformationPage from "../pages/home/InformationPage";
-
+import RankingPage from "../pages/plog/RankingPage";
 
 function Router() {
   return (
@@ -42,6 +42,7 @@ function Router() {
         <Route path="/my/notice" element={<NoticePage />} />
         <Route path="/plog/level" element={<LevelPage />} />
         <Route path="/plog/achievement" element={<AchievementPage />} />
+        <Route path="/plog/ranking" element={<RankingPage />} />
         <Route path="/home/season" element={<SeasonCoursePage />} />
         <Route path="/info" element={<InformationPage />} />
 
