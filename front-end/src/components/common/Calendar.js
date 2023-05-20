@@ -44,13 +44,13 @@ export const Calendar = () => {
       );
     }
 
-    // Add cells for each day of the month
     for (let day = 1; day <= daysInMonth; day++) {
       const currentDate = new Date(year, month, day);
       const isSpecial = day === 18; // Customize the condition for special dates
+      const isSunday = currentDate.getDay() === 0; // 일요일인 경우
 
       calendar.push(
-        <CalendarDay key={day} isSpecial={isSpecial}>
+        <CalendarDay key={day} isSpecial={isSpecial} isSunday={isSunday}>
           {day}
         </CalendarDay>
       );
@@ -116,21 +116,6 @@ const YearMonthText = styled.div`
   line-height: 19px;
 `;
 
-const DayLabel = styled.div`
-  margin-top: 12px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 40px;
-  height: 40px;
-  font-family: "SUIT Variable";
-  font-style: normal;
-  font-weight: 500;
-  font-size: 11px;
-  line-height: 14px;
-  color: ${COLOR.MAIN_BLACK};
-`;
-
 const DayLabels = styled.div`
   margin-top: 12px;
   display: grid;
@@ -141,15 +126,40 @@ const DayLabels = styled.div`
   margin-bottom: 8px;
 `;
 
+const DayLabel = styled.div`
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  font-family: "SUIT Variable";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 14px;
+  color: ${({ isSunday }) => (isSunday ? COLOR.MAIN_ORANGE : COLOR.MAIN_BLACK)};
+`;
+
+// CalendarDay 컴포넌트
 const CalendarDay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   width: 40px;
   height: 40px;
+  font-family: "SUIT Variable";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 16px;
   background-color: ${({ isSpecial }) =>
     isSpecial ? COLOR.MAIN_GREEN_HOVER : COLOR.MAIN_WHITE};
   border-radius: 8px;
-  color: ${({ isPreviousMonth, isNextMonth }) =>
-    isPreviousMonth || isNextMonth ? COLOR.LIGHT_GRAY : "inherit"};
+  color: ${({ isPreviousMonth, isNextMonth, isSunday }) =>
+    isPreviousMonth || isNextMonth
+      ? COLOR.LIGHT_GRAY
+      : isSunday
+      ? COLOR.MAIN_ORANGE
+      : "inherit"};
 `;
