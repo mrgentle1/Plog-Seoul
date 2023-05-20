@@ -4,7 +4,7 @@ import { Button, BorderGreenThinButton } from "../../components/common/Button";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 import { ReactComponent as Close } from "../../assets/icons/close.svg";
-import PlogImg from "../../assets/icons/certification.svg";
+import PlogImg from "../../assets/icons/imgMarker.svg";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import axios from "axios";
 

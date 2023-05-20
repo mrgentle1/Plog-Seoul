@@ -174,7 +174,10 @@ function RecordPoint() {
       </ShowPointHeader>
       {!isLoading && (
         <ShowPointContainer>
-          <Fire />
+          <ImgWrapper>
+            <Fire />
+          </ImgWrapper>
+
           <CurrentLevelWrapper>
             Level{" "}
             {isLevelUp.current ? pointData.initLevel + 1 : pointData.initLevel}
@@ -268,6 +271,12 @@ const ShowPointContainer = styled.div`
   align-items: center;
   justify-content: center;
   gap: 24px;
+`;
+
+const ImgWrapper = styled.div`
+  display: flex;
+  width: 5.4rem;
+  height: 7.2rem;
 `;
 
 const CurrentLevelWrapper = styled.p`

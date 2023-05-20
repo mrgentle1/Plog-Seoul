@@ -80,10 +80,12 @@ function RecordPage() {
     }
     //지도 중심좌표 이동
     const map = mapRef.current;
-    if (map)
+    if (map) {
       map.setCenter(
         new kakao.maps.LatLng(state.center.lat - 0.0008, state.center.lng)
       );
+      map.setLevel(3);
+    }
   };
 
   // 오늘 날짜
@@ -125,6 +127,7 @@ function RecordPage() {
           level={3} // 지도 확대 레벨
           isPanto={true}
           onCenterChanged={() => setIsMove(true)}
+          onZoomChanged={() => setIsMove(true)}
           ref={mapRef}
         >
           {!state.isLoading && (
@@ -194,7 +197,7 @@ const StRecordPage = styled.div`
 
 const MapContainer = styled.div`
   display: flex;
-  position: relative;
+  position: fixed;
   overflow: hidden;
 
   width: 100%;

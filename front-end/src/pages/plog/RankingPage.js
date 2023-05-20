@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { ReactComponent as BackArrow } from "../../assets/icons/backArrow.svg";
 import { ReactComponent as OneSelfIcon } from "../../assets/icons/pointFire.svg";
+import { userIdNumber, usePersistRecoilState } from "../../core/userId";
 
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
@@ -10,6 +11,8 @@ import { RankingBarGraph } from "../../components/common/RankingBar";
 
 function RankingPage() {
   const token = localStorage.getItem("key");
+  const [userId, setUserId] = usePersistRecoilState(userIdNumber);
+  console.log(userId);
 
   const navigate = useNavigate();
   const goBack = useCallback(() => {
@@ -29,7 +32,7 @@ function RankingPage() {
     try {
       // GET 요청은 params에 실어 보냄
       const response = await axios.get(
-        "https://seoul-plog.shop/api/plogging/ranking",
+        `${process.env.REACT_APP_API_ROOT}/api/plogging/ranking`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
