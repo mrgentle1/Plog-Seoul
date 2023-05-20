@@ -133,21 +133,6 @@ export const EditImgModal = ({ setImgOpen, data }) => {
   );
 };
 
-export const ImgModalBackground = styled.div`
-  position: fixed;
-  z-index: 1000;
-
-  /* 우선은 393px로 하는데 추후에 100%로 바꿔야 할 듯 */
-
-  width: 400px;
-  height: 100%;
-
-  background: rgba(190, 194, 198, 0.9);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
 const ModalContainer = styled.div`
   display: flex;
   flex-direction: column;
