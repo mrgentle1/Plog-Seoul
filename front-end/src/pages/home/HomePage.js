@@ -36,8 +36,6 @@ function HomePage() {
     month = `0${todayMonth}`;
   }
 
-  console.log(userId);
-
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API_ROOT}/api/auth/me`, {
@@ -58,12 +56,15 @@ function HomePage() {
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_ROOT}/api/plogging?date=${year}-${month}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      })
+      .get(
+        `${process.env.REACT_APP_API_ROOT}/api/plogging?date=${year}-${month}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((response) => {
         setPlogging(response.data.result.content);
       })
