@@ -6,7 +6,7 @@ import { Map, MapMarker, Polyline } from "react-kakao-maps-sdk";
 import { useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
-import TimeComponent from "../../components/Record/TimeComponent";
+import { TimeComponent } from "../../components/Record/TimeComponent";
 import current from "../../assets/icons/walk.svg";
 import trashCanImg from "../../assets/icons/trash.svg";
 import imgMarker from "../../assets/icons/imgMarker.svg";
@@ -186,10 +186,10 @@ function RecordIngPage() {
       const response = await axios.patch(
         `${process.env.REACT_APP_API_ROOT}/api/plogging/${recordUserData.recordId}/`,
         {
-          distance: distAll.current,
+          distance: distAll.current / 1000,
           endLat: locationList[locationList.length - 1].lat,
           endLng: locationList[locationList.length - 1].lng,
-          runningTime: runTime,
+          runningTime: time.all,
         },
         {
           headers: {
@@ -217,7 +217,7 @@ function RecordIngPage() {
       console.log(`distance: ${distAll.current},
         endLat: ${locationList[locationList.length - 1].lat},
         endLng: ${locationList[locationList.length - 1].lng},
-        runningTime: ${runTime}`);
+        runningTime: ${time.all}`);
       // navigate("/record/point", {
       //   state: {
       //     recordId: `${recordUserData.recordId}`,
@@ -290,7 +290,7 @@ function RecordIngPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
   const distAll = useRef(0);
-  const [runTime, setRunTime] = useState(0);
+  // const [runTime, setRunTime] = useState(0);
   const [recording, setRecording] = useState(false); //기록 중
   const [isMove, setIsMove] = useState(false);
   const [isActive, setIsActive] = useState(false);
@@ -319,8 +319,7 @@ function RecordIngPage() {
     console.log("position");
     if (navigator.geolocation) {
       // GeoLocation을 이용해서 접속 위치를 얻어옵니다
-      // let before_record = state[state.length - 1];
-      // console.log("bef: %o", before_record);
+
       const newId = navigator.geolocation.watchPosition(
         success,
         showError,
@@ -442,16 +441,9 @@ function RecordIngPage() {
       console.log("기록 종료 버튼 클릭");
 
       if (watchId !== -1) {
-        // const finTime = time.s + time.m * 60 + time.h * 3600;
-        // if (finTime < 60) {
-        //   alert("정상적인 종료 조건이 아닙니다.");
-        // }
         navigator.geolocation.clearWatch(watchId);
         setWatchId(-1);
-        //const finDist = getFinDist(locationList);
 
-        // setRecordcode(-1);
-        // setReadyRecord(true);
         setRecording(false);
         patchRecordData();
         navigate("/record/point", {
@@ -474,21 +466,6 @@ function RecordIngPage() {
       setIsActive(true);
     }
   }, [time]);
-
-  // useEffect(() => {
-  //   if (!recording && isActive) {
-  //     patchRecordData();
-  //     navigate("/record/point", {
-  //       state: {
-  //         recordId: `${recordUserData.recordId}`,
-  //         userId: `${recordUserData.userId}`,
-  //       },
-  //     });
-  //   }
-  // }, [recording]);
-  // console.log(state);
-  // console.log("ff");
-  //   console.log("path: %o", locationList);
 
   const [modalOpen, setModalOpen] = useState(false);
   const showModal = () => {

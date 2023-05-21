@@ -17,6 +17,7 @@ import dummyImg from "../../dummys/recordImgData.json";
 import { RecordHeader } from "../../components/layout/RecordHeader";
 import { RecordImgModal } from "../../components/Record/ImgModal";
 import { EditImgModal } from "./EditImg";
+import { TimeConvert } from "../../components/Record/TimeComponent";
 
 const modalData = {
   recording: false,
@@ -151,7 +152,9 @@ function RecordFinish() {
 
   useEffect(() => {
     console.log("기록가져옴");
+    console.log("rlfhr: %o", thisRecordData.runningTime);
     setIsLoading(false);
+    console.log("rlfhr: %o", thisRecordData);
   }, [thisRecordData]);
 
   return (
@@ -231,7 +234,9 @@ function RecordFinish() {
               </MapContainer>
               <DetailDataContainer>
                 <TimeDataContainer>
-                  <span>01:40:30</span>
+                  {/* <TimeConvert seconds={thisRecordData.runningTime} /> */}
+                  {/* <span>{thisRecordData.runningTime}</span> */}
+                  <span>{(thisRecordData.runningTime / 60).toFixed(2)}분</span>
                   <p>걸은 시간</p>
                 </TimeDataContainer>
                 <OtherDataContainer>
