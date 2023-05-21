@@ -28,6 +28,7 @@ import androidx.core.content.FileProvider;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -265,6 +266,8 @@ public class WebViewActivity extends AppCompatActivity {
                     // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
                     // ...
                     System.out.println("사진 업로드 성공");
+                    Task<Uri> url = ref.getDownloadUrl();
+                    webView.loadUrl("javascript:receiveImageURL('" + url.toString() + "')");
                 }
             });
         }
