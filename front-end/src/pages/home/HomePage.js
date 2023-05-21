@@ -236,15 +236,13 @@ const LevelBox = styled.div`
 `;
 const LevelBar = styled.div`
   margin-top: 1.2rem;
-  position: absolute;
   width: 32.1rem;
   height: 1rem;
   background: ${COLOR.INPUT_GRAY};
   border-radius: 0.5rem;
 `;
 const LevelBar2 = styled.div`
-  margin-top: 1.2rem;
-  position: absolute;
+  margin-top: -1rem;
   width: ${(props) => props.width}rem;
   height: 1rem;
   background: ${COLOR.MAIN_GREEN};
@@ -324,9 +322,9 @@ const Box4 = styled.div`
   display: flex;
   width: 35.3rem;
   height: 10.1rem;
-  margin-bottom: 3rem;
+  margin-bottom: 12rem;
   background: ${COLOR.MAIN_GREEN};
-  border: 0.2rem solid ${COLOR.MAIN_GREEN_HOVER};
+  border: 0.2rem solid ${COLOR.MAIN_GREEN};
   border-radius: 1.4rem;
   padding: 1.35rem 1.9rem;
   .record {

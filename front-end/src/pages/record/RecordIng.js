@@ -233,6 +233,15 @@ function RecordIngPage() {
   }
 
   /* POST - Record Img */
+  const [imageUrl, setImageUrl] = useState(null);
+
+    // Define the callback function
+    window.receiveImageURL = function(url) {
+        console.log("android image url is: ", url);
+        setImageUrl(url);
+    }
+
+  /* POST - Record Img */
   /*
   const [imgData, setImgData] = useState([
     {
@@ -581,7 +590,7 @@ function RecordIngPage() {
           </RecordDetailTxt>
           <RecordBtnContainer>
             <RecordCamBtnWrapper>
-              <CamBtn />
+              <CamBtn onClick={() => window.Android?.openCamera()}/>
             </RecordCamBtnWrapper>
             {isActive ? (
               <RecordFinishBtn

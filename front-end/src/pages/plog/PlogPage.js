@@ -92,6 +92,7 @@ const StPlogPage = styled.div`
   flex-direction: column;
 `;
 const StPlogContent = styled.div`
+  padding-bottom: 110px;
   p {
     margin-left: 12px;
   }
@@ -148,18 +149,16 @@ const Plog3 = styled.div`
 `;
 const LevelBar = styled.div`
   margin-top: 12px;
-  position: absolute;
   width: 321px;
   height: 10px;
   background: ${COLOR.INPUT_GRAY};
   border-radius: 5px;
 `;
 const LevelBar2 = styled.div`
-  margin-top: 12px;
-  position: absolute;
-  width: 196px;
+  margin-top: -10px;
   height: 10px;
   background: ${COLOR.MAIN_GREEN};
   width: ${(props) => props.width}px;
   border-radius: 5px;
+  z-index: 1;
 `;

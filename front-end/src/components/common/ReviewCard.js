@@ -21,7 +21,8 @@ export const ReviewCard = ({ r }) => {
 
   const pathname = window.location.pathname;
   const url = pathname.substring(7);
-  const real_pathname = `${process.env.REACT_APP_API_ROOT}/api/roads` + url + `/${r.reviewId}`;
+  const real_pathname =
+    `${process.env.REACT_APP_API_ROOT}/api/roads` + url + `/${r.reviewId}`;
 
   // 수정/삭제 팝업창 호출
   const [popupOpen, setPopupOpen] = useState(false);
@@ -133,7 +134,7 @@ const Box2 = styled.div`
 const Box3 = styled.div`
   display: flex;
   align-items: center;
-  width: 138px;
+
   h5 {
     margin-left: 15px;
     font-family: "SUIT Variable";
