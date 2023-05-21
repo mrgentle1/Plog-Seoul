@@ -193,6 +193,13 @@ const StRecordPage = styled.div`
   align-items: center;
   width: 100vw;
   height: 100vh;
+
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+
+  ::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+  }
 `;
 
 const MapContainer = styled.div`

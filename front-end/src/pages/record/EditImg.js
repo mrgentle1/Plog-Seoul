@@ -10,7 +10,7 @@ import { ReactComponent as Close } from "../../assets/icons/arrow_white_btn.svg"
 import { useNavigate, useHistory } from "react-router-dom";
 import { Button } from "../../components/common/Button";
 
-export const EditImgModal = ({ setImgOpen, data }) => {
+export const EditImgModal = ({ setImgEditOpen, data }) => {
   const navigate = useNavigate();
   const goBack = () => {
     navigate("/record/finish");
@@ -24,10 +24,10 @@ export const EditImgModal = ({ setImgOpen, data }) => {
 
   // 모달 끄기
   const closeModal = () => {
-    setImgOpen(false);
+    setImgEditOpen(false);
   };
   const checkModal = () => {
-    setImgOpen(false);
+    setImgEditOpen(false);
   };
 
   useEffect(() => {

@@ -26,6 +26,7 @@ import AchievementPage from "../pages/plog/AchievementPage";
 import SeasonCoursePage from "../pages/home/SeasonCoursePage";
 import InformationPage from "../pages/home/InformationPage";
 import RankingPage from "../pages/plog/RankingPage";
+import RecordFinishPage from "../pages/record/RecordFinishContainer";
 
 function Router() {
   return (
@@ -56,6 +57,7 @@ function Router() {
         <Route path="/record/ing" element={<RecordIng />} />
         <Route path="/record/point" element={<RecordPoint />} />
         <Route path="/record/finish" element={<RecordFinish />} />
+        <Route path="/record/test" element={<RecordFinishPage />} />
       </Routes>
     </BrowserRouter>
   );
