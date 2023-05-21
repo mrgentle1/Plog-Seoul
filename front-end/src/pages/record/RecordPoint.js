@@ -80,7 +80,9 @@ function RecordPoint() {
 
   /* PUT - 포인트 및 레벨 정보 */
   async function putPointData() {
-    const real_url = `${process.env.REACT_APP_API_ROOT}/api/users/${userData.userId}/point?newPoint=${nowPoint}&title=서울둘레길-3코스&type=플로깅`;
+    const real_url = `${process.env.REACT_APP_API_ROOT}/api/users/${
+      userData.userId
+    }/point?newPoint=${250}&title=서울둘레길-3코스&type=플로깅`;
     // async, await을 사용하는 경우
     try {
       // GET 요청은 params에 실어 보냄
