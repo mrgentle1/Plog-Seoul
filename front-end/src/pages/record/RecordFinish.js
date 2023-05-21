@@ -171,7 +171,7 @@ function RecordFinish() {
       <StRecordFinish>
         {!isLoading && (
           <>
-            <SignupHeader>
+            <RecordFinishHeader>
               <span>
                 {todayMonth}월 {todayDate}일
               </span>
@@ -184,7 +184,7 @@ function RecordFinish() {
                   }}
                 />
               </CloseWrapper>
-            </SignupHeader>
+            </RecordFinishHeader>
             {/* <RecordHeader /> */}
             <ContentsContainer>
               <MapContainer>
@@ -197,7 +197,7 @@ function RecordFinish() {
                   }}
                   style={{
                     width: "100%",
-                    height: "236px",
+                    height: "23.6rem",
                   }}
                   level={3} // 지도의 확대 레벨
                   zoomable={false}
@@ -295,12 +295,12 @@ const StRecordFinish = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 393px;
+  width: 39.3rem;
   height: 100vh;
-  padding-top: 127px;
-  padding-bottom: 200px;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-top: 12.7rem;
+  padding-bottom: 20rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
 
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
@@ -310,19 +310,19 @@ const StRecordFinish = styled.div`
   }
 `;
 
-const SignupHeader = styled.div`
+const RecordFinishHeader = styled.div`
   position: fixed;
   top: 0;
-  width: 393px;
-  height: 127px;
+  width: 39.3rem;
+  height: 12.7rem;
 
   display: grid;
-  grid-template-columns: 88px auto 14px;
+  grid-template-columns: 8.8rem auto 1.4rem;
 
   align-items: center;
 
-  padding-left: 20px;
-  padding-right: 25px;
+  padding-left: 2rem;
+  padding-right: 2.5rem;
 
   background-color: ${COLOR.MAIN_WHITE};
 
@@ -331,29 +331,29 @@ const SignupHeader = styled.div`
   span {
     font-style: normal;
     font-weight: 700;
-    font-size: 20px;
-    line-height: 25px;
+    font-size: 2rem;
+    line-height: 2.5rem;
     color: ${COLOR.MAIN_BLACK};
   }
 
   p {
     font-style: normal;
     font-weight: 500;
-    font-size: 14px;
-    line-height: 17px;
+    font-size: 1.4rem;
+    line-height: 1.7rem;
     color: ${COLOR.MAIN_GREEN};
   }
 
   .signupBackArrow {
-    margin-top: 50px;
-    margin-left: 20px;
+    margin-top: 5rem;
+    margin-left: 2rem;
   }
 `;
 
 const CloseWrapper = styled.div`
   .headerClose {
-    width: 27px;
-    height: 27px;
+    width: 2.7rem;
+    height: 2.7rem;
     color: ${COLOR.MAIN_BLACK};
   }
 `;
@@ -365,7 +365,7 @@ const ContentsContainer = styled.div`
 
   width: 100%;
 
-  padding-bottom: 122px;
+  padding-bottom: 12.2rem;
 
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
@@ -381,8 +381,8 @@ const MapContainer = styled.div`
   overflow: hidden;
 
   width: 100%;
-  height: 236px;
-  border-radius: 14px;
+  height: 23.6rem;
+  border-radius: 1.4rem;
 
   & > .MapWrapper {
     position: relative;
@@ -392,26 +392,26 @@ const MapContainer = styled.div`
 const DetailDataContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 2.4rem;
 
   width: 100%;
 
-  padding-top: 24px;
-  padding-bottom: 24px;
+  padding-top: 2.4rem;
+  padding-bottom: 2.4rem;
 
   span {
     font-style: normal;
     font-weight: 600;
-    font-size: 24px;
-    line-height: 30px;
+    font-size: 2.4rem;
+    line-height: 3rem;
     color: ${COLOR.MAIN_BLACK};
   }
 
   p {
     font-style: normal;
     font-weight: 500;
-    font-size: 13px;
-    line-height: 16px;
+    font-size: 1.3rem;
+    line-height: 1.6rem;
     color: ${COLOR.INPUT_BORDER_GRAY};
   }
 `;
@@ -419,7 +419,7 @@ const DetailDataContainer = styled.div`
 const TimeDataContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 0.6rem;
 `;
 const OtherDataContainer = styled.div`
   display: flex;
@@ -429,17 +429,17 @@ const OtherDataContainer = styled.div`
 const DistDataContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 0.6rem;
 `;
 const CalorieDataContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 0.6rem;
 `;
 const PhotoCountDataContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 0.6rem;
 `;
 
 const PhotoGridContainer = styled.div`
@@ -447,16 +447,16 @@ const PhotoGridContainer = styled.div`
   grid-template-columns: repeat(3, 1fr);
   width: 100%;
 
-  padding-top: 20px;
-  gap: 8px;
+  padding-top: 2rem;
+  gap: 0.8rem;
 
-  border-top: 1px solid ${COLOR.MAIN_GREEN};
+  border-top: 0.1rem solid ${COLOR.MAIN_GREEN};
 `;
 
 const PhotoWrapper = styled.div`
   img {
-    width: 109px;
-    height: 109px;
+    width: 10.9rem;
+    height: 10.9rem;
     object-fit: cover;
   }
 `;
@@ -468,19 +468,19 @@ const RecordFinishFooter = styled.div`
   justify-content: center;
   align-items: center;
   bottom: 0;
-  padding: 0px 6px 20px 20px;
-  gap: 12px;
+  padding: 0rem 0.6rem 2rem 2rem;
+  gap: 1.2rem;
 
-  width: 393px;
-  z-index: 200px;
+  width: 39.3rem;
+  z-index: 20rem;
 `;
 
 const PlogFinishBtnWrapper = styled.div`
   display: flex;
   font-style: normal;
   font-weight: 600;
-  font-size: 15px;
-  line-height: 19px;
+  font-size: 1.5rem;
+  line-height: 1.9rem;
 
   text-align: center;
   color: ${COLOR.MAIN_BLACK};
@@ -490,7 +490,7 @@ const PlogShareBtnWrapper = styled.div`
   display: flex;
   font-style: normal;
   font-weight: 600;
-  font-size: 15px;
-  line-height: 19px;
+  font-size: 1.5rem;
+  line-height: 1.9rem;
   text-align: center;
 `;

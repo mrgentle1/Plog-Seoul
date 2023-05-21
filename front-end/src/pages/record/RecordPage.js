@@ -208,7 +208,7 @@ const MapContainer = styled.div`
     overflow: hidden;
   }
   .startBtn {
-    margin-top: 28px;
+    margin-top: 2.8rem;
   }
 `;
 
@@ -216,8 +216,8 @@ const RelocateWrapper = styled.div`
   display: flex;
   position: absolute;
   overflow: hidden;
-  top: 10px;
-  right: 10px;
+  top: 1rem;
+  right: 1rem;
 
   z-index: 10;
 `;

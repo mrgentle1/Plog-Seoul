@@ -63,24 +63,6 @@ export const EditImgModal = ({ setImgOpen, data }) => {
     document.body.removeChild(link);
   };
 
-  //   const converToImg = async () => {
-  //     // html to imageFile
-  //     const paper = document.querySelector(".imgFrame");
-
-  //     const canvas = await html2canvas(paper);
-  //     const imageFile = canvas.toDataURL("image/png", 1.0);
-
-  //     return imageFile;
-  //   };
-
-  //   const ImgFilter = () => {
-  //     return (
-  //       <FilterContainer>
-  //         <Filter className="FilterImg" />
-  //       </FilterContainer>
-  //     );
-  //   };
-
   return (
     <>
       <ModalContainer>
@@ -138,7 +120,7 @@ const ModalContainer = styled.div`
   flex-direction: column;
 
   justify-content: center;
-  padding: 46px 20px 0px 20px;
+  padding: 4.6rem 2rem 0rem 2rem;
   z-index: 2000;
 
   position: absolute;
@@ -158,12 +140,12 @@ const ModalCloseWrapper = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  width: 41px;
-  height: 41px;
+  width: 4.1rem;
+  height: 4.1rem;
   .modalClose {
     display: flex;
-    width: 41px;
-    height: 41px;
+    width: 4.1rem;
+    height: 4.1rem;
     padding: 0;
   }
 `;
@@ -174,7 +156,7 @@ const ModalContents = styled.div`
   align-items: center;
   justify-content: center;
   height: 100%;
-  gap: 36px;
+  gap: 3.6rem;
 `;
 
 const SelectFilter = styled.div`
@@ -184,8 +166,8 @@ const SelectFilter = styled.div`
 const ModalImg = styled.div`
   display: flex;
   position: relative;
-  width: 353px;
-  height: 353px;
+  width: 35.3rem;
+  height: 35.3rem;
   align-items: center;
   justify-content: center;
 
@@ -196,8 +178,8 @@ const ModalImg = styled.div`
     position: absolute;
   }
   .FilterImg {
-    width: 353px;
-    height: 353px;
+    width: 35.3rem;
+    height: 35.3rem;
     display: flex;
     position: absolute;
   }
@@ -205,34 +187,34 @@ const ModalImg = styled.div`
   .LogoImg {
     display: flex;
     position: absolute;
-    top: 12px;
-    left: 16px;
-    width: 102.53px;
-    height: 21px;
+    top: 1.2rem;
+    left: 1.6rem;
+    width: 10.25rem;
+    height: 2.1rem;
   }
   .Select {
     display: flex;
     position: absolute;
-    width: 353px;
-    height: 353px;
+    width: 35.3rem;
+    height: 35.3rem;
   }
   p {
     display: flex;
     position: absolute;
-    bottom: 20px;
+    bottom: 2rem;
     font-family: "SUIT Variable";
     font-style: normal;
     font-weight: 700;
-    font-size: 17px;
-    line-height: 21px;
+    font-size: 1.7rem;
+    line-height: 2.1rem;
     text-align: center;
     color: ${COLOR.MAIN_BLACK};
 
     &.DistText {
-      left: 16px;
+      left: 1.6rem;
     }
     &.DateText {
-      right: 16px;
+      right: 1.6rem;
     }
   }
 `;
@@ -240,8 +222,8 @@ const ModalImg = styled.div`
 const SelectImg = styled.div`
   display: flex;
   position: absolute;
-  width: 353px;
-  height: 353px;
+  width: 35.3rem;
+  height: 35.3rem;
   background-position: center;
   background-size: cover;
   background-image: url(${(props) => props.image});

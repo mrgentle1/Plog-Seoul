@@ -174,13 +174,13 @@ const StRankingPage = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
-  padding: 88px 20px 0px;
+  padding: 8.8rem 2rem 0rem;
 `;
 const RankingHeader = styled.div`
   position: fixed;
   top: 0;
-  width: 393px;
-  height: 118px;
+  width: 39.3rem;
+  height: 11.8rem;
   background: ${COLOR.MAIN_WHITE};
   z-index: 100;
 
@@ -189,8 +189,8 @@ const RankingHeader = styled.div`
   justify-content: flex-start;
   align-items: center;
 
-  padding: 0px 20px;
-  gap: 24px;
+  padding: 0rem 2rem;
+  gap: 2.4rem;
 
   .noticeBackArrow {
     /* margin-top: 40px;
@@ -201,8 +201,8 @@ const HeaderText = styled.div`
   font-family: "SUIT Variable";
   font-style: normal;
   font-weight: 700;
-  font-size: 20px;
-  line-height: 25px;
+  font-size: 2rem;
+  line-height: 2.5rem;
   color: ${COLOR.MAIN_BLACK};
 `;
 const RankingContainer = styled.div`
@@ -210,7 +210,7 @@ const RankingContainer = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100%;
-  padding-top: 44px;
+  padding-top: 4.4rem;
 `;
 
 const sharedUserNameStyle = `
@@ -218,8 +218,8 @@ const sharedUserNameStyle = `
   font-family: "SUIT Variable";
   font-style: normal;
   font-weight: 600;
-  font-size: 15px;
-  line-height: 19px;
+  font-size: 1.5rem;
+  line-height: 1.9rem;
   color: ${COLOR.MAIN_BLACK};
 `;
 
@@ -228,8 +228,8 @@ const sharedTextStyle = `
   font-family: "SUIT Variable";
   font-style: normal;
   font-weight: 500;
-  font-size: 13px;
-  line-height: 16px;
+  font-size: 1.3rem;
+  line-height: 1.6rem;
   text-align: right;
 
   color: ${COLOR.DARK_GRAY};
@@ -242,7 +242,7 @@ const TopRankingContainer = styled.div`
   align-items: flex-end;
 
   width: 100%;
-  padding-bottom: 40px;
+  padding-bottom: 4rem;
 `;
 
 const TopUserData = styled.div`
@@ -251,8 +251,8 @@ const TopUserData = styled.div`
   align-items: center;
   .UserName {
     ${sharedUserNameStyle}
-    margin-top:12px;
-    margin-bottom: 4px;
+    margin-top:1.2rem;
+    margin-bottom: 0.4rem;
   }
 
   .UserDist {
@@ -264,25 +264,25 @@ const MyRankingContainer = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  width: 353px;
-  height: 79px;
-  padding: 16px 12px;
-  gap: 12px;
+  width: 35.3rem;
+  height: 7.9rem;
+  padding: 1.6rem 1.2rem;
+  gap: 1.2rem;
 
-  border: 1px solid ${COLOR.MAIN_GREEN};
-  border-radius: 14px;
+  border: 0.1rem solid ${COLOR.MAIN_GREEN};
+  border-radius: 1.4rem;
 `;
 
 const RankingData = styled.div`
   display: grid;
-  grid-template-columns: 42px 1fr 1fr;
+  grid-template-columns: 4.2rem 1fr 1fr;
   width: 100%;
   align-items: center;
   .rowItem {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 12px;
+    gap: 1.2rem;
   }
 
   .UserRanking {
@@ -290,8 +290,8 @@ const RankingData = styled.div`
     font-family: "SUIT Variable";
     font-style: normal;
     font-weight: 500;
-    font-size: 15px;
-    line-height: 19px;
+    font-size: 1.5rem;
+    line-height: 1.9rem;
 
     color: ${COLOR.INPUT_BORDER_GRAY};
   }
@@ -308,8 +308,8 @@ const RankingData = styled.div`
     font-family: "SUIT Variable";
     font-style: normal;
     font-weight: 500;
-    font-size: 13px;
-    line-height: 16px;
+    font-size: 1.3rem;
+    line-height: 1.6rem;
     text-align: center;
 
     color: ${COLOR.MAIN_GREEN};
@@ -318,8 +318,8 @@ const RankingData = styled.div`
 
 const OneselfIconWrapper = styled.div`
   display: flex;
-  width: 20px;
-  height: 26px;
+  width: 2rem;
+  height: 2.6rem;
 `;
 
 const CommentWrapper = styled.div`
@@ -330,12 +330,12 @@ const CommentWrapper = styled.div`
 const RankingList = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 12px 12px;
+  padding: 1.2rem 1.2rem;
 `;
 const OtherRankingContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 43px;
+  height: 4.3rem;
 `;

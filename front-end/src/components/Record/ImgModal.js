@@ -66,7 +66,7 @@ const ModalContainer = styled.div`
   flex-direction: column;
 
   justify-content: center;
-  padding: 46px 20px 0px 20px;
+  padding: 4.6rem 2rem 0rem 2rem;
   z-index: 2000;
 
   position: absolute;
@@ -86,12 +86,12 @@ const ModalCloseWrapper = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  width: 41px;
-  height: 41px;
+  width: 4.1rem;
+  height: 4.1rem;
   .modalClose {
     display: flex;
-    width: 41px;
-    height: 41px;
+    width: 4.1rem;
+    height: 4.1rem;
     padding: 0;
   }
 `;
@@ -102,13 +102,13 @@ const ModalContents = styled.div`
   align-items: center;
   justify-content: center;
   height: 100%;
-  gap: 36px;
+  gap: 3.6rem;
 `;
 
 const ModalImg = styled.div`
   display: flex;
-  width: 353px;
-  height: 353px;
+  width: 35.3rem;
+  height: 35.3rem;
   background-color: ${COLOR.MAIN_WHITE};
 
   img {

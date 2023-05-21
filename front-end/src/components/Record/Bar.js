@@ -102,28 +102,28 @@ const StProgressBar = styled.div`
   align-items: center;
   justify-content: center;
 
-  margin-top: 20px;
+  margin-top: 2rem;
 
   .container {
     position: relative;
-    width: 321px;
-    height: 30px;
+    width: 32.1rem;
+    height: 3rem;
     background: #fff;
-    margin: 0 15px;
-    padding: 10px 20px;
-    border-radius: 7px;
+    margin: 0rem 1.5rem;
+    padding: 1rem 2rem;
+    border-radius: 0.7rem;
   }
 
   .container .skill-box {
     width: 100%;
-    margin: 25px 0;
+    margin: 2.5rem 0;
   }
 
   .skill-box .skill-bar {
-    height: 8px;
-    width: 321px;
-    border-radius: 6px;
-    margin-top: 6px;
+    height: 0.8rem;
+    width: 32.1rem;
+    border-radius: 0.6rem;
+    margin-top: 0.6rem;
     background: ${COLOR.LIGHT_GRAY};
   }
 
@@ -132,7 +132,7 @@ const StProgressBar = styled.div`
     display: block;
     height: 100%;
     width: 100%;
-    border-radius: 6px;
+    border-radius: 0.6rem;
     background: ${COLOR.MAIN_GREEN};
 
     &.init {
@@ -168,15 +168,15 @@ const StProgressBar = styled.div`
 
   .skill-per .tooltip {
     position: absolute;
-    right: -11px;
-    top: -23px;
+    right: -1.1rem;
+    top: -2.3rem;
     font-style: normal;
     font-weight: 500;
-    font-size: 11px;
-    line-height: 14px;
+    font-size: 1.1rem;
+    line-height: 1.4rem;
     color: ${COLOR.MAIN_GREEN};
-    padding: 2px 6px;
-    border-radius: 3px;
+    padding: 0.2rem 0.6rem;
+    border-radius: 0.3rem;
     background: ${COLOR.MAIN_WHITE};
     z-index: 1;
     transition: all 1s;
@@ -186,12 +186,12 @@ const StProgressBar = styled.div`
     content: "";
     position: absolute;
     left: 50%;
-    bottom: -17px;
-    height: 16px;
-    width: 16px;
+    bottom: -1.7rem;
+    height: 1.6rem;
+    width: 1.6rem;
     z-index: -1;
     background-color: ${COLOR.MAIN_GREEN};
-    border-radius: 20px;
+    border-radius: 2rem;
     transition: all 1s;
   }
 `;
