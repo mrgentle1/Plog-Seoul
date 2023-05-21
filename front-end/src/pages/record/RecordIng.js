@@ -235,32 +235,25 @@ function RecordIngPage() {
   /* POST - Record Img */
   const [imageUrl, setImageUrl] = useState(null);
 
-    // Define the callback function
-    window.receiveImageURL = function(url) {
-        console.log("android image url is: ", url);
-        setImageUrl(url);
-    }
+  // Define the callback function
+  window.receiveImageURL = function (url) {
+    console.log("android image url is: ", url);
+    setImageUrl(url);
+  };
 
   /* POST - Record Img */
-  /*
-  const [imgData, setImgData] = useState([
-    {
-      img:""
-    },
-  ]);
+
+  const [imgData, setImgData] = useState([]);
   async function postImgData() {
     // async, await을 사용하는 경우
     try {
       // GET 요청은 params에 실어 보냄
       const response = await axios.post(
-        `${process.env.REACT_APP_API_ROOT}/api/plogging`,
+        `${process.env.REACT_APP_API_ROOT}/api/plogging/${recordUserData.recordId}/images/`,
         {
-          distance: 0,
-          startLat: startLat,
-          startLng: startLng,
-          endLat: 0,
-          endLng: 0,
-          runningTime: 0,
+          imgUrl: imgData[imgData.length - 1].img,
+          imgLat: imgData[imgData.length - 1].imgLat,
+          imgLng: imgData[imgData.length - 1].imgLng,
         },
         {
           headers: {
@@ -269,29 +262,12 @@ function RecordIngPage() {
           },
         }
       );
-
-      // 응답 결과(response)를 변수에 저장하거나.. 등 필요한 처리를 해 주면 된다.
-      const initRecord = response.data.result.map((it) => {
-        return {
-          userId: it.userId,
-          userName: it.userName,
-          recordId: it.recordId,
-          distance: it.distance,
-          startLat: it.startLat,
-          startLng: it.startLng,
-          endLat: it.endLat,
-          endLng: it.endLng,
-          runningTime: it.runningTime,
-        };
-      });
-      setRecordData(initRecord);
     } catch (e) {
       // 실패 시 처리
       console.error(e);
-      alert("기록 시작 실패. 재시도해주세요.");
+      alert("이미지 업로드 실패. 재시도해주세요.");
     }
   }
-  */
 
   const beforeRecord = useRef({ lat: startLat, lng: startLng });
   const [watchId, setWatchId] = useState(-1); // watchPosition 중지를 위함
@@ -344,6 +320,25 @@ function RecordIngPage() {
       }));
     }
     console.log("listlocation: %o", locationList);
+  };
+
+  const recordCurrentPositon = () => {
+    if (navigator.geolocation) {
+      // GeoLocation을 이용해서 접속 위치를 얻어옵니다
+      navigator.geolocation.getCurrentPosition((position) => {
+        console.log("이미지 정확도:", position.coords.accuracy);
+        return {
+          lat: position.coords.latitude, // 위도
+          lng: position.coords.longitude, // 경도
+        };
+      }, showError);
+    } else {
+      setState((prev) => ({
+        ...prev,
+        errMsg: "geolocation을 사용할수 없어요..",
+        isLoading: false,
+      }));
+    }
   };
 
   const success = (position) => {
@@ -476,6 +471,20 @@ function RecordIngPage() {
     }
   }, [time]);
 
+  useEffect(() => {
+    if (imageUrl !== null) {
+      const { lat, lng } = recordCurrentPositon();
+      const newData = { img: imageUrl, imgLat: lat, imgLng: lng };
+      setImgData([...imgData, newData]);
+    }
+  }, [imageUrl]);
+
+  useEffect(() => {
+    if (imageUrl !== null) {
+      postImgData();
+    }
+  }, [imgData]);
+
   const [modalOpen, setModalOpen] = useState(false);
   const showModal = () => {
     setModalOpen(true);
@@ -590,7 +599,7 @@ function RecordIngPage() {
           </RecordDetailTxt>
           <RecordBtnContainer>
             <RecordCamBtnWrapper>
-              <CamBtn onClick={() => window.Android?.openCamera()}/>
+              <CamBtn onClick={() => window.Android?.openCamera()} />
             </RecordCamBtnWrapper>
             {isActive ? (
               <RecordFinishBtn
@@ -624,22 +633,22 @@ const StRecordIngPage = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
-  padding-top: 127px;
-  padding-bottom: 200px;
+  padding-top: 12.7rem;
+  padding-bottom: 20rem;
 `;
 const RecordIngHeader = styled.div`
   position: fixed;
   top: 0;
-  width: 393px;
-  height: 127px;
+  width: 39.3rem;
+  height: 12.7rem;
 
   display: grid;
-  grid-template-columns: 88px auto 14px;
+  grid-template-columns: 8.8rem auto 1.4rem;
 
   align-items: center;
 
-  padding-left: 20px;
-  padding-right: 25px;
+  padding-left: 2rem;
+  padding-right: 2.5rem;
 
   background-color: ${COLOR.MAIN_WHITE};
 
@@ -648,24 +657,24 @@ const RecordIngHeader = styled.div`
   span {
     font-style: normal;
     font-weight: 700;
-    font-size: 20px;
-    line-height: 25px;
+    font-size: 2rem;
+    line-height: 2.5rem;
     color: ${COLOR.MAIN_BLACK};
   }
 
   p {
     font-style: normal;
     font-weight: 500;
-    font-size: 14px;
-    line-height: 17px;
+    font-size: 1.4rem;
+    line-height: 1.7rem;
     color: ${COLOR.MAIN_GREEN};
   }
 `;
 
 const CloseWrapper = styled.div`
   .headerClose {
-    width: 27px;
-    height: 27px;
+    width: 2.7rem;
+    height: 2.7rem;
     color: ${COLOR.MAIN_BLACK};
   }
 `;
@@ -683,7 +692,7 @@ const MapContainer = styled.div`
     overflow: hidden;
   }
   .startBtn {
-    margin-top: 28px;
+    margin-top: 2.8rem;
   }
 `;
 
@@ -691,8 +700,8 @@ const RelocateWrapper = styled.div`
   display: flex;
   position: absolute;
   overflow: hidden;
-  top: 10px;
-  right: 10px;
+  top: 1rem;
+  right: 1rem;
 
   z-index: 10;
 `;
@@ -700,8 +709,8 @@ const RelocateWrapper = styled.div`
 const RecordDetailContainer = styled.div`
   position: fixed;
   bottom: 0;
-  width: 393px;
-  height: 200px;
+  width: 39.3rem;
+  height: 20rem;
 
   display: flex;
   flex-direction: column;
@@ -709,7 +718,7 @@ const RecordDetailContainer = styled.div`
   align-items: center;
 
   z-index: 100;
-  padding-top: 10px;
+  padding-top: 1rem;
 `;
 
 const StopWatchContainer = styled.div`
@@ -721,8 +730,8 @@ const RecordDetailTxt = styled.p`
 
   font-style: normal;
   font-weight: 500;
-  font-size: 13px;
-  line-height: 16px;
+  font-size: 1.3rem;
+  line-height: 1.6rem;
 
   color: ${COLOR.DARK_GRAY};
 `;
@@ -752,17 +761,17 @@ const RecordFinishBtn = styled.div`
   align-items: center;
   padding: 0px;
 
-  width: 281px;
-  height: 60px;
+  width: 28.1rem;
+  height: 6rem;
 
   background: ${(props) => props.bgColor};
-  border-radius: 14px;
+  border-radius: 1.4rem;
 
   p {
     font-style: normal;
     font-weight: 600;
-    font-size: 15px;
-    line-height: 19px;
+    font-size: 1.5rem;
+    line-height: 1, 9rem;
     text-align: center;
 
     color: ${(props) => props.color};
