@@ -264,10 +264,14 @@ public class WebViewActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                    // ...
-                    System.out.println("사진 업로드 성공");
-                    Task<Uri> url = ref.getDownloadUrl();
-                    webView.loadUrl("javascript:receiveImageURL('" + url.toString() + "')");
+                    ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            // Here uri is the URL that can be used to download the file.
+                            String imageUrl = uri.toString();
+                            webView.loadUrl("javascript:receiveImageURL('" + imageUrl + "')");
+                        }
+                    });
                 }
             });
         }
