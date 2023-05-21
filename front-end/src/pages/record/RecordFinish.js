@@ -1,3 +1,4 @@
+/* global kakao */
 import { useEffect, useState, useRef, useMemo } from "react";
 import { Map, MapMarker, Polyline, useMap } from "react-kakao-maps-sdk";
 import { Button, BorderGreenThinButton } from "../../components/common/Button";
@@ -18,6 +19,7 @@ import { RecordHeader } from "../../components/layout/RecordHeader";
 import { RecordImgModal } from "../../components/Record/ImgModal";
 import { EditImgModal } from "./EditImg";
 import { TimeConvert } from "../../components/Record/TimeComponent";
+import { path } from "d3-path";
 
 const modalData = {
   recording: false,
@@ -36,7 +38,12 @@ function RecordFinish() {
   });
 
   const [isCourse, sestIsCourse] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+
+  const [isDataLoading, setIsDataLoading] = useState(true);
+  const [isPathLoading, setIsPathLoading] = useState(true);
+  const [isImgLoading, setIsImgLoading] = useState(true);
+  const [isImgData, setIsImgData] = useState(false);
+
   const mapRef = useRef();
 
   const [points, setPoints] = useState([
@@ -61,7 +68,7 @@ function RecordFinish() {
     try {
       // GET 요청은 params에 실어 보냄
       const response = await axios.get(
-        `${process.env.REACT_APP_API_ROOT}/api/plogging/` + userData.recordId,
+        `${process.env.REACT_APP_API_ROOT}/api/plogging/${userData.recordId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -90,14 +97,95 @@ function RecordFinish() {
     }
   }
 
-  //   const bounds = useMemo(() => {
-  //     const bounds = new kakao.maps.LatLngBounds();
+  /* GET - Record path */
 
-  //     points.forEach(point => {
-  //       bounds.extend(new kakao.maps.LatLng(point.lat, point.lng))
-  //     });
-  //     return bounds;
-  //   }, [points])
+  const [pathData, setPathData] = useState([
+    {
+      lat: 0,
+      lng: 0,
+    },
+  ]);
+
+  async function getPathData() {
+    // async, await을 사용하는 경우
+    try {
+      // GET 요청은 params에 실어 보냄
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_ROOT}/api/plogging/${userData.recordId}/paths/`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("get경로: %o", response);
+      const initPath = response.data.result.content.map((it) => {
+        return {
+          lat: it.wayLat,
+          lng: it.wayLng,
+        };
+      });
+      setPathData(initPath);
+    } catch (e) {
+      // 실패 시 처리
+      console.error(e);
+      alert("경로 get 실패. 재시도해주세요.");
+    }
+  }
+
+  /* GET - Record Img */
+
+  const [imgData, setImgData] = useState([
+    {
+      imageId: 0,
+      recordId: 0,
+      imgUrl: "",
+      imgLat: 0,
+      imgLng: 0,
+    },
+  ]);
+  async function getImgData() {
+    // async, await을 사용하는 경우
+    try {
+      // GET 요청은 params에 실어 보냄
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_ROOT}/api/plogging/${userData.recordId}/images/`,
+
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("get이미지: %o", response);
+      const initImg = response.data.result.content.map((it) => {
+        return {
+          imageId: it.imageId,
+          recordId: it.recordId,
+          imgUrl: it.imgUrl,
+          imgLat: it.imgLat,
+          imgLng: it.imgLng,
+        };
+      });
+      setImgData(initImg);
+    } catch (e) {
+      // 실패 시 처리
+      console.error(e);
+      setIsImgData(false);
+      // alert("이미지 get 실패. 재시도해주세요.");
+    }
+  }
+
+  const bounds = useMemo(() => {
+    const bounds = new kakao.maps.LatLngBounds();
+
+    pathData.forEach((point) => {
+      bounds.extend(new kakao.maps.LatLng(point.lat, point.lng));
+    });
+    return bounds;
+  }, [pathData]);
 
   // 오늘 날짜
   let now = new Date();
@@ -147,15 +235,46 @@ function RecordFinish() {
 
   useEffect(() => {
     getRecordData();
+    getPathData();
+    getImgData();
     console.log("기록가져오는 중");
   }, []);
 
   useEffect(() => {
-    console.log("기록가져옴");
+    console.log("data기록가져옴");
     console.log("rlfhr: %o", thisRecordData.runningTime);
-    setIsLoading(false);
+
+    setIsDataLoading(false);
+
     console.log("rlfhr: %o", thisRecordData);
   }, [thisRecordData]);
+
+  useEffect(() => {
+    console.log("path기록가져옴");
+
+    console.log("1.경로: %o", pathData);
+    const map = mapRef.current;
+    if (map) map.setBounds(bounds);
+    setIsPathLoading(false);
+    console.log("2.경로: %o", pathData);
+  }, [pathData]);
+
+  useEffect(() => {
+    console.log("img기록가져옴");
+    setIsImgLoading(false);
+    if (imgData[0].recordId === userData.recordId) {
+      setIsImgData(true);
+    }
+    console.log("이미지: %o", imgData);
+  }, [imgData]);
+
+  // useEffect(() => {
+  //   if (!isDataLoading & !isPathLoading) {
+  //     const map = mapRef.current;
+  //     if (map) map.setBounds(bounds);
+  //     setIsLoading(false);
+  //   }
+  // }, [thisRecordData, pathData]);
 
   return (
     <>
@@ -169,7 +288,7 @@ function RecordFinish() {
 
       {(modalOpen || imgOpen || imgEditOpen) && <ModalBackground />}
       <StRecordFinish>
-        {!isLoading && (
+        {!isDataLoading && !isPathLoading && !isImgLoading && (
           <>
             <RecordFinishHeader>
               <span>
@@ -204,27 +323,16 @@ function RecordFinish() {
                   draggable={false}
                   ref={mapRef}
                 >
-                  {dummyImg.recordImgData.map((value) => (
-                    <EventMarkerContainer
-                      key={`EventMarkerContainer-${value.recordId}-${value.imageId}`}
-                      position={{ lat: value.imgLat, lng: value.imgLng }}
-                      content={value.imgUrl}
-                    />
-                  ))}
+                  {isImgData &&
+                    imgData.map((value) => (
+                      <EventMarkerContainer
+                        key={`EventMarkerContainer-${value.recordId}-${value.imageId}`}
+                        position={{ lat: value.imgLat, lng: value.imgLng }}
+                        content={value.imgUrl}
+                      />
+                    ))}
                   <Polyline
-                    path={[
-                      { lat: 37.610265201223164, lng: 126.99707232277143 },
-                      { lat: 37.61040935336232, lng: 126.99683447827957 },
-                      { lat: 37.6106616386953, lng: 126.99716291281013 },
-                      { lat: 37.61126530538697, lng: 126.99733277671196 },
-                      { lat: 37.61154459907716, lng: 126.9968117784994 },
-                      { lat: 37.61177884519635, lng: 126.99642668902881 },
-                      { lat: 37.611959037372074, lng: 126.99624546610148 },
-                      { lat: 37.61167068496873, lng: 126.99524880576455 },
-                      { lat: 37.611391364679726, lng: 126.99492037510174 },
-                      { lat: 37.611202149030625, lng: 126.99473917550203 },
-                      { lat: 37.61098590653716, lng: 126.99462593326892 },
-                    ]}
+                    path={pathData}
                     strokeWeight={6} // 선의 두께 입니다
                     strokeColor={"#DCFA5C"} // 선의 색깔입니다
                     strokeOpacity={1} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
@@ -249,26 +357,32 @@ function RecordFinish() {
                     <p>소모한 칼로리</p>
                   </CalorieDataContainer>
                   <PhotoCountDataContainer>
-                    <span>4</span>
+                    <span>{isImgData ? imgData.length : 0}</span>
                     <p>남긴 사진</p>
                   </PhotoCountDataContainer>
                 </OtherDataContainer>
               </DetailDataContainer>
-              <PhotoGridContainer>
-                {dummyImg.recordImgData.map((img) => (
-                  <PhotoWrapper key={`${img.recordId}-${img.imageId}`}>
-                    <img
-                      src={img.imgUrl}
-                      alt="img"
-                      onClick={() => {
-                        console.log(img.imgUrl);
-                        setClickEditImg(img.imgUrl);
-                        showEditImgModal();
-                      }}
-                    ></img>
-                  </PhotoWrapper>
-                ))}
-              </PhotoGridContainer>
+              {isImgData ? (
+                <PhotoGridContainer>
+                  {dummyImg.recordImgData.map((img) => (
+                    <PhotoWrapper key={`${img.recordId}-${img.imageId}`}>
+                      <img
+                        src={img.imgUrl}
+                        alt="img"
+                        onClick={() => {
+                          console.log(img.imgUrl);
+                          setClickEditImg(img.imgUrl);
+                          showEditImgModal();
+                        }}
+                      ></img>
+                    </PhotoWrapper>
+                  ))}
+                </PhotoGridContainer>
+              ) : (
+                <NonePhotoWrapper>
+                  <p>인증 사진이 없습니다.</p>
+                </NonePhotoWrapper>
+              )}
             </ContentsContainer>
           </>
         )}
@@ -400,6 +514,7 @@ const DetailDataContainer = styled.div`
   padding-bottom: 2.4rem;
 
   span {
+    font-family: "SUIT Variable";
     font-style: normal;
     font-weight: 600;
     font-size: 2.4rem;
@@ -408,6 +523,7 @@ const DetailDataContainer = styled.div`
   }
 
   p {
+    font-family: "SUIT Variable";
     font-style: normal;
     font-weight: 500;
     font-size: 1.3rem;
@@ -461,6 +577,24 @@ const PhotoWrapper = styled.div`
   }
 `;
 
+const NonePhotoWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  height: 20rem;
+
+  p {
+    font-family: "SUIT Variable";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 1.3rem;
+    line-height: 1.6rem;
+    color: ${COLOR.INPUT_BORDER_GRAY};
+  }
+`;
 const RecordFinishFooter = styled.div`
   display: flex;
   position: fixed;

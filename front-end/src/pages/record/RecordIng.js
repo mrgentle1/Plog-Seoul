@@ -2,14 +2,14 @@
 import React, { useCallback, useEffect, useState, useRef } from "react";
 import moment from "moment";
 import { useLocation } from "react-router-dom";
-import { Map, MapMarker, Polyline } from "react-kakao-maps-sdk";
+import { Map, MapMarker, Polyline, useMap } from "react-kakao-maps-sdk";
 import { useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 import { TimeComponent } from "../../components/Record/TimeComponent";
 import current from "../../assets/icons/walk.svg";
 import trashCanImg from "../../assets/icons/trash.svg";
-import imgMarker from "../../assets/icons/imgMarker.svg";
+import PlogImg from "../../assets/icons/imgMarker.svg";
 import { ReactComponent as Close } from "../../assets/icons/close.svg";
 import { ReactComponent as RelocateBtn } from "../../assets/icons/relocateInactivate.svg";
 import { ReactComponent as RelocateAtiveBtn } from "../../assets/icons/relocateActivate.svg";
@@ -18,10 +18,9 @@ import {
   ModalBackground,
 } from "../../components/common/RecordModal";
 import { ReactComponent as CamBtn } from "../../assets/icons/camera.svg";
-import MapRecording from "../../components/Record/MapRecordingComponent3";
 
 import axios from "axios";
-import { DisabledButton } from "../../components/common/Button";
+import { RecordImgModal } from "../../components/Record/ImgModal";
 
 const { kakao } = window;
 let options = {
@@ -199,21 +198,6 @@ function RecordIngPage() {
         }
       );
 
-      // 응답 결과(response)를 변수에 저장하거나.. 등 필요한 처리를 해 주면 된다.
-      // const initRecord = response.data.result.map((it) => {
-      //   return {
-      //     userId: it.userId,
-      //     userName: it.userName,
-      //     recordId: it.recordId,
-      //     distance: it.distance,
-      //     startLat: it.startLat,
-      //     startLng: it.startLng,
-      //     endLat: it.endLat,
-      //     endLng: it.endLng,
-      //     runningTime: it.runningTime,
-      //   };
-      // });
-      // setRecordData(initRecord);
       console.log(`distance: ${distAll.current},
         endLat: ${locationList[locationList.length - 1].lat},
         endLng: ${locationList[locationList.length - 1].lng},
@@ -266,6 +250,29 @@ function RecordIngPage() {
       // 실패 시 처리
       console.error(e);
       alert("이미지 업로드 실패. 재시도해주세요.");
+    }
+  }
+
+  /* POST - Record path */
+
+  async function postPathData() {
+    // async, await을 사용하는 경우
+    try {
+      // GET 요청은 params에 실어 보냄
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_ROOT}/api/plogging/${recordUserData.recordId}/paths/`,
+        locationList,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    } catch (e) {
+      // 실패 시 처리
+      console.error(e);
+      alert("경로 업로드 실패. 재시도해주세요.");
     }
   }
 
@@ -450,6 +457,7 @@ function RecordIngPage() {
 
         setRecording(false);
         patchRecordData();
+        postPathData();
         navigate("/record/point", {
           state: {
             recordId: `${recordUserData.recordId}`,
@@ -485,9 +493,35 @@ function RecordIngPage() {
     }
   }, [imgData]);
 
+  const EventMarkerContainer = ({ position, content }) => {
+    const map = useMap();
+
+    return (
+      <MapMarker
+        position={position} // 마커를 표시할 위치
+        image={{
+          src: PlogImg, // 마커이미지의 주소입니다
+          size: {
+            width: 24,
+            height: 35,
+          }, // 마커이미지의 크기입니다
+        }}
+        onClick={() => {
+          setClickImg(content);
+          showImgModal();
+        }}
+      ></MapMarker>
+    );
+  };
+
   const [modalOpen, setModalOpen] = useState(false);
   const showModal = () => {
     setModalOpen(true);
+  };
+  const [clickImg, setClickImg] = useState("");
+  const [imgOpen, setImgOpen] = useState(false);
+  const showImgModal = () => {
+    setImgOpen(true);
   };
 
   return (
@@ -499,7 +533,8 @@ function RecordIngPage() {
           id={recordUserData.recordId}
         />
       )}
-      {modalOpen && <ModalBackground />}
+      {imgOpen && <RecordImgModal setImgOpen={setImgOpen} data={clickImg} />}
+      {(modalOpen || imgOpen) && <ModalBackground />}
       <StRecordIngPage>
         <RecordIngHeader>
           <span>
@@ -561,6 +596,13 @@ function RecordIngPage() {
                     }, // 마커이미지의 크기입니다
                   }}
                   title={position.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+                />
+              ))}
+              {imgData.map((value) => (
+                <EventMarkerContainer
+                  key={`EventMarkerContainer-${value.imageUrl}`}
+                  position={{ lat: value.imgLat, lng: value.imgLng }}
+                  content={value.imgUrl}
                 />
               ))}
               <Polyline
