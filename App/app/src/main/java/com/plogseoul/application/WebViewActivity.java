@@ -19,11 +19,19 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,6 +44,9 @@ import java.util.Map;
 public class WebViewActivity extends AppCompatActivity {
     private String TAG = WebViewActivity.class.getSimpleName();
     private long backBtnTime = 0;
+
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    JavaScriptInterface jsInterface = new JavaScriptInterface(this);
 
     private WebView webView;
 
@@ -102,7 +113,7 @@ public class WebViewActivity extends AppCompatActivity {
         webView.getSettings().setSupportMultipleWindows(true); // 멀티 윈도우 사용 여부
 
         webView.getSettings().setDomStorageEnabled(true);  // 로컬 스토리지 (localStorage) 사용여부
-        webView.addJavascriptInterface(new JavaScriptInterface(this), "Android");
+        webView.addJavascriptInterface(jsInterface, "Android");
 
 
         //웹페이지 호출
@@ -153,18 +164,25 @@ public class WebViewActivity extends AppCompatActivity {
     }
 
     public class JavaScriptInterface {
+
         private Activity activity;
         private String currentPhotoPath;
+
+        private static final int REQUEST_IMAGE_CAPTURE = 1;
+
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
 
         JavaScriptInterface(Activity activity) {
             this.activity = activity;
         }
 
         private File createImageFile() throws IOException {
+            System.out.println("createImageFile() called!");
             // Create an image file name
             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
             String imageFileName = "JPEG_" + timeStamp + "_";
-            File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+            File storageDir = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
             File image = File.createTempFile(
                     imageFileName,  /* prefix */
                     ".jpg",         /* suffix */
@@ -173,14 +191,16 @@ public class WebViewActivity extends AppCompatActivity {
 
             // Save a file: path for use with ACTION_VIEW intents
             currentPhotoPath = image.getAbsolutePath();
+            System.out.println("set currentPhotoPath = " + currentPhotoPath);
             return image;
         }
 
         @JavascriptInterface
         public void openCamera() {
+            System.out.println("openCamera clicked!");
             if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                if (takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
                     // Create the File where the photo should go
                     File photoFile = null;
                     try {
@@ -193,6 +213,8 @@ public class WebViewActivity extends AppCompatActivity {
                         Uri photoURI = FileProvider.getUriForFile(activity,
                                 "com.plogseoul.application.fileprovider",
                                 photoFile);
+
+                        System.out.println("File was successfully created!" + photoURI);
                         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                         activity.startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
                     }
@@ -202,13 +224,52 @@ public class WebViewActivity extends AppCompatActivity {
             }
         }
 
-        private void galleryAddPic() {
+        public void galleryAddPic() {
             Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
             File f = new File(currentPhotoPath);
             Uri contentUri = Uri.fromFile(f);
             mediaScanIntent.setData(contentUri);
             activity.sendBroadcast(mediaScanIntent);
+            System.out.println("저장되었습니다.");
         }
+
+        public String getCurrentPhotoPath() {
+            return currentPhotoPath;
+        }
+
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+//            jsInterface.galleryAddPic();
+            File photoFile = new File(jsInterface.getCurrentPhotoPath());
+
+            Uri photoURI = FileProvider.getUriForFile(this,
+                    "com.plogseoul.application.fileprovider",
+                    photoFile);
+
+            StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+            StorageReference ref = storageRef.child(photoFile.getName());
+
+            UploadTask uploadTask = ref.putFile(photoURI);
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle unsuccessful uploads
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                    // ...
+                    System.out.println("사진 업로드 성공");
+                    Task<Uri> url = ref.getDownloadUrl();
+                    webView.loadUrl("javascript:receiveImageURL('" + url.toString() + "')");
+                }
+            });
+        }
+    }
 }
