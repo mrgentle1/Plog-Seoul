@@ -125,7 +125,8 @@ const MyEdit = styled.div`
   position: fixed;
   display: flex;
   align-items: center;
-  width: 60px;
+  justify-content: flex-end;
+  width: 100px;
   height: 30px;
   margin-top: -60px;
   font-family: "SUIT Variable";
