@@ -76,11 +76,7 @@ function RecordFinishPage() {
       )}
       {imgOpen && <RecordImgModal setImgOpen={setImgOpen} data={clickImg} />}
       {imgEditOpen && (
-        <EditImgModal
-          setImgEditOpen={setImgEditOpen}
-          data={clickEditImg}
-          getImgUrl={getImgUrl}
-        />
+        <EditImgModal setImgEditOpen={setImgEditOpen} data={clickEditImg} />
       )}
 
       {(modalOpen || imgOpen || imgEditOpen) && <ModalBackground />}
@@ -103,6 +99,7 @@ function RecordFinishPage() {
         setModalOpen={setModalOpen}
         setImgOpen={setImgOpen}
         setImgEditOpen={setImgEditOpen}
+        getImgUrl={getImgUrl}
       />
       <StRecordFinish>
         <RecordFinishFooter>
