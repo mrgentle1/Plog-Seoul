@@ -276,8 +276,8 @@ function ShowRecordData({ recordId, setImgOpen, setImgEditOpen }) {
       const map = mapRef.current;
       if (map) {
         map.setBounds(bounds);
-        setIsLoading(false);
       }
+      setIsLoading(false);
     }
   }, [thisRecordData, pathData]);
 
