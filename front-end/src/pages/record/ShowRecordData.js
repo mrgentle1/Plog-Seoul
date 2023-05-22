@@ -285,7 +285,15 @@ function ShowRecordData({
       }
       setIsLoading(false);
     }
-  }, [thisRecordData, pathData, imgData]);
+  }, [
+    thisRecordData,
+    pathData,
+    imgData,
+    isDataLoading,
+    isPathLoading,
+    isImgLoading,
+    bounds,
+  ]);
 
   const sendImgUrl = (url) => {
     getImgUrl(url);
