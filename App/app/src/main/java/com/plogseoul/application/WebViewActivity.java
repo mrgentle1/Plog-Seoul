@@ -98,7 +98,7 @@ public class WebViewActivity extends AppCompatActivity {
                 callback.invoke(origin, true, false);
             }
         });
-
+        WebView.setWebContentsDebuggingEnabled(true);
         webView.getSettings().setLoadWithOverviewMode(true);  // WebView 화면크기에 맞추도록 설정 - setUseWideViewPort 와 같이 써야함
         webView.getSettings().setUseWideViewPort(true);  // wide viewport 설정 - setLoadWithOverviewMode 와 같이 써야함
 

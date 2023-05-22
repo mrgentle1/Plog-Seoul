@@ -326,7 +326,7 @@ function ShowRecordData({ recordId, setImgOpen, setImgEditOpen }) {
                 </TimeDataContainer>
                 <OtherDataContainer>
                   <DistDataContainer>
-                    <span>{thisRecordData.distance}</span>
+                    <span>{thisRecordData.distance.toFixed(2)}</span>
                     <p>걸은 킬로미터</p>
                   </DistDataContainer>
                   <CalorieDataContainer>
@@ -376,7 +376,7 @@ const StRecordFinish = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 39.3rem;
+  width: 100vw;
   height: 100vh;
   padding-top: 12.7rem;
   padding-bottom: 20rem;

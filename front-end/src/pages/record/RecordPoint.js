@@ -118,7 +118,7 @@ function RecordPoint() {
       const calPoint = pointData.initPoint + 250 * 1.5;
       setNowPoint(calPoint);
     } else {
-      const calPoint = pointData.initPoint + 500;
+      const calPoint = pointData.initPoint + 250;
       setNowPoint(calPoint);
     }
     console.log("여기?????");

@@ -217,11 +217,12 @@ function RecordIngPage() {
   }
 
   /* POST - Record Img */
-  const [imageUrl, setImageUrl] = useState(null);
+  const [imageUrl, setImageUrl] = useState("");
 
   // Define the callback function
   window.receiveImageURL = function (url) {
     console.log("android image url is: ", url);
+    imgUrlLoading.current = true;
     setImageUrl(url);
   };
 
@@ -282,6 +283,7 @@ function RecordIngPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
   const distAll = useRef(0);
+  const imgUrlLoading = useRef(false);
   // const [runTime, setRunTime] = useState(0);
   const [recording, setRecording] = useState(false); //기록 중
   const [isMove, setIsMove] = useState(false);
@@ -480,7 +482,7 @@ function RecordIngPage() {
   }, [time]);
 
   useEffect(() => {
-    if (imageUrl !== null) {
+    if (imgUrlLoading) {
       const { lat, lng } = recordCurrentPositon();
       const newData = { img: imageUrl, imgLat: lat, imgLng: lng };
       setImgData([...imgData, newData]);
