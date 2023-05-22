@@ -1,50 +1,142 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSetRecoilState } from "recoil";
 import { headerTitleState } from "../../core/headerTitle";
-import { HomeHeader } from "../../components/layout/Header";
 import { Footer } from "../../components/layout/Footer";
 import { ReactComponent as Flag } from "../../assets/icons/flag.svg";
 import { ReactComponent as Arrow } from "../../assets/icons/arrow.svg";
 import { ReactComponent as Footprint } from "../../assets/icons/footprint.svg";
 import { ReactComponent as Tree } from "../../assets/icons/tree.svg";
+import { ReactComponent as Level } from "../../assets/icons/level.svg";
+import { ReactComponent as Record } from "../../assets/icons/record.svg";
+import { ReactComponent as HomeButton } from "../../assets/icons/homeButton.svg";
+import { todayMonth, year } from "../../core/date.js";
 
+import axios from "axios";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
+import { Link } from "react-router-dom";
+import { userIdNumber, usePersistRecoilState } from "../../core/userId";
 
 function HomePage() {
-  const setHeaderTitle = useSetRecoilState(headerTitleState);
-
-  useEffect(() => {
-    setHeaderTitle("안녕하세요, 이름님!"); // '홈' 값을 할당합니다.
-  }, [setHeaderTitle]);
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+  const token = localStorage.getItem("key");
+  const [user, setUser] = useState("");
+  const [point, setPoint] = useState(0);
+  const [plogging, setPlogging] = useState([]);
+
+  const [userId, setUserId] = usePersistRecoilState(userIdNumber);
+  const setHeaderTitle = useSetRecoilState(headerTitleState);
+
+  // month가 한자리인지 두자리인지 판별
+  let month = 0;
+  if (todayMonth < 10) {
+    month = `0${todayMonth}`;
+  }
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_API_ROOT}/api/auth/me`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        setUser(response.data.result);
+        console.log(user);
+        setPoint(response.data.result.point);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get(
+        `${process.env.REACT_APP_API_ROOT}/api/plogging?date=${year}-${month}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        setPlogging(response.data.result.content);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  });
+
+  const headertext = "안녕하세요, " + user.nickname + "님!";
+  useEffect(() => {
+    setUserId(user.userId);
+    setHeaderTitle(headertext); // '홈' 값을 할당합니다.
+  });
+
+  const levelBarWidth = point >= 1000 ? 32.1 : (point / 1000) * 32.1;
+  let runningTime = 0;
+  let distance = 0;
+  plogging.map((data) => (runningTime += data.runningTime));
+  plogging.map((data) => (distance += data.distance));
+  distance = distance.toFixed(2);
+
   return (
     <StHomePage>
-      <div>
-        <Box1>
+      <Box1>
+        <Link to="/home/season">
           <LeftBox1>
             <Flag className="flag" />
-            <Text1>봄 추천 나들이길</Text1>
+            <Text1>계절별 추천 코스</Text1>
             <Arrow className="arrow" />
           </LeftBox1>
+        </Link>
+        <Link to="/info">
           <RightBox1>
             <Footprint className="footprint" />
-            <Text2>이번 주 평균 걸음</Text2>
-            <div></div>
+            <Text2>서울두드림길이란?</Text2>
+            <Arrow className="arrow" />
           </RightBox1>
-        </Box1>
-        <Box2></Box2>
-        <Box3>
-          <Tree className="tree" />
-        </Box3>
+        </Link>
+      </Box1>
+      <Link to="/plog/level">
+        <Box2>
+          <Level className="level" />
+          <LevelBox>
+            <Text3>Level {user.level}</Text3>
+            <Text4>다음 레벨까지 {1000 - point} 포인트</Text4>
+          </LevelBox>
+          <LevelBar />
+          <LevelBar2 width={levelBarWidth} />
+        </Box2>
+      </Link>
+      <Box3>
+        <Tree className="tree" />
+        <Text5>
+          <Ploging>{todayMonth}월 플로깅</Ploging>
+          <Time>걸은 시간</Time>
+          <Dis>걸은 거리</Dis>
+        </Text5>
+        <Text6>
+          <Ploging2>{plogging.length}번</Ploging2>
+          <Time2>{runningTime}분</Time2>
+          <Dis2>{distance}km</Dis2>
+        </Text6>
+      </Box3>
+      <Link to="/record">
         <Box4>
-          <Text4>오늘도 주워볼까요?</Text4>
+          <Record className="record" />
+          <div className="box4">
+            <Text7>오늘도 주워볼까요?</Text7>
+            <HomeButton className="homeButton" />
+          </div>
         </Box4>
-      </div>
+      </Link>
       <Footer />
     </StHomePage>
   );
@@ -59,102 +151,203 @@ const StHomePage = styled.div`
 `;
 const Box1 = styled.div`
   width: 100%;
-  height: 121px;
-  margin-bottom: 13px;
+  height: 12.1rem;
+  margin-bottom: 1.3rem;
 `;
 const LeftBox1 = styled.div`
   float: left;
-  width: 170px;
-  height: 121px;
-  border-radius: 14px;
-  background-color: ${COLOR.LIGHT_GRAY};
-  padding: 12px 16px;
+  width: 17rem;
+  height: 12.1rem;
+  border-radius: 1.4rem;
+  background-color: ${COLOR.MAIN_WHITE};
+  padding: 1.2rem 1.6rem;
 
   .flag {
-    width: 20px;
-    height: 20px;
+    width: 2.3rem;
+    height: 2.3rem;
+    margin-bottom: 1.2rem;
     color: ${COLOR.DARK_GRAY};
-    margin-bottom: 12px;
   }
   .arrow {
-    margin-top: 15px;
-    width: 25px;
-    height: 25px;
-    color: ${COLOR.DARK_GRAY};
-    margin-bottom: 10px;
+    margin-top: 1.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    color: ${COLOR.MAIN_GREEN};
+    margin-bottom: 1rem;
   }
 `;
 const Text1 = styled.div`
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 600;
-  font-size: 15px;
-  line-height: 19px;
-  color: ${COLOR.DARK_GRAY};
+  font-size: 1.5rem;
+  line-height: 1.9rem;
+  color: ${COLOR.MAIN_BLACK};
 `;
 
 const RightBox1 = styled.div`
   float: right;
-  width: 170px;
-  height: 121px;
-  border-radius: 14px;
-  border: 2px solid ${COLOR.INPUT_BORDER_GRAY};
-  border-radius: 14px;
-  padding: 12px 16px;
+  width: 17rem;
+  height: 12.1rem;
+  border-radius: 1.4rem;
+  background: ${COLOR.MAIN_WHITE};
+  border-radius: 1.4rem;
+  padding: 1.2rem 1.6rem;
 
   .footprint {
-    width: 20px;
-    height: 20px;
+    width: 2.3rem;
+    height: 2.3rem;
     color: ${COLOR.DARK_GRAY};
-    margin-bottom: 12px;
+    margin-bottom: 1.2rem;
+  }
+  .arrow {
+    margin-top: 1.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    color: ${COLOR.MAIN_GREEN};
+    margin-bottom: 1rem;
   }
 `;
 const Text2 = styled.div`
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 600;
-  font-size: 15px;
-  line-height: 19px;
+  font-size: 1.5rem;
+  line-height: 1.9rem;
+  color: ${COLOR.MAIN_BLACK};
+`;
+const Box2 = styled.div`
+  margin-bottom: 1.3rem;
+  width: 35.3rem;
+  height: 10.1rem;
+  background: ${COLOR.MAIN_WHITE};
+  border-radius: 1.4rem;
+  padding: 1.5rem 1.6rem;
+  .level {
+    width: 1.9rem;
+    height: 2rem;
+    margin-bottom: 1.2rem;
+    color: ${COLOR.DARK_GRAY};
+  }
+`;
+const LevelBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+const LevelBar = styled.div`
+  margin-top: 1.2rem;
+  width: 32.1rem;
+  height: 1rem;
+  background: ${COLOR.INPUT_GRAY};
+  border-radius: 0.5rem;
+`;
+const LevelBar2 = styled.div`
+  margin-top: -1rem;
+  width: ${(props) => props.width}rem;
+  height: 1rem;
+  background: ${COLOR.MAIN_GREEN};
+  border-radius: 0.5rem;
+  z-index: 1;
+`;
+const Text3 = styled.div`
+  font-family: "SUIT Variable";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 1.5rem;
+  line-height: 1.9rem;
+  color: ${COLOR.MAIN_GREEN};
+`;
+const Text4 = styled.div`
+  font-family: "SUIT Variable";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 1.3rem;
+  line-height: 1.6rem;
   color: ${COLOR.DARK_GRAY};
 `;
-
-const Box2 = styled.div`
-  margin-bottom: 13px;
-  width: 353px;
-  height: 101px;
-  background: ${COLOR.MAIN_LIME};
-  border-radius: 14px;
-  padding: 12px 16px;
-`;
 const Box3 = styled.div`
-  margin-bottom: 13px;
-  width: 353px;
-  height: 121px;
-  // border: 2px solid ${COLOR.MAIN_GREEN_HOVER};
-  border-radius: 14px;
-  padding: 12px 16px;
-  background-color: ${COLOR.INPUT_GRAY};
+  margin-bottom: 1.3rem;
+  width: 35.3rem;
+  height: 12.1rem;
+  border-radius: 1.4rem;
+  padding: 1.4rem 1.9rem;
+  background-color: ${COLOR.MAIN_WHITE};
 
   .tree {
-    width: 20px;
-    height: 20px;
+    width: 2.5rem;
+    height: 2.5rem;
     color: ${COLOR.DARK_GRAY};
-    margin-bottom: 15px;
+    margin-bottom: 1rem;
   }
+`;
+const Text5 = styled.div`
+  display: flex;
+  justify-content: space-between;
+  font-family: "SUIT Variable";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 1.5rem;
+  line-height: 1.9rem;
+`;
+const Ploging = styled.div`
+  width: 9.9rem;
+`;
+const Time = styled.div`
+  width: 9.9rem;
+`;
+const Dis = styled.div`
+  width: 9.9rem;
+`;
+const Text6 = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  font-family: "SUIT Variable";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 2.4rem;
+  line-height: 3rem;
+  color: ${COLOR.MAIN_GREEN};
+`;
+const Ploging2 = styled.div`
+  width: 9.9rem;
+`;
+const Time2 = styled.div`
+  width: 9.9rem;
+`;
+const Dis2 = styled.div`
+  width: 9.9rem;
 `;
 const Box4 = styled.div`
   display: flex;
-  flex-direction: column;
-  margin-bottom: 13px;
-  width: 353px;
-  height: 101px;
+  width: 35.3rem;
+  height: 10.1rem;
+  margin-bottom: 12rem;
   background: ${COLOR.MAIN_GREEN};
-  border: 2px solid ${COLOR.MAIN_GREEN_HOVER};
-  border-radius: 14px;
+  border: 0.2rem solid ${COLOR.MAIN_GREEN};
+  border-radius: 1.4rem;
+  padding: 1.35rem 1.9rem;
+  .record {
+    width: 2.7rem;
+    height: 2.7rem;
+    color: ${COLOR.MAIN_BLACK};
+    margin-bottom: 1rem;
+  }
+  .box4 {
+    margin-top: 2.4rem;
+    display: flex;
+    flex-direction: row;
+    width: 35.3rem;
+    justify-content: space-between;
+  }
 `;
-const Text4 = styled.div`
-  justify-content: flex-start;
-  margin-top: 20px;
-  margin-bottom: 15px;
-  margin-left: 20px;
+const Text7 = styled.div`
+  margin-top: 1.45rem;
+  margin-left: -2.5rem;
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 600;
-  font-size: 16px;
-  line-height: 19px;
+  font-size: 1.5rem;
+  line-height: 1.9rem;
   color: ${COLOR.MAIN_BLACK};
 `;

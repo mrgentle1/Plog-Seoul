@@ -1,15 +1,10 @@
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
-
 import { useCallback, useState } from "react";
-import { useRecoilValue } from "recoil";
-import { headerTitleState } from "../../core/headerTitle";
 import { ReactComponent as Close } from "../../assets/icons/close.svg";
 import { useNavigate } from "react-router-dom";
 
-export const HomeHeaderV3 = ({ headerBackground }) => {
-  const headerTitle = useRecoilValue(headerTitleState);
-
+export const HomeHeaderV3 = ({ headerBackground, headerTitle }) => {
   const navigate = useNavigate();
   const goBack = useCallback(() => {
     navigate(-1);
@@ -42,10 +37,12 @@ export const HomeHeaderV3 = ({ headerBackground }) => {
 const StHomeHeader = styled.div`
   position: fixed;
   top: 0;
-  width: 393px;
+  width: 100%;
   height: 127px;
   padding: 66px 0 36px 20px;
 
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 700;
   font-size: 20px;
   line-height: 15px;
@@ -65,6 +62,8 @@ const StHeaderTitle = styled.span`
   color: ${COLOR.MAIN_WHITE};
   width: 100%;
   height: 50px;
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 700;
   font-size: 20px;
   line-height: 25px;

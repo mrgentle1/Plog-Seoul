@@ -25,7 +25,7 @@ export const Modal = ({ setModalOpen }) => {
           <h3>소중한 후기 감사합니다!</h3>
           <h5>
             여러분의 소중한 후기로
-            <br />더 나은 서비스로 보답할게요
+            <br />더 나은 서비스를 보답할게요
           </h5>
         </ModalText>
         <ModalLine />
@@ -33,7 +33,7 @@ export const Modal = ({ setModalOpen }) => {
           <Link to={real_pathname}>
             <CloseButton onClick={closeModal}>닫기</CloseButton>
           </Link>
-          <Link to={real_pathname}>
+          <Link to="/plog/level">
             <CheckButton onClick={checkModal}>내 포인트 확인</CheckButton>
           </Link>
         </ModalButton>
@@ -93,6 +93,8 @@ const ModalText = styled.div`
   }
   h3 {
     margin-top: 28px;
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-weight: 700;
     font-size: 17px;
     line-height: 21px;
@@ -102,6 +104,8 @@ const ModalText = styled.div`
   h5 {
     margin-top: 12px;
     margin-bottom: 70px;
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-weight: 500;
     font-size: 15px;
     line-height: 19px;
@@ -124,6 +128,8 @@ const CloseButton = styled.button`
   background: ${COLOR.MAIN_WHITE};
   border-radius: 0px 0px 0px 14px;
   border: none;
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 500;
   font-size: 15px;
   line-height: 19px;
@@ -134,6 +140,8 @@ const CheckButton = styled.button`
   background: ${COLOR.MAIN_GREEN};
   border-radius: 0px 0px 14px 0px;
   border: none;
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 600;
   font-size: 15px;
   line-height: 19px;

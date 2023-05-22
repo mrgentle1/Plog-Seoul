@@ -1,9 +1,11 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { ReactComponent as BackArrow } from "../../assets/icons/backArrow.svg";
 import { ReactComponent as Pencil } from "../../assets/icons/pencil.svg";
 import { ReactComponent as Star } from "../../assets/icons/star.svg";
 import { ReviewCard } from "../../components/common/ReviewCard";
+
+import axios from "axios";
 
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
@@ -17,39 +19,49 @@ function ReviewPage() {
   // 경로
   const pathname = window.location.pathname;
   const real_pathname = pathname.substring(0, 9);
+  const url = pathname.substring(7);
+  const url2 = url.substring(0, url.length - "/reviews".length);
 
-  const dummydata = [
-    {
-      id: 1,
-      user: "user1",
-      date: "2023.05.02",
-      content: "어쩌구저쩌구 이것은 후기입니다",
-    },
-    {
-      id: 2,
-      user: "user12",
-      date: "2023.05.02",
-      content: "어쩌구저쩌구 이것은 후기입니다",
-    },
-    {
-      id: 3,
-      user: "user123",
-      date: "2023.05.03",
-      content: "리뷰의 예시",
-    },
-    {
-      id: 4,
-      user: "user124",
-      date: "2021.05.05",
-      content: "어쩌구저쩌구 이것은 후기입니다",
-    },
-    {
-      id: 5,
-      user: "user1235",
-      date: "2022.05.02",
-      content: "리이이이이이뷰우우우우우웅",
-    },
-  ];
+  const course_url = `${process.env.REACT_APP_API_ROOT}/api/roads` + url2;
+  const real_url = `${process.env.REACT_APP_API_ROOT}/api/roads` + url;
+
+  const token = localStorage.getItem("key");
+
+  const [course, setCourse] = useState([]);
+  const [reviews, setReviews] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(course_url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        console.log("코스", response);
+        setCourse(response.data.result);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get(real_url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        setReviews(response.data.result.content);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, [reviews]);
 
   return (
     <StReviewPage>
@@ -57,29 +69,38 @@ function ReviewPage() {
         <ReviewBox1>
           <BackArrow className="backArrow" onClick={goBack} />
           <h1>후기</h1>
-          <h4>6</h4>
+          <h4>{course.reviewCnt}</h4>
         </ReviewBox1>
         <ReviewBox2>
-          <h5>+ 500 포인트</h5>
-          <Link to={real_pathname + "/write"}>
+          <h5>+ 100 포인트</h5>
+          <Link to={real_pathname + "/review"}>
             <Pencil className="pencil" />
           </Link>
         </ReviewBox2>
       </ReviewHeader>
       <ReviewMain>
-        <ReviewStar>
-          <h5>평점</h5>
-          <Star className="star" />
-          <Star className="star" />
-          <Star className="star" />
-          <Star className="star" />
-          <Star className="star" />
-        </ReviewStar>
-        <ReviewList>
-          {dummydata.map((data) =>
-            data ? <ReviewCard key={data.id} r={data} /> : null
-          )}
-        </ReviewList>
+        {course.reviewCnt === 0 ? (
+          <div className="noReview">
+            <h5>아직 후기가 없어요</h5>
+            <h3>첫 후기를 남겨주세요!</h3>
+          </div>
+        ) : (
+          <>
+            <ReviewStar>
+              {[...Array(5)].map(
+                (_, index) =>
+                  index < course.reviewSum && (
+                    <Star key={index} className="star" />
+                  )
+              )}
+            </ReviewStar>
+            <ReviewList>
+              {reviews.map((data) => (
+                <ReviewCard key={data.reviewId} r={data} />
+              ))}
+            </ReviewList>
+          </>
+        )}
       </ReviewMain>
     </StReviewPage>
   );
@@ -98,30 +119,39 @@ const StReviewPage = styled.div`
 const ReviewHeader = styled.div`
   position: fixed;
   top: 0;
-  width: 353px;
-  height: 88px;
+  width: 100%;
+  height: 127px;
+  padding-left: 20px;
+  padding-right: 20px;
 
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+
+  background-color: ${COLOR.MAIN_WHITE};
+  z-index: 1;
 `;
 const ReviewBox1 = styled.div`
   display: flex;
 
   .backArrow {
-    margin-top: 76px;
+    margin-top: 45px;
   }
   h1 {
-    margin-top: 74px;
+    margin-top: 42px;
     margin-left: 20px;
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-weight: 700;
     font-size: 20px;
     line-height: 25px;
   }
   h4 {
-    margin-top: 76px;
+    margin-top: 44px;
     margin-left: 6px;
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-weight: 700;
     font-size: 17px;
     line-height: 21px;
@@ -132,9 +162,11 @@ const ReviewBox2 = styled.div`
   display: flex;
   justify-content: space-between;
   width: 110px;
-  margin-top: 76px;
+  margin-top: 44px;
 
   h5 {
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-weight: 500;
     font-size: 13.5px;
     line-height: 21px;
@@ -147,7 +179,31 @@ const ReviewBox2 = styled.div`
   }
 `;
 const ReviewMain = styled.div`
-  margin-top: 24px;
+  margin-top: 44px;
+  padding-bottom: 30px;
+  .noReview {
+    margin-top: 300px;
+
+    h5 {
+      font-family: "SUIT Variable";
+      font-style: normal;
+      font-weight: 700;
+      font-size: 17px;
+      line-height: 21px;
+      text-align: center;
+      color: ${COLOR.INPUT_BORDER_GRAY};
+    }
+    h3 {
+      margin-top: 12px;
+      font-family: "SUIT Variable";
+      font-style: normal;
+      font-weight: 700;
+      font-size: 17px;
+      line-height: 21px;
+      text-align: center;
+      color: ${COLOR.DARK_GRAY};
+    }
+  }
 `;
 const ReviewStar = styled.div`
   display: flex;
@@ -155,6 +211,8 @@ const ReviewStar = styled.div`
   h5 {
     margin-top: 5px;
     margin-right: 10px;
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-weight: 500;
     font-size: 15px;
     color: ${COLOR.MAIN_BLACK};

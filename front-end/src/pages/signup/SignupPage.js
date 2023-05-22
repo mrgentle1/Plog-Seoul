@@ -1,22 +1,50 @@
 import { useCallback, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ReactComponent as BackArrow } from "../../assets/icons/backArrow.svg";
 import { Button, DisabledButton } from "../../components/common/Button";
 
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
+import axios from "axios";
+import { useCookies } from "react-cookie";
 
 function SignupPage() {
   const [name, setName] = useState("");
+  const [cookies] = useCookies(["accessToken"]);
+  const token = cookies.accessToken;
 
   const navigate = useNavigate();
   const goBack = useCallback(() => {
-    navigate(-1);
+    navigate("/");
   }, [navigate]);
 
   const onChangeName = (e) => {
     setName(e.target.value);
   };
+
+  const onSubmit = useCallback(() => {
+    axios
+      .post(
+        `${process.env.REACT_APP_API_ROOT}/api/auth/registration`,
+        {
+          nickname: name,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((res) => {
+        localStorage.setItem("key", token);
+        navigate("/home");
+      })
+      .catch((err) => {
+        console.error(err);
+        // handle error
+      });
+  }, [name, navigate]);
 
   return (
     <StSignupPage>
@@ -41,9 +69,7 @@ function SignupPage() {
           {!name ? (
             <DisabledButton disabled="disabled">시작하기</DisabledButton>
           ) : (
-            <Link to={"/home"}>
-              <Button>시작하기</Button>
-            </Link>
+            <Button onClick={onSubmit}>시작하기</Button>
           )}
         </SignupButton>
       </SignupContent>
@@ -88,29 +114,35 @@ const SignupText = styled.div`
   text-align: left;
   margin: 0;
   padding: 0;
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 700;
   font-size: 20px;
   line-height: 25px;
 `;
 const SignupInput = styled.div`
-  width: 100%;
+  width: 353px;
   height: 41px;
   text-align: center;
   margin-top: 36px;
 `;
 const SignupInputBox = styled.input`
-  width: 353px;
+  width: 100%;
   height: 41px;
   background: ${COLOR.INPUT_GRAY};
   border: 1px solid ${COLOR.INPUT_BORDER_GRAY};
   border-radius: 8px;
   padding: 12px;
+  font-family: "SUIT Variable";
+  font-style: normal;
   font-weight: 500;
   font-size: 14px;
   line-height: 17px;
 
   ::placeholder {
     color: ${COLOR.INPUT_BORDER_GRAY};
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-weight: 400;
     font-size: 14px;
     line-height: 17px;

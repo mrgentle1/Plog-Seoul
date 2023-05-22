@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PathRequestDto {
-    private Float wayLat;
-    private Float wayLng;
+    private Float lat;
+    private Float lng;
 }

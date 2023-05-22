@@ -7,6 +7,11 @@
   pointer-events: none;
 }
 
+@font-face {
+  font-family: "SUITE-Regular";
+  src: url("./styles/fonts/SUITE-Variable-ttf/SUITE-Variable.ttf");
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;

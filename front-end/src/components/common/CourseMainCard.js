@@ -6,7 +6,7 @@ import { ReactComponent as Shop } from "../../assets/icons/shop.svg";
 export const CourseMainCard = ({ c }) => {
   const navigate = useNavigate();
   const handlePageChange = () => {
-    navigate(`/course/${c.courseId}`);
+    navigate(`/course/${c.routeId}`);
   };
 
   return (
@@ -16,16 +16,16 @@ export const CourseMainCard = ({ c }) => {
         <StCourseText>
           <CourseText>
             <h3>{c.title}</h3>
-            <h6>{c.coursename}</h6>
+            <h6>{c.name}</h6>
           </CourseText>
           <CourseTag>
             <Tag>
               <Shop className="shop" />
-              <p>예시</p>
+              <p>{c.category}</p>
             </Tag>
             <Tag>
               <Shop className="shop" />
-              <p>예시입니다</p>
+              <p>{c.difficulty}</p>
             </Tag>
           </CourseTag>
         </StCourseText>
@@ -65,6 +65,8 @@ const StCourseText = styled.div`
   height: 115px;
 
   h3 {
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-weight: 600;
     font-size: 15px;
     line-height: 19px;
@@ -72,6 +74,8 @@ const StCourseText = styled.div`
   }
   h6 {
     margin-top: 12px;
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-weight: 500;
     font-size: 13px;
     line-height: 16px;
@@ -108,6 +112,8 @@ const Tag = styled.div`
   }
   p {
     margin-top: 1.5px;
+    font-family: "SUIT Variable";
+    font-style: normal;
     font-weight: 500;
     font-size: 11px;
     line-height: 14px;

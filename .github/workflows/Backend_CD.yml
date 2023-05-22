@@ -20,18 +20,21 @@ jobs:
       with:
         java-version: '17'
         distribution: 'adopt'
+        
+    - name: setup Firebase service account
+      uses: jsdaniell/create-json@v1.2.2
+      with:
+        name: "serviceAccountKey.json"
+        json: ${{ secrets.FIREBASE_KEY }}
+        dir: 'back-end/plogging/src/main/resources/'
 
-    ## create application-database.yml
+    ## create application.yml
     - name: make application-stage.yml
       run: |
-        ## create application-stage.yml
         cd ./back-end/plogging/src/main/resources
-
-        # application-stage.yml 파일 생성
-        touch ./application-stage.yml
-
         # GitHub-Actions 에서 설정한 값을 application.yml 파일에 쓰기
         echo "${{ secrets.APPLICATION_STAGE }}" > ./application.yml
+        echo "${{ secrets.KEYSTORE }}" | base64 --decode > ./keystore.p12
       shell: bash
 
     ## gradle build
@@ -69,4 +72,4 @@ jobs:
           docker stop $(docker ps -a -q) 
           docker rm $(docker ps -a -q) 
           docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
-          docker run -d -p 80:8080 --name seoulplog_backend ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}
+          docker run -d -p 443:443 --name seoulplog_backend ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}

@@ -20,7 +20,7 @@ export const Layout = () => {
     location.pathname === "/my";
 
   return (
-    <StLayout>
+    <StLayout isHome={location.pathname === "/home"}>
       {isHeaderV2 ? null : <HomeHeader />}
       <Outlet />
       {isFooter ? <Footer /> : null}
@@ -32,8 +32,10 @@ const StLayout = styled.div`
   display: flex;
   justify-content: center;
   overflow-x: hidden;
-  width: 393px;
+  width: 100%;
+  height: 100%;
   padding-top: 127px;
-  padding-bottom: 100px;
   overflow-y: scroll;
+  background-color: ${({ isHome }) =>
+    isHome ? COLOR.INPUT_GRAY : "transparent"};
 `;

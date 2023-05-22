@@ -9,7 +9,7 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
 
-    width: 393px;
+    width: 100%;
     height: 100%;
     margin: 0 auto;
     font-size: 62.5%;
@@ -17,11 +17,10 @@ const GlobalStyle = createGlobalStyle`
   }
 
   @font-face {
-    font-family: 'SUIT Variable';
-    font-weight: 100 900;
-    src: local('SUIT Variable Regular'), url('./SUIT-Variable.woff2') format('woff2-variations');
+    font-family: "SUITE-Regular";
+    src: url("./styles/fonts/SUITE-Variable-ttf/SUITE-Variable.ttf");
   }
-
+ 
   * {
     box-sizing: border-box;
 	}
