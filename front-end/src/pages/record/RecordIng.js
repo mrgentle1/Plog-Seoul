@@ -232,7 +232,7 @@ function RecordIngPage() {
   const [imgData, setImgData] = useState([]);
   async function postImgData() {
     // async, await을 사용하는 경우
-    console.log("post직전 imgUrl확인:", imageUrl);
+    // console.log("post직전 imgUrl확인:", imageUrl);
     try {
       // GET 요청은 params에 실어 보냄
       const response = await axios.post(
@@ -260,6 +260,7 @@ function RecordIngPage() {
 
   async function postPathData() {
     // async, await을 사용하는 경우
+
     try {
       // GET 요청은 params에 실어 보냄
       const response = await axios.post(
@@ -460,6 +461,7 @@ function RecordIngPage() {
         setWatchId(-1);
 
         setRecording(false);
+        console.log("post직전 path확인:", locationList);
         patchRecordData();
         postPathData();
         navigate("/record/point", {
