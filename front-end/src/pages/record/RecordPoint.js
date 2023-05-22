@@ -162,7 +162,7 @@ function RecordPoint() {
   const gotoFinish = () => {
     putPointData();
     console.log("go");
-    navigate("/record/finish", {
+    navigate("/record/test", {
       state: {
         recordId: `${userData.recordId}`,
       },
@@ -203,7 +203,7 @@ function RecordPoint() {
       )}
       <RecordFinishFooter>
         <Link
-          to={"/record/finish"}
+          to={"/record/test"}
           state={{
             recordId: `${userData.recordId}`,
           }}
