@@ -27,12 +27,7 @@ const modalData = {
   btnText1: "닫기",
   btnText2: "내 포인트 확인",
 };
-function ShowRecordData({
-  recordId,
-  setImgOpen,
-  setImgEditOpen,
-  setClickEditImg,
-}) {
+function ShowRecordData({ props }) {
   const token = localStorage.getItem("key");
 
   /*point에서 현재 위치 값을 가져와 초기세팅 해줌 */
@@ -41,6 +36,9 @@ function ShowRecordData({
   //   const [userData, setUserData] = useState({
   //     recordId: recordId,
   //   });
+  const [userData, setUserData] = useState({
+    recordId: props.recordId,
+  });
 
   const [isCourse, sestIsCourse] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -73,7 +71,7 @@ function ShowRecordData({
     try {
       // GET 요청은 params에 실어 보냄
       const response = await axios.get(
-        `${process.env.REACT_APP_API_ROOT}/api/plogging/${recordId}`,
+        `${process.env.REACT_APP_API_ROOT}/api/plogging/${userData.recordId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -116,7 +114,7 @@ function ShowRecordData({
     try {
       // GET 요청은 params에 실어 보냄
       const response = await axios.get(
-        `${process.env.REACT_APP_API_ROOT}/api/plogging/${recordId}/paths/`,
+        `${process.env.REACT_APP_API_ROOT}/api/plogging/${userData.recordId}/paths/`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -155,7 +153,7 @@ function ShowRecordData({
     try {
       // GET 요청은 params에 실어 보냄
       const response = await axios.get(
-        `${process.env.REACT_APP_API_ROOT}/api/plogging/${recordId}/images/`,
+        `${process.env.REACT_APP_API_ROOT}/api/plogging/${userData.recordId}/images/`,
 
         {
           headers: {
@@ -208,13 +206,13 @@ function ShowRecordData({
   const [clickImg, setClickImg] = useState("");
 
   const showImgModal = () => {
-    setImgOpen(true);
+    props.setImgOpen(true);
   };
 
   // const [clickEditImg, setClickEditImg] = useState("");
 
   const showEditImgModal = () => {
-    setImgEditOpen(true);
+    props.setImgEditOpen(true);
   };
 
   const EventMarkerContainer = ({ position, content }) => {
@@ -265,10 +263,10 @@ function ShowRecordData({
   }, [pathData]);
 
   useEffect(() => {
-    console.log("img기록가져옴", recordId);
+    console.log("img기록가져옴", userData.recordId);
     console.log("이미지id: %o", imgData[0].recordId);
 
-    if (imgData[0].recordId == recordId) {
+    if (imgData[0].recordId == userData.recordId) {
       console.log("이미지 기록이 있다.");
       setIsImgData(true);
     }
@@ -285,6 +283,10 @@ function ShowRecordData({
       setIsLoading(false);
     }
   }, [thisRecordData, pathData]);
+
+  const sendImgUrl = (url) => {
+    props.getImgUrl(url);
+  };
 
   return (
     <>
@@ -359,7 +361,7 @@ function ShowRecordData({
                         alt="img"
                         onClick={() => {
                           console.log(img.imgUrl);
-                          setClickEditImg(img.imgUrl);
+                          sendImgUrl(img.imgUrl);
                           showEditImgModal();
                         }}
                       ></img>

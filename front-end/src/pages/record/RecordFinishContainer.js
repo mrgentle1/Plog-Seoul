@@ -65,6 +65,10 @@ function RecordFinishPage() {
     setImgEditOpen(true);
   };
 
+  const getImgUrl = (url) => {
+    setClickEditImg(url);
+  };
+
   return (
     <>
       {modalOpen && (
@@ -75,7 +79,7 @@ function RecordFinishPage() {
         <EditImgModal
           setImgEditOpen={setImgEditOpen}
           data={clickEditImg}
-          setClickEditImg={setClickEditImg}
+          getImgUrl={getImgUrl}
         />
       )}
 
