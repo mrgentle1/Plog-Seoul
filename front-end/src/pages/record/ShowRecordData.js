@@ -279,8 +279,10 @@ function ShowRecordData({
 
   useEffect(() => {
     if (!isDataLoading && !isPathLoading && !isImgLoading) {
+      console.log("loading???????");
       const map = mapRef.current;
       if (map) {
+        console.log("범위 재구성");
         map.setBounds(bounds);
       }
       setIsLoading(false);
