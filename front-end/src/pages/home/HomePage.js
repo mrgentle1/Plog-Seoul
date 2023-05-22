@@ -337,9 +337,8 @@ const Box4 = styled.div`
     margin-top: 2.4rem;
     display: flex;
     flex-direction: row;
-  }
-  .homeButton {
-    margin-left: 14.9rem;
+    width: 35.3rem;
+    justify-content: space-between;
   }
 `;
 const Text7 = styled.div`
