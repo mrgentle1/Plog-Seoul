@@ -27,15 +27,15 @@ const modalData = {
   btnText1: "닫기",
   btnText2: "내 포인트 확인",
 };
-function RecordFinish() {
+function ShowRecordData({ recordId, setImgOpen, setImgEditOpen }) {
   const token = localStorage.getItem("key");
 
   /*point에서 현재 위치 값을 가져와 초기세팅 해줌 */
-  const plogRecord = useLocation();
-  const recordId = plogRecord.state.recordId;
-  const [userData, setUserData] = useState({
-    recordId: recordId,
-  });
+  //   const plogRecord = useLocation();
+  //   const recordId = plogRecord.state.recordId;
+  //   const [userData, setUserData] = useState({
+  //     recordId: recordId,
+  //   });
 
   const [isCourse, sestIsCourse] = useState(false);
 
@@ -68,7 +68,7 @@ function RecordFinish() {
     try {
       // GET 요청은 params에 실어 보냄
       const response = await axios.get(
-        `${process.env.REACT_APP_API_ROOT}/api/plogging/${userData.recordId}`,
+        `${process.env.REACT_APP_API_ROOT}/api/plogging/${recordId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -111,7 +111,7 @@ function RecordFinish() {
     try {
       // GET 요청은 params에 실어 보냄
       const response = await axios.get(
-        `${process.env.REACT_APP_API_ROOT}/api/plogging/${userData.recordId}/paths/`,
+        `${process.env.REACT_APP_API_ROOT}/api/plogging/${recordId}/paths/`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -150,7 +150,7 @@ function RecordFinish() {
     try {
       // GET 요청은 params에 실어 보냄
       const response = await axios.get(
-        `${process.env.REACT_APP_API_ROOT}/api/plogging/${userData.recordId}/images/`,
+        `${process.env.REACT_APP_API_ROOT}/api/plogging/${recordId}/images/`,
 
         {
           headers: {
@@ -201,13 +201,13 @@ function RecordFinish() {
     navigate("/record");
   };
   const [clickImg, setClickImg] = useState("");
-  const [imgOpen, setImgOpen] = useState(false);
+
   const showImgModal = () => {
     setImgOpen(true);
   };
 
   const [clickEditImg, setClickEditImg] = useState("");
-  const [imgEditOpen, setImgEditOpen] = useState(false);
+
   const showEditImgModal = () => {
     setImgEditOpen(true);
   };
@@ -262,7 +262,7 @@ function RecordFinish() {
   useEffect(() => {
     console.log("img기록가져옴");
     setIsImgLoading(false);
-    if (imgData[0].recordId === userData.recordId) {
+    if (imgData[0].recordId === recordId) {
       setIsImgData(true);
     }
     console.log("이미지: %o", imgData);
@@ -278,32 +278,9 @@ function RecordFinish() {
 
   return (
     <>
-      {modalOpen && (
-        <RecordModal setModalOpen={setModalOpen} data={modalData} />
-      )}
-      {imgOpen && <RecordImgModal setImgOpen={setImgOpen} data={clickImg} />}
-      {imgEditOpen && (
-        <EditImgModal setImgOpen={setImgEditOpen} data={clickEditImg} />
-      )}
-
-      {(modalOpen || imgOpen || imgEditOpen) && <ModalBackground />}
       <StRecordFinish>
         {!isDataLoading && !isPathLoading && !isImgLoading && (
           <>
-            <RecordFinishHeader>
-              <span>
-                {todayMonth}월 {todayDate}일
-              </span>
-              <p>개운산 숲 나들길</p>
-              <CloseWrapper>
-                <Close
-                  className="headerClose"
-                  onClick={() => {
-                    isCourse ? showModal() : finish();
-                  }}
-                />
-              </CloseWrapper>
-            </RecordFinishHeader>
             {/* <RecordHeader /> */}
             <ContentsContainer>
               <MapContainer>
@@ -387,23 +364,13 @@ function RecordFinish() {
           </>
         )}
 
-        <RecordFinishFooter>
-          <Button
-            onClick={() => {
-              isCourse ? showModal() : finish();
-            }}
-          >
-            플로깅 종료하기
-          </Button>
-          <BorderGreenThinButton>공유하기</BorderGreenThinButton>
-        </RecordFinishFooter>
         {/* <RecordFinishFooter setData={setModalOpen} data={modalData} /> */}
       </StRecordFinish>
     </>
   );
 }
 
-export default RecordFinish;
+export default ShowRecordData;
 
 const StRecordFinish = styled.div`
   display: flex;
@@ -590,37 +557,4 @@ const NonePhotoWrapper = styled.div`
     line-height: 1.6rem;
     color: ${COLOR.INPUT_BORDER_GRAY};
   }
-`;
-const RecordFinishFooter = styled.div`
-  display: flex;
-  position: fixed;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  bottom: 0;
-  padding: 0rem 0.6rem 2rem 2rem;
-  gap: 1.2rem;
-
-  width: 39.3rem;
-  z-index: 20rem;
-`;
-
-const PlogFinishBtnWrapper = styled.div`
-  display: flex;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 1.5rem;
-  line-height: 1.9rem;
-
-  text-align: center;
-  color: ${COLOR.MAIN_BLACK};
-`;
-
-const PlogShareBtnWrapper = styled.div`
-  display: flex;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 1.5rem;
-  line-height: 1.9rem;
-  text-align: center;
 `;

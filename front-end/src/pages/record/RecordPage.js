@@ -80,10 +80,12 @@ function RecordPage() {
     }
     //지도 중심좌표 이동
     const map = mapRef.current;
-    if (map)
+    if (map) {
       map.setCenter(
         new kakao.maps.LatLng(state.center.lat - 0.0008, state.center.lng)
       );
+      map.setLevel(3);
+    }
   };
 
   // 오늘 날짜
@@ -125,6 +127,7 @@ function RecordPage() {
           level={3} // 지도 확대 레벨
           isPanto={true}
           onCenterChanged={() => setIsMove(true)}
+          onZoomChanged={() => setIsMove(true)}
           ref={mapRef}
         >
           {!state.isLoading && (
@@ -190,11 +193,18 @@ const StRecordPage = styled.div`
   align-items: center;
   width: 100vw;
   height: 100vh;
+
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+
+  ::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+  }
 `;
 
 const MapContainer = styled.div`
   display: flex;
-  position: relative;
+  position: fixed;
   overflow: hidden;
 
   width: 100%;
@@ -205,7 +215,7 @@ const MapContainer = styled.div`
     overflow: hidden;
   }
   .startBtn {
-    margin-top: 28px;
+    margin-top: 2.8rem;
   }
 `;
 
@@ -213,8 +223,8 @@ const RelocateWrapper = styled.div`
   display: flex;
   position: absolute;
   overflow: hidden;
-  top: 10px;
-  right: 10px;
+  top: 1rem;
+  right: 1rem;
 
   z-index: 10;
 `;
