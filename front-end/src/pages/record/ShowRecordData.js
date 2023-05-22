@@ -160,7 +160,7 @@ function ShowRecordData({ recordId, setImgOpen, setImgEditOpen }) {
         }
       );
       console.log("get이미지: %o", response);
-      const initImg = response.data.result.content.map((it) => {
+      const initImg = response.data.result.map((it) => {
         return {
           imageId: it.imageId,
           recordId: it.recordId,
