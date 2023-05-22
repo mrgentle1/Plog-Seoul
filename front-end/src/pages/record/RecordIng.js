@@ -223,6 +223,7 @@ function RecordIngPage() {
   window.receiveImageURL = function (url) {
     console.log("android image url is: ", url);
     imgUrlLoading.current = true;
+    console.log("이미지 url받아왔다");
     setImageUrl(url);
   };
 
@@ -493,6 +494,7 @@ function RecordIngPage() {
     console.log("imageUrl 변화 생김");
     if (imgUrlLoading.current) {
       console.log("imageUrl 값 변경됨");
+      console.log("변경된 이미지: ", imageUrl);
       postImgData();
     }
   }, [imageUrl]);
