@@ -263,7 +263,7 @@ function ShowRecordData({ recordId, setImgOpen, setImgEditOpen }) {
     console.log("img기록가져옴", recordId);
     console.log("이미지id: %o", imgData[0].recordId);
 
-    if (imgData[0].recordId === recordId) {
+    if (imgData[0].recordId == recordId) {
       console.log("이미지 기록이 있다.");
       setIsImgData(true);
     }
