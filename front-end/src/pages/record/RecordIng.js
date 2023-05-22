@@ -490,7 +490,9 @@ function RecordIngPage() {
   // }, [imageUrl]);
 
   useEffect(() => {
-    if (imgUrlLoading) {
+    console.log("imageUrl에 변화가 생김");
+    if (imgUrlLoading.current) {
+      console.log("imageUrl값이 들어있음");
       postImgData();
     }
   }, [imageUrl]);
