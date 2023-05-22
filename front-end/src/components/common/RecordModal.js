@@ -42,6 +42,7 @@ export const RecordModal = ({ setModalOpen, data, id }) => {
   const closeModal = () => {
     console.log("close");
     setModalOpen(false);
+    navigate("/record");
   };
   const gotoModal = () => {
     console.log("goto");
@@ -98,7 +99,7 @@ export const RecordModal = ({ setModalOpen, data, id }) => {
 
           <CheckButton
             onClick={() => {
-              data.isrecording ? closeModal() : gotoModal();
+              data.recording ? closeModal() : gotoModal();
             }}
           >
             {data.btnText2}
