@@ -27,7 +27,13 @@ const modalData = {
   btnText1: "닫기",
   btnText2: "내 포인트 확인",
 };
-function ShowRecordData({ props }) {
+function ShowRecordData({
+  recordId,
+  setImgOpen,
+  setImgEditOpen,
+  setClickEditImg,
+  getImgUrl,
+}) {
   const token = localStorage.getItem("key");
 
   /*point에서 현재 위치 값을 가져와 초기세팅 해줌 */
@@ -36,9 +42,6 @@ function ShowRecordData({ props }) {
   //   const [userData, setUserData] = useState({
   //     recordId: recordId,
   //   });
-  const [userData, setUserData] = useState({
-    recordId: props.recordId,
-  });
 
   const [isCourse, sestIsCourse] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -71,7 +74,7 @@ function ShowRecordData({ props }) {
     try {
       // GET 요청은 params에 실어 보냄
       const response = await axios.get(
-        `${process.env.REACT_APP_API_ROOT}/api/plogging/${userData.recordId}`,
+        `${process.env.REACT_APP_API_ROOT}/api/plogging/${recordId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -114,7 +117,7 @@ function ShowRecordData({ props }) {
     try {
       // GET 요청은 params에 실어 보냄
       const response = await axios.get(
-        `${process.env.REACT_APP_API_ROOT}/api/plogging/${userData.recordId}/paths/`,
+        `${process.env.REACT_APP_API_ROOT}/api/plogging/${recordId}/paths/`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -153,7 +156,7 @@ function ShowRecordData({ props }) {
     try {
       // GET 요청은 params에 실어 보냄
       const response = await axios.get(
-        `${process.env.REACT_APP_API_ROOT}/api/plogging/${userData.recordId}/images/`,
+        `${process.env.REACT_APP_API_ROOT}/api/plogging/${recordId}/images/`,
 
         {
           headers: {
@@ -206,13 +209,13 @@ function ShowRecordData({ props }) {
   const [clickImg, setClickImg] = useState("");
 
   const showImgModal = () => {
-    props.setImgOpen(true);
+    setImgOpen(true);
   };
 
   // const [clickEditImg, setClickEditImg] = useState("");
 
   const showEditImgModal = () => {
-    props.setImgEditOpen(true);
+    setImgEditOpen(true);
   };
 
   const EventMarkerContainer = ({ position, content }) => {
@@ -263,10 +266,10 @@ function ShowRecordData({ props }) {
   }, [pathData]);
 
   useEffect(() => {
-    console.log("img기록가져옴", userData.recordId);
+    console.log("img기록가져옴", recordId);
     console.log("이미지id: %o", imgData[0].recordId);
 
-    if (imgData[0].recordId == userData.recordId) {
+    if (imgData[0].recordId == recordId) {
       console.log("이미지 기록이 있다.");
       setIsImgData(true);
     }
@@ -285,7 +288,7 @@ function ShowRecordData({ props }) {
   }, [thisRecordData, pathData]);
 
   const sendImgUrl = (url) => {
-    props.getImgUrl(url);
+    getImgUrl(url);
   };
 
   return (
