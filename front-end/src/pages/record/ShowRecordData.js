@@ -191,7 +191,7 @@ function ShowRecordData({
       bounds.extend(new kakao.maps.LatLng(point.lat, point.lng));
     });
     return bounds;
-  }, [isLoading]);
+  }, [isPathLoading]);
 
   // 오늘 날짜
   let now = new Date();
@@ -278,14 +278,14 @@ function ShowRecordData({
   }, [imgData]);
 
   useEffect(() => {
-    if (!isDataLoading && !isPathLoading) {
+    if (!isDataLoading && !isPathLoading && !isImgLoading) {
       const map = mapRef.current;
       if (map) {
         map.setBounds(bounds);
       }
       setIsLoading(false);
     }
-  }, [thisRecordData, pathData]);
+  }, [thisRecordData, pathData, imgData]);
 
   const sendImgUrl = (url) => {
     getImgUrl(url);
