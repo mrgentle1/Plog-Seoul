@@ -72,7 +72,11 @@ function RecordFinishPage() {
       )}
       {imgOpen && <RecordImgModal setImgOpen={setImgOpen} data={clickImg} />}
       {imgEditOpen && (
-        <EditImgModal setImgEditOpen={setImgEditOpen} data={clickEditImg} />
+        <EditImgModal
+          setImgEditOpen={setImgEditOpen}
+          data={clickEditImg}
+          setClickEditImg={setClickEditImg}
+        />
       )}
 
       {(modalOpen || imgOpen || imgEditOpen) && <ModalBackground />}
@@ -312,7 +316,7 @@ const RecordFinishFooter = styled.div`
   gap: 1.2rem;
 
   width: 39.3rem;
-  z-index: 20rem;
+  z-index: 2000;
 `;
 
 const PlogFinishBtnWrapper = styled.div`

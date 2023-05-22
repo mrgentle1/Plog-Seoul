@@ -27,7 +27,12 @@ const modalData = {
   btnText1: "닫기",
   btnText2: "내 포인트 확인",
 };
-function ShowRecordData({ recordId, setImgOpen, setImgEditOpen }) {
+function ShowRecordData({
+  recordId,
+  setImgOpen,
+  setImgEditOpen,
+  setClickEditImg,
+}) {
   const token = localStorage.getItem("key");
 
   /*point에서 현재 위치 값을 가져와 초기세팅 해줌 */
@@ -206,7 +211,7 @@ function ShowRecordData({ recordId, setImgOpen, setImgEditOpen }) {
     setImgOpen(true);
   };
 
-  const [clickEditImg, setClickEditImg] = useState("");
+  // const [clickEditImg, setClickEditImg] = useState("");
 
   const showEditImgModal = () => {
     setImgEditOpen(true);

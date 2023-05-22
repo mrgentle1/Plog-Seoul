@@ -121,7 +121,7 @@ const ModalContainer = styled.div`
 
   justify-content: center;
   padding: 4.6rem 2rem 0rem 2rem;
-  z-index: 2000;
+  z-index: 20000;
 
   position: absolute;
 
