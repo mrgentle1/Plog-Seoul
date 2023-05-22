@@ -238,7 +238,7 @@ function RecordIngPage() {
       const response = await axios.post(
         `${process.env.REACT_APP_API_ROOT}/api/plogging/${recordUserData.recordId}/images/`,
         {
-          imgUrl: imageUrl,
+          imageUrl: imageUrl,
           imgLat: locationList[locationList.length - 1].lat,
           imgLng: locationList[locationList.length - 1].lng,
         },
