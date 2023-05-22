@@ -236,9 +236,9 @@ function RecordIngPage() {
       const response = await axios.post(
         `${process.env.REACT_APP_API_ROOT}/api/plogging/${recordUserData.recordId}/images/`,
         {
-          imgUrl: imgData[imgData.length - 1].img,
-          imgLat: imgData[imgData.length - 1].imgLat,
-          imgLng: imgData[imgData.length - 1].imgLng,
+          imgUrl: imageUrl,
+          imgLat: locationList[locationList.length - 1].lat,
+          imgLng: locationList[locationList.length - 1].lng,
         },
         {
           headers: {
@@ -481,19 +481,19 @@ function RecordIngPage() {
     }
   }, [time]);
 
-  useEffect(() => {
-    if (imgUrlLoading) {
-      const { lat, lng } = recordCurrentPositon();
-      const newData = { img: imageUrl, imgLat: lat, imgLng: lng };
-      setImgData([...imgData, newData]);
-    }
-  }, [imageUrl]);
+  // useEffect(() => {
+  //   if (imgUrlLoading) {
+  //     const { lat, lng } = recordCurrentPositon();
+  //     const newData = { img: imageUrl, imgLat: lat, imgLng: lng };
+  //     setImgData([...imgData, newData]);
+  //   }
+  // }, [imageUrl]);
 
   useEffect(() => {
-    if (imageUrl !== null) {
+    if (imgUrlLoading) {
       postImgData();
     }
-  }, [imgData]);
+  }, [imageUrl]);
 
   const EventMarkerContainer = ({ position, content }) => {
     const map = useMap();
