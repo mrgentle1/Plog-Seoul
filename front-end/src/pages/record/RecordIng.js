@@ -233,15 +233,16 @@ function RecordIngPage() {
   async function postImgData() {
     // async, await을 사용하는 경우
     console.log("post직전 imgUrl확인:", imageUrl);
+    const sendImgData = {
+      imageUrl: imageUrl,
+      imgLat: locationList[locationList.length - 1].lat,
+      imgLng: locationList[locationList.length - 1].lng,
+    };
     try {
       // GET 요청은 params에 실어 보냄
       const response = await axios.post(
         `${process.env.REACT_APP_API_ROOT}/api/plogging/${recordUserData.recordId}/images/`,
-        {
-          imageUrl: imageUrl,
-          imgLat: locationList[locationList.length - 1].lat,
-          imgLng: locationList[locationList.length - 1].lng,
-        },
+        sendImgData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -249,6 +250,8 @@ function RecordIngPage() {
           },
         }
       );
+
+      setImgData([...imgData, sendImgData]);
     } catch (e) {
       // 실패 시 처리
       console.error(e);

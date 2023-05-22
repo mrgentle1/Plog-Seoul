@@ -274,8 +274,10 @@ function ShowRecordData({ recordId, setImgOpen, setImgEditOpen }) {
   useEffect(() => {
     if (!isDataLoading && !isPathLoading) {
       const map = mapRef.current;
-      if (map) map.setBounds(bounds);
-      setIsLoading(false);
+      if (map) {
+        map.setBounds(bounds);
+        setIsLoading(false);
+      }
     }
   }, [thisRecordData, pathData]);
 
