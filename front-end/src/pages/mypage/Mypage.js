@@ -73,33 +73,32 @@ function MyPage() {
           <MyEmail>{user.email}</MyEmail>
         </StMyInfo>
         <StMyContent>
-          <MyBox1>
-            <MyText>내 포인트</MyText>
-            <Link to="/plog/level">
+          <Link to="/plog/level">
+            <MyBox1>
+              <MyText>내 포인트</MyText>
               <ForwardArrow className="forwardArrow" />
-            </Link>
-          </MyBox1>
-          <MyBox2>
-            <MyText>공지사항</MyText>
-            <Link to="/my/notice">
+            </MyBox1>
+          </Link>
+          <Link to="/my/notice">
+            <MyBox2>
+              <MyText>공지사항</MyText>
               <ForwardArrow className="forwardArrow" />
-            </Link>
-          </MyBox2>
-          <MyBox3>
+            </MyBox2>
+          </Link>
+          <MyBox3
+            onClick={() => {
+              window.open(form_url, "_blank");
+            }}
+          >
             <MyText>문의하기</MyText>
-            <ForwardArrow
-              className="forwardArrow"
-              onClick={() => {
-                window.open(form_url, "_blank");
-              }}
-            />
+            <ForwardArrow className="forwardArrow" />
           </MyBox3>
-          <MyBox4>
-            <MyText>서울 두드림길 안내</MyText>
-            <Link to="/info">
+          <Link to="/info">
+            <MyBox4>
+              <MyText>서울 두드림길 안내</MyText>
               <ForwardArrow className="forwardArrow" />
-            </Link>
-          </MyBox4>
+            </MyBox4>
+          </Link>
           <MyBox5 onClick={showModal2}>로그아웃</MyBox5>
         </StMyContent>
         <Footer />
@@ -126,7 +125,8 @@ const MyEdit = styled.div`
   position: fixed;
   display: flex;
   align-items: center;
-  width: 60px;
+  justify-content: flex-end;
+  width: 100px;
   height: 30px;
   margin-top: -60px;
   font-family: "SUIT Variable";
