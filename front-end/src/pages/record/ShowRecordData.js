@@ -191,7 +191,7 @@ function ShowRecordData({
       bounds.extend(new kakao.maps.LatLng(point.lat, point.lng));
     });
     return bounds;
-  }, [pathData]);
+  }, [isLoading]);
 
   // 오늘 날짜
   let now = new Date();
