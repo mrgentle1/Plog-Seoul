@@ -38,7 +38,7 @@ function ShowRecordData({ recordId, setImgOpen, setImgEditOpen }) {
   //   });
 
   const [isCourse, sestIsCourse] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(true);
   const [isDataLoading, setIsDataLoading] = useState(true);
   const [isPathLoading, setIsPathLoading] = useState(true);
   const [isImgLoading, setIsImgLoading] = useState(true);
@@ -253,8 +253,8 @@ function ShowRecordData({ recordId, setImgOpen, setImgEditOpen }) {
     console.log("path기록가져옴");
 
     console.log("1.경로: %o", pathData);
-    const map = mapRef.current;
-    if (map) map.setBounds(bounds);
+    // const map = mapRef.current;
+    // if (map) map.setBounds(bounds);
     setIsPathLoading(false);
     console.log("2.경로: %o", pathData);
   }, [pathData]);
@@ -271,18 +271,19 @@ function ShowRecordData({ recordId, setImgOpen, setImgEditOpen }) {
     console.log("이미지: %o", imgData);
   }, [imgData]);
 
-  // useEffect(() => {
-  //   if (!isDataLoading & !isPathLoading) {
-  //     const map = mapRef.current;
-  //     if (map) map.setBounds(bounds);
-  //     setIsLoading(false);
-  //   }
-  // }, [thisRecordData, pathData]);
+  useEffect(() => {
+    if (!isDataLoading && !isPathLoading) {
+      const map = mapRef.current;
+      if (map) map.setBounds(bounds);
+      setIsLoading(false);
+    }
+  }, [thisRecordData, pathData]);
 
   return (
     <>
       <StRecordFinish>
-        {!isDataLoading && !isPathLoading && !isImgLoading && (
+        {/* {!isDataLoading && !isPathLoading && !isImgLoading && ( */}
+        {!isLoading && (
           <>
             {/* <RecordHeader /> */}
             <ContentsContainer>
@@ -344,7 +345,7 @@ function ShowRecordData({ recordId, setImgOpen, setImgEditOpen }) {
               </DetailDataContainer>
               {isImgData ? (
                 <PhotoGridContainer>
-                  {dummyImg.recordImgData.map((img) => (
+                  {imgData.map((img) => (
                     <PhotoWrapper key={`${img.recordId}-${img.imageId}`}>
                       <img
                         src={img.imgUrl}
