@@ -261,10 +261,12 @@ function ShowRecordData({ recordId, setImgOpen, setImgEditOpen }) {
 
   useEffect(() => {
     console.log("img기록가져옴");
-    setIsImgLoading(false);
+
     if (imgData[0].recordId === recordId) {
+      console.log("이미지 기록이 있다.");
       setIsImgData(true);
     }
+    setIsImgLoading(false);
     console.log("이미지: %o", imgData);
   }, [imgData]);
 
