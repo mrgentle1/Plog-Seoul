@@ -115,8 +115,8 @@ export const ModalBackground = styled.div`
 
   /* 우선은 393px로 하는데 추후에 100%로 바꿔야 할 듯 */
 
-  width: 400px;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
 
   background: rgba(190, 194, 198, 0.9);
   display: flex;
@@ -129,12 +129,12 @@ const ModalContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 76px 0px 0px;
+  padding: 7.6rem 0rem 0rem;
   z-index: 2000;
 
   position: absolute;
-  width: 300px;
-  height: 324px;
+  width: 30rem;
+  height: 32.4rem;
 
   position: fixed;
   top: 50%;
@@ -142,7 +142,7 @@ const ModalContainer = styled.div`
   transform: translate(-50%, -50%);
 
   background: ${COLOR.MAIN_WHITE};
-  border-radius: 14px;
+  border-radius: 1.4rem;
 `;
 
 const ModalContents = styled.div`
@@ -153,11 +153,11 @@ const ModalContents = styled.div`
   width: 100%;
   height: 100%;
 
-  gap: 15px;
+  gap: 1.5rem;
 
   .modalIcon {
-    width: 36px;
-    height: 36px;
+    width: 3.6rem;
+    height: 3.6rem;
   }
 `;
 const ModalText = styled.div`
@@ -165,35 +165,35 @@ const ModalText = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 0px;
+  padding: 0rem;
 
   width: 100%;
   height: 100%;
 
-  gap: 12px;
+  gap: 1.2rem;
 
   h3 {
     /* font-family: "SUIT Variable"; */
     font-style: normal;
     font-weight: 700;
-    font-size: 17px;
-    line-height: 21px;
+    font-size: 1.7rem;
+    line-height: 2.1rem;
     text-align: center;
 
     color: ${COLOR.MAIN_BLACK};
   }
   h5 {
-    margin-bottom: 70px;
+    margin-bottom: 7rem;
     font-weight: 500;
-    font-size: 15px;
-    line-height: 19px;
+    font-size: 1.5rem;
+    line-height: 1.9rem;
     text-align: center;
     color: ${COLOR.INPUT_BORDER_GRAY};
   }
 `;
 const ModalLine = styled.div`
-  width: 300px;
-  border: 0.25px solid ${COLOR.MAIN_GREEN_HOVER};
+  width: 30rem;
+  border: 0.025rem solid ${COLOR.MAIN_GREEN_HOVER};
 `;
 const ModalButton = styled.div`
   display: flex;
@@ -201,23 +201,23 @@ const ModalButton = styled.div`
   justify-content: flex-end;
 `;
 const CloseButton = styled.button`
-  width: 150px;
-  height: 48px;
+  width: 15rem;
+  height: 4.8rem;
   color: ${COLOR.MAIN_GREEN};
   background: ${COLOR.MAIN_WHITE};
-  border-radius: 0px 0px 0px 14px;
+  border-radius: 0rem 0rem 0rem 1.4rem;
   border: none;
   font-weight: 500;
-  font-size: 15px;
-  line-height: 19px;
+  font-size: 1.5rem;
+  line-height: 1.9rem;
 `;
 const CheckButton = styled.button`
-  width: 150px;
-  height: 48px;
+  width: 15rem;
+  height: 4.8rem;
   background: ${COLOR.MAIN_GREEN};
-  border-radius: 0px 0px 14px 0px;
+  border-radius: 0rem 0rem 1.4rem 0rem;
   border: none;
   font-weight: 600;
-  font-size: 15px;
-  line-height: 19px;
+  font-size: 1.5rem;
+  line-height: 1.9rem;
 `;

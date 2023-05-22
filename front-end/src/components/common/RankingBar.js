@@ -65,17 +65,17 @@ const StRankingBarGraph = styled.div`
 `;
 
 const RankingIcon = styled.div`
-  width: 19.73px;
-  height: 26.67px;
+  width: 1.97rem;
+  height: 2.67rem;
   opacity: ${(props) => props.visible};
   transition: opacity 1.5s ease-in;
 `;
 
 const Bar = styled.div`
-  width: 48px;
+  width: 4.8rem;
   height: ${(props) => props.height}px;
   background: ${(props) => props.bgColor};
-  border-radius: 14px 14px 0px 0px;
+  border-radius: 1.4rem 1.4rem 0rem 0rem;
   transition: height 1.3s ease;
 
   position: relative;
@@ -83,7 +83,7 @@ const Bar = styled.div`
 
 const Number = styled.span`
   position: absolute;
-  top: 20px;
+  top: 2rem;
   left: 50%;
   transform: translateX(-50%);
   font-weight: bold;
@@ -92,14 +92,14 @@ const Number = styled.span`
   font-family: "SUIT Variable";
   font-style: normal;
   font-weight: 700;
-  font-size: 20px;
-  line-height: 25px;
+  font-size: 2rem;
+  line-height: 2.5rem;
   color: ${(props) => props.color};
 `;
 
 const BarWrapper = styled.div`
-  width: 48px;
-  height: 186px;
+  width: 4.8rem;
+  height: 18.6rem;
   display: flex;
   align-items: flex-end;
 `;

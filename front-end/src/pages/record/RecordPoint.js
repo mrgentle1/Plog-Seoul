@@ -80,7 +80,9 @@ function RecordPoint() {
 
   /* PUT - 포인트 및 레벨 정보 */
   async function putPointData() {
-    const real_url = `${process.env.REACT_APP_API_ROOT}/api/users/${userData.userId}/point?newPoint=${nowPoint}&title=서울둘레길-3코스&type=플로깅`;
+    const real_url = `${process.env.REACT_APP_API_ROOT}/api/users/${
+      userData.userId
+    }/point?newPoint=${250}&title=서울둘레길-3코스&type=플로깅`;
     // async, await을 사용하는 경우
     try {
       // GET 요청은 params에 실어 보냄
@@ -174,7 +176,10 @@ function RecordPoint() {
       </ShowPointHeader>
       {!isLoading && (
         <ShowPointContainer>
-          <Fire />
+          <ImgWrapper>
+            <Fire />
+          </ImgWrapper>
+
           <CurrentLevelWrapper>
             Level{" "}
             {isLevelUp.current ? pointData.initLevel + 1 : pointData.initLevel}
@@ -227,26 +232,26 @@ const StShowPointPage = styled.div`
   justify-content: center;
   width: 100vw;
   height: 100vh;
-  max-width: 393px;
-  padding-top: 127px;
-  padding-bottom: 200px;
-  padding-left: 20px;
-  padding-right: 20px;
+  max-width: 39.3rem;
+  padding-top: 12.7rem;
+  padding-bottom: 20rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
 `;
 
 const ShowPointHeader = styled.div`
   position: fixed;
   top: 0;
-  width: 393px;
-  height: 127px;
+  width: 39.3rem;
+  height: 12.7rem;
 
   display: grid;
-  grid-template-columns: 88px auto 14px;
+  grid-template-columns: 8.8rem auto 1.4rem;
 
   align-items: center;
 
-  padding-left: 20px;
-  padding-right: 25px;
+  padding-left: 2rem;
+  padding-right: 2.5rem;
 
   background-color: ${COLOR.MAIN_WHITE};
 
@@ -255,8 +260,8 @@ const ShowPointHeader = styled.div`
   span {
     font-style: normal;
     font-weight: 700;
-    font-size: 20px;
-    line-height: 25px;
+    font-size: 2rem;
+    line-height: 2.5rem;
     color: ${COLOR.MAIN_BLACK};
     white-space: nowrap;
   }
@@ -267,15 +272,21 @@ const ShowPointContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 24px;
+  gap: 2.4rem;
+`;
+
+const ImgWrapper = styled.div`
+  display: flex;
+  width: 5.4rem;
+  height: 7.2rem;
 `;
 
 const CurrentLevelWrapper = styled.p`
   display: flex;
   font-style: normal;
   font-weight: 700;
-  font-size: 17px;
-  line-height: 21px;
+  font-size: 1.7rem;
+  line-height: 2.1rem;
   text-align: center;
   color: ${COLOR.MAIN_BLACK};
 `;
@@ -285,8 +296,8 @@ const CommentWrapper = styled.div`
     text-align: center;
     font-style: normal;
     font-weight: 500;
-    font-size: 15px;
-    line-height: 19px;
+    font-size: 1.5rem;
+    line-height: 1.9rem;
     color: ${COLOR.DARK_GRAY};
     /* transition: all ease 6s 0s; */
     animation: setMotion 1.5s 1.5s ease-in-out;
@@ -308,9 +319,9 @@ const RecordFinishFooter = styled.div`
   justify-content: center;
   align-items: center;
   bottom: 0;
-  padding: 0px 6px 20px 20px;
-  gap: 12px;
+  padding: 0rem 0.6rem 2rem 2rem;
+  gap: 1.2rem;
 
-  width: 393px;
-  z-index: 200px;
+  width: 39.3rem;
+  z-index: 20rem;
 `;
