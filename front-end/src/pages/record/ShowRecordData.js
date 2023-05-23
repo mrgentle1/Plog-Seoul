@@ -206,7 +206,7 @@ function ShowRecordData({
   const finish = () => {
     navigate("/record");
   };
-  const [clickImg, setClickImg] = useState("");
+  // const [clickImg, setClickImg] = useState("");
 
   const showImgModal = () => {
     setImgOpen(true);
@@ -232,7 +232,8 @@ function ShowRecordData({
           }, // 마커이미지의 크기입니다
         }}
         onClick={() => {
-          setClickImg(content);
+          // setClickImg(content);
+          sendImgUrl(content);
           showImgModal();
         }}
       ></MapMarker>

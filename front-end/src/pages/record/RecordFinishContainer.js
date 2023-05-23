@@ -66,7 +66,7 @@ function RecordFinishPage() {
   };
 
   const getImgUrl = (url) => {
-    setClickEditImg(url);
+    setClickImg(url);
   };
 
   return (
@@ -76,7 +76,7 @@ function RecordFinishPage() {
       )}
       {imgOpen && <RecordImgModal setImgOpen={setImgOpen} data={clickImg} />}
       {imgEditOpen && (
-        <EditImgModal setImgEditOpen={setImgEditOpen} data={clickEditImg} />
+        <EditImgModal setImgEditOpen={setImgEditOpen} data={clickImg} />
       )}
 
       {(modalOpen || imgOpen || imgEditOpen) && <ModalBackground />}
@@ -155,7 +155,7 @@ const RecordFinishHeader = styled.div`
 
   background-color: ${COLOR.MAIN_WHITE};
 
-  z-index: 100;
+  z-index: 500;
 
   span {
     font-style: normal;
@@ -317,7 +317,7 @@ const RecordFinishFooter = styled.div`
   gap: 1.2rem;
 
   width: 39.3rem;
-  z-index: 2000;
+  z-index: 500;
 `;
 
 const PlogFinishBtnWrapper = styled.div`

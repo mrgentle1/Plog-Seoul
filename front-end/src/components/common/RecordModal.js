@@ -42,12 +42,11 @@ export const RecordModal = ({ setModalOpen, data, id }) => {
   const closeModal = () => {
     console.log("close");
     setModalOpen(false);
-    navigate("/record");
   };
   const gotoModal = () => {
     console.log("goto");
-
     setModalOpen(false);
+    navigate("/plog/level");
   };
 
   const exitModal = () => {
@@ -55,6 +54,11 @@ export const RecordModal = ({ setModalOpen, data, id }) => {
     setModalOpen(false);
     deleteRecordData();
     navigate("/record");
+  };
+  const plogExitModal = () => {
+    console.log("check");
+    setModalOpen(false);
+    navigate("/plog");
   };
 
   return (
@@ -91,7 +95,7 @@ export const RecordModal = ({ setModalOpen, data, id }) => {
         <ModalButton>
           <CloseButton
             onClick={() => {
-              data.recording ? exitModal() : closeModal();
+              data.recording ? exitModal() : plogExitModal();
             }}
           >
             {data.btnText1}
@@ -140,7 +144,7 @@ const ModalContainer = styled.div`
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  /* transform: translate(-50%, -50%); */
 
   background: ${COLOR.MAIN_WHITE};
   border-radius: 1.4rem;
