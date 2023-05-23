@@ -441,11 +441,11 @@ function RecordIngPage() {
     updatedTime = time.all;
 
   const run = () => {
-    if (updatedM === 60) {
+    if (updatedM === 59) {
       updatedH++;
       updatedM = 0;
     }
-    if (updatedS === 60) {
+    if (updatedS === 59) {
       updatedM++;
       updatedS = 0;
     }
@@ -482,12 +482,12 @@ function RecordIngPage() {
     clearInterval(interv);
   };
 
-  // useEffect(() => {
-  //   if (time.all > 60) {
-  //     console.log("here");
-  //     setIsActive(true);
-  //   }
-  // }, [time]);
+  useEffect(() => {
+    if (time.all > 60) {
+      console.log("here");
+      setIsActive(true);
+    }
+  }, [time]);
 
   // useEffect(() => {
   //   if (imgUrlLoading) {
