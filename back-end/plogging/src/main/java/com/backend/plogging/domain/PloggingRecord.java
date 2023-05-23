@@ -29,16 +29,16 @@ public class PloggingRecord extends BaseEntity{
     private Float distance;
 
     @Column(name = "start_lat")
-    private Float startLat;
+    private Double startLat;
 
     @Column(name = "start_lng")
-    private Float startLng;
+    private Double startLng;
 
     @Column(name = "end_lat")
-    private Float endLat;
+    private Double endLat;
 
     @Column(name = "end_lng")
-    private Float endLng;
+    private Double endLng;
 
     @Column(name = "running_time")
     private Float runningTime;
@@ -55,7 +55,7 @@ public class PloggingRecord extends BaseEntity{
     @OneToMany(mappedBy = "ploggingRecord", orphanRemoval = true)
     private List<Path> paths;
 
-    public void update(Float distance, Float endLat, Float endLng, Float runningTime) {
+    public void update(Float distance, Double endLat, Double endLng, Float runningTime) {
         if (distance != null) {
             this.distance = distance;
         }

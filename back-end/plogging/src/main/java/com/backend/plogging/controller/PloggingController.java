@@ -40,8 +40,8 @@ public class PloggingController {
     }
 
     @GetMapping("/ranking")
-    public BaseResponseEntity<?> getRanking() {
-        BaseResponseEntity response = ploggingService.getWeeklyRankings();
+    public BaseResponseEntity<?> getRanking(Principal principal, @RequestParam PloggingService.SortBy sortBy) {
+        BaseResponseEntity response = ploggingService.getWeeklyRankings(principal.getName(), sortBy);
         return response;
     }
 

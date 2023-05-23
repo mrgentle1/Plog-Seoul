@@ -13,8 +13,8 @@ public class ImageResponseDto {
     private Long recordId;
     private String imgUrl;
     private LocalDateTime createdAt;
-    private Float imgLat;
-    private Float imgLng;
+    private Double imgLat;
+    private Double imgLng;
 
     public ImageResponseDto(Image image) {
         this.imageId = image.getImageId();

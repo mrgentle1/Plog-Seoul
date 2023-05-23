@@ -10,8 +10,8 @@ import lombok.*;
 @AllArgsConstructor
 public class ImageRequestDto {
     private String imageUrl;
-    private Float imgLat;
-    private Float imgLng;
+    private Double imgLat;
+    private Double imgLng;
 
     public ImageRequestDto(Image image) {
         this.imageUrl = image.getImgUrl();

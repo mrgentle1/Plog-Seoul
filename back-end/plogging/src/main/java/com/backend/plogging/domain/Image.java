@@ -31,9 +31,9 @@ public class Image {
     private LocalDateTime createdAt;
 
     @Column(name = "img_lat")
-    private Float imgLat;
+    private Double imgLat;
 
     @Column(name = "img_lng")
-    private Float imgLng;
+    private Double imgLng;
 
 }

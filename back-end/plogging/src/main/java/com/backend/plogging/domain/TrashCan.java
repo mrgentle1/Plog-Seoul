@@ -20,10 +20,10 @@ public class TrashCan extends BaseEntity{
     private Long trashCanId;
 
     @Column(name = "lat")
-    private Float lat;
+    private Double lat;
 
     @Column(name = "lng")
-    private Float lng;
+    private Double lng;
 
     @Column(name = "address")
     private String address;  // 도로명 주소

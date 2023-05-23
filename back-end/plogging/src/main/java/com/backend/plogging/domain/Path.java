@@ -24,10 +24,10 @@ public class Path {
     private PloggingRecord ploggingRecord;
 
     @Column(name = "way_lat")
-    private Float wayLat;
+    private Double wayLat;
 
     @Column(name = "way_lng")
-    private Float wayLng;
+    private Double wayLng;
 
     @Column(name = "sequence")
     private Long sequence;
