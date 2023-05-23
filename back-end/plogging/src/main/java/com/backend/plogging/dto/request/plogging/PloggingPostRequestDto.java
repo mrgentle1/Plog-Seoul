@@ -13,10 +13,10 @@ import javax.persistence.Column;
 public class PloggingPostRequestDto {
 
     private Float distance;
-    private Float startLat;
-    private Float startLng;
-    private Float endLat;
-    private Float endLng;
+    private Double startLat;
+    private Double startLng;
+    private Double endLat;
+    private Double endLng;
     private Float runningTime;
 
 }
