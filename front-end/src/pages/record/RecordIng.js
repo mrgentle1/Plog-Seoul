@@ -52,16 +52,7 @@ function RecordIngPage() {
   const startLng = location.state.lng;
 
   /*사용자 이동 기록*/
-  const [state, setState] = useState([
-    {
-      center: {
-        lat: startLat,
-        lng: startLng,
-      },
-      errMsg: null,
-      isLoading: true,
-    },
-  ]);
+  const [state, setState] = useState();
 
   /*polyline path를 위함 */
   const [locationList, setLocationList] = useState([
@@ -312,8 +303,16 @@ function RecordIngPage() {
         )
       );
       map.setLevel(2);
+      // setState({
+      //   center: {
+      //     lat: locationList[locationList.length - 1].la,
+      //     lng: locationList[locationList.length - 1].lng,
+      //   },
+      // });
     }
   };
+
+  useEffect(() => {}, [locationList]);
 
   const recordPosition = () => {
     console.log("position");
@@ -328,11 +327,12 @@ function RecordIngPage() {
       setWatchId(newId);
     } else {
       // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
-      setState((prev) => ({
-        ...prev,
-        errMsg: "geolocation을 사용할수 없어요..",
-        isLoading: false,
-      }));
+      // setState((prev) => ({
+      //   ...prev,
+      //   errMsg: "geolocation을 사용할수 없어요..",
+      //   isLoading: false,
+      // }));
+      alert("geolocation을 사용할수 없어요");
     }
     console.log("listlocation: %o", locationList);
   };
@@ -348,11 +348,12 @@ function RecordIngPage() {
         };
       }, showError);
     } else {
-      setState((prev) => ({
-        ...prev,
-        errMsg: "geolocation을 사용할수 없어요..",
-        isLoading: false,
-      }));
+      // setState((prev) => ({
+      //   ...prev,
+      //   errMsg: "geolocation을 사용할수 없어요..",
+      //   isLoading: false,
+      // }));
+      alert("geolocation을 사용할수 없어요");
     }
   };
 
@@ -481,12 +482,12 @@ function RecordIngPage() {
     clearInterval(interv);
   };
 
-  useEffect(() => {
-    if (time.all > 60) {
-      console.log("here");
-      setIsActive(true);
-    }
-  }, [time]);
+  // useEffect(() => {
+  //   if (time.all > 60) {
+  //     console.log("here");
+  //     setIsActive(true);
+  //   }
+  // }, [time]);
 
   // useEffect(() => {
   //   if (imgUrlLoading) {
@@ -536,6 +537,23 @@ function RecordIngPage() {
     setImgOpen(true);
   };
 
+  // Define the callback function
+  window.receiveBackPressed = function (backPressed) {
+    console.log("뒤로가기 ", backPressed);
+
+    console.log("뒤로가기");
+    setModalOpen(backPressed);
+  };
+
+  useEffect(() => {}, [modalOpen]);
+  // Define the callback function
+  window.receiveRecordingExit = function (realExit) {
+    console.log("뒤로가기,기록종료 ", realExit);
+    setModalOpen(false);
+    deleteRecordData();
+    navigate("/record");
+  };
+
   return (
     <>
       {modalOpen && (
@@ -571,6 +589,15 @@ function RecordIngPage() {
             onDragEnd={() => setIsMove(true)}
             onZoomChanged={() => setIsMove(true)}
             ref={mapRef}
+            onCenterChanged={(map) =>
+              setState({
+                level: map.getLevel(),
+                center: {
+                  lat: map.getCenter().getLat(),
+                  lng: map.getCenter().getLng(),
+                },
+              })
+            }
           >
             <div>
               <MapMarker // 마커를 생성합니다

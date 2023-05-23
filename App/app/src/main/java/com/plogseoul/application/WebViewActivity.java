@@ -126,9 +126,14 @@ public class WebViewActivity extends AppCompatActivity {
         long curTime = System.currentTimeMillis();
         long gapTime = curTime - backBtnTime;
         String nowUrl = webView.getUrl();
-        if (webView.canGoBack() && !nowUrl.equals(rootUrl+"home")) {
+
+        if (webView.canGoBack() && !nowUrl.equals(rootUrl+"home") && !nowUrl.equals(rootUrl+"record/ing")) {
             webView.goBack();
+        } else if(nowUrl.equals(rootUrl+"record/ing")) {
+            backBtnTime = curTime;
+            webView.loadUrl("javascript:receiveBackPressed('" + true+ "')");
         } else if (0 <= gapTime && 2000 >= gapTime) {
+            if(nowUrl.equals(rootUrl+"record/ing")){webView.loadUrl("javascript:receiveRecordingExit('" + true+ "')");}
             super.onBackPressed();
         } else {
             backBtnTime = curTime;
