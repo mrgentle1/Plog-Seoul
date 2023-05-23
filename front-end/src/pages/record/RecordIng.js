@@ -52,7 +52,13 @@ function RecordIngPage() {
   const startLng = location.state.lng;
 
   /*사용자 이동 기록*/
-  const [state, setState] = useState();
+  const [state, setState] = useState({
+    level: 2,
+    center: {
+      lat: startLat,
+      lng: startLng,
+    },
+  });
 
   /*polyline path를 위함 */
   const [locationList, setLocationList] = useState([
@@ -498,6 +504,18 @@ function RecordIngPage() {
   // }, [imageUrl]);
 
   useEffect(() => {
+    if (!isMove) {
+      setState({
+        level: 2,
+        center: {
+          lat: locationList[locationList.length - 1].lat,
+          lng: locationList[locationList.length - 1].lng,
+        },
+      });
+    }
+  }, [locationList]);
+
+  useEffect(() => {
     console.log("imageUrl 변화 생김");
     if (imgUrlLoading.current) {
       console.log("imageUrl 값 변경됨");
@@ -582,7 +600,7 @@ function RecordIngPage() {
         </RecordIngHeader>
         <MapContainer>
           <Map
-            center={locationList[locationList.length - 1]} // 지도의 중심 좌표
+            center={state.center} // 지도의 중심 좌표
             style={{ width: "100%", height: "100%" }} // 지도 크기
             level={2} // 지도 확대 레벨
             isPanto={true}
@@ -641,7 +659,7 @@ function RecordIngPage() {
                 <EventMarkerContainer
                   key={`EventMarkerContainer-${value.imageUrl}`}
                   position={{ lat: value.imgLat, lng: value.imgLng }}
-                  content={value.imgUrl}
+                  content={value.imageUrl}
                 />
               ))}
               <Polyline
@@ -658,14 +676,15 @@ function RecordIngPage() {
             {isMove ? (
               <RelocateBtn
                 onClick={() => {
-                  handleRelocate();
                   setIsMove(false);
+                  handleRelocate();
                 }}
               />
             ) : (
               <RelocateAtiveBtn
                 onClick={() => {
                   // handleRelocate();
+                  // setIsMove(true);
                 }}
               />
             )}
@@ -720,7 +739,7 @@ const StRecordIngPage = styled.div`
 const RecordIngHeader = styled.div`
   position: fixed;
   top: 0;
-  width: 39.3rem;
+  width: 100%;
   height: 12.7rem;
 
   display: grid;
@@ -790,7 +809,7 @@ const RelocateWrapper = styled.div`
 const RecordDetailContainer = styled.div`
   position: fixed;
   bottom: 0;
-  width: 39.3rem;
+  width: 100%;
   height: 20rem;
 
   display: flex;
