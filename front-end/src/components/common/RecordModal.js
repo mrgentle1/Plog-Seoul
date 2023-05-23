@@ -142,8 +142,8 @@ const ModalContainer = styled.div`
   height: 32.4rem;
 
   position: fixed;
-  top: 50%;
-  left: 50%;
+  /* top: 50%;
+  left: 50%; */
   /* transform: translate(-50%, -50%); */
 
   background: ${COLOR.MAIN_WHITE};
