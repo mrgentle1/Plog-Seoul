@@ -558,8 +558,7 @@ function RecordIngPage() {
   // Define the callback function
   window.receiveBackPressed = function (backPressed) {
     console.log("뒤로가기 ", backPressed);
-    setModalOpen(true);
-    console.log("뒤로가기");
+
     setModalOpen(backPressed);
   };
 
@@ -567,7 +566,7 @@ function RecordIngPage() {
   // Define the callback function
   window.receiveRecordingExit = function (realExit) {
     console.log("뒤로가기,기록종료 ", realExit);
-    setModalOpen(false);
+    setModalOpen(realExit);
     deleteRecordData();
     navigate("/record");
   };
