@@ -164,12 +164,14 @@ const SelectFilter = styled.div`
 `;
 
 const ModalImg = styled.div`
-  display: flex;
   position: relative;
-  width: 35.3rem;
-  height: 35.3rem;
-  align-items: center;
-  justify-content: center;
+  width: 100%;
+
+  ::after {
+    display: block;
+    content: "";
+    padding-bottom: 100%;
+  }
 
   img {
     width: 100%;
@@ -178,8 +180,9 @@ const ModalImg = styled.div`
     position: absolute;
   }
   .FilterImg {
-    width: 35.3rem;
-    height: 35.3rem;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
     display: flex;
     position: absolute;
   }
@@ -222,8 +225,8 @@ const ModalImg = styled.div`
 const SelectImg = styled.div`
   display: flex;
   position: absolute;
-  width: 35.3rem;
-  height: 35.3rem;
+  width: 100%;
+  height: 100%;
   background-position: center;
   background-size: cover;
   background-image: url(${(props) => props.image});
@@ -232,4 +235,5 @@ const SelectImg = styled.div`
 const ModalButton = styled.div`
   display: flex;
   flex-direction: row;
+  width: 100%;
 `;

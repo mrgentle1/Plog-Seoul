@@ -416,7 +416,7 @@ const StRecordFinish = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 39.3rem;
+  width: 100vw;
   height: 100vh;
   padding-top: 12.7rem;
   padding-bottom: 20rem;
@@ -434,7 +434,7 @@ const StRecordFinish = styled.div`
 const RecordFinishHeader = styled.div`
   position: fixed;
   top: 0;
-  width: 39.3rem;
+  width: 100%;
   height: 12.7rem;
 
   display: grid;

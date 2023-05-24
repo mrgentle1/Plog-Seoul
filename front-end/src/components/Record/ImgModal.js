@@ -50,7 +50,7 @@ export const RecordImgModal = ({ setImgOpen, data }) => {
         </ModalCloseWrapper>
         <ModalContents>
           <ModalImg>
-            <img src={data} alt="img"></img>
+            <img className="content" src={data} alt="img"></img>
           </ModalImg>
           <ModalButton>
             <Button>공유하기</Button>
@@ -71,6 +71,7 @@ const ModalContainer = styled.div`
 
   position: absolute;
 
+  width: 100vw;
   height: 100vh;
   top: 0;
 
@@ -106,12 +107,18 @@ const ModalContents = styled.div`
 `;
 
 const ModalImg = styled.div`
-  display: flex;
-  width: 35.3rem;
-  height: 35.3rem;
-  background-color: ${COLOR.MAIN_WHITE};
+  position: relative;
+  width: 100%;
 
-  img {
+  ::after {
+    display: block;
+    content: "";
+    padding-bottom: 100%;
+  }
+
+  .content {
+    position: absolute;
+
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -121,4 +128,5 @@ const ModalImg = styled.div`
 const ModalButton = styled.div`
   display: flex;
   flex-direction: row;
+  width: 100%;
 `;

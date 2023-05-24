@@ -30,7 +30,7 @@ const modalData = {
 function ShowRecordData({
   recordId,
   setImgOpen,
-  setImgEditOpen,
+
   setClickEditImg,
   getImgUrl,
 }) {
@@ -175,7 +175,10 @@ function ShowRecordData({
           imgLng: it.imgLng,
         };
       });
-      setImgData(initImg);
+      if (initImg.length > 1) {
+        setImgData(initImg);
+        setIsImgData(true);
+      }
     } catch (e) {
       // 실패 시 처리
       console.error(e);
@@ -191,7 +194,7 @@ function ShowRecordData({
       bounds.extend(new kakao.maps.LatLng(point.lat, point.lng));
     });
     return bounds;
-  }, [isPathLoading]);
+  }, [pathData]);
 
   // 오늘 날짜
   let now = new Date();
@@ -206,7 +209,8 @@ function ShowRecordData({
   const finish = () => {
     navigate("/record");
   };
-  // const [clickImg, setClickImg] = useState("");
+  const [clickImg, setClickImg] = useState("");
+  const [imgEditOpen, setImgEditOpen] = useState(false);
 
   const showImgModal = () => {
     setImgOpen(true);
@@ -268,12 +272,12 @@ function ShowRecordData({
 
   useEffect(() => {
     console.log("img기록가져옴", recordId);
-    console.log("이미지id: %o", imgData[0].recordId);
+    // console.log("이미지id: %o", imgData[0].recordId);
 
-    if (imgData[0].recordId == recordId) {
-      console.log("이미지 기록이 있다.");
-      setIsImgData(true);
-    }
+    // if (imgData[0].recordId == recordId) {
+    //   console.log("이미지 기록이 있다.");
+    //   setIsImgData(true);
+    // }
     setIsImgLoading(false);
     console.log("이미지: %o", imgData);
   }, [imgData]);
@@ -404,7 +408,7 @@ const StRecordFinish = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   padding-top: 12.7rem;
   padding-bottom: 20rem;
   padding-left: 2rem;
