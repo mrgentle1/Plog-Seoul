@@ -88,6 +88,15 @@ function HomePage() {
 
   return (
     <StHomePage>
+      <Link to="/record">
+        <Box4>
+          <Record className="record" />
+          <div className="box4">
+            <Text7>오늘도 주워볼까요?</Text7>
+            <HomeButton className="homeButton" />
+          </div>
+        </Box4>
+      </Link>
       <Box1>
         <Link to="/home/season">
           <LeftBox1>
@@ -104,17 +113,6 @@ function HomePage() {
           </RightBox1>
         </Link>
       </Box1>
-      <Link to="/plog/level">
-        <Box2>
-          <Level className="level" />
-          <LevelBox>
-            <Text3>Level {user.level}</Text3>
-            <Text4>다음 레벨까지 {1000 - point} 포인트</Text4>
-          </LevelBox>
-          <LevelBar />
-          <LevelBar2 width={levelBarWidth} />
-        </Box2>
-      </Link>
       <Box3>
         <Tree className="tree" />
         <Text5>
@@ -128,15 +126,18 @@ function HomePage() {
           <Dis2>{distance}km</Dis2>
         </Text6>
       </Box3>
-      <Link to="/record">
-        <Box4>
-          <Record className="record" />
-          <div className="box4">
-            <Text7>오늘도 주워볼까요?</Text7>
-            <HomeButton className="homeButton" />
-          </div>
-        </Box4>
+      <Link to="/plog/level">
+        <Box2>
+          <Level className="level" />
+          <LevelBox>
+            <Text3>Level {user.level}</Text3>
+            <Text4>다음 레벨까지 {1000 - point} 포인트</Text4>
+          </LevelBox>
+          <LevelBar />
+          <LevelBar2 width={levelBarWidth} />
+        </Box2>
       </Link>
+
       <Footer />
     </StHomePage>
   );
@@ -148,6 +149,7 @@ const StHomePage = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
+  height: 100%;
 `;
 const Box1 = styled.div`
   width: 100%;
@@ -166,7 +168,6 @@ const LeftBox1 = styled.div`
     width: 2.3rem;
     height: 2.3rem;
     margin-bottom: 1.2rem;
-    color: ${COLOR.DARK_GRAY};
   }
   .arrow {
     margin-top: 1.5rem;
@@ -197,7 +198,6 @@ const RightBox1 = styled.div`
   .footprint {
     width: 2.3rem;
     height: 2.3rem;
-    color: ${COLOR.DARK_GRAY};
     margin-bottom: 1.2rem;
   }
   .arrow {
@@ -217,7 +217,7 @@ const Text2 = styled.div`
   color: ${COLOR.MAIN_BLACK};
 `;
 const Box2 = styled.div`
-  margin-bottom: 1.3rem;
+  margin-bottom: 13rem;
   width: 35.3rem;
   height: 10.1rem;
   background: ${COLOR.MAIN_WHITE};
@@ -227,7 +227,6 @@ const Box2 = styled.div`
     width: 1.9rem;
     height: 2rem;
     margin-bottom: 1.2rem;
-    color: ${COLOR.DARK_GRAY};
   }
 `;
 const LevelBox = styled.div`
@@ -266,9 +265,9 @@ const Text4 = styled.div`
   color: ${COLOR.DARK_GRAY};
 `;
 const Box3 = styled.div`
-  margin-bottom: 1.3rem;
   width: 35.3rem;
   height: 12.1rem;
+  margin-bottom: 1.3rem;
   border-radius: 1.4rem;
   padding: 1.4rem 1.9rem;
   background-color: ${COLOR.MAIN_WHITE};
@@ -276,7 +275,6 @@ const Box3 = styled.div`
   .tree {
     width: 2.5rem;
     height: 2.5rem;
-    color: ${COLOR.DARK_GRAY};
     margin-bottom: 1rem;
   }
 `;
@@ -322,7 +320,7 @@ const Box4 = styled.div`
   display: flex;
   width: 35.3rem;
   height: 10.1rem;
-  margin-bottom: 12rem;
+  margin-bottom: 1.3rem;
   background: ${COLOR.MAIN_GREEN};
   border: 0.2rem solid ${COLOR.MAIN_GREEN};
   border-radius: 1.4rem;
