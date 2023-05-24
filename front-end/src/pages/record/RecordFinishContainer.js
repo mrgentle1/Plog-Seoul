@@ -114,32 +114,31 @@ function RecordFinishPage() {
         setImgEditOpen={setImgEditOpen}
         getImgUrl={getImgUrl}
       />
-      <StRecordFinish>
-        {!userData.isShowPlog ? (
-          <RecordFinishFooter>
-            <Button
-              onClick={() => {
-                isCourse ? showModal() : showModal();
-              }}
-            >
-              플로깅 종료하기
-            </Button>
-            <BorderGreenThinButton>공유하기</BorderGreenThinButton>
-          </RecordFinishFooter>
-        ) : (
-          <PlogRecordFooter>
-            <Button
-              onClick={() => {
-                isCourse ? showModal() : showModal();
-              }}
-            >
-              공유하기
-            </Button>
-          </PlogRecordFooter>
-        )}
 
-        {/* <RecordFinishFooter setData={setModalOpen} data={modalData} /> */}
-      </StRecordFinish>
+      {!userData.isShowPlog ? (
+        <RecordFinishFooter>
+          <Button
+            onClick={() => {
+              isCourse ? showModal() : showModal();
+            }}
+          >
+            플로깅 종료하기
+          </Button>
+          <BorderGreenThinButton>공유하기</BorderGreenThinButton>
+        </RecordFinishFooter>
+      ) : (
+        <PlogRecordFooter>
+          <Button
+            onClick={() => {
+              isCourse ? showModal() : showModal();
+            }}
+          >
+            공유하기
+          </Button>
+        </PlogRecordFooter>
+      )}
+
+      {/* <RecordFinishFooter setData={setModalOpen} data={modalData} /> */}
     </>
   );
 }
@@ -372,7 +371,7 @@ const RecordFinishFooter = styled.div`
   padding: 0rem 0.6rem 2rem 2rem;
   gap: 1.2rem;
 
-  width: 39.3rem;
+  width: 100%;
   z-index: 500;
 `;
 
@@ -406,6 +405,6 @@ const PlogRecordFooter = styled.div`
   padding: 0rem 0.6rem 2rem 2rem;
   gap: 1.2rem;
 
-  width: 39.3rem;
+  width: 100%;
   z-index: 500;
 `;

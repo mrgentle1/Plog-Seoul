@@ -266,6 +266,11 @@ function ShowRecordData({
     console.log("1.경로: %o", pathData);
     // const map = mapRef.current;
     // if (map) map.setBounds(bounds);
+    if (!isPathLoading) {
+      const map = mapRef.current;
+      console.log("범위 재구성");
+      if (map) map.setBounds(bounds);
+    }
     setIsPathLoading(false);
     console.log("2.경로: %o", pathData);
   }, [pathData]);
@@ -285,11 +290,11 @@ function ShowRecordData({
   useEffect(() => {
     if (!isDataLoading && !isPathLoading && !isImgLoading) {
       console.log("loading???????");
-      const map = mapRef.current;
-      if (map) {
-        console.log("범위 재구성");
-        map.setBounds(bounds);
-      }
+      // const map = mapRef.current;
+      // if (map) {
+      //   console.log("범위 재구성");
+      //   map.setBounds(bounds);
+      // }
       setIsLoading(false);
     }
   }, [
