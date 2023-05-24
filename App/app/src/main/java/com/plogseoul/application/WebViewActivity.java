@@ -132,8 +132,9 @@ public class WebViewActivity extends AppCompatActivity {
         }  else if (0 <= gapTime && 2000 >= gapTime) {
             if(nowUrl.equals(rootUrl+"record/ing")){
                 webView.loadUrl("javascript:receiveRecordingExit('" + false+ "')");
+            }else{
+                super.onBackPressed();
             }
-            super.onBackPressed();
         } else if(nowUrl.equals(rootUrl+"record/ing")) {
             backBtnTime = curTime;
             webView.loadUrl("javascript:receiveBackPressed('" + true+ "')");
