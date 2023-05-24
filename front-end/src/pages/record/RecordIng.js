@@ -558,7 +558,7 @@ function RecordIngPage() {
   // Define the callback function
   window.receiveBackPressed = function (backPressed) {
     console.log("뒤로가기 ", backPressed);
-
+    setModalOpen(true);
     console.log("뒤로가기");
     setModalOpen(backPressed);
   };
