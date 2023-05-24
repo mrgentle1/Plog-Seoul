@@ -283,11 +283,11 @@ function ShowRecordData({
     //   console.log("이미지 기록이 있다.");
     //   setIsImgData(true);
     // }
-    const map = mapRef.current;
-    if (map) {
-      console.log("범위 재구성");
-      map.setBounds(bounds);
-    }
+    // const map = mapRef.current;
+    // if (map) {
+    //   console.log("범위 재구성");
+    //   map.setBounds(bounds);
+    // }
     setIsImgLoading(false);
     console.log("이미지: %o", imgData);
   }, [imgData]);
