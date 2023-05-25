@@ -12,7 +12,7 @@ import { RankingBarGraph } from "../../components/common/RankingBar";
 function RankingPage() {
   const token = localStorage.getItem("key");
   const [userId, setUserId] = usePersistRecoilState(userIdNumber);
-  console.log(userId);
+  console.log("userID입니다:", userId);
 
   const navigate = useNavigate();
   const goBack = useCallback(() => {
@@ -21,6 +21,7 @@ function RankingPage() {
 
   const [isLoading, setIsLoading] = useState(true);
   const isUpdate = useRef(false);
+  const isMoreThan = useRef(false);
 
   /* GET - 랭킹 */
   const [rankingAllData, setRankingAllData] = useState([
@@ -32,7 +33,7 @@ function RankingPage() {
     try {
       // GET 요청은 params에 실어 보냄
       const response = await axios.get(
-        `${process.env.REACT_APP_API_ROOT}/api/plogging/ranking`,
+        `${process.env.REACT_APP_API_ROOT}/api/plogging/ranking?sortBy=TOTAL_DISTANCE`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -42,7 +43,8 @@ function RankingPage() {
       );
 
       // 응답 결과(response)를 변수에 저장하거나.. 등 필요한 처리를 해 주면 된다.
-      const initData = response.data.result.map((it) => {
+      const initRanking = response.data.result.rankings;
+      const initData = initRanking.map((it) => {
         return {
           rank: it.rank,
           userId: it.userId,
@@ -51,7 +53,12 @@ function RankingPage() {
           totalDist: it.totalDistance / 1000,
         };
       });
+
       isUpdate.current = true;
+      console.log("길이:", initData.length);
+      if (initData.length > 3) {
+        isMoreThan.current = true;
+      }
       setRankingAllData(initData);
     } catch (e) {
       // 실패 시 처리
@@ -79,7 +86,7 @@ function RankingPage() {
     );
   };
 
-  const UserRankingContainer = ({ num, name, dist, isList }) => {
+  const UserRankingContainer = ({ num, name, dist, isList, id }) => {
     const rank = String(num).padStart(2, "0");
     // const distData = dist / 1000;
     return (
@@ -87,7 +94,7 @@ function RankingPage() {
         <p className="UserRanking">{rank}</p>
         <div className="rowItem">
           <p className="UserName">{name}</p>
-          {isList && (
+          {isList && id === userId && (
             <OneselfIconWrapper>
               <OneSelfIcon />
             </OneselfIconWrapper>
@@ -139,24 +146,31 @@ function RankingPage() {
             />
           </TopRankingContainer>
           <MyRankingContainer>
-            <UserRankingContainer
-              num={5}
-              name={"박이름ㅇㅇㅇ"}
-              dist={1.33}
-              isList={false}
-            />
+            {rankingAllData
+              .filter((data) => data.userId === userId)
+              .map((data) => (
+                <UserRankingContainer
+                  key={data.userId}
+                  num={data.rank}
+                  name={data.nickname}
+                  dist={data.totalDist}
+                  isList={false}
+                />
+              ))}
+
             <CommentWrapper>다음 등수까지 1.4Km 남았어요!</CommentWrapper>
           </MyRankingContainer>
           <RankingList>
             {rankingAllData
-              .filter((data) => data.rank > 1 && data.rank < 11)
+              .filter((data) => data.rank > 3 && data.rank < 11)
               .map((data) => (
-                <OtherRankingContainer key={data.userId}>
+                <OtherRankingContainer>
                   <UserRankingContainer
                     num={data.rank}
                     name={data.nickname}
                     dist={data.totalDist}
                     isList={true}
+                    id={data.id}
                   />
                 </OtherRankingContainer>
               ))}
@@ -179,7 +193,7 @@ const StRankingPage = styled.div`
 const RankingHeader = styled.div`
   position: fixed;
   top: 0;
-  width: 39.3rem;
+  width: 100%;
   height: 11.8rem;
   background: ${COLOR.MAIN_WHITE};
   z-index: 100;
@@ -264,7 +278,7 @@ const MyRankingContainer = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  width: 35.3rem;
+  width: 100%;
   height: 7.9rem;
   padding: 1.6rem 1.2rem;
   gap: 1.2rem;
@@ -330,6 +344,7 @@ const CommentWrapper = styled.div`
 const RankingList = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
   padding: 1.2rem 1.2rem;
 `;
 const OtherRankingContainer = styled.div`
@@ -338,4 +353,15 @@ const OtherRankingContainer = styled.div`
   justify-content: center;
   width: 100%;
   height: 4.3rem;
+`;
+
+const NoneRankingContainer = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  height: 4.3rem;
+  span {
+    width: 100%;
+    ${sharedTextStyle}
+  }
 `;

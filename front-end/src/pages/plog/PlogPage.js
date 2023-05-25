@@ -83,9 +83,11 @@ function PlogPage() {
               <p>0개</p>
             </BorderThinButton>
           </Link>
-          <BorderThinButton>
-            랭킹 확인하기<p>거리순/기록순</p>
-          </BorderThinButton>
+          <Link to="/plog/ranking">
+            <BorderThinButton>
+              랭킹 확인하기<p>거리순/기록순</p>
+            </BorderThinButton>
+          </Link>
         </StPlogContent>
       </StPlogPage>
     </motion.div>

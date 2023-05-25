@@ -29,6 +29,9 @@ kakao:
 jwt:
   secret: '62ee24aa5950496692f0c633e26b58b062ee24aa5950496692f0c633e26b58b0'
 
+seoul:
+  api-key: '465a446d466d7267313138595778636d'
+
 app:
   firebase-configuration-file: ./serviceAccountKey.json
   firebase-bucket: seoulplog.appspot.com
