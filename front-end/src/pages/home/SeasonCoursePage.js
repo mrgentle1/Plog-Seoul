@@ -44,8 +44,13 @@ function SeasonCoursePage() {
         <HeaderText>계절별 추천 코스</HeaderText>
       </SeasonHeader>
       <SeasonContent>
-        {courses.map((data) => (
-          <CourseSeasonCard key={data.RNUM} c={data} />
+        {courses.map((data, index) => (
+          <CourseSeasonCard
+            key={data.RNUM}
+            index={data.RNUM}
+            c={data}
+            isLastCard={index === courses.length - 1} // 마지막 아이템인 경우 isLastCard를 true로 설정
+          />
         ))}
       </SeasonContent>
     </StSeasonCoursePage>

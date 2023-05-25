@@ -3,28 +3,23 @@ import { COLOR } from "../../styles/color";
 import { useNavigate } from "react-router-dom";
 import { ReactComponent as Shop } from "../../assets/icons/shop.svg";
 
-export const CourseSeasonCard = ({ c }) => {
-  const navigate = useNavigate();
-  const handlePageChange = () => {
-    navigate(`/home/season/${c.RNUM}`);
-  };
-
+export const CourseSeasonCard = ({ c, isLastCard }) => {
   return (
     <>
-      <StCourseCard onClick={handlePageChange}>
+      <StCourseCard>
         <StCourseContent>
           <StCourseText>
             <CourseText>
+              <h3>{c.COURSE_NAME}</h3>
               <h2>
                 {c.AREA_GU} - {c.CODE_NAME}
               </h2>
-              <h3>{c.COURSE_NAME}</h3>
-              <h6>{c.TRAFFIC_INFO}</h6>
+              <span>{c.DETAIL_COURSE}</span>
             </CourseText>
             <CourseTag>
               <Tag>
                 <Shop className="shop" />
-                <p>{c.RELATE_SUBWAY}</p>
+                <p>{c.LEAD_TIME}</p>
               </Tag>
               <Tag>
                 <Shop className="shop" />
@@ -32,12 +27,12 @@ export const CourseSeasonCard = ({ c }) => {
               </Tag>
               <Tag>
                 <Shop className="shop" />
-                <p>{c.LEAD_TIME}</p>
+                <p>{c.RELATE_SUBWAY}</p>
               </Tag>
             </CourseTag>
           </StCourseText>
         </StCourseContent>
-        <StCourseLine />
+        {!isLastCard && <StCourseLine />}
       </StCourseCard>
     </>
   );
@@ -47,10 +42,7 @@ const StCourseCard = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-top: 10px;
   width: 353px;
-  height: 230px;
-
   background: #ffffff;
 `;
 const StCourseContent = styled.div`
@@ -59,43 +51,42 @@ const StCourseContent = styled.div`
   justify-content: space-between;
   align-items: flex-start;
   padding: 0px;
-
   width: 353px;
-  height: 230px;
 `;
 const StCourseText = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-
   width: 353px;
-  height: 140px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 
-  h2 {
-    font-family: "SUIT Variable";
-    font-style: normal;
-    font-weight: 500;
-    font-size: 12px;
-    line-height: 19px;
-    color: ${COLOR.DARK_GRAY};
-  }
   h3 {
-    margin-top: 3px;
     font-family: "SUIT Variable";
     font-style: normal;
     font-weight: 600;
-    font-size: 17px;
+    font-size: 15px;
     line-height: 19px;
     color: ${COLOR.MAIN_BLACK};
   }
-  h6 {
+  h2 {
     margin-top: 12px;
     font-family: "SUIT Variable";
     font-style: normal;
     font-weight: 500;
     font-size: 13px;
     line-height: 16px;
-    color: ${COLOR.MAIN_GREEN};
+    color: ${COLOR.MAIN_DARK_GREEN};
+  }
+  span {
+    margin-top: 12px;
+    font-family: "SUIT Variable";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 11px;
+    line-height: 14px;
+    color: ${COLOR.DARK_GRAY};
+    white-space: normal;
   }
 `;
 const CourseText = styled.div`
@@ -110,7 +101,6 @@ const CourseTag = styled.div`
   align-items: flex-start;
   margin-top: 10px;
   gap: 6px;
-
   height: 24px;
 `;
 const Tag = styled.div`
@@ -139,6 +129,5 @@ const Tag = styled.div`
 const StCourseLine = styled.div`
   width: 353px;
   text-align: center;
-  line-height: 0.1px;
   border: 0.35px solid #8edf82;
 `;
