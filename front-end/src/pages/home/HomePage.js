@@ -177,7 +177,7 @@ const LeftBox1 = styled.div`
     margin-bottom: 1rem;
   }
 `;
-const Text1 = styled.div`
+const Text1 = styled.p`
   font-family: "SUIT Variable";
   font-style: normal;
   font-weight: 600;
@@ -208,7 +208,7 @@ const RightBox1 = styled.div`
     margin-bottom: 1rem;
   }
 `;
-const Text2 = styled.div`
+const Text2 = styled.p`
   font-family: "SUIT Variable";
   font-style: normal;
   font-weight: 600;
@@ -248,7 +248,7 @@ const LevelBar2 = styled.div`
   border-radius: 0.5rem;
   z-index: 1;
 `;
-const Text3 = styled.div`
+const Text3 = styled.p`
   font-family: "SUIT Variable";
   font-style: normal;
   font-weight: 600;
@@ -256,7 +256,7 @@ const Text3 = styled.div`
   line-height: 1.9rem;
   color: ${COLOR.MAIN_GREEN};
 `;
-const Text4 = styled.div`
+const Text4 = styled.p`
   font-family: "SUIT Variable";
   font-style: normal;
   font-weight: 500;
@@ -287,14 +287,32 @@ const Text5 = styled.div`
   font-size: 1.5rem;
   line-height: 1.9rem;
 `;
-const Ploging = styled.div`
+const Ploging = styled.p`
   width: 9.9rem;
+  color: ${COLOR.MAIN_BLACK};
+  font-family: "SUIT Variable";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 19px;
 `;
-const Time = styled.div`
+const Time = styled.p`
   width: 9.9rem;
+  color: ${COLOR.MAIN_BLACK};
+  font-family: "SUIT Variable";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 19px;
 `;
-const Dis = styled.div`
+const Dis = styled.p`
   width: 9.9rem;
+  color: ${COLOR.MAIN_BLACK};
+  font-family: "SUIT Variable";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 19px;
 `;
 const Text6 = styled.div`
   display: flex;
@@ -305,16 +323,33 @@ const Text6 = styled.div`
   font-weight: 600;
   font-size: 2.4rem;
   line-height: 3rem;
+`;
+const Ploging2 = styled.p`
+  width: 9.9rem;
   color: ${COLOR.MAIN_GREEN};
+  font-family: "SUIT Variable";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 30px;
 `;
-const Ploging2 = styled.div`
+const Time2 = styled.p`
   width: 9.9rem;
+  color: ${COLOR.MAIN_GREEN};
+  font-family: "SUIT Variable";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 30px;
 `;
-const Time2 = styled.div`
+const Dis2 = styled.p`
   width: 9.9rem;
-`;
-const Dis2 = styled.div`
-  width: 9.9rem;
+  color: ${COLOR.MAIN_GREEN};
+  font-family: "SUIT Variable";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 30px;
 `;
 const Box4 = styled.div`
   display: flex;
@@ -339,7 +374,7 @@ const Box4 = styled.div`
     justify-content: space-between;
   }
 `;
-const Text7 = styled.div`
+const Text7 = styled.p`
   margin-top: 1.45rem;
   margin-left: -2.5rem;
   font-family: "SUIT Variable";
