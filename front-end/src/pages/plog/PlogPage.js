@@ -76,9 +76,11 @@ function PlogPage() {
             <p>0개</p>
           </BorderThinButton>
         </Link>
-        <BorderThinButton>
-          랭킹 확인하기<p>126등</p>
-        </BorderThinButton>
+        <Link to="/plog/ranking">
+          <BorderThinButton>
+            랭킹 확인하기<p>126등</p>
+          </BorderThinButton>
+        </Link>
       </StPlogContent>
     </StPlogPage>
   );
