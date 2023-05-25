@@ -61,7 +61,8 @@ function SignupPage() {
         </SignupText>
         <SignupInput>
           <SignupInputBox
-            placeholder="이름을 입력해주세요"
+            maxLength={6}
+            placeholder="최대 6글자까지 입력 가능합니다"
             onChange={onChangeName}
           />
         </SignupInput>
