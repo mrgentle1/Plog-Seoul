@@ -227,5 +227,5 @@ const CalendarDay = styled.div`
       : "inherit"};
   cursor: ${({ isSpecial }) => (isSpecial ? "pointer" : "default")};
   border: 2px solid
-    ${({ isToday }) => (isToday ? COLOR.MAIN_DARK_GREEN : "transparent")};
+    ${({ isToday }) => (isToday ? COLOR.MAIN_GREEN : "transparent")};
 `;

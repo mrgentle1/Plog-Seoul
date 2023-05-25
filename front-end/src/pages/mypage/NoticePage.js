@@ -4,6 +4,7 @@ import { ReactComponent as BackArrow } from "../../assets/icons/backArrow.svg";
 
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
+import { motion } from "framer-motion";
 
 function NoticePage() {
   const navigate = useNavigate();
@@ -12,15 +13,22 @@ function NoticePage() {
   }, [navigate]);
 
   return (
-    <StNoticePage>
-      <NoticeHeader>
-        <BackArrow className="noticeBackArrow" onClick={goBack} />
-        <HeaderText>공지사항</HeaderText>
-      </NoticeHeader>
-      <NoticeContent>
-        <div className="noticeText">아직 표시할 공지사항이 없어요</div>
-      </NoticeContent>
-    </StNoticePage>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.6 }}
+    >
+      <StNoticePage>
+        <NoticeHeader>
+          <BackArrow className="noticeBackArrow" onClick={goBack} />
+          <HeaderText>공지사항</HeaderText>
+        </NoticeHeader>
+        <NoticeContent>
+          <div className="noticeText">아직 표시할 공지사항이 없어요</div>
+        </NoticeContent>
+      </StNoticePage>
+    </motion.div>
   );
 }
 export default NoticePage;

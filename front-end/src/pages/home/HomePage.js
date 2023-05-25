@@ -14,6 +14,7 @@ import { todayMonth, year } from "../../core/date.js";
 import axios from "axios";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { userIdNumber, usePersistRecoilState } from "../../core/userId";
 
@@ -90,61 +91,68 @@ function HomePage() {
   const real_runningTime2 = runningTime % 60;
 
   return (
-    <StHomePage>
-      <Link to="/record">
-        <Box4>
-          <Record className="record" />
-          <div className="box4">
-            <Text7>오늘도 주워볼까요?</Text7>
-            <HomeButton className="homeButton" />
-          </div>
-        </Box4>
-      </Link>
-      <Box1>
-        <Link to="/home/season">
-          <LeftBox1>
-            <Flag className="flag" />
-            <Text1>계절별 추천 코스</Text1>
-            <Arrow className="arrow" />
-          </LeftBox1>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.6 }}
+    >
+      <StHomePage>
+        <Link to="/record">
+          <Box4>
+            <Record className="record" />
+            <div className="box4">
+              <Text7>오늘도 주워볼까요?</Text7>
+              <HomeButton className="homeButton" />
+            </div>
+          </Box4>
         </Link>
-        <Link to="/info">
-          <RightBox1>
-            <Footprint className="footprint" />
-            <Text2>서울두드림길이란?</Text2>
-            <Arrow className="arrow" />
-          </RightBox1>
+        <Box1>
+          <Link to="/home/season">
+            <LeftBox1>
+              <Flag className="flag" />
+              <Text1>계절별 추천 코스</Text1>
+              <Arrow className="arrow" />
+            </LeftBox1>
+          </Link>
+          <Link to="/info">
+            <RightBox1>
+              <Footprint className="footprint" />
+              <Text2>서울두드림길이란?</Text2>
+              <Arrow className="arrow" />
+            </RightBox1>
+          </Link>
+        </Box1>
+        <Box3>
+          <Tree className="tree" />
+          <Text5>
+            <Ploging>{todayMonth}월 플로깅</Ploging>
+            <Time>걸은 시간</Time>
+            <Dis>걸은 거리</Dis>
+          </Text5>
+          <Text6>
+            <Ploging2>{plogging.length}번</Ploging2>
+            <Time2>
+              {real_runningTime}분 {real_runningTime2}초
+            </Time2>
+            <Dis2>{distance}km</Dis2>
+          </Text6>
+        </Box3>
+        <Link to="/plog/level">
+          <Box2>
+            <Level className="level" />
+            <LevelBox>
+              <Text3>Level {user.level}</Text3>
+              <Text4>다음 레벨까지 {1000 - point} 포인트</Text4>
+            </LevelBox>
+            <LevelBar />
+            <LevelBar2 width={levelBarWidth} />
+          </Box2>
         </Link>
-      </Box1>
-      <Box3>
-        <Tree className="tree" />
-        <Text5>
-          <Ploging>{todayMonth}월 플로깅</Ploging>
-          <Time>걸은 시간</Time>
-          <Dis>걸은 거리</Dis>
-        </Text5>
-        <Text6>
-          <Ploging2>{plogging.length}번</Ploging2>
-          <Time2>
-            {real_runningTime}분 {real_runningTime2}초
-          </Time2>
-          <Dis2>{distance}km</Dis2>
-        </Text6>
-      </Box3>
-      <Link to="/plog/level">
-        <Box2>
-          <Level className="level" />
-          <LevelBox>
-            <Text3>Level {user.level}</Text3>
-            <Text4>다음 레벨까지 {1000 - point} 포인트</Text4>
-          </LevelBox>
-          <LevelBar />
-          <LevelBar2 width={levelBarWidth} />
-        </Box2>
-      </Link>
 
-      <Footer />
-    </StHomePage>
+        <Footer />
+      </StHomePage>
+    </motion.div>
   );
 }
 

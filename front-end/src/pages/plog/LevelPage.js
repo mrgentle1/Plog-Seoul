@@ -8,6 +8,7 @@ import { userIdNumber, usePersistRecoilState } from "../../core/userId";
 
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
+import { motion } from "framer-motion";
 import axios from "axios";
 
 function LevelPage() {
@@ -65,50 +66,57 @@ function LevelPage() {
   ];
 
   return (
-    <StNoticePage>
-      <NoticeHeader>
-        <BackArrow className="noticeBackArrow" onClick={goBack} />
-        <HeaderText>Level {user.level}</HeaderText>
-      </NoticeHeader>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.6 }}
+    >
+      <StNoticePage>
+        <NoticeHeader>
+          <BackArrow className="noticeBackArrow" onClick={goBack} />
+          <HeaderText>Level {user.level}</HeaderText>
+        </NoticeHeader>
 
-      <ResponsiveContainer width="100%" height={240} className="graph">
-        <PieChart>
-          <Pie
-            data={data}
-            startAngle={90}
-            endAngle={-270}
-            cx="50%"
-            cy="50%"
-            innerRadius="55%"
-            outerRadius="90%"
-            animationDuration={1000}
-            animationBegin={0.5}
-            dataKey="value"
-          >
-            <Cell fill={COLOR.MAIN_GREEN} />
-            <Cell fill={COLOR.FOOTER_GRAY} />
-          </Pie>
-        </PieChart>
-      </ResponsiveContainer>
+        <ResponsiveContainer width="100%" height={240} className="graph">
+          <PieChart>
+            <Pie
+              data={data}
+              startAngle={90}
+              endAngle={-270}
+              cx="50%"
+              cy="50%"
+              innerRadius="55%"
+              outerRadius="90%"
+              animationDuration={1000}
+              animationBegin={0.5}
+              dataKey="value"
+            >
+              <Cell fill={COLOR.MAIN_GREEN} />
+              <Cell fill={COLOR.FOOTER_GRAY} />
+            </Pie>
+          </PieChart>
+        </ResponsiveContainer>
 
-      <Point>
-        <h5>{user.point}</h5>
-        <h6>/ 1,000 포인트</h6>
-      </Point>
-      <LevelLine />
-      <NoticeContent>
-        <PointText>포인트 내역</PointText>
-        <PointList>
-          {points.map((data, index) =>
-            data ? (
-              <PointCard key={data.id} p={data} />
-            ) : (
-              <div key={index}>포인트 내역이 없어요</div>
-            )
-          )}
-        </PointList>
-      </NoticeContent>
-    </StNoticePage>
+        <Point>
+          <h5>{user.point}</h5>
+          <h6>/ 1,000 포인트</h6>
+        </Point>
+        <LevelLine />
+        <NoticeContent>
+          <PointText>포인트 내역</PointText>
+          <PointList>
+            {points.map((data, index) =>
+              data ? (
+                <PointCard key={data.id} p={data} />
+              ) : (
+                <div key={index}>포인트 내역이 없어요</div>
+              )
+            )}
+          </PointList>
+        </NoticeContent>
+      </StNoticePage>
+    </motion.div>
   );
 }
 
