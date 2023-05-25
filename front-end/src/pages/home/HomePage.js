@@ -71,7 +71,7 @@ function HomePage() {
       .catch((error) => {
         console.error(error);
       });
-  });
+  }, []);
 
   const headertext = "안녕하세요, " + user.nickname + "님!";
   useEffect(() => {
@@ -85,6 +85,9 @@ function HomePage() {
   plogging.map((data) => (runningTime += data.runningTime));
   plogging.map((data) => (distance += data.distance));
   distance = distance.toFixed(2);
+
+  const real_runningTime = Math.floor(runningTime / 60);
+  const real_runningTime2 = runningTime % 60;
 
   return (
     <StHomePage>
@@ -122,7 +125,9 @@ function HomePage() {
         </Text5>
         <Text6>
           <Ploging2>{plogging.length}번</Ploging2>
-          <Time2>{runningTime}분</Time2>
+          <Time2>
+            {real_runningTime}분 {real_runningTime2}초
+          </Time2>
           <Dis2>{distance}km</Dis2>
         </Text6>
       </Box3>
