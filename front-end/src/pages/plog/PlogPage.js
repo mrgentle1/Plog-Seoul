@@ -77,7 +77,7 @@ function PlogPage() {
           </BorderThinButton>
         </Link>
         <BorderThinButton>
-          랭킹 확인하기<p>126등</p>
+          랭킹 확인하기<p>거리순/기록순</p>
         </BorderThinButton>
       </StPlogContent>
     </StPlogPage>
