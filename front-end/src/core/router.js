@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Layout } from "../components/layout/Layout";
+import { AnimatePresence } from "framer-motion";
 
 import KakaoCallback from "../pages/login/KakaoCallback";
 import LoginPage from "../pages/login/LoginPage";
@@ -31,34 +32,37 @@ import RecordFinishPage from "../pages/record/RecordFinishContainer";
 function Router() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/auth/kakao-callback" element={<KakaoCallback />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/search" element={<SearchPage />} />
-        <Route path="/course/:id" element={<CoursePostPage />} />
-        <Route path="/course/main" element={<CourseMainPage />} />
-        <Route path="/course/:id/reviews" element={<ReviewPage />} />
-        <Route path="/course/:id/review" element={<ReviewWritePage />} />
-        <Route path="/my/notice" element={<NoticePage />} />
-        <Route path="/plog/level" element={<LevelPage />} />
-        <Route path="/plog/achievement" element={<AchievementPage />} />
-        <Route path="/plog/ranking" element={<RankingPage />} />
-        <Route path="/home/season" element={<SeasonCoursePage />} />
-        <Route path="/info" element={<InformationPage />} />
+      <AnimatePresence>
+        <Routes>
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/auth/kakao-callback" element={<KakaoCallback />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/course/:id" element={<CoursePostPage />} />
+          <Route path="/course/main" element={<CourseMainPage />} />
+          <Route path="/course/:id/reviews" element={<ReviewPage />} />
+          <Route path="/course/:id/review" element={<ReviewWritePage />} />
+          <Route path="/my/notice" element={<NoticePage />} />
+          <Route path="/plog/level" element={<LevelPage />} />
+          <Route path="/plog/achievement" element={<AchievementPage />} />
+          <Route path="/plog/ranking" element={<RankingPage />} />
+          <Route path="/home/season" element={<SeasonCoursePage />} />
+          <Route path="/info" element={<InformationPage />} />
 
-        <Route element={<Layout />}>
-          <Route path="/home" element={<HomePage />} />
-          <Route path="/course" element={<CoursePage />} />
-          <Route path="/record" element={<RecordPage />} />
-          <Route path="/plog" element={<PlogPage />} />
-          <Route path="/my" element={<MyPage />} />
-        </Route>
-        <Route path="/record/ing" element={<RecordIng />} />
-        <Route path="/record/point" element={<RecordPoint />} />
-        <Route path="/record/finish" element={<RecordFinish />} />
-        <Route path="/record/test" element={<RecordFinishPage />} />
-      </Routes>
+          <Route element={<Layout />}>
+            <Route path="/home" element={<HomePage />} />
+            <Route path="/course" element={<CoursePage />} />
+            <Route path="/record" element={<RecordPage />} />
+            <Route path="/plog" element={<PlogPage />} />
+            <Route path="/my" element={<MyPage />} />
+          </Route>
+
+          <Route path="/record/ing" element={<RecordIng />} />
+          <Route path="/record/point" element={<RecordPoint />} />
+          <Route path="/record/finish" element={<RecordFinish />} />
+          <Route path="/record/test" element={<RecordFinishPage />} />
+        </Routes>
+      </AnimatePresence>
     </BrowserRouter>
   );
 }

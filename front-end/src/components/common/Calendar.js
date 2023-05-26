@@ -102,13 +102,15 @@ export const Calendar = () => {
         .toString()
         .padStart(2, "0")}`;
       const isSpecial = ploggingDate.includes(formattedDate);
-      const isSunday = currentDate.getUTCDay() === 0; // 일요일인 경우
+      const isSunday = currentDate.getUTCDay() === 0; // 일요일
+      const isToday = currentDate.toDateString() === new Date().toDateString(); // 오늘 날짜
 
       calendar.push(
         <CalendarDay
           key={day}
           isSpecial={isSpecial}
           isSunday={isSunday}
+          isToday={isToday}
           onClick={() => handleDayClick(formattedDate)}
         >
           {day}
@@ -224,4 +226,6 @@ const CalendarDay = styled.div`
       ? COLOR.MAIN_ORANGE
       : "inherit"};
   cursor: ${({ isSpecial }) => (isSpecial ? "pointer" : "default")};
+  border: 2px solid
+    ${({ isToday }) => (isToday ? COLOR.MAIN_GREEN : "transparent")};
 `;

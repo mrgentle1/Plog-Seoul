@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "../../components/common/Button";
 import { ReactComponent as Logo } from "../../assets/icons/logo.svg";
+import { ReactComponent as KakaoButton } from "../../assets/icons/kakaoButton.svg";
 
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
@@ -36,7 +37,7 @@ function LoginPage() {
         ></p>
         {contentIndex > content.length && (
           <LoginButton>
-            <Button onClick={kakaoLogin}>카카오로 시작하기</Button>
+            <KakaoButton onClick={kakaoLogin}>카카오로 시작하기</KakaoButton>
           </LoginButton>
         )}
       </LoginText>

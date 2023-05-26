@@ -15,6 +15,7 @@ import {
 import axios from "axios";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
 function MyPage() {
@@ -60,49 +61,56 @@ function MyPage() {
 
   return (
     <>
-      {modalOpen && <NickNameModal setModalOpen={setModalOpen} />}
-      {modalOpen && <ModalBackground />}
-      {modalOpen2 && <LogoutModal setModalOpen2={setModalOpen2} />}
-      {modalOpen2 && <ModalBackground2 />}
-      <StMyPage>
-        <StHeader>
-          <MyEdit onClick={showModal}>닉네임 변경</MyEdit>
-        </StHeader>
-        <StMyInfo>
-          <MyName>{user.name}</MyName>
-          <MyEmail>{user.email}</MyEmail>
-        </StMyInfo>
-        <StMyContent>
-          <Link to="/plog/level">
-            <MyBox1>
-              <MyText>내 포인트</MyText>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        {modalOpen && <NickNameModal setModalOpen={setModalOpen} />}
+        {modalOpen && <ModalBackground />}
+        {modalOpen2 && <LogoutModal setModalOpen2={setModalOpen2} />}
+        {modalOpen2 && <ModalBackground2 />}
+        <StMyPage>
+          <StHeader>
+            <MyEdit onClick={showModal}>닉네임 변경</MyEdit>
+          </StHeader>
+          <StMyInfo>
+            <MyName>{user.name}</MyName>
+            <MyEmail>{user.email}</MyEmail>
+          </StMyInfo>
+          <StMyContent>
+            <Link to="/plog/level">
+              <MyBox1>
+                <MyText>내 포인트</MyText>
+                <ForwardArrow className="forwardArrow" />
+              </MyBox1>
+            </Link>
+            <Link to="/my/notice">
+              <MyBox2>
+                <MyText>공지사항</MyText>
+                <ForwardArrow className="forwardArrow" />
+              </MyBox2>
+            </Link>
+            <MyBox3
+              onClick={() => {
+                window.open(form_url, "_blank");
+              }}
+            >
+              <MyText>문의하기</MyText>
               <ForwardArrow className="forwardArrow" />
-            </MyBox1>
-          </Link>
-          <Link to="/my/notice">
-            <MyBox2>
-              <MyText>공지사항</MyText>
-              <ForwardArrow className="forwardArrow" />
-            </MyBox2>
-          </Link>
-          <MyBox3
-            onClick={() => {
-              window.open(form_url, "_blank");
-            }}
-          >
-            <MyText>문의하기</MyText>
-            <ForwardArrow className="forwardArrow" />
-          </MyBox3>
-          <Link to="/info">
-            <MyBox4>
-              <MyText>서울 두드림길 안내</MyText>
-              <ForwardArrow className="forwardArrow" />
-            </MyBox4>
-          </Link>
-          <MyBox5 onClick={showModal2}>로그아웃</MyBox5>
-        </StMyContent>
-        <Footer />
-      </StMyPage>
+            </MyBox3>
+            <Link to="/info">
+              <MyBox4>
+                <MyText>서울 두드림길 안내</MyText>
+                <ForwardArrow className="forwardArrow" />
+              </MyBox4>
+            </Link>
+            <MyBox5 onClick={showModal2}>로그아웃</MyBox5>
+          </StMyContent>
+          <Footer />
+        </StMyPage>
+      </motion.div>
     </>
   );
 }

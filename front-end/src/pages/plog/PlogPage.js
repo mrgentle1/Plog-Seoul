@@ -8,6 +8,7 @@ import { Calendar } from "../../components/common/Calendar";
 import axios from "axios";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
+import { motion } from "framer-motion";
 import { BorderThinButton } from "../../components/common/Button";
 import { Link } from "react-router-dom";
 
@@ -48,41 +49,48 @@ function PlogPage() {
   const levelBarWidth = point >= 1000 ? 321 : (point / 1000) * 321;
 
   return (
-    <StPlogPage>
-      <StPlogContent>
-        <PlogCalender>
-          <Calendar />
-        </PlogCalender>
-        <PlogLevel>
-          <Plog1>
-            <Level className="level" />
-          </Plog1>
-          <Link to="/plog/level">
-            <Plog2>
-              <PlogText>
-                <Text1>Level {user.level}</Text1>
-                <Text2>다음 레벨까지 {1000 - point} 포인트</Text2>
-              </PlogText>
-            </Plog2>
-            <Plog3>
-              <LevelBar></LevelBar>
-              <LevelBar2 width={levelBarWidth}></LevelBar2>
-            </Plog3>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.6 }}
+    >
+      <StPlogPage>
+        <StPlogContent>
+          <PlogCalender>
+            <Calendar />
+          </PlogCalender>
+          <PlogLevel>
+            <Plog1>
+              <Level className="level" />
+            </Plog1>
+            <Link to="/plog/level">
+              <Plog2>
+                <PlogText>
+                  <Text1>Level {user.level}</Text1>
+                  <Text2>다음 레벨까지 {1000 - point} 포인트</Text2>
+                </PlogText>
+              </Plog2>
+              <Plog3>
+                <LevelBar></LevelBar>
+                <LevelBar2 width={levelBarWidth}></LevelBar2>
+              </Plog3>
+            </Link>
+          </PlogLevel>
+          <Link to="/plog/achievement">
+            <BorderThinButton>
+              달성한 업적
+              <p>0개</p>
+            </BorderThinButton>
           </Link>
-        </PlogLevel>
-        <Link to="/plog/achievement">
-          <BorderThinButton>
-            달성한 업적
-            <p>0개</p>
-          </BorderThinButton>
-        </Link>
-        <Link to="/plog/ranking">
-          <BorderThinButton>
-            랭킹 확인하기<p>126등</p>
-          </BorderThinButton>
-        </Link>
-      </StPlogContent>
-    </StPlogPage>
+          <Link to="/plog/ranking">
+            <BorderThinButton>
+              랭킹 확인하기<p>거리순/기록순</p>
+            </BorderThinButton>
+          </Link>
+        </StPlogContent>
+      </StPlogPage>
+    </motion.div>
   );
 }
 

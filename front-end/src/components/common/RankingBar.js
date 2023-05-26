@@ -11,7 +11,7 @@ export const RankingBarGraph = ({ num, bgColor, max }) => {
 
   useEffect(() => {
     increaseHeight();
-    console.log("3", showIcon, num);
+    //console.log("3", showIcon, num);
     // setShowIcon(true);
     // console.log("4", showIcon, num);
     const timer = setTimeout(() => {
@@ -30,9 +30,9 @@ export const RankingBarGraph = ({ num, bgColor, max }) => {
   const increaseHeight = () => {
     setHeight(max); // 막대 그래프의 최대 높이로 설정합니다.
     setShowNumber(true); // 숫자 1을 표시합니다.
-    console.log("1", showIcon, num);
+    //console.log("1", showIcon, num);
     setShowIcon(true);
-    console.log("2", showIcon, num);
+    //console.log("2", showIcon, num);
   };
 
   return (
