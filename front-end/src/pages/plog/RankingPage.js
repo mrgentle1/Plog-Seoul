@@ -12,7 +12,6 @@ import { RankingBarGraph } from "../../components/common/RankingBar";
 function RankingPage() {
   const token = localStorage.getItem("key");
   const [userId, setUserId] = usePersistRecoilState(userIdNumber);
-  console.log("userID입니다:", userId);
 
   const navigate = useNavigate();
   const goBack = useCallback(() => {
@@ -23,9 +22,25 @@ function RankingPage() {
   const isUpdate = useRef(false);
   const isMoreThan = useRef(false);
 
+  const [dist, setDist] = useState(true);
+  const [time, setTime] = useState(false);
+
+  const handleDistClick = () => {
+    setDist(true);
+    setTime(false);
+  };
+
+  const handleTimeClick = () => {
+    setDist(false);
+    setTime(true);
+  };
+
   /* GET - 랭킹 */
-  const [rankingAllData, setRankingAllData] = useState([
+  const [rankingDistData, setRankingDistData] = useState([
     { rank: 0, userId: 0, nickname: "", level: 0, totalDist: 0 },
+  ]);
+  const [rankingTimeData, setRankingTimeData] = useState([
+    { rank: 0, userId: 0, nickname: "", level: 0, totalTime: 0 },
   ]);
 
   async function getRankingData() {
@@ -41,32 +56,61 @@ function RankingPage() {
           },
         }
       );
-
       // 응답 결과(response)를 변수에 저장하거나.. 등 필요한 처리를 해 주면 된다.
       const initRanking = response.data.result.rankings;
-      const initData = initRanking.map((it) => {
+      const initDistData = initRanking.map((it) => {
         return {
           rank: it.rank,
           userId: it.userId,
           nickname: it.nickname,
           level: it.level,
-          totalDist: it.totalDistance / 1000,
+          totalDist: it.totalDistance,
         };
       });
 
       isUpdate.current = true;
-      console.log("길이:", initData.length);
-      if (initData.length > 3) {
+      if (initDistData.length > 3) {
         isMoreThan.current = true;
       }
-      setRankingAllData(initData);
+      setRankingDistData(initDistData);
     } catch (e) {
-      // 실패 시 처리
+      console.error(e);
+    }
+
+    try {
+      // GET 요청은 params에 실어 보냄
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_ROOT}/api/plogging/ranking?sortBy=TOTAL_RUNNING_TIME`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      // 응답 결과(response)를 변수에 저장하거나.. 등 필요한 처리를 해 주면 된다.
+      const initRanking = response.data.result.rankings;
+      const initTimeData = initRanking.map((it) => {
+        return {
+          rank: it.rank,
+          userId: it.userId,
+          nickname: it.nickname,
+          level: it.level,
+          totalTime: it.totalRunningTime,
+        };
+      });
+
+      isUpdate.current = true;
+      if (initTimeData.length > 3) {
+        isMoreThan.current = true;
+      }
+      setRankingTimeData(initTimeData);
+    } catch (e) {
       console.error(e);
     }
   }
 
-  const TopUserContainer = ({ num, name, dist }) => {
+  const TopUserContainer = ({ num, name, dist, time }) => {
     const barData = [
       { rank: 1, bgColor: COLOR.MAIN_GREEN, max: 180 },
       { rank: 2, bgColor: COLOR.LIGHT_GRAY, max: 140 },
@@ -81,12 +125,17 @@ function RankingPage() {
           max={barData[num - 1].max}
         />
         <p className="UserName">{name}</p>
-        <p className="UserDist">{dist.toFixed(2)}Km</p>
+        {dist && <p className="UserDist">{dist.toFixed(2)}Km</p>}
+        {time && (
+          <p className="UserDist">
+            {Math.floor(time / 60)}분 {time % 60}초
+          </p>
+        )}
       </TopUserData>
     );
   };
 
-  const UserRankingContainer = ({ num, name, dist, isList, id }) => {
+  const UserRankingContainer = ({ num, name, dist, time, isList, id }) => {
     const rank = String(num).padStart(2, "0");
     // const distData = dist / 1000;
     return (
@@ -100,25 +149,25 @@ function RankingPage() {
             </OneselfIconWrapper>
           )}
         </div>
-
-        <p className="UserDist">{dist.toFixed(2)}Km</p>
+        {dist && <p className="UserDist">{dist.toFixed(2)}Km</p>}
+        {time && (
+          <p className="UserDist">
+            {Math.floor(time / 60)}분 {time % 60}초
+          </p>
+        )}
       </RankingData>
     );
   };
 
   useEffect(() => {
     getRankingData();
-    console.log("기록가져오는 중");
   }, []);
 
   useEffect(() => {
     if (isUpdate.current) {
-      console.log("기록가져옴");
-      console.log("기록: %o", rankingAllData);
-      console.log("who:", rankingAllData[0].nickname);
       setIsLoading(false);
     }
-  }, [rankingAllData]);
+  }, [rankingDistData, rankingTimeData]);
 
   return (
     <StRankingPage>
@@ -126,27 +175,35 @@ function RankingPage() {
         <BackArrow className="noticeBackArrow" onClick={goBack} />
         <HeaderText>랭킹</HeaderText>
       </RankingHeader>
-      {!isLoading && (
+      {!isLoading && dist && (
         <RankingContainer>
           <TopRankingContainer>
             <TopUserContainer
               num={2}
-              name={rankingAllData[1].nickname}
-              dist={rankingAllData[1].totalDist}
+              name={rankingDistData[1].nickname}
+              dist={rankingDistData[1].totalDist}
             />
             <TopUserContainer
               num={1}
-              name={rankingAllData[0].nickname}
-              dist={rankingAllData[0].totalDist}
+              name={rankingDistData[0].nickname}
+              dist={rankingDistData[0].totalDist}
             />
             <TopUserContainer
               num={3}
-              name={rankingAllData[2].nickname}
-              dist={rankingAllData[2].totalDist}
+              name={rankingDistData[2].nickname}
+              dist={rankingDistData[2].totalDist}
             />
           </TopRankingContainer>
+          <ButtonContainer>
+            <DistButton onClick={handleDistClick} dist={dist}>
+              <p>거리순</p>
+            </DistButton>
+            <TimeButton onClick={handleTimeClick} time={time}>
+              <p>시간순</p>
+            </TimeButton>
+          </ButtonContainer>
           <MyRankingContainer>
-            {rankingAllData
+            {rankingDistData
               .filter((data) => data.userId === userId)
               .map((data) => (
                 <UserRankingContainer
@@ -161,7 +218,7 @@ function RankingPage() {
             <CommentWrapper>다음 등수까지 1.4Km 남았어요!</CommentWrapper>
           </MyRankingContainer>
           <RankingList>
-            {rankingAllData
+            {rankingDistData
               .filter((data) => data.rank > 3 && data.rank < 11)
               .map((data) => (
                 <OtherRankingContainer>
@@ -169,6 +226,66 @@ function RankingPage() {
                     num={data.rank}
                     name={data.nickname}
                     dist={data.totalDist}
+                    isList={true}
+                    id={data.id}
+                  />
+                </OtherRankingContainer>
+              ))}
+          </RankingList>
+        </RankingContainer>
+      )}
+
+      {!isLoading && time && (
+        <RankingContainer>
+          <TopRankingContainer>
+            <TopUserContainer
+              num={2}
+              name={rankingTimeData[1].nickname}
+              time={rankingTimeData[1].totalTime}
+            />
+            <TopUserContainer
+              num={1}
+              name={rankingTimeData[0].nickname}
+              time={rankingTimeData[0].totalTime}
+            />
+            <TopUserContainer
+              num={3}
+              name={rankingTimeData[2].nickname}
+              time={rankingTimeData[2].totalTime}
+            />
+          </TopRankingContainer>
+          <ButtonContainer>
+            <DistButton onClick={handleDistClick} dist={dist}>
+              <p>거리순</p>
+            </DistButton>
+            <TimeButton onClick={handleTimeClick} time={time}>
+              <p>시간순</p>
+            </TimeButton>
+          </ButtonContainer>
+          <MyRankingContainer>
+            {rankingTimeData
+              .filter((data) => data.userId === userId)
+              .map((data) => (
+                <UserRankingContainer
+                  key={data.userId}
+                  num={data.rank}
+                  name={data.nickname}
+                  time={data.totalTime}
+                  isList={false}
+                />
+              ))}
+
+            <CommentWrapper>다음 등수까지 00초 남았어요!</CommentWrapper>
+          </MyRankingContainer>
+          <RankingList>
+            {rankingTimeData
+              .filter((data) => data.rank > 3 && data.rank < 11)
+              .map((data) => (
+                <OtherRankingContainer>
+                  <UserRankingContainer
+                    num={data.rank}
+                    name={data.nickname}
+                    time={data.totalTime}
                     isList={true}
                     id={data.id}
                   />
@@ -256,7 +373,7 @@ const TopRankingContainer = styled.div`
   align-items: flex-end;
 
   width: 100%;
-  padding-bottom: 4rem;
+  padding-bottom: 3rem;
 `;
 
 const TopUserData = styled.div`
@@ -363,5 +480,44 @@ const NoneRankingContainer = styled.div`
   span {
     width: 100%;
     ${sharedTextStyle}
+  }
+`;
+
+const ButtonContainer = styled.div`
+  text-align: center;
+  margin-bottom: 3rem;
+`;
+const DistButton = styled.button`
+  margin-left: 1rem;
+  margin-right: 1rem;
+  width: 6rem;
+  height: 3rem;
+  background-color: ${({ dist }) =>
+    dist ? COLOR.MAIN_GREEN : COLOR.LIGHT_GRAY};
+  border: 0.2rem solid
+    ${({ dist }) => (dist ? COLOR.MAIN_GREEN : COLOR.MEDIUM_GRAY)};
+  border-radius: 1rem 1rem 1rem 1rem;
+  p {
+    color: ${COLOR.MAIN_BLACK};
+    font-size: 1.6rem;
+    font-weight: 500;
+    letter-spacing: 0.09rem;
+  }
+`;
+const TimeButton = styled.button`
+  margin-left: 1rem;
+  margin-right: 1rem;
+  width: 6rem;
+  height: 3rem;
+  background-color: ${({ time }) =>
+    time ? COLOR.MAIN_GREEN : COLOR.LIGHT_GRAY};
+  border: 0.2rem solid
+    ${({ time }) => (time ? COLOR.MAIN_GREEN : COLOR.MEDIUM_GRAY)};
+  border-radius: 1rem 1rem 1rem 1rem;
+  p {
+    color: ${COLOR.MAIN_BLACK};
+    font-size: 1.6rem;
+    font-weight: 500;
+    letter-spacing: 0.09rem;
   }
 `;
