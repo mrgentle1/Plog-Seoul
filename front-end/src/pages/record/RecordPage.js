@@ -225,14 +225,14 @@ function RecordPage() {
         {/* Reloacate-지도 이동 확인 O -> activate Btn */}
         <RelocateWrapper>
           {isMove ? (
-            <RelocateAtiveBtn
+            <RelocateBtn
               onClick={() => {
                 handleRelocate();
                 setIsMove(false);
               }}
             />
           ) : (
-            <RelocateBtn
+            <RelocateAtiveBtn
               onClick={() => {
                 handleRelocate();
               }}
