@@ -176,11 +176,13 @@ function ShowRecordData({
           imgLng: it.imgLng,
         };
       });
+
       if (initImg.length > 1) {
-        setImgData(initImg);
+        // setImgData(initImg);
         setIsImgData(true);
       }
       getImg.current = true;
+      setImgData(initImg);
     } catch (e) {
       // 실패 시 처리
       console.error(e);
