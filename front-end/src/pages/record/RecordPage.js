@@ -225,14 +225,14 @@ function RecordPage() {
         {/* Reloacate-지도 이동 확인 O -> activate Btn */}
         <RelocateWrapper>
           {isMove ? (
-            <RelocateAtiveBtn
+            <RelocateBtn
               onClick={() => {
                 handleRelocate();
                 setIsMove(false);
               }}
             />
           ) : (
-            <RelocateBtn
+            <RelocateAtiveBtn
               onClick={() => {
                 handleRelocate();
               }}
@@ -309,6 +309,7 @@ const ShowTrashCanWrapper = styled.div`
   position: absolute;
   overflow: hidden;
   top: 5rem;
+
   right: 1rem;
 
   z-index: 10;
