@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Map, MapMarker, CustomOverlayMap } from "react-kakao-maps-sdk";
+import { Map, MapMarker, CustomOverlayMap, useMap } from "react-kakao-maps-sdk";
 import { useNavigate, Link } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { headerTitleState } from "../../core/headerTitle";
@@ -24,6 +24,7 @@ function RecordPage() {
   const [errorMessage, setErrorMessage] = useState("");
   const [isMove, setIsMove] = useState(false);
   const [isShowCan, setIsShowCan] = useState(false);
+  const [level, setLevel] = useState(3);
   const mapRef = useRef();
   const [state, setState] = useState({
     center: {
@@ -155,6 +156,34 @@ function RecordPage() {
   }, []);
   console.log(state);
 
+  /* TrashCan show Marker */
+  const [markerSize, setMarkerSize] = useState({ width: 64, height: 64 });
+  const [isVisible, setIsVisible] = useState(true);
+  useEffect(() => {
+    console.log(level);
+
+    if (level > 5) {
+      setIsVisible(false);
+    } else {
+      setIsVisible(true);
+    }
+  }, [level]);
+
+  const EventTrashCanContainer = ({ position, mSize, title }) => {
+    const map = useMap();
+
+    return (
+      <MapMarker
+        position={position} // 마커를 표시할 위치
+        image={{
+          src: trashCanImg, // 마커이미지의 주소입니다
+          size: { markerSize }, // 마커이미지의 크기입니다
+        }}
+        title={title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+      ></MapMarker>
+    );
+  };
+
   return (
     <StRecordPage>
       <HomeHeaderV2 headerBackground={COLOR.MAIN_WHITE} />
@@ -169,7 +198,7 @@ function RecordPage() {
           level={3} // 지도 확대 레벨
           isPanto={true}
           onCenterChanged={() => setIsMove(true)}
-          onZoomChanged={() => setIsMove(true)}
+          onZoomChanged={(map) => setLevel(map.getLevel())}
           ref={mapRef}
         >
           {!state.isLoading && (
@@ -204,20 +233,15 @@ function RecordPage() {
             </div>
           )}
           {isShowCan &&
-            trashCanData.map((position, index) => (
-              <MapMarker
+            isVisible &&
+            trashCanData.map((position) => (
+              <EventTrashCanContainer
                 key={`${position.trashCanId}-${position.title}`}
                 position={{
                   lat: position.latlng.lat,
                   lng: position.latlng.lng,
                 }} // 마커를 표시할 위치
-                image={{
-                  src: trashCanImg, // 마커이미지의 주소입니다
-                  size: {
-                    width: 64,
-                    height: 64,
-                  }, // 마커이미지의 크기입니다
-                }}
+                mSize={markerSize}
                 title={position.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
               />
             ))}

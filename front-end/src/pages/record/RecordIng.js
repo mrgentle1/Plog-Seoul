@@ -284,6 +284,7 @@ function RecordIngPage() {
   const [isMove, setIsMove] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const [isShowCan, setIsShowCan] = useState(false);
+  const [level, setLevel] = useState(3);
   const mapRef = useRef();
 
   const start = () => {
@@ -497,6 +498,52 @@ function RecordIngPage() {
     }
   }, [imageUrl]);
 
+  const [markerSize, setMarkerSize] = useState({ width: 64, height: 64 });
+  const [isVisible, setIsVisible] = useState(true);
+  useEffect(() => {
+    console.log(level);
+    // if (level < 4) {
+    //   setMarkerSize({ width: 64, height: 64 });
+    // } else if (level < 7) {
+    //   setMarkerSize({ width: 32, height: 32 });
+    // } else {
+    //   setMarkerSize({ width: 8, height: 8 });
+    // }
+
+    if (level > 5) {
+      setIsVisible(false);
+    } else {
+      setIsVisible(true);
+    }
+  }, [level]);
+
+  const EventTrashCanContainer = ({ position, mSize, title }) => {
+    // console.log("현사이즈", mSize);
+    // console.log("사이즈", markerSize);
+    const map = useMap();
+
+    // if (0 < mapLevel && mapLevel < 4) {
+    //   setMarkerSize({ width: 64, height: 64 });
+    //   // } else if (3 < mapLevel && mapLevel < 6) {
+    //   //   markerSize = { width: 32, height: 32 };
+    //   // } else if (5 < mapLevel && mapLevel < 15) {
+    //   //   markerSize = { width: 16, height: 16 };
+    // } else {
+    //   setMarkerSize({ width: 32, height: 32 });
+    // }
+
+    return (
+      <MapMarker
+        position={position} // 마커를 표시할 위치
+        image={{
+          src: trashCanImg, // 마커이미지의 주소입니다
+          size: { markerSize }, // 마커이미지의 크기입니다
+        }}
+        title={title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+      ></MapMarker>
+    );
+  };
+
   const EventMarkerContainer = ({ position, content }) => {
     const map = useMap();
 
@@ -574,7 +621,7 @@ function RecordIngPage() {
             level={2} // 지도 확대 레벨
             isPanto={true}
             onDragEnd={() => setIsMove(true)}
-            onZoomChanged={() => setIsMove(true)}
+            onZoomChanged={(map) => setLevel(map.getLevel())}
             ref={mapRef}
             onCenterChanged={(map) =>
               setState({
@@ -608,20 +655,15 @@ function RecordIngPage() {
                 }}
               />
               {isShowCan &&
-                trashCanData.map((position, index) => (
-                  <MapMarker
+                isVisible &&
+                trashCanData.map((position) => (
+                  <EventTrashCanContainer
                     key={`${position.trashCanId}-${position.title}`}
                     position={{
                       lat: position.latlng.lat,
                       lng: position.latlng.lng,
                     }} // 마커를 표시할 위치
-                    image={{
-                      src: trashCanImg, // 마커이미지의 주소입니다
-                      size: {
-                        width: 64,
-                        height: 64,
-                      }, // 마커이미지의 크기입니다
-                    }}
+                    mSize={markerSize}
                     title={position.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
                   />
                 ))}
@@ -797,6 +839,9 @@ const ShowTrashCanWrapper = styled.div`
   overflow: hidden;
   top: 6rem;
   right: 1rem;
+
+  /* width: 4.4rem;
+  height: 4.4rem; */
 
   z-index: 10;
 `;
