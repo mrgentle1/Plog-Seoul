@@ -2,20 +2,20 @@ package com.plogseoul.application;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.webkit.DownloadListener;
+import android.util.Log;
 import android.webkit.GeolocationPermissions;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
@@ -27,20 +27,22 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
+import com.facebook.appevents.internal.Constants;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 
 public class WebViewActivity extends AppCompatActivity {
     private String TAG = WebViewActivity.class.getSimpleName();
@@ -234,16 +236,89 @@ public class WebViewActivity extends AppCompatActivity {
         }
 
         public void galleryAddPic() {
-            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-            File f = new File(currentPhotoPath);
-            Uri contentUri = Uri.fromFile(f);
-            mediaScanIntent.setData(contentUri);
-            activity.sendBroadcast(mediaScanIntent);
-            System.out.println("저장되었습니다.");
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            String imageFileName = "JPEG_" + timeStamp + ".jpg";
+
+            ContentValues values = new ContentValues();
+            values.put(MediaStore.Images.Media.DISPLAY_NAME, imageFileName);
+            values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+            values.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES);
+
+            ContentResolver resolver = activity.getContentResolver();
+            Uri imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+            try {
+                if (imageUri != null) {
+                    OutputStream outputStream = resolver.openOutputStream(imageUri);
+                    if (outputStream != null) {
+                        // Write your data to outputStream here.
+                        // You might get data from a file, like this:
+                         File initialFile = new File(currentPhotoPath);
+                         InputStream targetStream = new FileInputStream(initialFile);
+                         byte[] buffer = new byte[8 * 1024];
+                         int bytesRead;
+                         while ((bytesRead = targetStream.read(buffer)) != -1) {
+                             outputStream.write(buffer, 0, bytesRead);
+                         }
+                         targetStream.close();
+
+                        Toast.makeText(activity, "저장되었습니다", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            } catch (Exception e) {
+                Log.e("YOUR_APP_LOG_TAG", "Error occurred: " + e.getMessage());
+            }
         }
+
 
         public String getCurrentPhotoPath() {
             return currentPhotoPath;
+        }
+
+        @JavascriptInterface
+        public void shareInstagram() {
+
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("image/*");
+            File file = new File(currentPhotoPath);
+            Uri uri = FileProvider.getUriForFile(activity, getApplicationContext().getPackageName() + ".fileprovider", file);
+            intent.putExtra(Intent.EXTRA_STREAM, uri);
+            activity.grantUriPermission(
+                    "com.instagram.android", uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.setPackage("com.instagram.android");
+            startActivity(intent);
+
+
+//            System.out.println("shareInstagram called!" + currentPhotoPath);
+//            // Instantiate an intent
+//            Intent intent = new Intent("com.instagram.share.ADD_TO_STORY");
+//
+//            // Attach your App ID to the intent
+//            String sourceApplication = "232135862851032"; // This is your application's FB ID
+//            intent.setType("image/*");
+//            intent.putExtra("source_application", sourceApplication);
+//
+//            // Attach your sticker to the intent from a URI, and set background colors
+//            Uri stickerAssetUri = Uri.parse(currentPhotoPath);
+//            intent.putExtra("interactive_asset_uri", stickerAssetUri);
+//            intent.putExtra("top_background_color", "#33FF33");
+//            intent.putExtra("bottom_background_color", "#FF00FF");
+//
+//            // Grant URI permissions for the image
+//            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//            intent.setPackage("com.instagram.android");
+//
+//            // Grant URI permissions for the sticker
+//            activity.grantUriPermission(
+//                    "com.instagram.android", stickerAssetUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//
+////            System.out.println("intent!!");
+////            activity.startActivity(intent);
+//            // Verify that the activity resolves the intent and start it
+//            if (activity.getPackageManager().resolveActivity(intent, 0) != null) {
+//                System.out.println("hi~~");
+//                activity.startActivityForResult(intent, 0);
+//            }
         }
 
     }
@@ -252,8 +327,12 @@ public class WebViewActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 0 && resultCode == RESULT_OK) {
+            System.out.println("requestCode = " + requestCode);
+            this.startActivity(data);
+        }
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-//            jsInterface.galleryAddPic();
+            jsInterface.galleryAddPic();
             File photoFile = new File(jsInterface.getCurrentPhotoPath());
 
             Uri photoURI = FileProvider.getUriForFile(this,
