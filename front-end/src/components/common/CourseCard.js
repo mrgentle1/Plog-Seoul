@@ -1,10 +1,12 @@
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
-import { useState, useEffect } from "react";
+import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { ReactComponent as Shop } from "../../assets/icons/shop.svg";
 import { ReactComponent as Loading } from "../../assets/icons/imageLoading.svg";
+import { useQuery } from "react-query";
+
+import axios from "axios";
 
 export const CourseCard = ({ c }) => {
   const navigate = useNavigate();
@@ -13,68 +15,32 @@ export const CourseCard = ({ c }) => {
   };
 
   const token = localStorage.getItem("key");
-  const [images, setImages] = useState([]);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [imageCache, setImageCache] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
 
   const img_url = `${process.env.REACT_APP_API_ROOT}/api/roads/images`;
 
-  useEffect(() => {
-    const CancelToken = axios.CancelToken;
-    const source = CancelToken.source();
-
-    axios
-      .get(img_url, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        cancelToken: source.token,
-      })
-      .then((response) => {
-        setImages(response.data.result.courseImages);
-      })
-      .catch((error) => {
-        console.error("error", error);
-      });
-
-    return () => {
-      source.cancel();
-    };
-  }, []);
-
-  useEffect(() => {
-    const cacheImages = async () => {
-      const imagePromises = images.map((image) => {
-        return new Promise((resolve, reject) => {
-          const img = new Image();
-          img.src = image.imgUrl;
-          img.onload = resolve();
-          img.onerror = reject();
-        });
-      });
-      await Promise.all(imagePromises);
-      setImageCache(images.map((image) => image.imgUrl));
-      setIsLoading(false);
-    };
-
-    if (images.length > 0) {
-      cacheImages();
-    }
-  }, [images]);
-
-  useEffect(() => {
-    if (imageCache.length > 0) {
-      const index = c.routeId % imageCache.length;
-      setCurrentImageIndex(index);
-    }
-  }, [c.routeId, imageCache]);
-
-  const handleClickNextImage = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % imageCache.length);
+  const fetchCourseImages = async () => {
+    const response = await axios.get(img_url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data.result.courseImages;
   };
 
+  const { data: images, isLoading } = useQuery(
+    "courseImages",
+    fetchCourseImages
+  );
+
+  const imageCache = useMemo(() => {
+    if (images && images.length > 0) {
+      return images.map((image) => image.imgUrl);
+    }
+    return [];
+  }, [images]);
+
+  const currentImageIndex = c.routeId % imageCache.length;
   const currentImageUrl = imageCache[currentImageIndex];
 
   return (
