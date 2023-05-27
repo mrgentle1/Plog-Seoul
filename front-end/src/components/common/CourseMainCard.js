@@ -15,7 +15,7 @@ export const CourseMainCard = ({ c }) => {
   const [images, setImages] = useState([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  const img_url = `${process.env.REACT_APP_API_ROOT}/api/roads/images`;
+  const img_url = `${process.env.REACT_APP_API_ROOT}/api/roads/images?category=doseong`;
 
   useEffect(() => {
     axios

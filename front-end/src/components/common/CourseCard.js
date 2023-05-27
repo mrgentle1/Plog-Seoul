@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ReactComponent as Shop } from "../../assets/icons/shop.svg";
+import { ReactComponent as Loading } from "../../assets/icons/imageLoading.svg";
 
 export const CourseCard = ({ c }) => {
   const navigate = useNavigate();
@@ -14,16 +15,22 @@ export const CourseCard = ({ c }) => {
   const token = localStorage.getItem("key");
   const [images, setImages] = useState([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [imageCache, setImageCache] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const img_url = `${process.env.REACT_APP_API_ROOT}/api/roads/images`;
 
   useEffect(() => {
+    const CancelToken = axios.CancelToken;
+    const source = CancelToken.source();
+
     axios
       .get(img_url, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
+        cancelToken: source.token,
       })
       .then((response) => {
         setImages(response.data.result.courseImages);
@@ -31,20 +38,44 @@ export const CourseCard = ({ c }) => {
       .catch((error) => {
         console.error("error", error);
       });
+
+    return () => {
+      source.cancel();
+    };
   }, []);
 
   useEffect(() => {
+    const cacheImages = async () => {
+      const imagePromises = images.map((image) => {
+        return new Promise((resolve, reject) => {
+          const img = new Image();
+          img.src = image.imgUrl;
+          img.onload = resolve();
+          img.onerror = reject();
+        });
+      });
+      await Promise.all(imagePromises);
+      setImageCache(images.map((image) => image.imgUrl));
+      setIsLoading(false);
+    };
+
     if (images.length > 0) {
-      const index = c.routeId % images.length;
+      cacheImages();
+    }
+  }, [images]);
+
+  useEffect(() => {
+    if (imageCache.length > 0) {
+      const index = c.routeId % imageCache.length;
       setCurrentImageIndex(index);
     }
-  }, [c.id, images]);
+  }, [c.routeId, imageCache]);
 
   const handleClickNextImage = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % imageCache.length);
   };
 
-  const currentImage = images[currentImageIndex];
+  const currentImageUrl = imageCache[currentImageIndex];
 
   return (
     <>
@@ -67,14 +98,21 @@ export const CourseCard = ({ c }) => {
             </CourseTag>
           </StCourseText>
           <StCourseImg>
-            {currentImage && (
-              <div key={currentImage.id} style={{ width: 120, height: 140 }}>
-                <img
-                  src={currentImage.imgUrl}
-                  alt=""
-                  style={{ width: 120, height: 140, borderRadius: 14 }}
-                />
-              </div>
+            {isLoading ? (
+              <Loading style={{ width: 120, height: 140, borderRadius: 14 }} />
+            ) : (
+              currentImageUrl && (
+                <div
+                  key={currentImageIndex}
+                  style={{ width: 120, height: 140 }}
+                >
+                  <img
+                    src={currentImageUrl}
+                    alt=""
+                    style={{ width: 120, height: 140, borderRadius: 14 }}
+                  />
+                </div>
+              )
             )}
           </StCourseImg>
         </StCourseContent>
