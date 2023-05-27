@@ -11,6 +11,12 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
+    <queries>
+        <intent>
+            <action android:name='com.instagram.share.ADD_TO_STORY' />
+            <data android:mimeType='image/*' />
+        </intent>
+    </queries>
 
     <application
         android:allowBackup="true"
@@ -37,13 +43,20 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.plogseoul.application.fileprovider"
+            android:authorities="${applicationId}.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths"></meta-data>
         </provider>
+
+        <provider android:authorities="com.facebook.app.FacebookContentProvider232135862851032"
+            android:name="com.facebook.FacebookContentProvider"
+            android:exported="true" />
+
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>
 
     </application>
 
