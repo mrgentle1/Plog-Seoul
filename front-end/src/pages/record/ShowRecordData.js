@@ -294,7 +294,7 @@ function ShowRecordData({
   }, [imgData]);
 
   useEffect(() => {
-    if (!isDataLoading && !isPathLoading && !imgLoading) {
+    if (!isDataLoading && !isPathLoading && !imgLoading.current) {
       console.log("loading???????");
       // const map = mapRef.current;
       // if (map) {
