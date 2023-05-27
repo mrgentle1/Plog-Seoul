@@ -45,6 +45,7 @@ function SignupPage() {
         }
       )
       .then((res) => {
+        localStorage.removeItem("key");
         localStorage.setItem("key", token);
         navigate("/home");
       })
