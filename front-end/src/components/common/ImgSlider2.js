@@ -2,10 +2,37 @@ import React, { useState, useEffect } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import axios from "axios";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 
-const ImgSlider = () => {
+const ImgSlider2 = () => {
+  const token = localStorage.getItem("key");
+  const [images, setImages] = useState([]);
+
+  const img_url = `${process.env.REACT_APP_API_ROOT}/api/roads/images`;
+
+  useEffect(() => {
+    axios
+      .get(img_url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        setImages(response.data.result.courseImages);
+      })
+      .catch((error) => {
+        console.error("error", error);
+      });
+  }, []);
+
+  const getRandomImages = () => {
+    const shuffledImages = [...images].sort(() => 0.5 - Math.random());
+    return shuffledImages.slice(0, 3);
+  };
+
   const settings = {
     dots: true,
     infinite: true,
@@ -34,20 +61,16 @@ const ImgSlider = () => {
 
   return (
     <Slider {...settings}>
-      <div>
-        <img src={require("../../assets/images/imgSlide.png")} alt="Image 1" />
-      </div>
-      <div>
-        <img src={require("../../assets/images/course1.png")} alt="Image 2" />
-      </div>
-      <div>
-        <img src={require("../../assets/images/course2.png")} alt="Image 3" />
-      </div>
+      {getRandomImages().map((image) => (
+        <div key={image.id}>
+          <img src={image.imgUrl} alt="" />
+        </div>
+      ))}
     </Slider>
   );
 };
 
-export default ImgSlider;
+export default ImgSlider2;
 
 const Dots = styled.div`
   .dots_custom {
