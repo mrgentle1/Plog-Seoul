@@ -181,7 +181,6 @@ function ShowRecordData({
         setIsImgData(true);
       }
       getImg.current = true;
-      
     } catch (e) {
       // 실패 시 처리
       console.error(e);
@@ -280,7 +279,9 @@ function ShowRecordData({
 
   useEffect(() => {
     console.log("img기록가져옴", recordId);
-    if(getImg.current){setIsImgLoading(false);}
+    if (!getImg.current) {
+      setIsImgLoading(false);
+    }
     // console.log("이미지id: %o", imgData[0].recordId);
 
     // if (imgData[0].recordId == recordId) {
@@ -292,14 +293,15 @@ function ShowRecordData({
     //   console.log("범위 재구성");
     //   map.setBounds(bounds);
     // }
-    
+
     console.log("이미지: %o", imgData);
   }, [imgData]);
 
   useEffect(() => {
     if (!isDataLoading && !isPathLoading && !isImgLoading) {
       console.log("loading???????");
-      
+      setIsLoading(false);
+    }
   }, [
     thisRecordData,
     pathData,
