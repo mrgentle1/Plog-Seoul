@@ -169,14 +169,15 @@ const StCoursePostMain = styled.div`
 `;
 const CoursePostImg = styled.div`
   position: relative;
-  width: 393px;
+  width: 410px;
   height: 356px;
   margin-top: 46px;
+
   overflow: hidden;
 `;
 const ImgGradation = styled.div`
   position: absolute;
-  width: 393px;
+  width: 410px;
   height: 177px;
   background: linear-gradient(
     180deg,
