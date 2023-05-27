@@ -50,6 +50,7 @@ function ShowRecordData({
   const [isImgLoading, setIsImgLoading] = useState(true);
   const [isImgData, setIsImgData] = useState(false);
   const getImg = useRef(false);
+  const getPath = useRef(false);
 
   const mapRef = useRef();
 
@@ -134,6 +135,7 @@ function ShowRecordData({
         };
       });
       setPathData(initPath);
+      getPath.current = true;
     } catch (e) {
       // 실패 시 처리
       console.error(e);
@@ -270,38 +272,40 @@ function ShowRecordData({
     console.log("1.경로: %o", pathData);
     // const map = mapRef.current;
     // if (map) map.setBounds(bounds);
-    if (!isPathLoading) {
+    if (getPath.current) {
+      // setIsPathLoading(false);
       const map = mapRef.current;
       console.log("범위 재구성");
       if (map) map.setBounds(bounds);
+      console.log("2.범위: %o", bounds);
+      setIsPathLoading(false);
     }
-    setIsPathLoading(false);
-    console.log("2.경로: %o", pathData);
+    // setIsPathLoading(false);
   }, [pathData]);
 
   useEffect(() => {
     console.log("img기록가져옴", recordId);
     if (getImg.current) {
+      console.log("이미지 기록이 있다.");
       setIsImgLoading(false);
+      console.log("이미지: %o", imgData);
     }
-    // console.log("이미지id: %o", imgData[0].recordId);
-
-    // if (imgData[0].recordId == recordId) {
-    //   console.log("이미지 기록이 있다.");
-    //   setIsImgData(true);
-    // }
-    // const map = mapRef.current;
-    // if (map) {
-    //   console.log("범위 재구성");
-    //   map.setBounds(bounds);
-    // }
-
-    console.log("이미지: %o", imgData);
   }, [imgData]);
 
   useEffect(() => {
     if (!isDataLoading && !isPathLoading && !isImgLoading) {
       console.log("loading???????");
+      console.log(
+        "data, path, img",
+        isDataLoading,
+        isPathLoading,
+        isImgLoading
+      );
+
+      // const map = mapRef.current;
+      // console.log("3범위 재구성");
+      // if (map) map.setBounds(bounds);
+      // console.log("3.범위: %o", bounds);
       setIsLoading(false);
     }
   }, [
@@ -341,6 +345,7 @@ function ShowRecordData({
                   level={3} // 지도의 확대 레벨
                   zoomable={false}
                   draggable={false}
+                  disableDoubleClickZoom={false}
                   ref={mapRef}
                 >
                   {isImgData &&
