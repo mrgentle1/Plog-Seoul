@@ -5,6 +5,7 @@ import { AnimatePresence } from "framer-motion";
 import KakaoCallback from "../pages/login/KakaoCallback";
 import LoginPage from "../pages/login/LoginPage";
 import SignupPage from "../pages/signup/SignupPage";
+import SplashPage from "../pages/login/Splash";
 import HomePage from "../pages/home/HomePage";
 import CoursePage from "../pages/course/CoursePage";
 import RecordPage from "../pages/record/RecordPage";
@@ -37,6 +38,7 @@ function Router() {
           <Route path="/" element={<LoginPage />} />
           <Route path="/auth/kakao-callback" element={<KakaoCallback />} />
           <Route path="/signup" element={<SignupPage />} />
+          <Route path="/splash" element={<SplashPage />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/course/:id" element={<CoursePostPage />} />
           <Route path="/course/main" element={<CourseMainPage />} />

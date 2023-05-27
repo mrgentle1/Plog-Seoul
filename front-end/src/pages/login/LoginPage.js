@@ -26,7 +26,7 @@ function LoginPage() {
   const token = localStorage.getItem("key");
   useEffect(() => {
     if (token) {
-      navigate("/home");
+      navigate("/splash");
     }
   }, [token]);
 
