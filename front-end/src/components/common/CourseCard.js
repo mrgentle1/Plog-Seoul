@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import { ReactComponent as Shop } from "../../assets/icons/shop.svg";
 
 export const CourseCard = ({ c }) => {
@@ -8,6 +10,41 @@ export const CourseCard = ({ c }) => {
   const handlePageChange = () => {
     navigate(`/course/${c.routeId}`);
   };
+
+  const token = localStorage.getItem("key");
+  const [images, setImages] = useState([]);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const img_url = `${process.env.REACT_APP_API_ROOT}/api/roads/images`;
+
+  useEffect(() => {
+    axios
+      .get(img_url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        setImages(response.data.result.courseImages);
+      })
+      .catch((error) => {
+        console.error("error", error);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (images.length > 0) {
+      const index = c.routeId % images.length;
+      setCurrentImageIndex(index);
+    }
+  }, [c.id, images]);
+
+  const handleClickNextImage = () => {
+    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+  };
+
+  const currentImage = images[currentImageIndex];
 
   return (
     <>
@@ -29,7 +66,17 @@ export const CourseCard = ({ c }) => {
               </Tag>
             </CourseTag>
           </StCourseText>
-          <StCourseImg></StCourseImg>
+          <StCourseImg>
+            {currentImage && (
+              <div key={currentImage.id} style={{ width: 120, height: 140 }}>
+                <img
+                  src={currentImage.imgUrl}
+                  alt=""
+                  style={{ width: 120, height: 140, borderRadius: 14 }}
+                />
+              </div>
+            )}
+          </StCourseImg>
         </StCourseContent>
         <StCourseLine />
       </StCourseCard>
@@ -131,7 +178,6 @@ const Tag = styled.div`
 const StCourseImg = styled.div`
   float: right;
   padding: 0px;
-  background-color: ${COLOR.DARK_GRAY};
   width: 120px;
   height: 140px;
   border-radius: 14px;
