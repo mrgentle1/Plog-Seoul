@@ -179,7 +179,7 @@ function ShowRecordData({
         };
       });
 
-      if (initImg.length > 1) {
+      if (initImg.length > 0) {
         // setImgData(initImg);
         setIsImgData(true);
       }
