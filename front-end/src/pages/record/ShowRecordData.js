@@ -309,7 +309,7 @@ function ShowRecordData({
     imgData,
     isDataLoading,
     isPathLoading,
-    isImgLoading,
+    imgLoading,
     bounds,
   ]);
 
