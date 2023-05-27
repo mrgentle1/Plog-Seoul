@@ -296,11 +296,11 @@ function ShowRecordData({
   useEffect(() => {
     if (!isDataLoading && !isPathLoading && !imgLoading.current) {
       console.log("loading???????");
-      // const map = mapRef.current;
-      // if (map) {
-      //   console.log("범위 재구성");
-      //   map.setBounds(bounds);
-      // }
+      const map = mapRef.current;
+      if (map) {
+        console.log("범위 재구성");
+        map.setBounds(bounds);
+      }
       setIsLoading(false);
     }
   }, [
