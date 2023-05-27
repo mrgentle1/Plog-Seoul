@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 import { useEffect, useCallback } from "react";
+import html2canvas from "html2canvas";
 
 import { ReactComponent as Close } from "../../assets/icons/arrow_white_btn.svg";
 import { useNavigate, useHistory } from "react-router-dom";
@@ -37,6 +38,28 @@ export const RecordImgModal = ({ setImgOpen, data }) => {
     };
   }, []);
 
+  const onCapture = () => {
+    console.log("onCapture");
+    html2canvas(document.getElementById("imgFrame"), {
+      imageTimeout: 15000, //newline
+      scale: 3, //newline
+      allowTaint: true,
+      useCORS: true,
+    }).then((canvas) => {
+      onSaveAs(canvas.toDataURL("image/png"), "image-download.png");
+    });
+  };
+
+  const onSaveAs = (uri, filename) => {
+    console.log("onSaveAs");
+    var link = document.createElement("a");
+    document.body.appendChild(link);
+    link.href = uri;
+    link.download = filename;
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <>
       <ModalContainer>
@@ -49,11 +72,18 @@ export const RecordImgModal = ({ setImgOpen, data }) => {
           />
         </ModalCloseWrapper>
         <ModalContents>
-          <ModalImg>
+          <ModalImg id="imgFrame">
             <img className="content" src={data} alt="img"></img>
           </ModalImg>
           <ModalButton>
-            <Button onClick={() => window.Android?.shareInstagram(data)}>공유하기</Button>
+            <Button
+              onClick={() => {
+                onCapture();
+                window.Android?.shareInstagram(data);
+              }}
+            >
+              공유하기
+            </Button>
           </ModalButton>
         </ModalContents>
       </ModalContainer>
