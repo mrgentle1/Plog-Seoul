@@ -53,7 +53,7 @@ export const RecordImgModal = ({ setImgOpen, data }) => {
             <img className="content" src={data} alt="img"></img>
           </ModalImg>
           <ModalButton>
-            <Button>공유하기</Button>
+            <Button onClick={() => window.Android?.shareInstagram(data)}>공유하기</Button>
           </ModalButton>
         </ModalContents>
       </ModalContainer>
