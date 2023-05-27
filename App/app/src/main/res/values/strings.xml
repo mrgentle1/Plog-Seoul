@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">PlogSeoul</string>
+    <string name="facebook_app_id">232135862851032</string>
+    <string name="facebook_client_token">3ce3b33dd58faf10afc7b7efc7357441</string>
 </resources>
