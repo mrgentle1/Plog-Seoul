@@ -21,12 +21,13 @@ function SignupPage() {
   const [error, setError] = useState("");
   const onChangeName = (e) => {
     const inputValue = e.target.value;
+    const filteredValue = inputValue.replace(/[^\wㄱ-ㅎㅏ-ㅣ가-힣]/g, "");
     if (inputValue.length > 6) {
       setError("최대 6글자까지 입력 가능합니다.");
     } else {
       setError("");
     }
-    setName(inputValue);
+    setName(filteredValue);
   };
 
   const onSubmit = useCallback(() => {
