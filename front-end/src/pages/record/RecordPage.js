@@ -308,7 +308,7 @@ const ShowTrashCanWrapper = styled.div`
   display: flex;
   position: absolute;
   overflow: hidden;
-  top: 5rem;
+  top: 6rem;
 
   right: 1rem;
 
