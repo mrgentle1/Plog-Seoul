@@ -53,7 +53,7 @@ function MyPage() {
       .catch((error) => {
         console.error(error);
       });
-  }, [user]);
+  }, []);
 
   useEffect(() => {
     setHeaderTitle(user.nickname);
