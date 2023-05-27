@@ -18,8 +18,15 @@ function SignupPage() {
     navigate("/");
   }, [navigate]);
 
+  const [error, setError] = useState("");
   const onChangeName = (e) => {
-    setName(e.target.value);
+    const inputValue = e.target.value;
+    if (inputValue.length > 6) {
+      setError("최대 6글자까지 입력 가능합니다.");
+    } else {
+      setError("");
+    }
+    setName(inputValue);
   };
 
   const onSubmit = useCallback(() => {
@@ -65,6 +72,7 @@ function SignupPage() {
             placeholder="최대 6글자까지 입력 가능합니다"
             onChange={onChangeName}
           />
+          {error && <ErrorMessage>{error}</ErrorMessage>}
         </SignupInput>
         <SignupButton>
           {!name ? (
@@ -148,6 +156,14 @@ const SignupInputBox = styled.input`
     font-size: 14px;
     line-height: 17px;
   }
+`;
+const ErrorMessage = styled.div`
+  width: 100%;
+  text-align: left;
+  padding-left: 5px;
+  color: #ff2c2c;
+  font-size: 12px;
+  margin-top: 4px;
 `;
 const SignupButton = styled.div`
   position: fixed;
