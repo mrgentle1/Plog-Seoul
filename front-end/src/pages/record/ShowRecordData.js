@@ -49,7 +49,8 @@ function ShowRecordData({
   const [isPathLoading, setIsPathLoading] = useState(true);
   const [isImgLoading, setIsImgLoading] = useState(true);
   const [isImgData, setIsImgData] = useState(false);
-  const imgLoading = useRef(true);
+  const getImg = useRef(false);
+
   const mapRef = useRef();
 
   const [points, setPoints] = useState([
@@ -179,7 +180,8 @@ function ShowRecordData({
         setImgData(initImg);
         setIsImgData(true);
       }
-      imgLoading.current = false;
+      getImg.current = true;
+      
     } catch (e) {
       // 실패 시 처리
       console.error(e);
@@ -278,6 +280,7 @@ function ShowRecordData({
 
   useEffect(() => {
     console.log("img기록가져옴", recordId);
+    if(getImg.current){setIsImgLoading(false);}
     // console.log("이미지id: %o", imgData[0].recordId);
 
     // if (imgData[0].recordId == recordId) {
@@ -289,27 +292,21 @@ function ShowRecordData({
     //   console.log("범위 재구성");
     //   map.setBounds(bounds);
     // }
-    setIsImgLoading(false);
+    
     console.log("이미지: %o", imgData);
   }, [imgData]);
 
   useEffect(() => {
-    if (!isDataLoading && !isPathLoading && !imgLoading.current) {
+    if (!isDataLoading && !isPathLoading && !isImgLoading) {
       console.log("loading???????");
-      const map = mapRef.current;
-      if (map) {
-        console.log("범위 재구성");
-        map.setBounds(bounds);
-      }
-      setIsLoading(false);
-    }
+      
   }, [
     thisRecordData,
     pathData,
     imgData,
     isDataLoading,
     isPathLoading,
-    imgLoading,
+    isImgLoading,
     bounds,
   ]);
 
