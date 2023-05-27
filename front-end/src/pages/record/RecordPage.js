@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { motion } from "framer-motion";
 import { Map, MapMarker, CustomOverlayMap, useMap } from "react-kakao-maps-sdk";
 import { useNavigate, Link } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
@@ -8,6 +9,7 @@ import { COLOR } from "../../styles/color";
 import current from "../../assets/icons/currentMarker.svg";
 import trashCanImg from "../../assets/icons/trash.svg";
 import { ReactComponent as StartBtn } from "../../assets/icons/recordStart.svg";
+import { ReactComponent as RecordStartBtn } from "../../assets/icons/runStartBtn.svg";
 import { ReactComponent as RelocateBtn } from "../../assets/icons/relocateInactivate.svg";
 import { ReactComponent as RelocateAtiveBtn } from "../../assets/icons/relocateActivate.svg";
 import { ReactComponent as TrashCanAtiveBtn } from "../../assets/icons/trashCanActivate.svg";
@@ -185,101 +187,113 @@ function RecordPage() {
   };
 
   return (
-    <StRecordPage>
-      <HomeHeaderV2 headerBackground={COLOR.MAIN_WHITE} />
-      <MapContainer>
-        <Map
-          id="MapWrapper"
-          center={{
-            lat: state.center.lat - 0.0008,
-            lng: state.center.lng + 0.0001,
-          }} // 지도의 중심 좌표
-          style={{ width: "100%", height: "100%" }} // 지도 크기
-          level={3} // 지도 확대 레벨
-          isPanto={true}
-          onCenterChanged={() => setIsMove(true)}
-          onZoomChanged={(map) => setLevel(map.getLevel())}
-          ref={mapRef}
-        >
-          {!state.isLoading && (
-            <div>
-              <MapMarker // 마커를 생성합니다
-                position={state.center}
-                image={{
-                  src: current, // 마커이미지의 주소입니다
-                  size: {
-                    width: 80,
-                    height: 80,
-                  }, // 마커이미지의 크기입니다
-                  options: {
-                    offset: {
-                      x: 40,
-                      y: 60,
-                    }, // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-                  },
+    <motion.div
+      /* 2. 원하는 애니메이션으로 jsx를 감싸준다 */
+      // initial={{ opacity: 0 }}
+      // animate={{ opacity: 1 }}
+      // exit={{ opacity: 0 }}
+      animate={{ y: 0 }}
+      initial={{ y: 700 }}
+      transition={{ delay: 1, duration: 1.5, type: "spring" }}
+    >
+      <StRecordPage>
+        <HomeHeaderV2 headerBackground={COLOR.MAIN_WHITE} />
+        <MapContainer>
+          <Map
+            id="MapWrapper"
+            center={{
+              lat: state.center.lat - 0.00008,
+              lng: state.center.lng,
+            }} // 지도의 중심 좌표
+            style={{ width: "100%", height: "100%" }} // 지도 크기
+            level={3} // 지도 확대 레벨
+            isPanto={true}
+            onCenterChanged={() => setIsMove(true)}
+            onZoomChanged={(map) => setLevel(map.getLevel())}
+            ref={mapRef}
+          >
+            {!state.isLoading && (
+              <div>
+                <MapMarker // 마커를 생성합니다
+                  position={state.center}
+                  image={{
+                    src: current, // 마커이미지의 주소입니다
+                    size: {
+                      width: 80,
+                      height: 80,
+                    }, // 마커이미지의 크기입니다
+                    options: {
+                      offset: {
+                        x: 40,
+                        y: 60,
+                      }, // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+                    },
+                  }}
+                />
+              </div>
+            )}
+            {isShowCan &&
+              isVisible &&
+              trashCanData.map((position) => (
+                <EventTrashCanContainer
+                  key={`${position.trashCanId}-${position.title}`}
+                  position={{
+                    lat: position.latlng.lat,
+                    lng: position.latlng.lng,
+                  }} // 마커를 표시할 위치
+                  mSize={markerSize}
+                  title={position.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+                />
+              ))}
+          </Map>
+          {/* Reloacate-지도 이동 확인 O -> activate Btn */}
+          <RelocateWrapper>
+            {isMove ? (
+              <RelocateBtn
+                onClick={() => {
+                  handleRelocate();
+                  setIsMove(false);
                 }}
               />
-              <CustomOverlayMap position={state.center} yAnchor={0.05}>
-                <Link
-                  to={"/record/ing"}
-                  state={{
-                    lat: `${state.center.lat}`,
-                    lng: `${state.center.lng}`,
-                  }}
-                >
-                  <StartBtn className="startBtn" />
-                </Link>
-              </CustomOverlayMap>
-            </div>
-          )}
-          {isShowCan &&
-            isVisible &&
-            trashCanData.map((position) => (
-              <EventTrashCanContainer
-                key={`${position.trashCanId}-${position.title}`}
-                position={{
-                  lat: position.latlng.lat,
-                  lng: position.latlng.lng,
-                }} // 마커를 표시할 위치
-                mSize={markerSize}
-                title={position.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+            ) : (
+              <RelocateAtiveBtn
+                onClick={() => {
+                  handleRelocate();
+                }}
               />
-            ))}
-        </Map>
-        {/* Reloacate-지도 이동 확인 O -> activate Btn */}
-        <RelocateWrapper>
-          {isMove ? (
-            <RelocateBtn
-              onClick={() => {
-                handleRelocate();
-                setIsMove(false);
+            )}
+          </RelocateWrapper>
+          <ShowTrashCanWrapper>
+            {isShowCan ? (
+              <TrashCanAtiveBtn
+                onClick={() => {
+                  setIsShowCan(false);
+                }}
+              />
+            ) : (
+              <TrashCanBtn
+                onClick={() => {
+                  setIsShowCan(true);
+                }}
+              />
+            )}
+          </ShowTrashCanWrapper>
+        </MapContainer>
+        <RecordPageFooter>
+          <RecordStartBtnWrapper>
+            <Link
+              to={"/record/ing"}
+              state={{
+                lat: `${state.center.lat}`,
+                lng: `${state.center.lng}`,
               }}
-            />
-          ) : (
-            <RelocateAtiveBtn
-              onClick={() => {
-                handleRelocate();
-              }}
-            />
-          )}
-        </RelocateWrapper>
-        <ShowTrashCanWrapper>
-          {isShowCan ? (
-            <TrashCanAtiveBtn
-              onClick={() => {
-                setIsShowCan(false);
-              }}
-            />
-          ) : (
-            <TrashCanBtn
-              onClick={() => {
-                setIsShowCan(true);
-              }}
-            />
-          )}
-        </ShowTrashCanWrapper>
-      </MapContainer>
-    </StRecordPage>
+            >
+              <RecordStartBtn />
+            </Link>
+          </RecordStartBtnWrapper>
+        </RecordPageFooter>
+      </StRecordPage>
+    </motion.div>
   );
 }
 
@@ -322,7 +336,7 @@ const RelocateWrapper = styled.div`
   display: flex;
   position: absolute;
   overflow: hidden;
-  top: 1rem;
+  top: 9rem;
   right: 1rem;
 
   z-index: 10;
@@ -332,9 +346,33 @@ const ShowTrashCanWrapper = styled.div`
   display: flex;
   position: absolute;
   overflow: hidden;
-  top: 6rem;
+  top: 14rem;
 
   right: 1rem;
 
   z-index: 10;
+`;
+
+const RecordPageFooter = styled.div`
+  display: flex;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 15.7rem;
+
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+
+  background-image: linear-gradient(
+    to top,
+    rgba(255, 255, 255, 0.7) 30%,
+    rgba(255, 255, 255, 0)
+  );
+
+  z-index: 100;
+`;
+
+const RecordStartBtnWrapper = styled.div`
+  display: flex;
 `;
