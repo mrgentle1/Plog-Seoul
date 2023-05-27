@@ -13,6 +13,8 @@ import PlogImg from "../../assets/icons/imgMarker.svg";
 import { ReactComponent as Close } from "../../assets/icons/close.svg";
 import { ReactComponent as RelocateBtn } from "../../assets/icons/relocateInactivate.svg";
 import { ReactComponent as RelocateAtiveBtn } from "../../assets/icons/relocateActivate.svg";
+import { ReactComponent as TrashCanAtiveBtn } from "../../assets/icons/trashCanActivate.svg";
+import { ReactComponent as TrashCanBtn } from "../../assets/icons/trash.svg";
 import {
   RecordModal,
   ModalBackground,
@@ -139,7 +141,6 @@ function RecordIngPage() {
         recordId: response.data.result.recordId,
       };
       setRecordUserData(initRecord);
-
     } catch (e) {
       // 실패 시 처리
       console.error(e);
@@ -282,6 +283,7 @@ function RecordIngPage() {
   const [recording, setRecording] = useState(false); //기록 중
   const [isMove, setIsMove] = useState(false);
   const [isActive, setIsActive] = useState(false);
+  const [isShowCan, setIsShowCan] = useState(false);
   const mapRef = useRef();
 
   const start = () => {
@@ -352,7 +354,6 @@ function RecordIngPage() {
   };
 
   const success = (position) => {
-
     const coordinates = [
       new kakao.maps.LatLng(beforeRecord.current.lat, beforeRecord.current.lng),
       new kakao.maps.LatLng(
@@ -368,7 +369,6 @@ function RecordIngPage() {
     const distDiff = linePath.getLength();
 
     if (distDiff !== 0 && position.coords.accuracy < 20 && distDiff < 800) {
-
       beforeRecord.current = {
         lat: position.coords.latitude,
         lng: position.coords.longitude,
@@ -443,7 +443,6 @@ function RecordIngPage() {
   const recordStopHandler = async (e) => {
     e.preventDefault();
     try {
-
       if (watchId !== -1) {
         navigator.geolocation.clearWatch(watchId);
         setWatchId(-1);
@@ -531,7 +530,6 @@ function RecordIngPage() {
 
   // Define the callback function
   window.receiveBackPressed = function (backPressed) {
-
     setModalOpen(backPressed);
   };
 
@@ -609,23 +607,24 @@ function RecordIngPage() {
                   },
                 }}
               />
-              {trashCanData.map((position, index) => (
-                <MapMarker
-                  key={`${position.trashCanId}-${position.title}`}
-                  position={{
-                    lat: position.latlng.lat,
-                    lng: position.latlng.lng,
-                  }} // 마커를 표시할 위치
-                  image={{
-                    src: trashCanImg, // 마커이미지의 주소입니다
-                    size: {
-                      width: 64,
-                      height: 64,
-                    }, // 마커이미지의 크기입니다
-                  }}
-                  title={position.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
-                />
-              ))}
+              {isShowCan &&
+                trashCanData.map((position, index) => (
+                  <MapMarker
+                    key={`${position.trashCanId}-${position.title}`}
+                    position={{
+                      lat: position.latlng.lat,
+                      lng: position.latlng.lng,
+                    }} // 마커를 표시할 위치
+                    image={{
+                      src: trashCanImg, // 마커이미지의 주소입니다
+                      size: {
+                        width: 64,
+                        height: 64,
+                      }, // 마커이미지의 크기입니다
+                    }}
+                    title={position.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+                  />
+                ))}
               {imgData.map((value) => (
                 <EventMarkerContainer
                   key={`EventMarkerContainer-${value.imageUrl}`}
@@ -660,6 +659,21 @@ function RecordIngPage() {
               />
             )}
           </RelocateWrapper>
+          <ShowTrashCanWrapper>
+            {isShowCan ? (
+              <TrashCanAtiveBtn
+                onClick={() => {
+                  setIsShowCan(false);
+                }}
+              />
+            ) : (
+              <TrashCanBtn
+                onClick={() => {
+                  setIsShowCan(true);
+                }}
+              />
+            )}
+          </ShowTrashCanWrapper>
         </MapContainer>
         <RecordDetailContainer>
           <StopWatchContainer>
@@ -772,6 +786,16 @@ const RelocateWrapper = styled.div`
   position: absolute;
   overflow: hidden;
   top: 1rem;
+  right: 1rem;
+
+  z-index: 10;
+`;
+
+const ShowTrashCanWrapper = styled.div`
+  display: flex;
+  position: absolute;
+  overflow: hidden;
+  top: 6rem;
   right: 1rem;
 
   z-index: 10;
