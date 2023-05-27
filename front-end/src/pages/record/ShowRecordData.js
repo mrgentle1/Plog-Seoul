@@ -49,7 +49,7 @@ function ShowRecordData({
   const [isPathLoading, setIsPathLoading] = useState(true);
   const [isImgLoading, setIsImgLoading] = useState(true);
   const [isImgData, setIsImgData] = useState(false);
-
+  const imgLoading = useRef(true);
   const mapRef = useRef();
 
   const [points, setPoints] = useState([
@@ -179,6 +179,7 @@ function ShowRecordData({
         setImgData(initImg);
         setIsImgData(true);
       }
+      imgLoading.current = false;
     } catch (e) {
       // 실패 시 처리
       console.error(e);
@@ -293,7 +294,7 @@ function ShowRecordData({
   }, [imgData]);
 
   useEffect(() => {
-    if (!isDataLoading && !isPathLoading && !isImgLoading) {
+    if (!isDataLoading && !isPathLoading && !imgLoading) {
       console.log("loading???????");
       // const map = mapRef.current;
       // if (map) {
