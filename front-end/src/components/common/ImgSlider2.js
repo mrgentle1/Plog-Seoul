@@ -63,7 +63,7 @@ const ImgSlider2 = () => {
     <Slider {...settings}>
       {getRandomImages().map((image) => (
         <div key={image.id}>
-          <img src={image.imgUrl} alt="" />
+          <img src={image.imgUrl} alt="" width="100%" />
         </div>
       ))}
     </Slider>
