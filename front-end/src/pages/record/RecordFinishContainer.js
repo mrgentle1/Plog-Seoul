@@ -35,9 +35,10 @@ function RecordFinishPage() {
   /*point에서 현재 위치 값을 가져와 초기세팅 해줌 */
   const plogRecord = useLocation();
   const recordId = plogRecord.state.recordId;
+  const isShowPlog = plogRecord.state.isShowPlog;
   const [userData, setUserData] = useState({
     recordId: recordId,
-    isShowPlog: false,
+    isShowPlog: isShowPlog,
   });
 
   const [isCourse, sestIsCourse] = useState(false);

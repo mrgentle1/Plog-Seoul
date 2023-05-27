@@ -206,6 +206,7 @@ function RecordPoint() {
           to={"/record/test"}
           state={{
             recordId: `${userData.recordId}`,
+            isShowPlog: false,
           }}
         >
           <Button

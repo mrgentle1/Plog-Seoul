@@ -49,6 +49,7 @@ function ShowRecordData({
   const [isPathLoading, setIsPathLoading] = useState(true);
   const [isImgLoading, setIsImgLoading] = useState(true);
   const [isImgData, setIsImgData] = useState(false);
+  const getImg = useRef(false);
 
   const mapRef = useRef();
 
@@ -175,10 +176,13 @@ function ShowRecordData({
           imgLng: it.imgLng,
         };
       });
+
       if (initImg.length > 1) {
-        setImgData(initImg);
+        // setImgData(initImg);
         setIsImgData(true);
       }
+      getImg.current = true;
+      setImgData(initImg);
     } catch (e) {
       // 실패 시 처리
       console.error(e);
@@ -277,6 +281,9 @@ function ShowRecordData({
 
   useEffect(() => {
     console.log("img기록가져옴", recordId);
+    if (getImg.current) {
+      setIsImgLoading(false);
+    }
     // console.log("이미지id: %o", imgData[0].recordId);
 
     // if (imgData[0].recordId == recordId) {
@@ -288,18 +295,13 @@ function ShowRecordData({
     //   console.log("범위 재구성");
     //   map.setBounds(bounds);
     // }
-    setIsImgLoading(false);
+
     console.log("이미지: %o", imgData);
   }, [imgData]);
 
   useEffect(() => {
     if (!isDataLoading && !isPathLoading && !isImgLoading) {
       console.log("loading???????");
-      // const map = mapRef.current;
-      // if (map) {
-      //   console.log("범위 재구성");
-      //   map.setBounds(bounds);
-      // }
       setIsLoading(false);
     }
   }, [
