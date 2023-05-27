@@ -6,10 +6,15 @@ import { headerTitleState } from "../../core/headerTitle";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 import current from "../../assets/icons/currentMarker.svg";
+import trashCanImg from "../../assets/icons/trash.svg";
 import { ReactComponent as StartBtn } from "../../assets/icons/recordStart.svg";
 import { ReactComponent as RelocateBtn } from "../../assets/icons/relocateInactivate.svg";
 import { ReactComponent as RelocateAtiveBtn } from "../../assets/icons/relocateActivate.svg";
+import { ReactComponent as TrashCanAtiveBtn } from "../../assets/icons/trashCanActivate.svg";
+import { ReactComponent as TrashCanBtn } from "../../assets/icons/trash.svg";
+
 import { HomeHeaderV2 } from "../../components/layout/HeaderV2";
+import axios from "axios";
 
 const { kakao } = window;
 
@@ -18,6 +23,7 @@ function RecordPage() {
   const token = localStorage.getItem("key");
   const [errorMessage, setErrorMessage] = useState("");
   const [isMove, setIsMove] = useState(false);
+  const [isShowCan, setIsShowCan] = useState(false);
   const mapRef = useRef();
   const [state, setState] = useState({
     center: {
@@ -94,11 +100,47 @@ function RecordPage() {
   let todayDate = today.getDate();
   const setHeaderTitle = useSetRecoilState(headerTitleState);
 
+  /* GET - 쓰레기통 위치 */
+  const [trashCanData, setTrashCanData] = useState([
+    { trashcanId: 0, title: "쓰레기통", latlng: { lat: 0, lng: 0 } },
+  ]);
+
+  async function getTrashCanData() {
+    // async, await을 사용하는 경우
+    try {
+      // GET 요청은 params에 실어 보냄
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_ROOT}/api/trash-cans`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      // 응답 결과(response)를 변수에 저장하거나.. 등 필요한 처리를 해 주면 된다.
+      const initTrash = response.data.result.map((it) => {
+        return {
+          trashCanId: it.trashCanId,
+          title: it.address,
+          latlng: { lat: it.lat, lng: it.lng },
+        };
+      });
+      setTrashCanData(initTrash);
+    } catch (e) {
+      // 실패 시 처리
+      console.error(e);
+    }
+  }
+
   useEffect(() => {
     setHeaderTitle(`${todayMonth}월 ${todayDate}일 플로깅`); // '홈' 값을 할당합니다.
   }, [setHeaderTitle]);
 
   useEffect(() => {
+    getTrashCanData(); //쓰레기통 위치 정보
+
     if (navigator.geolocation) {
       // GeoLocation을 이용해서 접속 위치를 얻어옵니다
       navigator.geolocation.getCurrentPosition(success, showError);
@@ -161,6 +203,24 @@ function RecordPage() {
               </CustomOverlayMap>
             </div>
           )}
+          {isShowCan &&
+            trashCanData.map((position, index) => (
+              <MapMarker
+                key={`${position.trashCanId}-${position.title}`}
+                position={{
+                  lat: position.latlng.lat,
+                  lng: position.latlng.lng,
+                }} // 마커를 표시할 위치
+                image={{
+                  src: trashCanImg, // 마커이미지의 주소입니다
+                  size: {
+                    width: 64,
+                    height: 64,
+                  }, // 마커이미지의 크기입니다
+                }}
+                title={position.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+              />
+            ))}
         </Map>
         {/* Reloacate-지도 이동 확인 O -> activate Btn */}
         <RelocateWrapper>
@@ -179,6 +239,21 @@ function RecordPage() {
             />
           )}
         </RelocateWrapper>
+        <ShowTrashCanWrapper>
+          {isShowCan ? (
+            <TrashCanAtiveBtn
+              onClick={() => {
+                setIsShowCan(false);
+              }}
+            />
+          ) : (
+            <TrashCanBtn
+              onClick={() => {
+                setIsShowCan(true);
+              }}
+            />
+          )}
+        </ShowTrashCanWrapper>
       </MapContainer>
     </StRecordPage>
   );
@@ -224,6 +299,16 @@ const RelocateWrapper = styled.div`
   position: absolute;
   overflow: hidden;
   top: 1rem;
+  right: 1rem;
+
+  z-index: 10;
+`;
+
+const ShowTrashCanWrapper = styled.div`
+  display: flex;
+  position: absolute;
+  overflow: hidden;
+  top: 5rem;
   right: 1rem;
 
   z-index: 10;
