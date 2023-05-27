@@ -279,7 +279,7 @@ function ShowRecordData({
 
   useEffect(() => {
     console.log("img기록가져옴", recordId);
-    if (!getImg.current) {
+    if (getImg.current) {
       setIsImgLoading(false);
     }
     // console.log("이미지id: %o", imgData[0].recordId);
