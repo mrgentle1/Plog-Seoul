@@ -308,7 +308,7 @@ function RecordIngPage() {
           locationList[locationList.length - 1].lng
         )
       );
-      map.setLevel(2);
+      // map.setLevel(2);
       // setState({
       //   center: {
       //     lat: locationList[locationList.length - 1].la,

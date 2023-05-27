@@ -46,6 +46,8 @@ export const EditImgModal = ({ setImgEditOpen, data }) => {
   const onCapture = () => {
     console.log("onCapture");
     html2canvas(document.getElementById("imgFrame"), {
+      imageTimeout: 15000, //newline
+      scale: 3, //newline
       allowTaint: true,
       useCORS: true,
     }).then((canvas) => {
