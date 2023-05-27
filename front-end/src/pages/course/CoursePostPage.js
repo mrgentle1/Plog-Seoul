@@ -11,7 +11,7 @@ import axios from "axios";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 import { BorderButton } from "../../components/common/Button";
-import ImgSlider from "../../components/common/ImgSlider";
+import ImgSlider2 from "../../components/common/ImgSlider2";
 
 function CoursePostPage() {
   useEffect(() => {
@@ -23,7 +23,8 @@ function CoursePostPage() {
   const url = pathname.substring(7);
 
   const full_url = `${process.env.REACT_APP_API_ROOT}/api/roads` + url;
-  const real_url = `${process.env.REACT_APP_API_ROOT}/api/roads` + url + "/reviews";
+  const real_url =
+    `${process.env.REACT_APP_API_ROOT}/api/roads` + url + "/reviews";
 
   const token = localStorage.getItem("key");
 
@@ -91,7 +92,7 @@ function CoursePostPage() {
       <StCoursePostMain>
         <CoursePostImg>
           <ImgGradation />
-          <ImgSlider />
+          <ImgSlider2 />
         </CoursePostImg>
         <CoursePostText>
           <Text1>서울두드림길 포인트 1.5배 적립</Text1>
@@ -171,8 +172,6 @@ const CoursePostImg = styled.div`
   width: 393px;
   height: 356px;
   margin-top: 46px;
-  background-color: ${COLOR.DARK_GRAY};
-
   overflow: hidden;
 `;
 const ImgGradation = styled.div`
