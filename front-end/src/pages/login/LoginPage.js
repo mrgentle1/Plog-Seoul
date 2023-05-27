@@ -6,6 +6,7 @@ import { ReactComponent as KakaoButton } from "../../assets/icons/kakaoButton.sv
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 import { useCookies } from "react-cookie";
+import { userIdNumber, usePersistRecoilState } from "../../core/userId";
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -29,6 +30,8 @@ function LoginPage() {
       navigate("/splash");
     }
   }, [token]);
+
+  console.log(token);
 
   const kakaoLogin = () => {
     window.location.href = process.env.REACT_APP_KAKAO_LOGIN_URL;
