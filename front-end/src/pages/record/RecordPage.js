@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Map, MapMarker, CustomOverlayMap, useMap } from "react-kakao-maps-sdk";
 import { useNavigate, Link } from "react-router-dom";
@@ -8,6 +8,7 @@ import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 import current from "../../assets/icons/currentMarker.svg";
 import trashCanImg from "../../assets/icons/trash.svg";
+import { ReactComponent as Close } from "../../assets/icons/close.svg";
 import { ReactComponent as StartBtn } from "../../assets/icons/recordStart.svg";
 import { ReactComponent as RecordStartBtn } from "../../assets/icons/runStartBtn.svg";
 import { ReactComponent as RelocateBtn } from "../../assets/icons/relocateInactivate.svg";
@@ -22,6 +23,11 @@ const { kakao } = window;
 
 function RecordPage() {
   const navigate = useNavigate();
+  const goBack = useCallback(() => {
+    navigate(-1);
+    console.log(navigate(-1));
+  }, [navigate]);
+
   const token = localStorage.getItem("key");
   const [errorMessage, setErrorMessage] = useState("");
   const [isMove, setIsMove] = useState(false);
@@ -197,7 +203,21 @@ function RecordPage() {
       transition={{ delay: 1, duration: 1.5, type: "spring" }}
     >
       <StRecordPage>
-        <HomeHeaderV2 headerBackground={COLOR.MAIN_WHITE} />
+        <RecordIngHeader>
+          <span>
+            {todayMonth}월 {todayDate}일
+          </span>
+          <p></p>
+          <CloseWrapper>
+            <Close
+              className="headerClose"
+              onClick={() => {
+                // goBack();
+                navigate("/home");
+              }}
+            />
+          </CloseWrapper>
+        </RecordIngHeader>
         <MapContainer>
           <Map
             id="MapWrapper"
@@ -312,6 +332,48 @@ const StRecordPage = styled.div`
 
   ::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera*/
+  }
+`;
+const RecordIngHeader = styled.div`
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 12.7rem;
+
+  display: grid;
+  grid-template-columns: 8.8rem auto 1.4rem;
+
+  align-items: center;
+
+  padding-left: 2rem;
+  padding-right: 2.5rem;
+
+  background-color: ${COLOR.MAIN_WHITE};
+
+  z-index: 100;
+
+  span {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 2rem;
+    line-height: 2.5rem;
+    color: ${COLOR.MAIN_BLACK};
+  }
+
+  p {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 1.4rem;
+    line-height: 1.7rem;
+    color: ${COLOR.MAIN_GREEN};
+  }
+`;
+
+const CloseWrapper = styled.div`
+  .headerClose {
+    width: 2.7rem;
+    height: 2.7rem;
+    color: ${COLOR.MAIN_BLACK};
   }
 `;
 

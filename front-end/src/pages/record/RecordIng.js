@@ -585,7 +585,7 @@ function RecordIngPage() {
   window.receiveRecordingExit = function (realExit) {
     setModalOpen(realExit);
     deleteRecordData();
-    navigate("/record");
+    navigate("/record", { replace: true });
   };
 
   return (
