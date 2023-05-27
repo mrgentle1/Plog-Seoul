@@ -133,7 +133,6 @@ function RecordIngPage() {
           },
         }
       );
-      console.log(response);
       // 응답 결과(response)를 변수에 저장하거나.. 등 필요한 처리를 해 주면 된다.
       const initRecord = {
         userId: response.data.result.userId,
@@ -141,7 +140,6 @@ function RecordIngPage() {
       };
       setRecordUserData(initRecord);
 
-      console.log(initRecord);
     } catch (e) {
       // 실패 시 처리
       console.error(e);
@@ -165,7 +163,7 @@ function RecordIngPage() {
           },
         }
       );
-      console.log("success Delete");
+
       // 응답 결과(response)를 변수에 저장하거나.. 등 필요한 처리를 해 주면 된다.
     } catch (e) {
       // 실패 시 처리
@@ -195,10 +193,6 @@ function RecordIngPage() {
         }
       );
 
-      console.log(`distance: ${distAll.current},
-        endLat: ${locationList[locationList.length - 1].lat},
-        endLng: ${locationList[locationList.length - 1].lng},
-        runningTime: ${time.all}`);
       // navigate("/record/point", {
       //   state: {
       //     recordId: `${recordUserData.recordId}`,
@@ -218,9 +212,7 @@ function RecordIngPage() {
 
   // Define the callback function
   window.receiveImageURL = function (url) {
-    console.log("android image url is: ", url);
     imgUrlLoading.current = true;
-    console.log("이미지 url받아왔다");
     setImageUrl(url);
   };
 
@@ -229,7 +221,6 @@ function RecordIngPage() {
   const [imgData, setImgData] = useState([]);
   async function postImgData() {
     // async, await을 사용하는 경우
-    console.log("post직전 imgUrl확인:", imageUrl);
     const sendImgData = {
       imageUrl: imageUrl,
       imgLat: locationList[locationList.length - 1].lat,
@@ -321,7 +312,6 @@ function RecordIngPage() {
   useEffect(() => {}, [locationList]);
 
   const recordPosition = () => {
-    console.log("position");
     if (navigator.geolocation) {
       // GeoLocation을 이용해서 접속 위치를 얻어옵니다
 
@@ -340,14 +330,12 @@ function RecordIngPage() {
       // }));
       alert("geolocation을 사용할수 없어요");
     }
-    console.log("listlocation: %o", locationList);
   };
 
   const recordCurrentPositon = () => {
     if (navigator.geolocation) {
       // GeoLocation을 이용해서 접속 위치를 얻어옵니다
       navigator.geolocation.getCurrentPosition((position) => {
-        console.log("이미지 정확도:", position.coords.accuracy);
         return {
           lat: position.coords.latitude, // 위도
           lng: position.coords.longitude, // 경도
@@ -364,10 +352,6 @@ function RecordIngPage() {
   };
 
   const success = (position) => {
-    console.log("watchPosition: %o", position);
-    console.log("startlat: %o", startLat, "startlng: %o", startLng);
-    console.log("정확도:", position.coords.accuracy);
-    console.log("befor: ", beforeRecord.current);
 
     const coordinates = [
       new kakao.maps.LatLng(beforeRecord.current.lat, beforeRecord.current.lng),
@@ -382,11 +366,8 @@ function RecordIngPage() {
     });
 
     const distDiff = linePath.getLength();
-    console.log("이동거리:", distDiff.toFixed(2), "m");
 
-    console.log("location: %o", locationList);
     if (distDiff !== 0 && position.coords.accuracy < 20 && distDiff < 800) {
-      console.log("이동함");
 
       beforeRecord.current = {
         lat: position.coords.latitude,
@@ -427,7 +408,6 @@ function RecordIngPage() {
         setErrorMessage("알 수 없는 오류가 발생했습니다.");
         break;
     }
-    console.log("errMsg", errorMessage);
   };
 
   useEffect(() => {
@@ -462,16 +442,13 @@ function RecordIngPage() {
 
   const recordStopHandler = async (e) => {
     e.preventDefault();
-    console.log("recordHandler");
     try {
-      console.log("기록 종료 버튼 클릭");
 
       if (watchId !== -1) {
         navigator.geolocation.clearWatch(watchId);
         setWatchId(-1);
 
         setRecording(false);
-        console.log("post직전 path확인:", locationList);
         patchRecordData();
         postPathData();
         navigate("/record/point", {
@@ -490,7 +467,6 @@ function RecordIngPage() {
 
   useEffect(() => {
     if (time.all > 60) {
-      console.log("here");
       setIsActive(true);
     }
   }, [time]);
@@ -516,9 +492,7 @@ function RecordIngPage() {
   }, [locationList]);
 
   useEffect(() => {
-    console.log("imageUrl 변화 생김");
     if (imgUrlLoading.current) {
-      console.log("imageUrl 값 변경됨");
       console.log("변경된 이미지: ", imageUrl);
       postImgData();
     }
@@ -557,7 +531,6 @@ function RecordIngPage() {
 
   // Define the callback function
   window.receiveBackPressed = function (backPressed) {
-    console.log("뒤로가기 ", backPressed);
 
     setModalOpen(backPressed);
   };
@@ -565,7 +538,6 @@ function RecordIngPage() {
   useEffect(() => {}, [modalOpen]);
   // Define the callback function
   window.receiveRecordingExit = function (realExit) {
-    console.log("뒤로가기,기록종료 ", realExit);
     setModalOpen(realExit);
     deleteRecordData();
     navigate("/record");

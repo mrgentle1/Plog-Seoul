@@ -79,7 +79,7 @@ export const RecordImgModal = ({ setImgOpen, data }) => {
             <Button
               onClick={() => {
                 onCapture();
-                window.Android?.shareInstagram(data);
+                window.Android?.shareInstagram();
               }}
             >
               공유하기
