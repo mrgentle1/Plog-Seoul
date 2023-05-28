@@ -1,5 +1,5 @@
-import React, { useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useRef, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -8,6 +8,16 @@ import { COLOR } from "../../styles/color";
 import { Button } from "../../components/common/Button";
 
 const Onboard = () => {
+  const navigate = useNavigate();
+  const token = localStorage.getItem("key");
+  useEffect(() => {
+    if (token) {
+      navigate("/splash");
+    }
+  }, [token]);
+
+  console.log(token);
+
   const [currentSlide, setCurrentSlide] = useState(0);
   const sliderRef = useRef(null);
 

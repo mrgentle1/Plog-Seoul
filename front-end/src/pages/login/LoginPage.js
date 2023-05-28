@@ -5,7 +5,6 @@ import { ReactComponent as KakaoButton } from "../../assets/icons/kakaoButton.sv
 
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
-import { useCookies } from "react-cookie";
 import { userIdNumber, usePersistRecoilState } from "../../core/userId";
 
 function LoginPage() {
