@@ -5,8 +5,10 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
-import { Button } from "../../components/common/Button";
-import Img1 from "../../assets/images/onboard.svg";
+import { Button, BorderGreenThinButton } from "../../components/common/Button";
+import Img1 from "../../assets/images/onboard1.svg";
+import Img2 from "../../assets/images/onboard2.svg";
+import Img3 from "../../assets/images/onboard3.svg";
 
 const Onboard = () => {
   const navigate = useNavigate();
@@ -37,29 +39,52 @@ const Onboard = () => {
     sliderRef.current.slickGoTo(2);
   };
 
+  const handleNext = () => {
+    if (sliderRef.current) {
+      sliderRef.current.slickNext();
+    }
+  };
+
   return (
     <>
       <OnboardSlider {...settings} ref={sliderRef}>
-        <OnboardText>
-          <span>플로깅</span>은 쓰레기를 주우며 조깅을 하는 행위입니다.
+        <Slide1>
+          <OnboardText>
+            <span>플로깅 Plogging</span>이란
+            <br /> <span>쓰레기를 주우며 조깅</span>을 하는 행위를 말해요
+          </OnboardText>
           <img className="img1" src={Img1} />
-        </OnboardText>
-        <OnboardText>
-          <span>서울 두드림길 정보</span>를 제공하는
-          <br />
-          <span>플로깅 서울</span>과 함께라면,
-          <br />
-          <br /> 코스 걱정없이 언제든지 조깅이 가능합니다.
-        </OnboardText>
-        <OnboardText>
-          <span>포인트</span>를 모아서 나의 <span>랭킹</span>을 확인해보세요
-        </OnboardText>
+        </Slide1>
+        <Slide2>
+          <OnboardText>
+            플로그 서울에서 <span>코스 걱정 없이</span>
+            <br /> <span>서울두드림길</span> 플로깅을 도전해보세요!
+          </OnboardText>
+          <img className="img2" src={Img2} />
+        </Slide2>
+        <Slide3>
+          <OnboardText>
+            환경과 건강을 지키면서
+            <br />
+            <span>포인트</span>를 모으고, <span>랭킹</span>을 올려봐요!
+          </OnboardText>
+          <img className="img3" src={Img3} />
+        </Slide3>
       </OnboardSlider>
-      <OnboardButton>
-        <div className="pass" onClick={handlePass}>
-          건너뛰기
-        </div>
-      </OnboardButton>
+      {!isLastSlide && (
+        <OnboardTopButton>
+          <div className="pass" onClick={handlePass}>
+            건너뛰기
+          </div>
+        </OnboardTopButton>
+      )}
+      {!isLastSlide && (
+        <OnboardButton>
+          <BorderGreenThinButton onClick={handleNext}>
+            다음으로
+          </BorderGreenThinButton>
+        </OnboardButton>
+      )}
       {isLastSlide && (
         <OnboardButton>
           <Link to="/login">
@@ -71,6 +96,21 @@ const Onboard = () => {
   );
 };
 export default Onboard;
+
+const OnboardTopButton = styled.div`
+  justify-content: flex-end;
+  position: absolute;
+  right: 0;
+  top: 3.3rem;
+  padding-right: 20px;
+  .pass {
+    font-family: "SUIT Variable";
+    font-style: normal;
+    font-size: 15px;
+    font-weight: 500;
+    color: ${COLOR.INPUT_BORDER_GRAY};
+  }
+`;
 
 const OnboardSlider = styled(Slider)`
   display: flex;
@@ -141,28 +181,54 @@ const OnboardSlider = styled(Slider)`
   }
 `;
 
+const Slide1 = styled.div`
+  width: 100%;
+  height: 100%;
+  .img1 {
+    margin-left: 5%;
+    width: 90%;
+    text-align: center;
+    justify-content: center;
+  }
+`;
+const Slide2 = styled.div`
+  width: 100%;
+  height: 100%;
+  .img2 {
+    margin-left: 5%;
+    width: 90%;
+    text-align: center;
+    justify-content: center;
+  }
+`;
+const Slide3 = styled.div`
+  width: 100%;
+  height: 100%;
+  .img3 {
+    margin-left: 5%;
+    width: 90%;
+    text-align: center;
+    justify-content: center;
+  }
+`;
+
 const OnboardText = styled.div`
   width: 100%;
   white-space: nowrap;
   padding-top: 13rem;
-  text-align: center;
-  font-size: 17px;
+  margin-left: 2rem;
+  text-align: left;
+  font-size: 18px;
   font-family: "SUIT Variable";
   font-style: normal;
   font-weight: 600;
   line-height: 30px;
+  color: ${COLOR.DARK_GRAY};
   span {
     padding-right: 3px;
-    font-size: 20px;
+    font-size: 19px;
     font-weight: 700;
-    color: ${COLOR.MAIN_GREEN};
-  }
-  .img1 {
-    margin-left: 5%;
-    width: 90%;
-    padding-top: 10rem;
-    text-align: center;
-    justify-content: center;
+    color: ${COLOR.MAIN_BLACK};
   }
 `;
 
