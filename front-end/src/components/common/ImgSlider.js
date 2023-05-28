@@ -27,7 +27,7 @@ const ImgSlider = () => {
           bottom: "1px",
           alignItems: "center",
           justifyContent: "center",
-          paddingBottom: "10px",
+          paddingBottom: "20px",
         }}
       >
         <ul> {dots} </ul>

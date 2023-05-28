@@ -66,6 +66,7 @@ function RecordFinishPage() {
   };
 
   const [clickEditImg, setClickEditImg] = useState("");
+  const [recordImgData, setRecordImgData] = useState({});
   const [imgEditOpen, setImgEditOpen] = useState(false);
   const showEditImgModal = () => {
     setImgEditOpen(true);
@@ -75,6 +76,10 @@ function RecordFinishPage() {
     setClickImg(url);
   };
 
+  const getData = (data) => {
+    setRecordImgData(data);
+  };
+
   return (
     <>
       {modalOpen && (
@@ -82,7 +87,11 @@ function RecordFinishPage() {
       )}
       {imgOpen && <RecordImgModal setImgOpen={setImgOpen} data={clickImg} />}
       {imgEditOpen && (
-        <EditImgModal setImgEditOpen={setImgEditOpen} data={clickImg} />
+        <EditImgModal
+          setImgEditOpen={setImgEditOpen}
+          img={clickImg}
+          data={recordImgData}
+        />
       )}
 
       {(modalOpen || imgOpen || imgEditOpen) && <ModalBackground />}
@@ -114,6 +123,7 @@ function RecordFinishPage() {
         setImgOpen={setImgOpen}
         setImgEditOpen={setImgEditOpen}
         getImgUrl={getImgUrl}
+        getData={getData}
       />
 
       {!userData.isShowPlog ? (

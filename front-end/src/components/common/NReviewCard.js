@@ -29,7 +29,12 @@ export const NReviewCard = ({ r }) => {
             <Box3>
               {[...Array(5)].map(
                 (_, index) =>
-                  index < r.star && <Star key={index} className="blackStar" />
+                  index < 5 && (
+                    <Star
+                      key={index}
+                      className={index < r.star ? "blackStar" : "grayStar"}
+                    />
+                  )
               )}
               <h5>{r.userNickname}</h5>
             </Box3>
@@ -55,7 +60,7 @@ const StReviewCard = styled.div`
   margin: 0px;
   padding: 0px;
 
-  width: 353px;
+  width: 100%;
   height: 77px;
 
   background: ${COLOR.MAIN_WHITE};
@@ -69,6 +74,11 @@ const ReviewList = styled.div`
     width: 17px;
     height: 16px;
     color: ${COLOR.MAIN_BLACK};
+  }
+  .grayStar {
+    width: 17px;
+    height: 16px;
+    color: ${COLOR.LIGHT_GRAY};
   }
 `;
 
@@ -117,7 +127,7 @@ const Box3 = styled.div`
   }
 `;
 const CourseLine = styled.div`
-  width: 353px;
+  width: 100%;
   margin-top: 24px;
   margin-bottom: 24px;
   text-align: center;

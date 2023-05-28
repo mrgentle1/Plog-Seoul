@@ -117,40 +117,45 @@ function HomePage() {
               <Arrow className="arrow" />
             </LeftBox1>
           </Link>
-          <Link to="/info">
-            <RightBox1>
+          <RightBox1>
+            <Link to="/info">
               <Footprint className="footprint" />
               <Text2>서울두드림길이란?</Text2>
               <Arrow className="arrow" />
-            </RightBox1>
-          </Link>
+            </Link>
+          </RightBox1>
         </Box1>
-        <Box3>
-          <Tree className="tree" />
-          <Text5>
-            <Ploging>{todayMonth}월 플로깅</Ploging>
-            <Time>걸은 시간</Time>
-            <Dis>걸은 거리</Dis>
-          </Text5>
-          <Text6>
-            <Ploging2>{plogging.length}번</Ploging2>
-            <Time2>
-              {real_runningTime}분 {real_runningTime2}초
-            </Time2>
-            <Dis2>{distance}km</Dis2>
-          </Text6>
-        </Box3>
-        <Link to="/plog/level">
-          <Box2>
-            <Level className="level" />
-            <LevelBox>
-              <Text3>Level {user.level}</Text3>
-              <Text4>다음 레벨까지 {1000 - point} 포인트</Text4>
-            </LevelBox>
-            <LevelBar />
-            <LevelBar2 width={levelBarWidth} />
-          </Box2>
+        <Link to="/plog">
+          <Box3>
+            <Tree className="tree" />
+            <Text5>
+              <Ploging>{todayMonth}월 플로깅</Ploging>
+              <Time>걸은 시간</Time>
+              <Dis>걸은 거리</Dis>
+            </Text5>
+            <Text6>
+              <Ploging2>{plogging.length}번</Ploging2>
+              <Time2>
+                {real_runningTime}분 {real_runningTime2}초
+              </Time2>
+              <Dis2>{distance}km</Dis2>
+            </Text6>
+          </Box3>
         </Link>
+
+        <Box2>
+          <Link to="/plog/level">
+            <Box22>
+              <Level className="level" />
+              <LevelBox>
+                <Text3>Level {user.level}</Text3>
+                <Text4>다음 레벨까지 {1000 - point} 포인트</Text4>
+              </LevelBox>
+              <LevelBar />
+              <LevelBar2 width={levelBarWidth} />
+            </Box22>
+          </Link>
+        </Box2>
 
         <Footer />
       </StHomePage>
@@ -244,6 +249,7 @@ const Box2 = styled.div`
     margin-bottom: 1.2rem;
   }
 `;
+const Box22 = styled.div``;
 const LevelBox = styled.div`
   display: flex;
   justify-content: space-between;
