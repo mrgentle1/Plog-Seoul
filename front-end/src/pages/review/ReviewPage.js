@@ -198,11 +198,13 @@ const ReviewBox2 = styled.div`
   }
 `;
 const ReviewMain = styled.div`
+  margin-left: 20px;
+  margin-right: 20px;
+  width: 100%;
   margin-top: 10px;
   padding-bottom: 30px;
   .noReview {
     margin-top: 300px;
-
     h5 {
       font-family: "SUIT Variable";
       font-style: normal;
@@ -229,6 +231,7 @@ const ReviewStar = styled.div`
   align-items: center;
   margin-top: 12px;
   h1 {
+    margin-left: 20px;
     margin-right: 8px;
     font-family: "SUIT Variable";
     font-style: normal;
@@ -252,4 +255,7 @@ const ReviewStar = styled.div`
     color: ${COLOR.MAIN_ORANGE};
   }
 `;
-const ReviewList = styled.div``;
+const ReviewList = styled.div`
+  margin-left: 20px;
+  margin-right: 20px;
+`;
