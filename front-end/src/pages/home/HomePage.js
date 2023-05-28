@@ -117,13 +117,13 @@ function HomePage() {
               <Arrow className="arrow" />
             </LeftBox1>
           </Link>
-          <Link to="/info">
-            <RightBox1>
+          <RightBox1>
+            <Link to="/info">
               <Footprint className="footprint" />
               <Text2>서울두드림길이란?</Text2>
               <Arrow className="arrow" />
-            </RightBox1>
-          </Link>
+            </Link>
+          </RightBox1>
         </Box1>
         <Link to="/plog">
           <Box3>
@@ -142,17 +142,20 @@ function HomePage() {
             </Text6>
           </Box3>
         </Link>
-        <Link to="/plog/level">
-          <Box2>
-            <Level className="level" />
-            <LevelBox>
-              <Text3>Level {user.level}</Text3>
-              <Text4>다음 레벨까지 {1000 - point} 포인트</Text4>
-            </LevelBox>
-            <LevelBar />
-            <LevelBar2 width={levelBarWidth} />
-          </Box2>
-        </Link>
+
+        <Box2>
+          <Link to="/plog/level">
+            <Box22>
+              <Level className="level" />
+              <LevelBox>
+                <Text3>Level {user.level}</Text3>
+                <Text4>다음 레벨까지 {1000 - point} 포인트</Text4>
+              </LevelBox>
+              <LevelBar />
+              <LevelBar2 width={levelBarWidth} />
+            </Box22>
+          </Link>
+        </Box2>
 
         <Footer />
       </StHomePage>
@@ -246,6 +249,7 @@ const Box2 = styled.div`
     margin-bottom: 1.2rem;
   }
 `;
+const Box22 = styled.div``;
 const LevelBox = styled.div`
   display: flex;
   justify-content: space-between;
