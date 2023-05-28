@@ -3,6 +3,7 @@ import { COLOR } from "../../styles/color";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useQuery } from "react-query";
 import { ReactComponent as Shop } from "../../assets/icons/shop.svg";
 
 export const CourseMainCard = ({ c }) => {
@@ -12,39 +13,21 @@ export const CourseMainCard = ({ c }) => {
   };
 
   const token = localStorage.getItem("key");
-  const [images, setImages] = useState([]);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const img_url = `${process.env.REACT_APP_API_ROOT}/api/roads/images?category=doseong`;
 
-  useEffect(() => {
-    axios
-      .get(img_url, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      })
-      .then((response) => {
-        setImages(response.data.result.courseImages);
-      })
-      .catch((error) => {
-        console.error("error", error);
-      });
-  }, []);
+  const { data: images } = useQuery("courseImages", async () => {
+    const response = await axios.get(img_url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data.result.courseImages;
+  });
 
-  useEffect(() => {
-    if (images.length > 0) {
-      const index = c.routeId % images.length;
-      setCurrentImageIndex(index);
-    }
-  }, [c.id, images]);
-
-  const handleClickNextImage = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
-  };
-
-  const currentImage = images[currentImageIndex];
+  const currentImageIndex = c.routeId % (images?.length || 0);
+  const currentImage = images?.[currentImageIndex];
 
   return (
     <>

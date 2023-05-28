@@ -38,13 +38,13 @@ const ImgSlider = () => {
   return (
     <Slider {...settings}>
       <div>
-        <img src={ImgSlide} />
+        <img src={ImgSlide} width="100%" />
       </div>
       <div>
-        <img src={ImgSlide2} />
+        <img src={ImgSlide2} width="100%" />
       </div>
       <div>
-        <img src={ImgSlide3} />
+        <img src={ImgSlide3} width="100%" />
       </div>
     </Slider>
   );

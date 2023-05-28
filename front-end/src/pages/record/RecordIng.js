@@ -13,6 +13,8 @@ import PlogImg from "../../assets/icons/imgMarker.svg";
 import { ReactComponent as Close } from "../../assets/icons/close.svg";
 import { ReactComponent as RelocateBtn } from "../../assets/icons/relocateInactivate.svg";
 import { ReactComponent as RelocateAtiveBtn } from "../../assets/icons/relocateActivate.svg";
+import { ReactComponent as TrashCanAtiveBtn } from "../../assets/icons/trashCanActivate.svg";
+import { ReactComponent as TrashCanBtn } from "../../assets/icons/trash.svg";
 import {
   RecordModal,
   ModalBackground,
@@ -31,6 +33,14 @@ let options = {
 const modalData = {
   recording: true,
   title: "플로깅 기록을 종료할까요?",
+  contents: "지금 종료하면\n오늘의 플로깅 기록이 사라져요",
+  btnText1: "닫기",
+  btnText2: "계속하기",
+};
+const notMoreThanData = {
+  recording: true,
+  title: "플로깅 기록을 종료할까요?",
+  contents: "1분 미만 기록은\n저장되지 않아요",
   btnText1: "닫기",
   btnText2: "계속하기",
 };
@@ -139,7 +149,6 @@ function RecordIngPage() {
         recordId: response.data.result.recordId,
       };
       setRecordUserData(initRecord);
-
     } catch (e) {
       // 실패 시 처리
       console.error(e);
@@ -282,6 +291,8 @@ function RecordIngPage() {
   const [recording, setRecording] = useState(false); //기록 중
   const [isMove, setIsMove] = useState(false);
   const [isActive, setIsActive] = useState(false);
+  const [isShowCan, setIsShowCan] = useState(false);
+  const [level, setLevel] = useState(3);
   const mapRef = useRef();
 
   const start = () => {
@@ -352,7 +363,6 @@ function RecordIngPage() {
   };
 
   const success = (position) => {
-
     const coordinates = [
       new kakao.maps.LatLng(beforeRecord.current.lat, beforeRecord.current.lng),
       new kakao.maps.LatLng(
@@ -368,7 +378,6 @@ function RecordIngPage() {
     const distDiff = linePath.getLength();
 
     if (distDiff !== 0 && position.coords.accuracy < 20 && distDiff < 800) {
-
       beforeRecord.current = {
         lat: position.coords.latitude,
         lng: position.coords.longitude,
@@ -443,7 +452,6 @@ function RecordIngPage() {
   const recordStopHandler = async (e) => {
     e.preventDefault();
     try {
-
       if (watchId !== -1) {
         navigator.geolocation.clearWatch(watchId);
         setWatchId(-1);
@@ -498,6 +506,52 @@ function RecordIngPage() {
     }
   }, [imageUrl]);
 
+  const [markerSize, setMarkerSize] = useState({ width: 64, height: 64 });
+  const [isVisible, setIsVisible] = useState(true);
+  useEffect(() => {
+    console.log(level);
+    // if (level < 4) {
+    //   setMarkerSize({ width: 64, height: 64 });
+    // } else if (level < 7) {
+    //   setMarkerSize({ width: 32, height: 32 });
+    // } else {
+    //   setMarkerSize({ width: 8, height: 8 });
+    // }
+
+    if (level > 5) {
+      setIsVisible(false);
+    } else {
+      setIsVisible(true);
+    }
+  }, [level]);
+
+  const EventTrashCanContainer = ({ position, mSize, title }) => {
+    // console.log("현사이즈", mSize);
+    // console.log("사이즈", markerSize);
+    const map = useMap();
+
+    // if (0 < mapLevel && mapLevel < 4) {
+    //   setMarkerSize({ width: 64, height: 64 });
+    //   // } else if (3 < mapLevel && mapLevel < 6) {
+    //   //   markerSize = { width: 32, height: 32 };
+    //   // } else if (5 < mapLevel && mapLevel < 15) {
+    //   //   markerSize = { width: 16, height: 16 };
+    // } else {
+    //   setMarkerSize({ width: 32, height: 32 });
+    // }
+
+    return (
+      <MapMarker
+        position={position} // 마커를 표시할 위치
+        image={{
+          src: trashCanImg, // 마커이미지의 주소입니다
+          size: { markerSize }, // 마커이미지의 크기입니다
+        }}
+        title={title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+      ></MapMarker>
+    );
+  };
+
   const EventMarkerContainer = ({ position, content }) => {
     const map = useMap();
 
@@ -520,6 +574,7 @@ function RecordIngPage() {
   };
 
   const [modalOpen, setModalOpen] = useState(false);
+  const [isMoreThan, setIsMoreThan] = useState(false);
   const showModal = () => {
     setModalOpen(true);
   };
@@ -531,7 +586,6 @@ function RecordIngPage() {
 
   // Define the callback function
   window.receiveBackPressed = function (backPressed) {
-
     setModalOpen(backPressed);
   };
 
@@ -540,18 +594,25 @@ function RecordIngPage() {
   window.receiveRecordingExit = function (realExit) {
     setModalOpen(realExit);
     deleteRecordData();
-    navigate("/record");
+    navigate("/record", { replace: true });
   };
 
   return (
     <>
-      {modalOpen && (
-        <RecordModal
-          setModalOpen={setModalOpen}
-          data={modalData}
-          id={recordUserData.recordId}
-        />
-      )}
+      {modalOpen &&
+        (isMoreThan ? (
+          <RecordModal
+            setModalOpen={setModalOpen}
+            data={modalData}
+            id={recordUserData.recordId}
+          />
+        ) : (
+          <RecordModal
+            setModalOpen={setModalOpen}
+            data={notMoreThanData}
+            id={recordUserData.recordId}
+          />
+        ))}
       {imgOpen && <RecordImgModal setImgOpen={setImgOpen} data={clickImg} />}
       {(modalOpen || imgOpen) && <ModalBackground />}
       <StRecordIngPage>
@@ -564,6 +625,7 @@ function RecordIngPage() {
             <Close
               className="headerClose"
               onClick={() => {
+                setIsMoreThan(true);
                 showModal();
               }}
             />
@@ -576,7 +638,7 @@ function RecordIngPage() {
             level={2} // 지도 확대 레벨
             isPanto={true}
             onDragEnd={() => setIsMove(true)}
-            onZoomChanged={() => setIsMove(true)}
+            onZoomChanged={(map) => setLevel(map.getLevel())}
             ref={mapRef}
             onCenterChanged={(map) =>
               setState({
@@ -609,23 +671,19 @@ function RecordIngPage() {
                   },
                 }}
               />
-              {trashCanData.map((position, index) => (
-                <MapMarker
-                  key={`${position.trashCanId}-${position.title}`}
-                  position={{
-                    lat: position.latlng.lat,
-                    lng: position.latlng.lng,
-                  }} // 마커를 표시할 위치
-                  image={{
-                    src: trashCanImg, // 마커이미지의 주소입니다
-                    size: {
-                      width: 64,
-                      height: 64,
-                    }, // 마커이미지의 크기입니다
-                  }}
-                  title={position.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
-                />
-              ))}
+              {isShowCan &&
+                isVisible &&
+                trashCanData.map((position) => (
+                  <EventTrashCanContainer
+                    key={`${position.trashCanId}-${position.title}`}
+                    position={{
+                      lat: position.latlng.lat,
+                      lng: position.latlng.lng,
+                    }} // 마커를 표시할 위치
+                    mSize={markerSize}
+                    title={position.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+                  />
+                ))}
               {imgData.map((value) => (
                 <EventMarkerContainer
                   key={`EventMarkerContainer-${value.imageUrl}`}
@@ -660,6 +718,21 @@ function RecordIngPage() {
               />
             )}
           </RelocateWrapper>
+          <ShowTrashCanWrapper>
+            {isShowCan ? (
+              <TrashCanAtiveBtn
+                onClick={() => {
+                  setIsShowCan(false);
+                }}
+              />
+            ) : (
+              <TrashCanBtn
+                onClick={() => {
+                  setIsShowCan(true);
+                }}
+              />
+            )}
+          </ShowTrashCanWrapper>
         </MapContainer>
         <RecordDetailContainer>
           <StopWatchContainer>
@@ -682,7 +755,10 @@ function RecordIngPage() {
               </RecordFinishBtn>
             ) : (
               <DisabledFinishButton
-                disabled={true}
+                onClick={() => {
+                  setIsMoreThan(false);
+                  showModal();
+                }}
                 bgColor={COLOR.LIGHT_GRAY}
                 color={COLOR.DARK_GRAY}
               >
@@ -773,6 +849,19 @@ const RelocateWrapper = styled.div`
   overflow: hidden;
   top: 1rem;
   right: 1rem;
+
+  z-index: 10;
+`;
+
+const ShowTrashCanWrapper = styled.div`
+  display: flex;
+  position: absolute;
+  overflow: hidden;
+  top: 6rem;
+  right: 1rem;
+
+  /* width: 4.4rem;
+  height: 4.4rem; */
 
   z-index: 10;
 `;

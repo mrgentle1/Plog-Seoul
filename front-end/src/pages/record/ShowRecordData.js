@@ -50,6 +50,7 @@ function ShowRecordData({
   const [isImgLoading, setIsImgLoading] = useState(true);
   const [isImgData, setIsImgData] = useState(false);
   const getImg = useRef(false);
+  const getPath = useRef(false);
 
   const mapRef = useRef();
 
@@ -134,6 +135,7 @@ function ShowRecordData({
         };
       });
       setPathData(initPath);
+      getPath.current = true;
     } catch (e) {
       // 실패 시 처리
       console.error(e);
@@ -177,12 +179,13 @@ function ShowRecordData({
         };
       });
 
-      if (initImg.length > 1) {
+      if (initImg.length > 0) {
         // setImgData(initImg);
         setIsImgData(true);
       }
-      getImg.current = true;
+
       setImgData(initImg);
+      getImg.current = true;
     } catch (e) {
       // 실패 시 처리
       console.error(e);
@@ -191,14 +194,18 @@ function ShowRecordData({
     }
   }
 
-  const bounds = useMemo(() => {
-    const bounds = new kakao.maps.LatLngBounds();
-
-    pathData.forEach((point) => {
-      bounds.extend(new kakao.maps.LatLng(point.lat, point.lng));
-    });
-    return bounds;
-  }, [pathData]);
+  // const bounds = useMemo(() => {
+  //   //지도 재설정할 범위정보 가질 LatLngBounds객체
+  //   const map = mapRef.current;
+  //   const bounds = new kakao.maps.LatLngBounds();
+  //   console.log("bbbbb: %o", bounds);
+  //   pathData.forEach((point, i) => {
+  //     //LatLngBounds객체에 좌표추가
+  //     bounds.extend(new kakao.maps.LatLng(point.lat, point.lng));
+  //   });
+  //   if (map) map.setBounds(bounds);
+  //   return bounds;
+  // }, [pathData]);
 
   // 오늘 날짜
   let now = new Date();
@@ -268,51 +275,34 @@ function ShowRecordData({
     console.log("path기록가져옴");
 
     console.log("1.경로: %o", pathData);
-    // const map = mapRef.current;
+    const map = mapRef.current;
     // if (map) map.setBounds(bounds);
-    if (!isPathLoading) {
-      const map = mapRef.current;
-      console.log("범위 재구성");
-      if (map) map.setBounds(bounds);
+    console.log("1get", getPath.current, getImg.current);
+
+    if (getPath.current) {
+      console.log("2get", getPath.current, getImg.current);
+
+      setIsPathLoading(false);
     }
-    setIsPathLoading(false);
-    console.log("2.경로: %o", pathData);
   }, [pathData]);
 
   useEffect(() => {
     console.log("img기록가져옴", recordId);
     if (getImg.current) {
+      console.log("이미지 기록이 있다.");
       setIsImgLoading(false);
+      console.log("이미지: %o", imgData);
     }
-    // console.log("이미지id: %o", imgData[0].recordId);
-
-    // if (imgData[0].recordId == recordId) {
-    //   console.log("이미지 기록이 있다.");
-    //   setIsImgData(true);
-    // }
-    // const map = mapRef.current;
-    // if (map) {
-    //   console.log("범위 재구성");
-    //   map.setBounds(bounds);
-    // }
-
-    console.log("이미지: %o", imgData);
   }, [imgData]);
 
   useEffect(() => {
     if (!isDataLoading && !isPathLoading && !isImgLoading) {
       console.log("loading???????");
+      console.log("get", getPath.current, getImg.current);
+
       setIsLoading(false);
     }
-  }, [
-    thisRecordData,
-    pathData,
-    imgData,
-    isDataLoading,
-    isPathLoading,
-    isImgLoading,
-    bounds,
-  ]);
+  }, [isDataLoading, isPathLoading, isImgLoading, pathData, imgData]);
 
   const sendImgUrl = (url) => {
     getImgUrl(url);
@@ -321,45 +311,49 @@ function ShowRecordData({
   return (
     <>
       <StRecordFinish>
-        {/* {!isDataLoading && !isPathLoading && !isImgLoading && ( */}
-        {!isLoading && (
+        {!isDataLoading && !isPathLoading && (
+          // {!isLoading && (
           <>
             {/* <RecordHeader /> */}
             <ContentsContainer>
-              <MapContainer>
-                <Map // 지도를 표시할 Container
-                  id="MapWrapper"
-                  center={{
-                    // 지도의 중심좌표
-                    lat: 37.61177884519635,
-                    lng: 126.99642668902881,
-                  }}
-                  style={{
-                    width: "100%",
-                    height: "23.6rem",
-                  }}
-                  level={3} // 지도의 확대 레벨
-                  zoomable={false}
-                  draggable={false}
-                  ref={mapRef}
-                >
-                  {isImgData &&
-                    imgData.map((value) => (
-                      <EventMarkerContainer
-                        key={`EventMarkerContainer-${value.recordId}-${value.imageId}`}
-                        position={{ lat: value.imgLat, lng: value.imgLng }}
-                        content={value.imgUrl}
-                      />
-                    ))}
-                  <Polyline
-                    path={pathData}
-                    strokeWeight={6} // 선의 두께 입니다
-                    strokeColor={"#DCFA5C"} // 선의 색깔입니다
-                    strokeOpacity={1} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-                    strokeStyle={"solid"} // 선의 스타일입니다
-                  />
-                </Map>
-              </MapContainer>
+              {!isLoading && (
+                <MapContainer>
+                  <Map // 지도를 표시할 Container
+                    id="MapWrapper"
+                    center={{
+                      // 지도의 중심좌표
+                      lat: pathData[pathData.length - 1].lat,
+                      lng: pathData[pathData.length - 1].lng,
+                    }}
+                    style={{
+                      width: "100%",
+                      height: "23.6rem",
+                    }}
+                    level={3} // 지도의 확대 레벨
+                    zoomable={false}
+                    draggable={false}
+                    disableDoubleClickZoom={true}
+                    ref={mapRef}
+                    bounds={pathData}
+                  >
+                    {isImgData &&
+                      imgData.map((value) => (
+                        <EventMarkerContainer
+                          key={`EventMarkerContainer-${value.recordId}-${value.imageId}`}
+                          position={{ lat: value.imgLat, lng: value.imgLng }}
+                          content={value.imgUrl}
+                        />
+                      ))}
+                    <Polyline
+                      path={pathData}
+                      strokeWeight={6} // 선의 두께 입니다
+                      strokeColor={"#DCFA5C"} // 선의 색깔입니다
+                      strokeOpacity={1} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+                      strokeStyle={"solid"} // 선의 스타일입니다
+                    />
+                  </Map>
+                </MapContainer>
+              )}
               <DetailDataContainer>
                 <TimeDataContainer>
                   {/* <TimeConvert seconds={thisRecordData.runningTime} /> */}

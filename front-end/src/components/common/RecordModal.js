@@ -70,11 +70,7 @@ export const RecordModal = ({ setModalOpen, data, id }) => {
               <RecordAlert className="modalIcon" />
               <ModalText>
                 <h3>{data.title}</h3>
-                <h5>
-                  지금 종료하면
-                  <br />
-                  오늘의 플로깅 기록이 사라져요
-                </h5>
+                <h5>{data.contents}</h5>
               </ModalText>
             </>
           ) : (
@@ -194,6 +190,7 @@ const ModalText = styled.div`
     line-height: 1.9rem;
     text-align: center;
     color: ${COLOR.INPUT_BORDER_GRAY};
+    white-space: pre-line;
   }
 `;
 const ModalLine = styled.div`
