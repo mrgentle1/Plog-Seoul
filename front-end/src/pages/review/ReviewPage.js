@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { ReactComponent as BackArrow } from "../../assets/icons/backArrow.svg";
 import { ReactComponent as Pencil } from "../../assets/icons/pencil.svg";
 import { ReactComponent as Star } from "../../assets/icons/star.svg";
+import { ReactComponent as HalfStar } from "../../assets/icons/halfstar.svg";
 import { ReviewCard } from "../../components/common/ReviewCard";
 
 import axios from "axios";
@@ -63,6 +64,10 @@ function ReviewPage() {
       });
   }, [reviews]);
 
+  const reviewSum = course.reviewSum / course.reviewCnt;
+  const filledStars = Math.floor(reviewSum);
+  const hasHalfStar = reviewSum - filledStars >= 0.5;
+
   return (
     <StReviewPage>
       <ReviewHeader>
@@ -87,12 +92,26 @@ function ReviewPage() {
         ) : (
           <>
             <ReviewStar>
-              {[...Array(5)].map(
-                (_, index) =>
-                  index < course.reviewSum && (
-                    <Star key={index} className="star" />
-                  )
-              )}
+              <h1>
+                {reviewSum % 0.5 === 0
+                  ? reviewSum.toFixed(1)
+                  : reviewSum.toFixed(2)}
+              </h1>
+              {[...Array(5)].map((_, index) => {
+                if (index < filledStars) {
+                  return <Star key={index} className="star" />;
+                } else if (index === filledStars && hasHalfStar) {
+                  return (
+                    <HalfStar
+                      key={index}
+                      className="star"
+                      style={{ marginTop: -1 }}
+                    />
+                  );
+                } else {
+                  return null;
+                }
+              })}
             </ReviewStar>
             <ReviewList>
               {reviews.map((data) => (
@@ -207,7 +226,16 @@ const ReviewMain = styled.div`
 `;
 const ReviewStar = styled.div`
   display: flex;
+  align-items: center;
   margin-top: 12px;
+  h1 {
+    margin-right: 8px;
+    font-family: "SUIT Variable";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 16px;
+  }
   h5 {
     margin-top: 5px;
     margin-right: 10px;

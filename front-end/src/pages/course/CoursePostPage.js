@@ -88,9 +88,6 @@ function CoursePostPage() {
   const filledStars = Math.floor(reviewSum);
   const hasHalfStar = reviewSum - filledStars >= 0.5;
 
-  console.log("f", filledStars);
-  console.log("h", hasHalfStar);
-
   return (
     <StCoursePostPage>
       <HomeHeaderV3
