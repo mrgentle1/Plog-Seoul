@@ -125,10 +125,11 @@ const ModalContainer = styled.div`
   padding: 4.6rem 2rem 0rem 2rem;
   z-index: 2000;
 
-  position: absolute;
+  position: fixed;
   width: 100vw;
   height: 100vh;
   top: 0;
+  /* overflow-y: hidden; */
 
   /* top: 50%;
   left: 50%; */
