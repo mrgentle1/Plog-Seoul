@@ -20,6 +20,7 @@ import { RecordImgModal } from "../../components/Record/ImgModal";
 import { EditImgModal } from "./EditImg";
 import { TimeConvert } from "../../components/Record/TimeComponent";
 import { path } from "d3-path";
+import moment from "moment";
 
 const modalData = {
   recording: false,
@@ -33,6 +34,7 @@ function ShowRecordData({
   setImgOpen,
   setImgEditOpen,
   getImgUrl,
+  getData,
 }) {
   const token = localStorage.getItem("key");
 
@@ -69,6 +71,7 @@ function ShowRecordData({
     endLng: 0,
     runningTime: 0,
     kcal: 0,
+    createdAt: "",
   });
 
   async function getRecordData() {
@@ -94,6 +97,7 @@ function ShowRecordData({
         endLng: response.data.result.endLng,
         runningTime: response.data.result.runningTime,
         kcal: response.data.result.kcal,
+        createdAt: response.data.result.createdAt,
       };
 
       setThisRecordData(recordData);
@@ -323,6 +327,12 @@ function ShowRecordData({
   const sendImgUrl = (url) => {
     getImgUrl(url);
   };
+  const sendRecordData = () => {
+    getData({
+      dist: thisRecordData.distance.toFixed(2),
+      when: moment(thisRecordData.createdAt).format("YYYY년 MM월 DD일"),
+    });
+  };
 
   return (
     <>
@@ -402,6 +412,7 @@ function ShowRecordData({
                         onClick={() => {
                           console.log(img.imgUrl);
                           sendImgUrl(img.imgUrl);
+                          sendRecordData();
                           showEditImgModal();
                         }}
                       ></img>

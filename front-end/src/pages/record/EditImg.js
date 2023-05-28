@@ -10,7 +10,7 @@ import { ReactComponent as Close } from "../../assets/icons/arrow_white_btn.svg"
 import { useNavigate, useHistory } from "react-router-dom";
 import { Button } from "../../components/common/Button";
 
-export const EditImgModal = ({ setImgEditOpen, data }) => {
+export const EditImgModal = ({ setImgEditOpen, img, data }) => {
   const navigate = useNavigate();
   const goBack = () => {
     navigate("/record/finish");
@@ -87,7 +87,7 @@ export const EditImgModal = ({ setImgEditOpen, data }) => {
             }}
           >
             {/* <img src={data} alt="img"></img> */}
-            <SelectImg image={data}></SelectImg>
+            <SelectImg image={img}></SelectImg>
             {/* <SelectImg
               className="Select"
               style={`background-image: url(${data})`}
@@ -99,8 +99,8 @@ export const EditImgModal = ({ setImgEditOpen, data }) => {
             )}
 
             {/* <Logo className="LogoImg" /> */}
-            <p className="DistText">1.23KM</p>
-            <p className="DateText">2023년 5월 18일</p>
+            <p className="DistText">{data.dist}KM</p>
+            <p className="DateText">{data.when}</p>
           </ModalImg>
           <ModalButton>
             <Button
