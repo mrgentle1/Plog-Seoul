@@ -109,7 +109,6 @@ const StImgSlide = styled.div`
   position: relative;
   width: 100%;
   height: 356px;
-  background-color: ${COLOR.MEDIUM_GRAY};
   margin-top: 46px;
   margin-bottom: 21px;
 
