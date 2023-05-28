@@ -182,13 +182,15 @@ const StCoursePostPage = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
+  width: 100%;
 `;
 const StCoursePostMain = styled.div`
   margin-bottom: 24px;
+  width: 100%;
 `;
 const CoursePostImg = styled.div`
   position: relative;
-  width: 410px;
+  width: 100%;
   height: 356px;
   margin-top: 46px;
 
@@ -196,7 +198,7 @@ const CoursePostImg = styled.div`
 `;
 const ImgGradation = styled.div`
   position: absolute;
-  width: 410px;
+  width: 100%;
   height: 177px;
   background: linear-gradient(
     180deg,
@@ -206,8 +208,8 @@ const ImgGradation = styled.div`
   z-index: 1;
 `;
 const CoursePostText = styled.div`
-  width: 353px;
   margin-left: 20px;
+  margin-right: 20px;
 `;
 const Text1 = styled.div`
   margin-top: 24px;
@@ -290,11 +292,10 @@ const Tag = styled.div`
 `;
 
 const CoursePostReview = styled.div`
-  width: 353px;
   margin-left: 20px;
+  margin-right: 20px;
 `;
 const CourseLine = styled.div`
-  width: 353px;
   margin-top: 24px;
   margin-bottom: 24px;
   text-align: center;

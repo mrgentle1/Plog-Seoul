@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
-import axios from "axios";
 
 import { ReactComponent as Star } from "../../assets/icons/star.svg";
 import { ReactComponent as Dots } from "../../assets/icons/threedots.svg";
@@ -75,7 +74,7 @@ const StReviewCard = styled.div`
   margin: 0px;
   padding: 0px;
 
-  width: 353px;
+  width: 100%;
   height: 77px;
 
   background: ${COLOR.MAIN_WHITE};
@@ -134,7 +133,7 @@ const Box2 = styled.div`
     color: ${COLOR.INPUT_BORDER_GRAY};
   }
   .dots {
-    margin-right: 10px;
+    margin-right: 5px;
     &:hover + ${DropdownBox} {
       display: block; /* 드롭다운 아이콘에 마우스를 올리면 드롭다운 박스를 보여줌 */
     }
@@ -157,7 +156,7 @@ const Box3 = styled.div`
   }
 `;
 const CourseLine = styled.div`
-  width: 353px;
+  width: 100%;
   margin-top: 24px;
   margin-bottom: 24px;
   text-align: center;
