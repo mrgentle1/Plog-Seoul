@@ -7,6 +7,7 @@ import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { CalendarModal, ModalBackground } from "./modal/CalendarModal";
 
 export const Calendar = () => {
   const token = localStorage.getItem("key");
@@ -39,6 +40,8 @@ export const Calendar = () => {
       });
   }, []);
 
+  console.log(plogging);
+
   const ploggingDate = [];
   plogging.map((data) => {
     ploggingDate.push(data.createdAt.substring(0, 10));
@@ -60,10 +63,18 @@ export const Calendar = () => {
     );
   };
 
+  // const handleDayClick = (formattedDate) => {
+  //   if (ploggingDate.includes(formattedDate)) {
+  //     const path = `/plog/${formattedDate}`;
+  //     navigate(path);
+  //   }
+  // };
+
+  const [modalOpen, setModalOpen] = useState(false);
+
   const handleDayClick = (formattedDate) => {
     if (ploggingDate.includes(formattedDate)) {
-      const path = `/plog/${formattedDate}`;
-      navigate(path);
+      setModalOpen(true);
     }
   };
 
@@ -133,16 +144,22 @@ export const Calendar = () => {
   };
 
   return (
-    <CalendarContainer>
-      <CalendarHeader>
-        <BackArrow className="arrow1" onClick={handlePrevMonth} />
-        <YearMonthText>
-          {selectedDate.getFullYear()}년 {selectedDate.getMonth() + 1}월
-        </YearMonthText>
-        <ForwardArrow className="arrow2" onClick={handleNextMonth} />
-      </CalendarHeader>
-      <DayLabels>{getMonthCalendar()}</DayLabels>
-    </CalendarContainer>
+    <>
+      {modalOpen && (
+        <CalendarModal setModalOpen={setModalOpen} plogging={plogging} />
+      )}
+      {modalOpen && <ModalBackground />}
+      <CalendarContainer>
+        <CalendarHeader>
+          <BackArrow className="arrow1" onClick={handlePrevMonth} />
+          <YearMonthText>
+            {selectedDate.getFullYear()}년 {selectedDate.getMonth() + 1}월
+          </YearMonthText>
+          <ForwardArrow className="arrow2" onClick={handleNextMonth} />
+        </CalendarHeader>
+        <DayLabels>{getMonthCalendar()}</DayLabels>
+      </CalendarContainer>
+    </>
   );
 };
 
