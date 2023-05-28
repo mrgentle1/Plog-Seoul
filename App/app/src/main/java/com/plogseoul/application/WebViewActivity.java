@@ -30,6 +30,7 @@ import androidx.core.content.FileProvider;
 import com.facebook.appevents.internal.Constants;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -64,7 +65,7 @@ public class WebViewActivity extends AppCompatActivity {
             Manifest.permission.READ_EXTERNAL_STORAGE
     };
 
-    private String rootUrl = "https://plog-seoul.vercel.app/";
+    private String rootUrl = "https://plog-seoul-git-develop-mrgentle1.vercel.app/";
 
     private void checkPermissions() {
         ArrayList<String> permissionsNeeded = new ArrayList<>();
@@ -276,7 +277,24 @@ public class WebViewActivity extends AppCompatActivity {
         }
 
         @JavascriptInterface
-        public void shareInstagram() {
+        public void shareInstagram(String url) throws IOException {
+
+            StorageReference ref = storage.getReferenceFromUrl(url);
+            File localFile = File.createTempFile("images", "jpg");
+            ref.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    // Local temp file has been created
+                    System.out.println("다운로드 성공!");
+                    Toast.makeText(activity, "다운로드 성공!", Toast.LENGTH_SHORT).show();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle any errors
+                }
+            });
+
 
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType("image/*");
