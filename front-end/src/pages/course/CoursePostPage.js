@@ -231,13 +231,13 @@ const Text2 = styled.div`
   line-height: 30px;
 `;
 const Dis = styled.div`
-  width: 90px;
+  width: 100px;
 `;
 const Time = styled.div`
-  width: 115px;
+  width: 135px;
 `;
 const Level = styled.div`
-  width: 98px;
+  width: 60px;
 `;
 const Text3 = styled.div`
   margin-top: 12px;
