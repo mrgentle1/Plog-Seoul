@@ -53,11 +53,11 @@ function Router() {
           <Route element={<Layout />}>
             <Route path="/home" element={<HomePage />} />
             <Route path="/course" element={<CoursePage />} />
-            <Route path="/record" element={<RecordPage />} />
+
             <Route path="/plog" element={<PlogPage />} />
             <Route path="/my" element={<MyPage />} />
           </Route>
-
+          <Route path="/record" element={<RecordPage />} />
           <Route path="/record/ing" element={<RecordIng />} />
           <Route path="/record/point" element={<RecordPoint />} />
           <Route path="/record/finish" element={<RecordFinish />} />

@@ -41,10 +41,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/auth/kakao").permitAll()
                 .antMatchers("/api/tests/**").permitAll()
                 .antMatchers("/api/**").authenticated()
-//                .antMatchers("/api/admins/login").permitAll()
-//                .antMatchers("/api/admins/register").permitAll()
-//                .antMatchers(HttpMethod.POST, "/api/notifications/**").authenticated()
-//                .anyRequest().permitAll()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
