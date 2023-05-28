@@ -29,9 +29,9 @@ const modalData = {
 };
 function ShowRecordData({
   recordId,
+  setModalOpen,
   setImgOpen,
-
-  setClickEditImg,
+  setImgEditOpen,
   getImgUrl,
 }) {
   const token = localStorage.getItem("key");
@@ -119,7 +119,7 @@ function ShowRecordData({
     try {
       // GET 요청은 params에 실어 보냄
       const response = await axios.get(
-        `${process.env.REACT_APP_API_ROOT}/api/plogging/${recordId}/paths/`,
+        `${process.env.REACT_APP_API_ROOT}/api/plogging/${recordId}/paths?pagingIndex=0&pagingSize=2000`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -196,23 +196,35 @@ function ShowRecordData({
 
   // const bounds = useMemo(() => {
   //   //지도 재설정할 범위정보 가질 LatLngBounds객체
-  //   const map = mapRef.current;
+  //   // const map = mapRef.current;
   //   const bounds = new kakao.maps.LatLngBounds();
   //   console.log("bbbbb: %o", bounds);
   //   pathData.forEach((point, i) => {
   //     //LatLngBounds객체에 좌표추가
   //     bounds.extend(new kakao.maps.LatLng(point.lat, point.lng));
   //   });
-  //   if (map) map.setBounds(bounds);
+  //   // if (map) map.setBounds(bounds);
   //   return bounds;
   // }, [pathData]);
+  // const bounds = useMemo(() => {
+  //   //지도 재설정할 범위정보 가질 LatLngBounds객체
+  //   // const map = mapRef.current;
+  //   const bounds = new kakao.maps.LatLngBounds();
+  //   console.log("bbbbb: %o", bounds);
+  //   points.forEach((point, i) => {
+  //     //LatLngBounds객체에 좌표추가
+  //     bounds.extend(new kakao.maps.LatLng(point.lat, point.lng));
+  //   });
+  //   // if (map) map.setBounds(bounds);
+  //   return bounds;
+  // }, [points]);
 
   // 오늘 날짜
   let now = new Date();
   let todayMonth = now.getMonth() + 1;
   let todayDate = now.getDate();
 
-  const [modalOpen, setModalOpen] = useState(false);
+  // const [modalOpen, setModalOpen] = useState(false);
   const showModal = () => {
     setModalOpen(true);
   };
@@ -221,7 +233,7 @@ function ShowRecordData({
     navigate("/record");
   };
   const [clickImg, setClickImg] = useState("");
-  const [imgEditOpen, setImgEditOpen] = useState(false);
+  // const [imgEditOpen, setImgEditOpen] = useState(false);
 
   const showImgModal = () => {
     setImgOpen(true);
@@ -266,6 +278,10 @@ function ShowRecordData({
     console.log("data기록가져옴");
     console.log("rlfhr: %o", thisRecordData.runningTime);
 
+    setPoints([
+      { lat: thisRecordData.startLat, lng: thisRecordData.startLng },
+      { lat: thisRecordData.endLat, lng: thisRecordData.endLng },
+    ]);
     setIsDataLoading(false);
 
     console.log("rlfhr: %o", thisRecordData);
