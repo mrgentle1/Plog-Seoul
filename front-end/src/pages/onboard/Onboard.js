@@ -6,6 +6,7 @@ import "slick-carousel/slick/slick-theme.css";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 import { Button } from "../../components/common/Button";
+import Img1 from "../../assets/images/onboard.svg";
 
 const Onboard = () => {
   const navigate = useNavigate();
@@ -40,10 +41,8 @@ const Onboard = () => {
     <>
       <OnboardSlider {...settings} ref={sliderRef}>
         <OnboardText>
-          환경을 지키며 건강까지 챙겨보는 거 어떤가요?
-          <br />
-          <br />
           <span>플로깅</span>은 쓰레기를 주우며 조깅을 하는 행위입니다.
+          <img className="img1" src={Img1} />
         </OnboardText>
         <OnboardText>
           <span>서울 두드림길 정보</span>를 제공하는
@@ -51,12 +50,9 @@ const Onboard = () => {
           <span>플로깅 서울</span>과 함께라면,
           <br />
           <br /> 코스 걱정없이 언제든지 조깅이 가능합니다.
-          <br />
-          <br />
-          더불어 환경을 지킬 수 있죠.
         </OnboardText>
         <OnboardText>
-          <span>랭킹</span>을 통해 경쟁하며 <span>포인트</span>를 모아봐요{" "}
+          <span>포인트</span>를 모아서 나의 <span>랭킹</span>을 확인해보세요
           <br />
         </OnboardText>
       </OnboardSlider>
@@ -81,7 +77,7 @@ const OnboardSlider = styled(Slider)`
   display: flex;
   flex-direction: center;
   width: 100%;
-  height: 90%;
+  height: 100%;
   .slick-prev::before,
   .slick-next::before {
     opacity: 0;
@@ -146,7 +142,8 @@ const OnboardSlider = styled(Slider)`
   }
 `;
 
-const OnboardText = styled.span`
+const OnboardText = styled.div`
+  width: 100%;
   white-space: nowrap;
   padding-top: 13rem;
   text-align: center;
@@ -160,6 +157,13 @@ const OnboardText = styled.span`
     font-size: 20px;
     font-weight: 700;
     color: ${COLOR.MAIN_GREEN};
+  }
+  .img1 {
+    margin-left: 5%;
+    width: 90%;
+    padding-top: 10rem;
+    text-align: center;
+    justify-content: center;
   }
 `;
 
