@@ -29,7 +29,12 @@ export const NReviewCard = ({ r }) => {
             <Box3>
               {[...Array(5)].map(
                 (_, index) =>
-                  index < r.star && <Star key={index} className="blackStar" />
+                  index < 5 && (
+                    <Star
+                      key={index}
+                      className={index < r.star ? "blackStar" : "grayStar"}
+                    />
+                  )
               )}
               <h5>{r.userNickname}</h5>
             </Box3>
@@ -69,6 +74,11 @@ const ReviewList = styled.div`
     width: 17px;
     height: 16px;
     color: ${COLOR.MAIN_BLACK};
+  }
+  .grayStar {
+    width: 17px;
+    height: 16px;
+    color: ${COLOR.LIGHT_GRAY};
   }
 `;
 
