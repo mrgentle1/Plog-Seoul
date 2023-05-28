@@ -53,7 +53,6 @@ const Onboard = () => {
         </OnboardText>
         <OnboardText>
           <span>포인트</span>를 모아서 나의 <span>랭킹</span>을 확인해보세요
-          <br />
         </OnboardText>
       </OnboardSlider>
       <OnboardButton>
