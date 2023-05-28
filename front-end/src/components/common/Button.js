@@ -40,6 +40,7 @@ const StButton = styled.button`
   border-radius: 14px;
   background-color: ${COLOR.MAIN_GREEN};
   color: ${COLOR.MAIN_BLACK};
+  font-size: 15px;
   font-family: "SUIT Variable";
   font-style: normal;
   font-weight: 600;

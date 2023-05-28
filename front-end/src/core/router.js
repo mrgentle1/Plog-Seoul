@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Layout } from "../components/layout/Layout";
 import { AnimatePresence } from "framer-motion";
 
+import Onboard from "../pages/onboard/Onboard";
 import KakaoCallback from "../pages/login/KakaoCallback";
 import LoginPage from "../pages/login/LoginPage";
 import SignupPage from "../pages/signup/SignupPage";
@@ -13,15 +14,12 @@ import RecordIng from "../pages/record/RecordIng";
 import RecordFinish from "../pages/record/RecordFinish";
 import PlogPage from "../pages/plog/PlogPage";
 import MyPage from "../pages/mypage/Mypage";
-
 import SearchPage from "../pages/search/Search";
 import CoursePostPage from "../pages/course/CoursePostPage";
 import CourseMainPage from "../pages/course/CourseMainPage";
 import ReviewPage from "../pages/review/ReviewPage";
 import ReviewWritePage from "../pages/review/ReviewWritePage";
-
 import RecordPoint from "../pages/record/RecordPoint";
-
 import NoticePage from "../pages/mypage/NoticePage";
 import LevelPage from "../pages/plog/LevelPage";
 import AchievementPage from "../pages/plog/AchievementPage";
@@ -35,7 +33,8 @@ function Router() {
     <BrowserRouter>
       <AnimatePresence>
         <Routes>
-          <Route path="/" element={<LoginPage />} />
+          <Route path="/" element={<Onboard />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/auth/kakao-callback" element={<KakaoCallback />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/splash" element={<SplashPage />} />
