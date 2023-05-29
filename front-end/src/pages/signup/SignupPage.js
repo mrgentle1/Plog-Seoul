@@ -47,6 +47,9 @@ function SignupPage() {
       .then((res) => {
         localStorage.removeItem("key");
         localStorage.setItem("key", token);
+        if (window.Android) {
+          window.Android.showToastMessage(name + "님, 환영합니다!");
+        }
         navigate("/home");
       })
       .catch((err) => {

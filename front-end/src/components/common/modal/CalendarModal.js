@@ -7,10 +7,9 @@ import { CalendarList } from "../CalendarList";
 export const CalendarModal = ({ setModalOpen, plogging, specialDate }) => {
   const navigate = useNavigate();
 
-  console.log("모달창", plogging);
-  console.log("모달창스페셜", specialDate);
 
   const [isSelected, setIsSelected] = useState(false);
+
   const [selectedRecordId, setSelectedRecordId] = useState(null);
 
   const handleSelect = (recordId) => {
@@ -46,7 +45,7 @@ export const CalendarModal = ({ setModalOpen, plogging, specialDate }) => {
                 p={data}
                 onClick={() => handleSelect(data.recordId)}
                 isSelected={selectedRecordId === data.recordId}
-                isLastItem={index === array.length - 1} // Use filtered array length for determining the last item
+                isLastItem={index === array.length - 1} 
               />
             ))}
         </DateList>
