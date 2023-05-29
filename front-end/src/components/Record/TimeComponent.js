@@ -62,13 +62,13 @@ const StTimeComponent = styled.div`
   width: 100%;
   height: 100%;
 
-  span {
+  /* span {
     font-style: normal;
     font-weight: 600;
     font-size: 2.4rem;
     line-height: 3rem;
     color: ${COLOR.MAIN_BLACK};
-  }
+  } */
 `;
 
 const StTimeConvert = styled.div`
