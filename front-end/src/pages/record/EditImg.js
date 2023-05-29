@@ -107,7 +107,7 @@ export const EditImgModal = ({ setImgEditOpen, img, data }) => {
       imageTimeout: 15000, //newline
       scale: 3, //newline
       allowTaint: true,
-      useCORS: false,
+      useCORS: true,
     }).then((canvas) => {
       // setFilterImg(canvas.toDataURL("image/png"));
       postImgData(canvas.toDataURL("image/png"));
