@@ -45,8 +45,6 @@ export const Calendar = () => {
     ploggingDate.push(data.createdAt.substring(0, 10));
   });
 
-  console.log("플로깅데이터", ploggingDate);
-
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   const handlePrevMonth = () => {
@@ -86,7 +84,6 @@ export const Calendar = () => {
         dateCountMap[date] = 1;
       }
     });
-    console.log("날짜맵", dateCountMap);
 
     const daysOfWeek = ["일", "월", "화", "수", "목", "금", "토"];
 
@@ -119,7 +116,6 @@ export const Calendar = () => {
       const isSunday = currentDate.getUTCDay() === 0; // 일요일
       const isToday = currentDate.toDateString() === new Date().toDateString(); // 오늘 날짜
       const itemCount = dateCountMap[formattedDate] || 0;
-      console.log(itemCount);
 
       calendar.push(
         <CalendarDay
