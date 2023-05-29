@@ -134,14 +134,9 @@ public class WebViewActivity extends AppCompatActivity {
         if (webView.canGoBack() && !nowUrl.equals(rootUrl+"home") && !nowUrl.equals(rootUrl+"record/ing")) {
             webView.goBack();
         }  else if (0 <= gapTime && 2000 >= gapTime) {
-            if(nowUrl.equals(rootUrl+"record/ing")){
-                webView.loadUrl("javascript:receiveRecordingExit('" + false+ "')");
-            }else{
-                super.onBackPressed();
-            }
+            super.onBackPressed();
         } else if(nowUrl.equals(rootUrl+"record/ing")) {
-            backBtnTime = curTime;
-            webView.loadUrl("javascript:receiveBackPressed('" + true+ "')");
+            webView.loadUrl("javascript:receiveBackPressed(true)");
         } else {
             backBtnTime = curTime;
             Toast.makeText(this, "한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show();
