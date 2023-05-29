@@ -44,13 +44,22 @@ export const ModalBackground = styled.div`
 
   /* 우선은 393px로 하는데 추후에 100%로 바꿔야 할 듯 */
 
-  width: 400px;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
+
+  top: 0;
 
   background: rgba(190, 194, 198, 0.9);
   display: flex;
   justify-content: center;
   align-items: center;
+
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+
+  ::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+  }
 `;
 
 const ModalContainer = styled.div`
