@@ -91,8 +91,14 @@ function HomePage() {
   const real_runningTime2 = runningTime % 60;
 
   const boxVariants = {
-    hover: { backgroundColor: `${COLOR.MAIN_GREEN_HOVER}` },  // 은은하게 바뀔 색상을 color-code에 적용
-    rest: { backgroundColor: `${COLOR.MAIN_GREEN}` }  // 원래의 색상을 original-color-code에 적용
+    hover: { 
+      backgroundColor: `${COLOR.MAIN_GREEN_HOVER}`,
+      scale: 0.95,
+    }, 
+    rest: { 
+      backgroundColor: `${COLOR.MAIN_GREEN}`,
+      scale: 1,
+    }  // 원래의 색상을 original-color-code에 적용
   };
 
   return (
@@ -107,6 +113,8 @@ function HomePage() {
           <Box4
             variants={boxVariants}
             whileHover="hover"
+            whileTap="hover"
+            whileFocus="hover"
             initial="rest"
             animate="rest"
           >
