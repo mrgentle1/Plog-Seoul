@@ -198,18 +198,18 @@ function ShowRecordData({
     }
   }
 
-  // const bounds = useMemo(() => {
-  //   //지도 재설정할 범위정보 가질 LatLngBounds객체
-  //   // const map = mapRef.current;
-  //   const bounds = new kakao.maps.LatLngBounds();
-  //   console.log("bbbbb: %o", bounds);
-  //   pathData.forEach((point, i) => {
-  //     //LatLngBounds객체에 좌표추가
-  //     bounds.extend(new kakao.maps.LatLng(point.lat, point.lng));
-  //   });
-  //   // if (map) map.setBounds(bounds);
-  //   return bounds;
-  // }, [pathData]);
+  const bounds = useMemo(() => {
+    //지도 재설정할 범위정보 가질 LatLngBounds객체
+    // const map = mapRef.current;
+    const bounds = new kakao.maps.LatLngBounds();
+    console.log("bbbbb: %o", bounds);
+    pathData.forEach((point, i) => {
+      //LatLngBounds객체에 좌표추가
+      bounds.extend(new kakao.maps.LatLng(point.lat, point.lng));
+    });
+    // if (map) map.setBounds(bounds);
+    return bounds;
+  }, [pathData]);
   // const bounds = useMemo(() => {
   //   //지도 재설정할 범위정보 가질 LatLngBounds객체
   //   // const map = mapRef.current;
@@ -296,7 +296,7 @@ function ShowRecordData({
 
     console.log("1.경로: %o", pathData);
     const map = mapRef.current;
-    // if (map) map.setBounds(bounds);
+    if (map) map.setBounds(bounds);
     console.log("1get", getPath.current, getImg.current);
 
     if (getPath.current) {
