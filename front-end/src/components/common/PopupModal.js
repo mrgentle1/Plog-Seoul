@@ -15,7 +15,8 @@ export const PopupModal = ({ setPopupModal, r }) => {
 
   const pathname = window.location.pathname;
   const url = pathname.substring(7);
-  const real_pathname = `${process.env.REACT_APP_API_ROOT}/api/roads` + url + `/${r.reviewId}`;
+  const real_pathname =
+    `${process.env.REACT_APP_API_ROOT}/api/roads` + url + `/${r.reviewId}`;
 
   // 리뷰 수정 모달창 호출
   const [modalOpen, setModalOpen] = useState(false);
@@ -53,34 +54,43 @@ export const PopupModal = ({ setPopupModal, r }) => {
 
 export const ModalBackground2 = styled.div`
   position: fixed;
-  z-index: 1000;
-
-  /* 우선은 393px로 하는데 추후에 100%로 바꿔야 할 듯 */
-
-  width: 393px;
-  height: 100%;
-  margin-left: -20px;
-  margin-top: -145px;
-
+  z-index: 1200;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: rgba(190, 194, 198, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+
+  ::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
 `;
 
 const ModalContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  align-items: flex-start;
-  margin-left: -20px;
 
   padding: 24px 24px;
-  position: absolute;
-  width: 393px;
+  position: fixed;
+  width: 100%;
   height: 237px;
   bottom: 0px;
   z-index: 2000;
 
+  left: 0;
+  bottom: 0;
+
   background: ${COLOR.MAIN_WHITE};
   border-radius: 14px 14px 0px 0px;
+
+  overflow: hidden;
 
   p {
     font-family: "SUIT Variable";
