@@ -32,7 +32,6 @@ function PlogPage() {
         },
       })
       .then((response) => {
-        console.log(response);
         setUser(response.data.result);
         setUserName(response.data.result.nickname);
         setPoint(response.data.result.point);

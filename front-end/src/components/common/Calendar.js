@@ -40,14 +40,10 @@ export const Calendar = () => {
       });
   }, []);
 
-  console.log(plogging);
-
   const ploggingDate = [];
   plogging.map((data) => {
     ploggingDate.push(data.createdAt.substring(0, 10));
   });
-
-  console.log(ploggingDate);
 
   const [selectedDate, setSelectedDate] = useState(new Date());
 
@@ -63,18 +59,13 @@ export const Calendar = () => {
     );
   };
 
-  // const handleDayClick = (formattedDate) => {
-  //   if (ploggingDate.includes(formattedDate)) {
-  //     const path = `/plog/${formattedDate}`;
-  //     navigate(path);
-  //   }
-  // };
-
   const [modalOpen, setModalOpen] = useState(false);
+  const [specialDate, setSpecialDate] = useState("");
 
   const handleDayClick = (formattedDate) => {
     if (ploggingDate.includes(formattedDate)) {
       setModalOpen(true);
+      setSpecialDate(formattedDate);
     }
   };
 
@@ -146,7 +137,11 @@ export const Calendar = () => {
   return (
     <>
       {modalOpen && (
-        <CalendarModal setModalOpen={setModalOpen} plogging={plogging} />
+        <CalendarModal
+          setModalOpen={setModalOpen}
+          plogging={plogging}
+          specialDate={specialDate}
+        />
       )}
       {modalOpen && <ModalBackground />}
       <CalendarContainer>

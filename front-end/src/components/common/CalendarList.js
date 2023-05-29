@@ -37,7 +37,7 @@ const StCalendarList = styled.div`
   margin: 0px;
   padding: 0px;
   width: 100%;
-  height: 77px;
+  height: 67px;
   background: ${({ isSelected }) =>
     isSelected ? COLOR.MAIN_GREEN_HOVER : COLOR.MAIN_WHITE};
   cursor: pointer;
