@@ -283,7 +283,11 @@ function RecordFinish() {
       )}
       {imgOpen && <RecordImgModal setImgOpen={setImgOpen} data={clickImg} />}
       {imgEditOpen && (
-        <EditImgModal setImgOpen={setImgEditOpen} data={clickEditImg} />
+        <EditImgModal
+          setImgEditOpen={setImgEditOpen}
+          img={clickEditImg}
+          data={{ dist: 10, when: "2023년5월28일" }}
+        />
       )}
 
       {(modalOpen || imgOpen || imgEditOpen) && <ModalBackground />}
