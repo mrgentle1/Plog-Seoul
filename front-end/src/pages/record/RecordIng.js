@@ -34,14 +34,14 @@ const modalData = {
   recording: true,
   title: "플로깅 기록을 종료할까요?",
   contents: "지금 종료하면\n오늘의 플로깅 기록이 사라져요",
-  btnText1: "닫기",
+  btnText1: "종료하기",
   btnText2: "계속하기",
 };
 const notMoreThanData = {
   recording: true,
   title: "플로깅 기록을 종료할까요?",
   contents: "1분 미만 기록은\n저장되지 않아요",
-  btnText1: "닫기",
+  btnText1: "종료하기",
   btnText2: "계속하기",
 };
 
@@ -474,7 +474,7 @@ function RecordIngPage() {
   };
 
   useEffect(() => {
-    if (time.all > 60) {
+    if (time.all > 59) {
       setIsActive(true);
     }
   }, [time]);

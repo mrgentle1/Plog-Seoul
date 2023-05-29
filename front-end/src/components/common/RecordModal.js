@@ -119,10 +119,19 @@ export const ModalBackground = styled.div`
   width: 100vw;
   height: 100vh;
 
+  top: 0;
+
   background: rgba(190, 194, 198, 0.9);
   display: flex;
   justify-content: center;
   align-items: center;
+
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+
+  ::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+  }
 `;
 
 const ModalContainer = styled.div`

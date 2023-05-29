@@ -20,6 +20,7 @@ import { RecordImgModal } from "../../components/Record/ImgModal";
 import { EditImgModal } from "./EditImg";
 import { TimeConvert } from "../../components/Record/TimeComponent";
 import { path } from "d3-path";
+import moment from "moment";
 
 const modalData = {
   recording: false,
@@ -29,10 +30,11 @@ const modalData = {
 };
 function ShowRecordData({
   recordId,
+  setModalOpen,
   setImgOpen,
-
-  setClickEditImg,
+  setImgEditOpen,
   getImgUrl,
+  getData,
 }) {
   const token = localStorage.getItem("key");
 
@@ -69,6 +71,7 @@ function ShowRecordData({
     endLng: 0,
     runningTime: 0,
     kcal: 0,
+    createdAt: "",
   });
 
   async function getRecordData() {
@@ -94,6 +97,7 @@ function ShowRecordData({
         endLng: response.data.result.endLng,
         runningTime: response.data.result.runningTime,
         kcal: response.data.result.kcal,
+        createdAt: response.data.result.createdAt,
       };
 
       setThisRecordData(recordData);
@@ -119,7 +123,7 @@ function ShowRecordData({
     try {
       // GET 요청은 params에 실어 보냄
       const response = await axios.get(
-        `${process.env.REACT_APP_API_ROOT}/api/plogging/${recordId}/paths/`,
+        `${process.env.REACT_APP_API_ROOT}/api/plogging/${recordId}/paths?pagingIndex=0&pagingSize=2000`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -194,25 +198,37 @@ function ShowRecordData({
     }
   }
 
+  const bounds = useMemo(() => {
+    //지도 재설정할 범위정보 가질 LatLngBounds객체
+    // const map = mapRef.current;
+    const bounds = new kakao.maps.LatLngBounds();
+    console.log("bbbbb: %o", bounds);
+    pathData.forEach((point, i) => {
+      //LatLngBounds객체에 좌표추가
+      bounds.extend(new kakao.maps.LatLng(point.lat, point.lng));
+    });
+    // if (map) map.setBounds(bounds);
+    return bounds;
+  }, [pathData]);
   // const bounds = useMemo(() => {
   //   //지도 재설정할 범위정보 가질 LatLngBounds객체
-  //   const map = mapRef.current;
+  //   // const map = mapRef.current;
   //   const bounds = new kakao.maps.LatLngBounds();
   //   console.log("bbbbb: %o", bounds);
-  //   pathData.forEach((point, i) => {
+  //   points.forEach((point, i) => {
   //     //LatLngBounds객체에 좌표추가
   //     bounds.extend(new kakao.maps.LatLng(point.lat, point.lng));
   //   });
-  //   if (map) map.setBounds(bounds);
+  //   // if (map) map.setBounds(bounds);
   //   return bounds;
-  // }, [pathData]);
+  // }, [points]);
 
   // 오늘 날짜
   let now = new Date();
   let todayMonth = now.getMonth() + 1;
   let todayDate = now.getDate();
 
-  const [modalOpen, setModalOpen] = useState(false);
+  // const [modalOpen, setModalOpen] = useState(false);
   const showModal = () => {
     setModalOpen(true);
   };
@@ -221,7 +237,7 @@ function ShowRecordData({
     navigate("/record");
   };
   const [clickImg, setClickImg] = useState("");
-  const [imgEditOpen, setImgEditOpen] = useState(false);
+  // const [imgEditOpen, setImgEditOpen] = useState(false);
 
   const showImgModal = () => {
     setImgOpen(true);
@@ -266,6 +282,10 @@ function ShowRecordData({
     console.log("data기록가져옴");
     console.log("rlfhr: %o", thisRecordData.runningTime);
 
+    setPoints([
+      { lat: thisRecordData.startLat, lng: thisRecordData.startLng },
+      { lat: thisRecordData.endLat, lng: thisRecordData.endLng },
+    ]);
     setIsDataLoading(false);
 
     console.log("rlfhr: %o", thisRecordData);
@@ -276,7 +296,7 @@ function ShowRecordData({
 
     console.log("1.경로: %o", pathData);
     const map = mapRef.current;
-    // if (map) map.setBounds(bounds);
+    if (map) map.setBounds(bounds);
     console.log("1get", getPath.current, getImg.current);
 
     if (getPath.current) {
@@ -306,6 +326,12 @@ function ShowRecordData({
 
   const sendImgUrl = (url) => {
     getImgUrl(url);
+  };
+  const sendRecordData = () => {
+    getData({
+      dist: thisRecordData.distance.toFixed(2),
+      when: moment(thisRecordData.createdAt).format("YYYY년 MM월 DD일"),
+    });
   };
 
   return (
@@ -358,7 +384,7 @@ function ShowRecordData({
                 <TimeDataContainer>
                   {/* <TimeConvert seconds={thisRecordData.runningTime} /> */}
                   {/* <span>{thisRecordData.runningTime}</span> */}
-                  <span>{(thisRecordData.runningTime / 60).toFixed(2)}분</span>
+                  <TimeConvert time={thisRecordData.runningTime} />
                   <p>걸은 시간</p>
                 </TimeDataContainer>
                 <OtherDataContainer>
@@ -386,6 +412,7 @@ function ShowRecordData({
                         onClick={() => {
                           console.log(img.imgUrl);
                           sendImgUrl(img.imgUrl);
+                          sendRecordData();
                           showEditImgModal();
                         }}
                       ></img>
@@ -400,8 +427,6 @@ function ShowRecordData({
             </ContentsContainer>
           </>
         )}
-
-        {/* <RecordFinishFooter setData={setModalOpen} data={modalData} /> */}
       </StRecordFinish>
     </>
   );
@@ -425,54 +450,6 @@ const StRecordFinish = styled.div`
 
   ::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera*/
-  }
-`;
-
-const RecordFinishHeader = styled.div`
-  position: fixed;
-  top: 0;
-  width: 39.3rem;
-  height: 12.7rem;
-
-  display: grid;
-  grid-template-columns: 8.8rem auto 1.4rem;
-
-  align-items: center;
-
-  padding-left: 2rem;
-  padding-right: 2.5rem;
-
-  background-color: ${COLOR.MAIN_WHITE};
-
-  z-index: 100;
-
-  span {
-    font-style: normal;
-    font-weight: 700;
-    font-size: 2rem;
-    line-height: 2.5rem;
-    color: ${COLOR.MAIN_BLACK};
-  }
-
-  p {
-    font-style: normal;
-    font-weight: 500;
-    font-size: 1.4rem;
-    line-height: 1.7rem;
-    color: ${COLOR.MAIN_GREEN};
-  }
-
-  .signupBackArrow {
-    margin-top: 5rem;
-    margin-left: 2rem;
-  }
-`;
-
-const CloseWrapper = styled.div`
-  .headerClose {
-    width: 2.7rem;
-    height: 2.7rem;
-    color: ${COLOR.MAIN_BLACK};
   }
 `;
 
