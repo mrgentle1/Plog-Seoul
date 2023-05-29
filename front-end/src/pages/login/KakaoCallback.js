@@ -15,7 +15,9 @@ function KakaoCallback() {
 
       try {
         axios
-          .get(`https://seoul-plog.shop/api/auth/kakao?host=${host}&code=${code}`)
+          .get(
+            `https://seoul-plog.shop/api/auth/kakao?host=${host}&code=${code}`
+          )
           .then((res) => {
             const accessToken = res.data.result.jwt;
 
@@ -28,7 +30,6 @@ function KakaoCallback() {
         console.error("Error fetching authentication:", error);
       }
     }
-
     authenticate();
   }, [navigate]);
 

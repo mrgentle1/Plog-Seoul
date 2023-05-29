@@ -38,8 +38,6 @@ function HomePage() {
   }
 
   useEffect(() => {
-    const token = localStorage.getItem("key");
-
     axios
       .get(`${process.env.REACT_APP_API_ROOT}/api/auth/me`, {
         headers: {
@@ -55,7 +53,7 @@ function HomePage() {
       .catch((error) => {
         console.error(error);
       });
-  }, [token]);
+  }, []);
 
   useEffect(() => {
     axios

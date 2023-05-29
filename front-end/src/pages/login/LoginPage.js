@@ -5,10 +5,12 @@ import { ReactComponent as KakaoButton } from "../../assets/icons/kakaoButton.sv
 
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
-import { userIdNumber, usePersistRecoilState } from "../../core/userId";
+import { useCookies } from "react-cookie";
 
 function LoginPage() {
   const navigate = useNavigate();
+  const [cookies, setCookie] = useCookies(["accessToken"]);
+  const token = cookies.accessToken;
 
   const [contentIndex, setContentIndex] = useState(0);
   const content = "아름다운 서울을 위해\n우리 함께 주워봐요!";
@@ -23,14 +25,12 @@ function LoginPage() {
     return () => clearInterval(intervalId);
   }, []);
 
-  const token = localStorage.getItem("key");
+  localStorage.setItem("key", token);
   useEffect(() => {
     if (token) {
       navigate("/splash");
     }
   }, [token]);
-
-  console.log(token);
 
   const kakaoLogin = () => {
     window.location.href = process.env.REACT_APP_KAKAO_LOGIN_URL;
