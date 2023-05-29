@@ -11,7 +11,8 @@ export const ReviewDeleteModal = ({ setModal2Open, r }) => {
 
   const pathname = window.location.pathname;
   const url = pathname.substring(7);
-  const real_pathname = `${process.env.REACT_APP_API_ROOT}/api/roads` + url + `/${r.reviewId}`;
+  const real_pathname =
+    `${process.env.REACT_APP_API_ROOT}/api/roads` + url + `/${r.reviewId}`;
 
   const navigate = useNavigate();
 
@@ -57,16 +58,27 @@ export const ReviewDeleteModal = ({ setModal2Open, r }) => {
 
 export const ModalBackground3 = styled.div`
   position: fixed;
-  z-index: 1000;
+  z-index: 1200;
 
   /* 우선은 393px로 하는데 추후에 100%로 바꿔야 할 듯 */
 
-  width: 393px;
+  width: 100vw;
   height: 100vh;
-  margin-left: -20px;
-  margin-top: -145px;
 
-  background: rgba(190, 194, 198, 0.9);
+  top: 0;
+  left: 0;
+
+  background: rgba(190, 194, 198, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+
+  ::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+  }
 `;
 
 const ModalContainer = styled.div`
