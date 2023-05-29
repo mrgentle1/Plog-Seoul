@@ -1,17 +1,34 @@
 import styled from "styled-components";
 import { COLOR } from "../../../styles/color";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CalendarList } from "../CalendarList";
 
 export const CalendarModal = ({ setModalOpen, plogging }) => {
   const navigate = useNavigate();
 
-  // 모달 끄기
+  console.log("모달창", plogging);
+
+  const [isSelected, setIsSelected] = useState(false);
+
+  const [selectedRecordId, setSelectedRecordId] = useState(null);
+
+  const handleSelect = (recordId) => {
+    setSelectedRecordId(recordId);
+  };
+
   const closeModal = () => {
     setModalOpen(false);
   };
 
-  console.log("모달창", plogging);
+  const handleSelectAndNavigate = () => {
+    if (selectedRecordId) {
+      navigate("/record/test", {
+        state: { recordId: selectedRecordId, isShowPlog: true },
+      });
+      closeModal();
+    }
+  };
 
   return (
     <>
@@ -22,13 +39,19 @@ export const CalendarModal = ({ setModalOpen, plogging }) => {
         </ModalText>
         <DateList>
           {plogging.map((data, index) => (
-            <CalendarList key={index} p={data} />
+            <CalendarList
+              key={index}
+              p={data}
+              onClick={() => handleSelect(data.recordId)}
+              isSelected={selectedRecordId === data.recordId}
+              isLastItem={index === plogging.length - 1} // 마지막 요소인지 여부 전달
+            />
           ))}
         </DateList>
         <ModalLine />
         <ModalButton>
           <CloseButton onClick={closeModal}>취소</CloseButton>
-          <CheckButton onClick={closeModal}>선택하기</CheckButton>
+          <CheckButton onClick={handleSelectAndNavigate}>선택하기</CheckButton>
         </ModalButton>
       </ModalContainer>
     </>

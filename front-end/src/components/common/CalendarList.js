@@ -1,14 +1,7 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
-import axios from "axios";
 
-import { ReactComponent as Star } from "../../assets/icons/star.svg";
-
-export const CalendarList = ({ p }) => {
-  const navigate = useNavigate();
-
+export const CalendarList = ({ p, onClick, isSelected, isLastItem }) => {
   const createdAt = p.createdAt;
   const date = createdAt.substring(0, 10);
   const time = createdAt.substring(11, 16);
@@ -16,9 +9,13 @@ export const CalendarList = ({ p }) => {
   const runningTime = Math.floor(p.runningTime / 60);
   const runningTime2 = p.runningTime % 60;
 
+  const handleSelect = () => {
+    onClick(p.recordId);
+  };
+
   return (
     <>
-      <StCalendarList>
+      <StCalendarList onClick={handleSelect} isSelected={isSelected}>
         <ReviewListInfo>
           <h6>
             {date} {time}
@@ -28,7 +25,7 @@ export const CalendarList = ({ p }) => {
           </h5>
         </ReviewListInfo>
       </StCalendarList>
-      <CourseLine />
+      {!isLastItem && <CourseLine />}
     </>
   );
 };
@@ -37,14 +34,16 @@ const StCalendarList = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-
   margin: 0px;
   padding: 0px;
-
   width: 100%;
   height: 77px;
-
-  background: ${COLOR.MAIN_WHITE};
+  background: ${({ isSelected }) =>
+    isSelected ? COLOR.MAIN_GREEN_HOVER : COLOR.MAIN_WHITE};
+  cursor: pointer;
+  &:hover {
+    background: ${COLOR.MAIN_GREEN_HOVER};
+  }
 `;
 
 const ReviewListInfo = styled.div`
