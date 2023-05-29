@@ -17,6 +17,7 @@ import { COLOR } from "../../styles/color";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { userIdNumber, usePersistRecoilState } from "../../core/userId";
+import { TimeConvert } from "../../components/Record/TimeComponent";
 
 function HomePage() {
   useEffect(() => {
@@ -87,18 +88,15 @@ function HomePage() {
   plogging.map((data) => (distance += data.distance));
   distance = distance.toFixed(2);
 
-  const real_runningTime = Math.floor(runningTime / 60);
-  const real_runningTime2 = runningTime % 60;
-
   const boxVariants = {
-    hover: { 
+    hover: {
       backgroundColor: `${COLOR.MAIN_GREEN_HOVER}`,
       scale: 0.95,
-    }, 
-    rest: { 
+    },
+    rest: {
       backgroundColor: `${COLOR.MAIN_GREEN}`,
       scale: 1,
-    }  // 원래의 색상을 original-color-code에 적용
+    }, // 원래의 색상을 original-color-code에 적용
   };
 
   return (
@@ -152,7 +150,7 @@ function HomePage() {
             <Text6>
               <Ploging2>{plogging.length}번</Ploging2>
               <Time2>
-                {real_runningTime}분 {real_runningTime2}초
+                <TimeConvert className="time" time={runningTime} />
               </Time2>
               <Dis2>{distance}km</Dis2>
             </Text6>

@@ -8,6 +8,8 @@ import { NavLink } from "react-router-dom";
 export const HomeHeaderV2 = ({ headerBackground }) => {
   const headerTitle = useRecoilValue(headerTitleState);
 
+  console.log(headerBackground);
+
   return (
     <StHomeHeader backgroundColor={headerBackground}>
       <StHeaderTitle
