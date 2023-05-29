@@ -196,7 +196,6 @@ const CoursePostImg = styled.div`
   position: relative;
   width: 100%;
   height: 356px;
-  margin-top: 46px;
 
   overflow: hidden;
 `;
