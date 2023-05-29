@@ -73,7 +73,7 @@ export const EditImgModal = ({ setImgEditOpen, img, data }) => {
       console.log(response.data.result);
       if (window.Android) {
         window.Android.shareInstagram(response.data.result);
-      }
+    }
     } catch (e) {
       // 실패 시 처리
       console.error(e);
