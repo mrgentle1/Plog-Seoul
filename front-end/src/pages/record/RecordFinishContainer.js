@@ -36,6 +36,7 @@ function RecordFinishPage() {
   const plogRecord = useLocation();
   const recordId = plogRecord.state.recordId;
   const isShowPlog = plogRecord.state.isShowPlog;
+
   const [userData, setUserData] = useState({
     recordId: recordId,
     isShowPlog: isShowPlog,
@@ -140,9 +141,9 @@ function RecordFinishPage() {
       ) : (
         <PlogRecordFooter>
           <Button
-            onClick={() => {
-              isCourse ? showModal() : showModal();
-            }}
+          // onClick={() => {
+          //   isCourse ? showModal() : showModal();
+          // }}
           >
             공유하기
           </Button>
@@ -379,7 +380,7 @@ const RecordFinishFooter = styled.div`
   justify-content: center;
   align-items: center;
   bottom: 0;
-  padding: 0rem 0.6rem 2rem 2rem;
+  padding: 0rem 2rem 0.6rem 2rem;
   gap: 1.2rem;
 
   width: 100%;
@@ -413,7 +414,7 @@ const PlogRecordFooter = styled.div`
   justify-content: center;
   align-items: center;
   bottom: 0;
-  padding: 0rem 0.6rem 2rem 2rem;
+  padding: 0rem 2rem 2rem 2rem;
   gap: 1.2rem;
 
   width: 100%;
