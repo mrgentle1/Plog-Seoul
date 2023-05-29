@@ -34,28 +34,46 @@ export const EditImgModal = ({ setImgEditOpen, img, data }) => {
     setImgEditOpen(false);
   };
 
+  const dataURLtoFile = (dataurl, fileName) => {
+ 
+    var arr = dataurl.split(','),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]), 
+        n = bstr.length, 
+        u8arr = new Uint8Array(n);
+        
+    while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    
+    return new File([u8arr], fileName, {type:mime});
+  }
+
   /* POST - Record Img */
 
   const [imgData, setImgData] = useState([]);
   async function postImgData(img) {
     // async, await을 사용하는 경우
     let formData = new FormData();
-    formData.append("image", img);
+    let file = dataURLtoFile(img, "image.png");
+    formData.append("image", file);
 
-    try {
-      // GET 요청은 params에 실어 보냄
+    try { 
       const response = await axios.post(
         `${process.env.REACT_APP_API_ROOT}/api/images/`,
-        {
-          body: formData,
-        },
+          formData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
           },
         }
       );
+      console.log("success Post");
+      console.log(response.data.result);
+      if (window.Android) {
+        window.Android.shareInstagram(response.data.result);
+      }
     } catch (e) {
       // 실패 시 처리
       console.error(e);
