@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useCallback, useState, useRef } from "react";
 import { ReactComponent as Filter } from "../../assets/icons/filterWhite.svg";
 import { ReactComponent as ReverseFilter } from "../../assets/icons/filterWhiteReverse.svg";
+import axios from "axios";
 
 import { ReactComponent as Logo } from "../../assets/icons/smallLogo.svg";
 import html2canvas from "html2canvas";
@@ -11,12 +12,15 @@ import { useNavigate, useHistory } from "react-router-dom";
 import { Button } from "../../components/common/Button";
 
 export const EditImgModal = ({ setImgEditOpen, img, data }) => {
+  const token = localStorage.getItem("key");
   const navigate = useNavigate();
   const goBack = () => {
     navigate("/record/finish");
   };
 
   const [isReverse, setIsReverse] = useState(false);
+  const [filterImg, setFilterImg] = useState();
+  const isClick = useRef(false);
 
   // 경로
   const pathname = window.location.pathname;
@@ -29,6 +33,36 @@ export const EditImgModal = ({ setImgEditOpen, img, data }) => {
   const checkModal = () => {
     setImgEditOpen(false);
   };
+
+  /* POST - Record Img */
+
+  const [imgData, setImgData] = useState([]);
+  async function postImgData(img) {
+    // async, await을 사용하는 경우
+    let formData = new FormData();
+    formData.append("image", img);
+
+    try {
+      // GET 요청은 params에 실어 보냄
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_ROOT}/api/images/`,
+        {
+          body: formData,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    } catch (e) {
+      // 실패 시 처리
+      console.error(e);
+      console.log(img);
+      alert("이미지 업로드 실패. 재시도해주세요.");
+    }
+  }
 
   useEffect(() => {
     document.body.style.cssText = `
@@ -43,6 +77,12 @@ export const EditImgModal = ({ setImgEditOpen, img, data }) => {
     };
   }, []);
 
+  // useEffect(() => {
+  //   if (isClick.current) {
+  //     postImgData();
+  //   }
+  // }, [filterImg]);
+
   const onCapture = () => {
     console.log("onCapture");
     html2canvas(document.getElementById("imgFrame"), {
@@ -51,7 +91,9 @@ export const EditImgModal = ({ setImgEditOpen, img, data }) => {
       allowTaint: true,
       useCORS: true,
     }).then((canvas) => {
-      onSaveAs(canvas.toDataURL("image/png"), "image-download.png");
+      // setFilterImg(canvas.toDataURL("image/png"));
+      postImgData(canvas.toDataURL("image/png"));
+      // onSaveAs(canvas.toDataURL("image/png"), "image-download.png");
     });
   };
 
@@ -60,6 +102,7 @@ export const EditImgModal = ({ setImgEditOpen, img, data }) => {
     var link = document.createElement("a");
     document.body.appendChild(link);
     link.href = uri;
+    console.log("uri", uri);
     link.download = filename;
     link.click();
     document.body.removeChild(link);
@@ -105,6 +148,7 @@ export const EditImgModal = ({ setImgEditOpen, img, data }) => {
           <ModalButton>
             <Button
               onClick={() => {
+                isClick.current = true;
                 onCapture();
               }}
             >

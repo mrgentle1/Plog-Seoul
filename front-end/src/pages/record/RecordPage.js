@@ -1,6 +1,12 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
-import { Map, MapMarker, CustomOverlayMap, useMap } from "react-kakao-maps-sdk";
+import {
+  Map,
+  MapMarker,
+  CustomOverlayMap,
+  useMap,
+  MarkerClusterer,
+} from "react-kakao-maps-sdk";
 import { useNavigate, Link } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { headerTitleState } from "../../core/headerTitle";
@@ -15,7 +21,6 @@ import { ReactComponent as RelocateBtn } from "../../assets/icons/relocateInacti
 import { ReactComponent as RelocateAtiveBtn } from "../../assets/icons/relocateActivate.svg";
 import { ReactComponent as TrashCanAtiveBtn } from "../../assets/icons/trashCanActivate.svg";
 import { ReactComponent as TrashCanBtn } from "../../assets/icons/trash.svg";
-
 import { HomeHeaderV2 } from "../../components/layout/HeaderV2";
 import axios from "axios";
 
@@ -165,19 +170,8 @@ function RecordPage() {
   console.log(state);
 
   /* TrashCan show Marker */
-  const [markerSize, setMarkerSize] = useState({ width: 64, height: 64 });
-  const [isVisible, setIsVisible] = useState(true);
-  useEffect(() => {
-    console.log(level);
 
-    if (level > 5) {
-      setIsVisible(false);
-    } else {
-      setIsVisible(true);
-    }
-  }, [level]);
-
-  const EventTrashCanContainer = ({ position, mSize, title }) => {
+  const EventTrashCanContainer = ({ position, title }) => {
     const map = useMap();
 
     return (
@@ -185,7 +179,7 @@ function RecordPage() {
         position={position} // 마커를 표시할 위치
         image={{
           src: trashCanImg, // 마커이미지의 주소입니다
-          size: { markerSize }, // 마커이미지의 크기입니다
+          size: { width: 64, height: 64 }, // 마커이미지의 크기입니다
         }}
         title={title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
       ></MapMarker>
@@ -229,7 +223,6 @@ function RecordPage() {
             level={3} // 지도 확대 레벨
             isPanto={true}
             onCenterChanged={() => setIsMove(true)}
-            onZoomChanged={(map) => setLevel(map.getLevel())}
             ref={mapRef}
           >
             {!state.isLoading && (
@@ -252,7 +245,25 @@ function RecordPage() {
                 />
               </div>
             )}
-            {isShowCan &&
+            {isShowCan && (
+              <MarkerClusterer
+                averageCenter={true} // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
+                minLevel={6} // 클러스터 할 최소 지도 레벨
+              >
+                {trashCanData.map((position) => (
+                  <EventTrashCanContainer
+                    key={`${position.trashCanId}-${position.title}`}
+                    position={{
+                      lat: position.latlng.lat,
+                      lng: position.latlng.lng,
+                    }} // 마커를 표시할 위치
+                    title={position.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+                  />
+                ))}
+              </MarkerClusterer>
+            )}
+
+            {/* {isShowCan &&
               isVisible &&
               trashCanData.map((position) => (
                 <EventTrashCanContainer
@@ -264,7 +275,7 @@ function RecordPage() {
                   mSize={markerSize}
                   title={position.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
                 />
-              ))}
+              ))} */}
           </Map>
           {/* Reloacate-지도 이동 확인 O -> activate Btn */}
           <RelocateWrapper>

@@ -198,18 +198,18 @@ function ShowRecordData({
     }
   }
 
-  // const bounds = useMemo(() => {
-  //   //지도 재설정할 범위정보 가질 LatLngBounds객체
-  //   // const map = mapRef.current;
-  //   const bounds = new kakao.maps.LatLngBounds();
-  //   console.log("bbbbb: %o", bounds);
-  //   pathData.forEach((point, i) => {
-  //     //LatLngBounds객체에 좌표추가
-  //     bounds.extend(new kakao.maps.LatLng(point.lat, point.lng));
-  //   });
-  //   // if (map) map.setBounds(bounds);
-  //   return bounds;
-  // }, [pathData]);
+  const bounds = useMemo(() => {
+    //지도 재설정할 범위정보 가질 LatLngBounds객체
+    // const map = mapRef.current;
+    const bounds = new kakao.maps.LatLngBounds();
+    console.log("bbbbb: %o", bounds);
+    pathData.forEach((point, i) => {
+      //LatLngBounds객체에 좌표추가
+      bounds.extend(new kakao.maps.LatLng(point.lat, point.lng));
+    });
+    // if (map) map.setBounds(bounds);
+    return bounds;
+  }, [pathData]);
   // const bounds = useMemo(() => {
   //   //지도 재설정할 범위정보 가질 LatLngBounds객체
   //   // const map = mapRef.current;
@@ -296,7 +296,7 @@ function ShowRecordData({
 
     console.log("1.경로: %o", pathData);
     const map = mapRef.current;
-    // if (map) map.setBounds(bounds);
+    if (map) map.setBounds(bounds);
     console.log("1get", getPath.current, getImg.current);
 
     if (getPath.current) {
@@ -384,7 +384,7 @@ function ShowRecordData({
                 <TimeDataContainer>
                   {/* <TimeConvert seconds={thisRecordData.runningTime} /> */}
                   {/* <span>{thisRecordData.runningTime}</span> */}
-                  <span>{(thisRecordData.runningTime / 60).toFixed(2)}분</span>
+                  <TimeConvert time={thisRecordData.runningTime} />
                   <p>걸은 시간</p>
                 </TimeDataContainer>
                 <OtherDataContainer>
@@ -427,8 +427,6 @@ function ShowRecordData({
             </ContentsContainer>
           </>
         )}
-
-        {/* <RecordFinishFooter setData={setModalOpen} data={modalData} /> */}
       </StRecordFinish>
     </>
   );
@@ -452,54 +450,6 @@ const StRecordFinish = styled.div`
 
   ::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera*/
-  }
-`;
-
-const RecordFinishHeader = styled.div`
-  position: fixed;
-  top: 0;
-  width: 39.3rem;
-  height: 12.7rem;
-
-  display: grid;
-  grid-template-columns: 8.8rem auto 1.4rem;
-
-  align-items: center;
-
-  padding-left: 2rem;
-  padding-right: 2.5rem;
-
-  background-color: ${COLOR.MAIN_WHITE};
-
-  z-index: 100;
-
-  span {
-    font-style: normal;
-    font-weight: 700;
-    font-size: 2rem;
-    line-height: 2.5rem;
-    color: ${COLOR.MAIN_BLACK};
-  }
-
-  p {
-    font-style: normal;
-    font-weight: 500;
-    font-size: 1.4rem;
-    line-height: 1.7rem;
-    color: ${COLOR.MAIN_GREEN};
-  }
-
-  .signupBackArrow {
-    margin-top: 5rem;
-    margin-left: 2rem;
-  }
-`;
-
-const CloseWrapper = styled.div`
-  .headerClose {
-    width: 2.7rem;
-    height: 2.7rem;
-    color: ${COLOR.MAIN_BLACK};
   }
 `;
 
