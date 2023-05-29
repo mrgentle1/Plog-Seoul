@@ -33,11 +33,11 @@ function Router() {
     <BrowserRouter>
       <AnimatePresence>
         <Routes>
-          <Route path="/" element={<Onboard />} />
+          <Route path="/" element={<SplashPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/auth/kakao-callback" element={<KakaoCallback />} />
           <Route path="/signup" element={<SignupPage />} />
-          <Route path="/splash" element={<SplashPage />} />
+          <Route path="/onboard" element={<Onboard />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/course/:id" element={<CoursePostPage />} />
           <Route path="/course/main" element={<CourseMainPage />} />

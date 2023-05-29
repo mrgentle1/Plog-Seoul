@@ -5,7 +5,6 @@ import { ReactComponent as KakaoButton } from "../../assets/icons/kakaoButton.sv
 
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
-import { userIdNumber, usePersistRecoilState } from "../../core/userId";
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -23,14 +22,20 @@ function LoginPage() {
     return () => clearInterval(intervalId);
   }, []);
 
-  const token = localStorage.getItem("key");
-  useEffect(() => {
-    if (token) {
-      navigate("/splash");
-    }
-  }, [token]);
+  // const token = localStorage.getItem("key");
+  // useEffect(() => {
+  //   if (token) {
+  //     navigate("/splash");
+  //   }
+  // }, [token]);
+  // console.log(token);
 
-  console.log(token);
+  // localStorage.setItem("key", token);
+  // useEffect(() => {
+  //   if (token) {
+  //     navigate("/home");
+  //   }
+  // }, [token]);
 
   const kakaoLogin = () => {
     window.location.href = process.env.REACT_APP_KAKAO_LOGIN_URL;

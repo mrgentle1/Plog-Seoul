@@ -105,7 +105,7 @@ const ModalText = styled.div`
   justify-content: center;
   align-items: center;
   padding: 0px;
-  width: 187px;
+  width: 250px;
   height: 200px;
 
   h3 {
