@@ -62,7 +62,7 @@ function ReviewPage() {
       .catch((error) => {
         console.error(error);
       });
-  }, [reviews]);
+  }, []);
 
   const reviewSum = course.reviewSum / course.reviewCnt;
   const filledStars = Math.floor(reviewSum);

@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { headerTitleState } from "../../core/headerTitle";
 import { HomeHeaderV3 } from "../../components/layout/HeaderV3";
 import { ReactComponent as Star } from "../../assets/icons/star.svg";
 import { Button, DisabledButton } from "../../components/common/Button";
-import { Modal, ModalBackground } from "../../components/common/Modal";
+import { Modal, ModalBackground } from "../../components/common/modal/Modal";
 import { userIdNumber, usePersistRecoilState } from "../../core/userId";
 
 import axios from "axios";
@@ -21,7 +20,6 @@ function ReviewWritePage() {
 
   const token = localStorage.getItem("key");
   const [userId, setUserId] = usePersistRecoilState(userIdNumber);
-  console.log(userId);
 
   const pathname = window.location.pathname;
   const real_pathname = pathname.substring(7);
@@ -76,7 +74,7 @@ function ReviewWritePage() {
       .catch((error) => {
         console.error(error);
       });
-  }, [user]);
+  }, []);
 
   console.log("포인트", user);
 
