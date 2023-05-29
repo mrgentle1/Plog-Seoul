@@ -108,7 +108,6 @@ const StCourseContent = styled.div`
   justify-content: space-between;
   align-items: flex-start;
   padding: 0px;
-  gap: 57px;
 
   width: 353px;
   height: 140px;
@@ -153,7 +152,7 @@ const CourseTag = styled.div`
   align-items: flex-start;
   padding: 0px;
   gap: 6px;
-
+  width: 200px;
   height: 24px;
 `;
 const Tag = styled.div`
