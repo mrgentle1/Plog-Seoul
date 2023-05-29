@@ -30,6 +30,7 @@ import androidx.core.content.FileProvider;
 import com.facebook.appevents.internal.Constants;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -64,7 +65,7 @@ public class WebViewActivity extends AppCompatActivity {
             Manifest.permission.READ_EXTERNAL_STORAGE
     };
 
-    private String rootUrl = "https://plog-seoul.vercel.app/";
+    private String rootUrl = "https://plog-seoul-git-develop-mrgentle1.vercel.app/";
 
     private void checkPermissions() {
         ArrayList<String> permissionsNeeded = new ArrayList<>();
@@ -276,17 +277,51 @@ public class WebViewActivity extends AppCompatActivity {
         }
 
         @JavascriptInterface
-        public void shareInstagram() {
+        public void showToastMessage(String message) {
+            Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+        }
+
+        @JavascriptInterface
+        public void shareInstagram(String url) throws IOException {
+
+            int queryStart = url.indexOf("?");
+            if (queryStart != -1) {
+                url = url.substring(0, queryStart);
+            }
+            String fileUrl = url.substring(url.lastIndexOf('/') + 1); // 80e1f9b9-cd22-413d-94f3-91e4881d6036_image.png
+
+            StorageReference ref = storage.getReference(fileUrl);
+            File localFile = File.createTempFile("images", "jpg");
+            String absolutePath = localFile.getAbsolutePath();
+            ref.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    // Local temp file has been created
+                    ref.delete();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle any errors
+                    showToastMessage("공유하기에 실패했습니다. 다시 시도해주세요.");
+                }
+            });
+
 
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType("image/*");
-            File file = new File(currentPhotoPath);
+            File file = new File(absolutePath);
             Uri uri = FileProvider.getUriForFile(activity, getApplicationContext().getPackageName() + ".fileprovider", file);
             intent.putExtra(Intent.EXTRA_STREAM, uri);
             activity.grantUriPermission(
                     "com.instagram.android", uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
             intent.setPackage("com.instagram.android");
-            startActivity(intent);
+            try {
+                startActivity(intent);
+            } catch (Exception e) {
+                showToastMessage("instagram이 설치되어있지 않습니다.");
+            }
+
 
 
 //            System.out.println("shareInstagram called!" + currentPhotoPath);
