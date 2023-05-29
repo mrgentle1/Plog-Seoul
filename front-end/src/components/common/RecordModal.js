@@ -53,7 +53,7 @@ export const RecordModal = ({ setModalOpen, data, id }) => {
     console.log("check");
     setModalOpen(false);
     deleteRecordData();
-    navigate("/record");
+    navigate("/home");
   };
   const plogExitModal = () => {
     console.log("check");
