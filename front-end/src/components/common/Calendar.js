@@ -40,14 +40,12 @@ export const Calendar = () => {
       });
   }, []);
 
-  console.log(plogging);
-
   const ploggingDate = [];
   plogging.map((data) => {
     ploggingDate.push(data.createdAt.substring(0, 10));
   });
 
-  console.log(ploggingDate);
+  console.log("플로깅데이터", ploggingDate);
 
   const [selectedDate, setSelectedDate] = useState(new Date());
 
@@ -63,18 +61,13 @@ export const Calendar = () => {
     );
   };
 
-  // const handleDayClick = (formattedDate) => {
-  //   if (ploggingDate.includes(formattedDate)) {
-  //     const path = `/plog/${formattedDate}`;
-  //     navigate(path);
-  //   }
-  // };
-
   const [modalOpen, setModalOpen] = useState(false);
+  const [specialDate, setSpecialDate] = useState("");
 
   const handleDayClick = (formattedDate) => {
     if (ploggingDate.includes(formattedDate)) {
       setModalOpen(true);
+      setSpecialDate(formattedDate);
     }
   };
 
@@ -84,6 +77,16 @@ export const Calendar = () => {
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const firstDayOfWeek = new Date(year, month, 1).getDay();
     const calendar = [];
+    const dateCountMap = {}; // 날짜별 항목 개수를 저장할 객체
+
+    ploggingDate.forEach((date) => {
+      if (dateCountMap[date]) {
+        dateCountMap[date]++;
+      } else {
+        dateCountMap[date] = 1;
+      }
+    });
+    console.log("날짜맵", dateCountMap);
 
     const daysOfWeek = ["일", "월", "화", "수", "목", "금", "토"];
 
@@ -115,6 +118,8 @@ export const Calendar = () => {
       const isSpecial = ploggingDate.includes(formattedDate);
       const isSunday = currentDate.getUTCDay() === 0; // 일요일
       const isToday = currentDate.toDateString() === new Date().toDateString(); // 오늘 날짜
+      const itemCount = dateCountMap[formattedDate] || 0;
+      console.log(itemCount);
 
       calendar.push(
         <CalendarDay
@@ -122,6 +127,7 @@ export const Calendar = () => {
           isSpecial={isSpecial}
           isSunday={isSunday}
           isToday={isToday}
+          itemCount={itemCount}
           onClick={() => handleDayClick(formattedDate)}
         >
           {day}
@@ -146,7 +152,11 @@ export const Calendar = () => {
   return (
     <>
       {modalOpen && (
-        <CalendarModal setModalOpen={setModalOpen} plogging={plogging} />
+        <CalendarModal
+          setModalOpen={setModalOpen}
+          plogging={plogging}
+          specialDate={specialDate}
+        />
       )}
       {modalOpen && <ModalBackground />}
       <CalendarContainer>
@@ -233,8 +243,19 @@ const CalendarDay = styled.div`
   font-weight: 500;
   font-size: 13px;
   line-height: 16px;
-  background-color: ${({ isSpecial }) =>
-    isSpecial ? COLOR.MAIN_GREEN_HOVER : COLOR.MAIN_WHITE};
+  background-color: ${({
+    isSpecial,
+    itemCount,
+    isPreviousMonth,
+    isNextMonth,
+  }) =>
+    isSpecial && itemCount > 3
+      ? COLOR.GREEN
+      : itemCount === 0
+      ? COLOR.MAIN_WHITE
+      : isPreviousMonth || isNextMonth
+      ? COLOR.MAIN_WHITE
+      : COLOR.MAIN_GREEN_HOVER};
   border-radius: 8px;
   color: ${({ isPreviousMonth, isNextMonth, isSunday }) =>
     isPreviousMonth || isNextMonth
