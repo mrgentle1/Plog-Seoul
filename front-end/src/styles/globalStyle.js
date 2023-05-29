@@ -14,6 +14,10 @@ const GlobalStyle = createGlobalStyle`
     margin: 0 auto;
     font-size: 62.5%;
 
+    -webkit-touch-callout:none;
+    -webkit-user-select:none;
+    -webkit-tap-highlight-color:rgba(0,0,0,0);
+
   }
 
   @font-face {
