@@ -43,6 +43,14 @@ export const CourseCard = ({ c }) => {
   const currentImageIndex = c.routeId % imageCache.length;
   const currentImageUrl = imageCache[currentImageIndex];
 
+  let courseDetail = c.courseDetail;
+  if (typeof c.courseDetail === "string") {
+    courseDetail =
+      c.courseDetail.length > 40
+        ? `${c.courseDetail.slice(0, 40)} ... 더보기`
+        : c.courseDetail;
+  }
+
   return (
     <>
       <StCourseCard onClick={handlePageChange}>
@@ -50,7 +58,7 @@ export const CourseCard = ({ c }) => {
           <StCourseText>
             <CourseText>
               <h3>{c.name}</h3>
-              <h6>{c.courseDetail}</h6>
+              <h6>{courseDetail}</h6>
             </CourseText>
             <CourseTag>
               <Tag>
@@ -108,7 +116,6 @@ const StCourseContent = styled.div`
   justify-content: space-between;
   align-items: flex-start;
   padding: 0px;
-  gap: 57px;
 
   width: 353px;
   height: 140px;
@@ -153,7 +160,7 @@ const CourseTag = styled.div`
   align-items: flex-start;
   padding: 0px;
   gap: 6px;
-
+  width: 200px;
   height: 24px;
 `;
 const Tag = styled.div`

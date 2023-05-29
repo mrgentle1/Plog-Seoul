@@ -4,6 +4,8 @@ import { HomeHeaderV3 } from "../../components/layout/HeaderV3";
 import { ReactComponent as Pencil } from "../../assets/icons/pencil.svg";
 import { ReactComponent as Star } from "../../assets/icons/star.svg";
 import { ReactComponent as HalfStar } from "../../assets/icons/halfstar.svg";
+import { ReactComponent as QuarterStar } from "../../assets/icons/quarterstar.svg";
+import { ReactComponent as ThreeQuarterStar } from "../../assets/icons/threequartersstar.svg";
 import { NReviewCard } from "../../components/common/NReviewCard";
 import { ReactComponent as Shop } from "../../assets/icons/shop.svg";
 
@@ -86,7 +88,6 @@ function CoursePostPage() {
 
   const reviewSum = course.reviewSum / course.reviewCnt;
   const filledStars = Math.floor(reviewSum);
-  const hasHalfStar = reviewSum - filledStars >= 0.5;
 
   return (
     <StCoursePostPage>
@@ -138,27 +139,30 @@ function CoursePostPage() {
             </Box2>
           </ReviewBox1>
           <ReviewBox2>
-            <h1>
-              {reviewSum % 0.5 === 0
-                ? reviewSum.toFixed(1)
-                : reviewSum.toFixed(2)}
-            </h1>
+            {isNaN(reviewSum) ? null : reviewSum % 1 === 0 ? (
+              <h1>{reviewSum.toFixed(0)}</h1>
+            ) : reviewSum % 0.1 === 0 ? (
+              <h1>{reviewSum.toFixed(1)}</h1>
+            ) : (
+              <h1>{reviewSum.toFixed(2).replace(/\.?0+$/, "")}</h1>
+            )}
+
             {[...Array(5)].map((_, index) => {
               if (index < filledStars) {
                 return <Star key={index} className="star" />;
-              } else if (index === filledStars && hasHalfStar) {
-                return (
-                  <HalfStar
-                    key={index}
-                    className="star"
-                    style={{ marginTop: -1 }}
-                  />
-                );
-              } else {
-                return null;
+              } else if (index === filledStars) {
+                if (reviewSum - filledStars >= 0.65) {
+                  return <ThreeQuarterStar key={index} className="star" />;
+                } else if (reviewSum - filledStars >= 0.35) {
+                  return <HalfStar key={index} className="star" />;
+                } else if (reviewSum - filledStars > 0) {
+                  return <QuarterStar key={index} className="star" />;
+                }
               }
+              return null;
             })}
           </ReviewBox2>
+
           <ReviewList>
             {reviews.map((data) => (
               <NReviewCard key={data.userId} r={data} />
@@ -192,7 +196,6 @@ const CoursePostImg = styled.div`
   position: relative;
   width: 100%;
   height: 356px;
-  margin-top: 46px;
 
   overflow: hidden;
 `;

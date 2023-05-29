@@ -1,20 +1,20 @@
 import styled from "styled-components";
-import { COLOR } from "../../styles/color";
+import { COLOR } from "../../../styles/color";
 
-import { ReactComponent as ReviewCheck } from "../../assets/icons/reviewCheck.svg";
-import { Link } from "react-router-dom";
+import { ReactComponent as ReviewCheck } from "../../../assets/icons/reviewCheck.svg";
+import { useNavigate } from "react-router-dom";
 
 export const Modal = ({ setModalOpen }) => {
-  // 경로
-  const pathname = window.location.pathname;
-  const real_pathname = pathname.substring(0, 7);
+  const navigate = useNavigate();
 
   // 모달 끄기
   const closeModal = () => {
     setModalOpen(false);
+    navigate(-1);
   };
   const checkModal = () => {
     setModalOpen(false);
+    navigate("/plog/level");
   };
 
   return (
@@ -30,12 +30,8 @@ export const Modal = ({ setModalOpen }) => {
         </ModalText>
         <ModalLine />
         <ModalButton>
-          <Link to={real_pathname}>
-            <CloseButton onClick={closeModal}>닫기</CloseButton>
-          </Link>
-          <Link to="/plog/level">
-            <CheckButton onClick={checkModal}>내 포인트 확인</CheckButton>
-          </Link>
+          <CloseButton onClick={closeModal}>닫기</CloseButton>
+          <CheckButton onClick={checkModal}>내 포인트 확인</CheckButton>
         </ModalButton>
       </ModalContainer>
     </>

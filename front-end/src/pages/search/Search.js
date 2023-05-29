@@ -58,12 +58,15 @@ function SearchPage() {
   // API request using axios
   const fetchCourses = () => {
     axios
-      .get(`${process.env.REACT_APP_API_ROOT}/api/roads?pagingIndex=0&pagingSize=150`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      })
+      .get(
+        `${process.env.REACT_APP_API_ROOT}/api/roads?pagingIndex=0&pagingSize=150`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((response) => {
         console.log(response);
         setCourses(response.data.result.content);
@@ -265,8 +268,8 @@ const SearchItem0 = styled.div`
   h5 {
     margin-top: 4px;
     margin-left: 12px;
-    width: 40px;
-    height: 19px;
+    width: 100px;
+    height: 25px;
     font-family: "SUIT Variable";
     font-style: normal;
     font-weight: 500;
@@ -295,8 +298,8 @@ const SearchItem1 = styled.div`
   h5 {
     margin-top: 4px;
     margin-left: 12px;
-    width: 40px;
-    height: 19px;
+    width: 100px;
+    height: 25px;
     font-family: "SUIT Variable";
     font-style: normal;
     font-weight: 500;

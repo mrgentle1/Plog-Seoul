@@ -102,7 +102,7 @@ const StCoursePage = styled.div`
 `;
 
 const CourseMain = styled.div`
-  margin-top: -81px;
+  margin-top: -117px;
   width: 100%;
 `;
 const StImgSlide = styled.div`

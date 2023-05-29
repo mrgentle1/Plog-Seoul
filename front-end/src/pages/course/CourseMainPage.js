@@ -157,7 +157,7 @@ const CourseMainCategory = styled.div`
 `;
 const CourseCategory = styled.button`
   margin-right: 0.6rem;
-  width: 14rem;
+  width: 16rem;
   height: 3.6rem;
   border: none;
   border-radius: 0.8rem;

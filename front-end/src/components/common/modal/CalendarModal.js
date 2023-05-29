@@ -4,10 +4,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CalendarList } from "../CalendarList";
 
-export const CalendarModal = ({ setModalOpen, plogging }) => {
+export const CalendarModal = ({ setModalOpen, plogging, specialDate }) => {
   const navigate = useNavigate();
 
-  console.log("모달창", plogging);
 
   const [isSelected, setIsSelected] = useState(false);
 
@@ -38,15 +37,17 @@ export const CalendarModal = ({ setModalOpen, plogging }) => {
           <h5>보고싶은 기록을 선택하세요</h5>
         </ModalText>
         <DateList>
-          {plogging.map((data, index) => (
-            <CalendarList
-              key={index}
-              p={data}
-              onClick={() => handleSelect(data.recordId)}
-              isSelected={selectedRecordId === data.recordId}
-              isLastItem={index === plogging.length - 1} // 마지막 요소인지 여부 전달
-            />
-          ))}
+          {plogging
+            .filter((data) => data.createdAt.substring(0, 10) === specialDate) // Filter data based on createdAt matching specialDate
+            .map((data, index, array) => (
+              <CalendarList
+                key={index}
+                p={data}
+                onClick={() => handleSelect(data.recordId)}
+                isSelected={selectedRecordId === data.recordId}
+                isLastItem={index === array.length - 1} 
+              />
+            ))}
         </DateList>
         <ModalLine />
         <ModalButton>
@@ -119,6 +120,7 @@ const ModalText = styled.div`
 `;
 const DateList = styled.div`
   margin-bottom: 20px;
+  padding-right: 10px;
   width: 250px;
   height: 150px;
   overflow: scroll;
