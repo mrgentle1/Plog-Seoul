@@ -187,83 +187,83 @@ function RecordPage() {
   };
 
   return (
-    <motion.div
-      /* 2. 원하는 애니메이션으로 jsx를 감싸준다 */
-      // initial={{ opacity: 0 }}
-      // animate={{ opacity: 1 }}
-      // exit={{ opacity: 0 }}
-      animate={{ y: 0 }}
-      initial={{ y: 700 }}
-      transition={{ delay: 1, duration: 1.5, type: "spring" }}
-    >
-      <StRecordPage>
-        <RecordIngHeader>
-          <span>
-            {todayMonth}월 {todayDate}일
-          </span>
-          <p></p>
-          <CloseWrapper>
-            <Close
-              className="headerClose"
-              onClick={() => {
-                // goBack();
-                navigate("/home");
-              }}
-            />
-          </CloseWrapper>
-        </RecordIngHeader>
-        <MapContainer>
-          <Map
-            id="MapWrapper"
-            center={{
-              lat: state.center.lat - 0.00008,
-              lng: state.center.lng,
-            }} // 지도의 중심 좌표
-            style={{ width: "100%", height: "100%" }} // 지도 크기
-            level={3} // 지도 확대 레벨
-            isPanto={true}
-            onCenterChanged={() => setIsMove(true)}
-            ref={mapRef}
-          >
-            {!state.isLoading && (
-              <div>
-                <MapMarker // 마커를 생성합니다
-                  position={state.center}
-                  image={{
-                    src: current, // 마커이미지의 주소입니다
-                    size: {
-                      width: 80,
-                      height: 80,
-                    }, // 마커이미지의 크기입니다
-                    options: {
-                      offset: {
-                        x: 40,
-                        y: 60,
-                      }, // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-                    },
-                  }}
+    // <motion.div
+    //   /* 2. 원하는 애니메이션으로 jsx를 감싸준다 */
+    //   // initial={{ opacity: 0 }}
+    //   // animate={{ opacity: 1 }}
+    //   // exit={{ opacity: 0 }}
+    //   animate={{ y: 0 }}
+    //   initial={{ y: 700 }}
+    //   transition={{ delay: 1, duration: 1.5, type: "spring" }}
+    // >
+    <StRecordPage>
+      <RecordIngHeader>
+        <span>
+          {todayMonth}월 {todayDate}일
+        </span>
+        <p></p>
+        <CloseWrapper>
+          <Close
+            className="headerClose"
+            onClick={() => {
+              // goBack();
+              navigate("/home");
+            }}
+          />
+        </CloseWrapper>
+      </RecordIngHeader>
+      <MapContainer>
+        <Map
+          id="MapWrapper"
+          center={{
+            lat: state.center.lat - 0.00008,
+            lng: state.center.lng,
+          }} // 지도의 중심 좌표
+          style={{ width: "100%", height: "100%" }} // 지도 크기
+          level={3} // 지도 확대 레벨
+          isPanto={true}
+          onCenterChanged={() => setIsMove(true)}
+          ref={mapRef}
+        >
+          {!state.isLoading && (
+            <div>
+              <MapMarker // 마커를 생성합니다
+                position={state.center}
+                image={{
+                  src: current, // 마커이미지의 주소입니다
+                  size: {
+                    width: 80,
+                    height: 80,
+                  }, // 마커이미지의 크기입니다
+                  options: {
+                    offset: {
+                      x: 40,
+                      y: 60,
+                    }, // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+                  },
+                }}
+              />
+            </div>
+          )}
+          {isShowCan && (
+            <MarkerClusterer
+              averageCenter={true} // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
+              minLevel={6} // 클러스터 할 최소 지도 레벨
+            >
+              {trashCanData.map((position) => (
+                <EventTrashCanContainer
+                  key={`${position.trashCanId}-${position.title}`}
+                  position={{
+                    lat: position.latlng.lat,
+                    lng: position.latlng.lng,
+                  }} // 마커를 표시할 위치
+                  title={position.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
                 />
-              </div>
-            )}
-            {isShowCan && (
-              <MarkerClusterer
-                averageCenter={true} // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
-                minLevel={6} // 클러스터 할 최소 지도 레벨
-              >
-                {trashCanData.map((position) => (
-                  <EventTrashCanContainer
-                    key={`${position.trashCanId}-${position.title}`}
-                    position={{
-                      lat: position.latlng.lat,
-                      lng: position.latlng.lng,
-                    }} // 마커를 표시할 위치
-                    title={position.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
-                  />
-                ))}
-              </MarkerClusterer>
-            )}
+              ))}
+            </MarkerClusterer>
+          )}
 
-            {/* {isShowCan &&
+          {/* {isShowCan &&
               isVisible &&
               trashCanData.map((position) => (
                 <EventTrashCanContainer
@@ -276,55 +276,55 @@ function RecordPage() {
                   title={position.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
                 />
               ))} */}
-          </Map>
-          {/* Reloacate-지도 이동 확인 O -> activate Btn */}
-          <RelocateWrapper>
-            {isMove ? (
-              <RelocateBtn
-                onClick={() => {
-                  handleRelocate();
-                  setIsMove(false);
-                }}
-              />
-            ) : (
-              <RelocateAtiveBtn
-                onClick={() => {
-                  handleRelocate();
-                }}
-              />
-            )}
-          </RelocateWrapper>
-          <ShowTrashCanWrapper>
-            {isShowCan ? (
-              <TrashCanAtiveBtn
-                onClick={() => {
-                  setIsShowCan(false);
-                }}
-              />
-            ) : (
-              <TrashCanBtn
-                onClick={() => {
-                  setIsShowCan(true);
-                }}
-              />
-            )}
-          </ShowTrashCanWrapper>
-        </MapContainer>
-        <RecordPageFooter>
-          <RecordStartBtnWrapper>
-            <Link
-              to={"/record/ing"}
-              state={{
-                lat: `${state.center.lat}`,
-                lng: `${state.center.lng}`,
+        </Map>
+        {/* Reloacate-지도 이동 확인 O -> activate Btn */}
+        <RelocateWrapper>
+          {isMove ? (
+            <RelocateBtn
+              onClick={() => {
+                handleRelocate();
+                setIsMove(false);
               }}
-            >
-              <RecordStartBtn />
-            </Link>
-          </RecordStartBtnWrapper>
-        </RecordPageFooter>
-      </StRecordPage>
-    </motion.div>
+            />
+          ) : (
+            <RelocateAtiveBtn
+              onClick={() => {
+                handleRelocate();
+              }}
+            />
+          )}
+        </RelocateWrapper>
+        <ShowTrashCanWrapper>
+          {isShowCan ? (
+            <TrashCanAtiveBtn
+              onClick={() => {
+                setIsShowCan(false);
+              }}
+            />
+          ) : (
+            <TrashCanBtn
+              onClick={() => {
+                setIsShowCan(true);
+              }}
+            />
+          )}
+        </ShowTrashCanWrapper>
+      </MapContainer>
+      <RecordPageFooter>
+        <RecordStartBtnWrapper>
+          <Link
+            to={"/record/ing"}
+            state={{
+              lat: `${state.center.lat}`,
+              lng: `${state.center.lng}`,
+            }}
+          >
+            <RecordStartBtn />
+          </Link>
+        </RecordStartBtnWrapper>
+      </RecordPageFooter>
+    </StRecordPage>
+    // </motion.div>
   );
 }
 
