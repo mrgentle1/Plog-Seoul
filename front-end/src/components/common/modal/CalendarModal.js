@@ -44,6 +44,7 @@ export const CalendarModal = ({ setModalOpen, plogging }) => {
               p={data}
               onClick={() => handleSelect(data.recordId)}
               isSelected={selectedRecordId === data.recordId}
+              isLastItem={index === plogging.length - 1} // 마지막 요소인지 여부 전달
             />
           ))}
         </DateList>

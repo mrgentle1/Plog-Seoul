@@ -1,11 +1,7 @@
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
-import axios from "axios";
 
-export const CalendarList = ({ p, onClick, isSelected }) => {
-  const navigate = useNavigate();
-
+export const CalendarList = ({ p, onClick, isSelected, isLastItem }) => {
   const createdAt = p.createdAt;
   const date = createdAt.substring(0, 10);
   const time = createdAt.substring(11, 16);
@@ -29,7 +25,7 @@ export const CalendarList = ({ p, onClick, isSelected }) => {
           </h5>
         </ReviewListInfo>
       </StCalendarList>
-      <CourseLine />
+      {!isLastItem && <CourseLine />}
     </>
   );
 };
