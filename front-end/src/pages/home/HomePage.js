@@ -92,6 +92,11 @@ function HomePage() {
   const real_runningTime = Math.floor(runningTime / 60);
   const real_runningTime2 = runningTime % 60;
 
+  const boxVariants = {
+    hover: { backgroundColor: `${COLOR.MAIN_GREEN_HOVER}` },  // 은은하게 바뀔 색상을 color-code에 적용
+    rest: { backgroundColor: `${COLOR.MAIN_GREEN}` }  // 원래의 색상을 original-color-code에 적용
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -101,7 +106,12 @@ function HomePage() {
     >
       <StHomePage>
         <Link to="/record">
-          <Box4>
+          <Box4
+            variants={boxVariants}
+            whileHover="hover"
+            initial="rest"
+            animate="rest"
+          >
             <Record className="record" />
             <div className="box4">
               <Text7>오늘도 주워볼까요?</Text7>
@@ -372,7 +382,7 @@ const Dis2 = styled.p`
   font-size: 24px;
   line-height: 30px;
 `;
-const Box4 = styled.div`
+const Box4 = styled(motion.div)`
   display: flex;
   width: 35.3rem;
   height: 10.1rem;
