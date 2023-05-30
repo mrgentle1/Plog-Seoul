@@ -94,7 +94,7 @@ function MyPage() {
             <MyEmail>{user.email}</MyEmail>
           </StMyInfo>
           <StMyContent>
-            <Link to="/plog/level">
+            <Link to="/exchange">
               <MyBox1>
                 <MyText>포인트 사용</MyText>
                 <ForwardArrow className="forwardArrow" />

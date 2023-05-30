@@ -27,6 +27,7 @@ import SeasonCoursePage from "../pages/home/SeasonCoursePage";
 import InformationPage from "../pages/home/InformationPage";
 import RankingPage from "../pages/plog/RankingPage";
 import RecordFinishPage from "../pages/record/RecordFinishContainer";
+import ExchangePage from "../pages/mypage/ExchangePage";
 
 function Router() {
   return (
@@ -49,6 +50,7 @@ function Router() {
           <Route path="/plog/ranking" element={<RankingPage />} />
           <Route path="/home/season" element={<SeasonCoursePage />} />
           <Route path="/info" element={<InformationPage />} />
+          <Route path="/exchange" element={<ExchangePage />} />
 
           <Route path="/course" element={<CoursePage />} />
           <Route element={<Layout />}>
