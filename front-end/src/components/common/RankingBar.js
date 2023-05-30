@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { ReactComponent as Ranking1st } from "../../assets/icons/ranking1st.svg";
+import { ReactComponent as Ranking1stNotME } from "../../assets/icons/ranking1stBlack.svg";
 
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 
-export const RankingBarGraph = ({ num, bgColor, max }) => {
+export const RankingBarGraph = ({ num, bgColor, max, user, myId, hasData }) => {
   const [height, setHeight] = useState(0);
   const [showNumber, setShowNumber] = useState(false);
   const [showIcon, setShowIcon] = useState(false);
@@ -39,7 +40,7 @@ export const RankingBarGraph = ({ num, bgColor, max }) => {
     <StRankingBarGraph>
       {num === 1 && (
         <RankingIcon visible={showIcon ? 1 : 0}>
-          <Ranking1st />
+          {hasData && user === myId ? <Ranking1st /> : <Ranking1stNotME />}
         </RankingIcon>
       )}
       <BarWrapper>
