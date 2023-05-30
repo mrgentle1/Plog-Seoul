@@ -141,12 +141,15 @@ public class WebViewActivity extends AppCompatActivity {
         long gapTime = curTime - backBtnTime;
         String nowUrl = webView.getUrl();
 
-        if (webView.canGoBack() && !nowUrl.equals(rootUrl+"home") && !nowUrl.equals(rootUrl+"record/ing")) {
+        if (webView.canGoBack() && !nowUrl.equals(rootUrl+"home") && !nowUrl.equals(rootUrl+"record/ing")
+        && !nowUrl.equals(rootUrl) && !nowUrl.equals(rootUrl+"onboard")) {
             webView.goBack();
         }  else if (0 <= gapTime && 2000 >= gapTime) {
             super.onBackPressed();
         } else if(nowUrl.equals(rootUrl+"record/ing")) {
             webView.loadUrl("javascript:receiveBackPressed(true)");
+        } else if (nowUrl.equals(rootUrl) || nowUrl.equals(rootUrl+"onboard")) {
+
         } else {
             backBtnTime = curTime;
             Toast.makeText(this, "한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show();
