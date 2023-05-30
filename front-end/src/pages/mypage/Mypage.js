@@ -11,6 +11,10 @@ import {
   LogoutModal,
   ModalBackground2,
 } from "../../components/common/modal/LogoutModal";
+import {
+  DeleteAccountModal,
+  ModalBackground3,
+} from "../../components/common/modal/DeleteAccountModal";
 
 import axios from "axios";
 import styled from "styled-components";
@@ -38,6 +42,12 @@ function MyPage() {
   const [modalOpen2, setModalOpen2] = useState(false);
   const showModal2 = () => {
     setModalOpen2(true);
+  };
+
+  // 회원탈퇴 모달창 호출
+  const [modalOpen3, setModalOpen3] = useState(false);
+  const showModal3 = () => {
+    setModalOpen3(true);
   };
 
   useEffect(() => {
@@ -73,6 +83,8 @@ function MyPage() {
         {modalOpen && <ModalBackground />}
         {modalOpen2 && <LogoutModal setModalOpen2={setModalOpen2} />}
         {modalOpen2 && <ModalBackground2 />}
+        {modalOpen3 && <DeleteAccountModal setModalOpen3={setModalOpen3} />}
+        {modalOpen3 && <ModalBackground3 />}
         <StMyPage>
           <StHeader>
             <MyEdit onClick={showModal}>닉네임 변경</MyEdit>
@@ -84,7 +96,7 @@ function MyPage() {
           <StMyContent>
             <Link to="/plog/level">
               <MyBox1>
-                <MyText>내 포인트</MyText>
+                <MyText>포인트 사용</MyText>
                 <ForwardArrow className="forwardArrow" />
               </MyBox1>
             </Link>
@@ -108,7 +120,11 @@ function MyPage() {
                 <ForwardArrow className="forwardArrow" />
               </MyBox4>
             </Link>
-            <MyBox5 onClick={showModal2}>로그아웃</MyBox5>
+            <MyBox5 onClick={showModal2}>
+              <MyText2>로그아웃</MyText2>
+              <ForwardArrow className="forwardArrow" />
+            </MyBox5>
+            <MyBox6 onClick={showModal3}>회원탈퇴</MyBox6>
           </StMyContent>
           <Footer />
         </StMyPage>
@@ -198,6 +214,11 @@ const MyBox4 = styled.div`
 `;
 const MyBox5 = styled.div`
   display: flex;
+  justify-content: space-between;
+  margin-top: 29px;
+`;
+const MyBox6 = styled.div`
+  display: flex;
   margin-top: 46px;
   font-family: "SUIT Variable";
   font-style: normal;
@@ -211,6 +232,14 @@ const MyText = styled.div`
   font-style: normal;
   font-weight: 600;
   font-size: 16px;
+  line-height: 19px;
+  align-items: center;
+`;
+const MyText2 = styled.div`
+  font-family: "SUIT Variable";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 15px;
   line-height: 19px;
   align-items: center;
 `;
