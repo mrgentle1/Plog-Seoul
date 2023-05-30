@@ -23,7 +23,7 @@ function AdminSignupPage() {
 
   const onChangeCode = (e) => {
     setCode(e.target.value);
-    if (e.target.value === "google") {
+    if (e.target.value === process.env.REACT_APP_CODE) {
       setCodeError(false);
     } else {
       setCodeError(true);
@@ -31,7 +31,7 @@ function AdminSignupPage() {
   };
 
   const onSubmit = useCallback(() => {
-    if (!codeError && code === "google") {
+    if (!codeError && code === process.env.REACT_APP_CODE) {
       axios
         .post(
           `${process.env.REACT_APP_API_ROOT}/api/auth/registration`,
