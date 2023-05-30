@@ -22,7 +22,7 @@ const GlobalStyle = createGlobalStyle`
 
   @font-face {
     font-family: "SUITE-Regular";
-    src: url("./styles/fonts/SUITE-Variable-ttf/SUITE-Variable.ttf");
+    src: url("./styles/fonts/SUIT-Variable-ttf/SUIT-Variable.ttf");
   }
  
   * {
