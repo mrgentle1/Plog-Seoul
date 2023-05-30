@@ -248,29 +248,6 @@ function RankingPage() {
       }
     );
 
-    const Comment = () => {
-      if (userData[0].rank === 0) {
-        return <p className="comment">축하합니다. 1등이에요!</p>;
-      } else {
-        rankingData
-          .filter((it) => it.rank === userData[0].rank - 1)
-          .map((it) => {
-            const diff = selectDist
-              ? it.totalDist - userData[0].totalDist
-              : it.totalTime - userData[0].totalTime;
-
-            if (selectDist && diff < 0.01) {
-              return <p>다음 등수와 아주 근소한 차이에요!</p>;
-            } else if (selectDist) {
-              return <p>다음 등수까지 {diff.toFixed(2)}km 남았어요!</p>;
-            } else {
-              return (
-                <p>다음 등수까지 대략 {Math.floor(diff / 60)}분 남았어요!</p>
-              );
-            }
-          });
-      }
-    };
     const preRankDiff = rankingData
       .filter((it) => it.rank === userData[0].rank - 1)
       .map((it) => {
@@ -283,21 +260,25 @@ function RankingPage() {
       return (
         <>
           {userData[0].rank === 1 ? (
-            <p>축하합니다. 1등이에요!</p>
+            <p className="comment">축하합니다. 1등이에요!</p>
           ) : (
             <>
               {selectDist ? (
                 <>
                   {preRankDiff < 0.01 ? (
                     <>
-                      <p>다음 등수와 아주 근소한 차이에요!</p>
+                      <p className="comment">
+                        다음 등수와 아주 근소한 차이에요!
+                      </p>
                     </>
                   ) : (
-                    <p>다음 등수까지 {preRankDiff}km 남았어요!</p>
+                    <p className="comment">
+                      다음 등수까지 {preRankDiff}km 남았어요!
+                    </p>
                   )}
                 </>
               ) : (
-                <p>
+                <p className="comment">
                   다음 등수까지 대략 {Math.floor(preRankDiff / 60)}분 남았어요!
                 </p>
               )}
@@ -600,15 +581,12 @@ const OneselfIconWrapper = styled.div`
 
 const CommentWrapper = styled.div`
   display: flex;
-
   width: 100%;
   height: 100%;
   justify-content: flex-end;
 
-  &.comment {
-    p {
-      ${sharedTextStyle}
-    }
+  .comment {
+    ${sharedTextStyle}
   }
 `;
 
