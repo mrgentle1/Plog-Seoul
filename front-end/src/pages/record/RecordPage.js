@@ -249,6 +249,50 @@ function RecordPage() {
             <MarkerClusterer
               averageCenter={true} // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
               minLevel={6} // 클러스터 할 최소 지도 레벨
+              calculator={[10, 30, 50]}
+              styles={[
+                {
+                  // calculator 각 사이 값 마다 적용될 스타일을 지정한다
+                  width: "30px",
+                  height: "30px",
+                  background: "rgba(255, 255, 255, .8)",
+                  borderRadius: "15px",
+                  color: "#000",
+                  textAlign: "center",
+                  fontWeight: "bold",
+                  lineHeight: "31px",
+                },
+                {
+                  width: "40px",
+                  height: "40px",
+                  background: "rgba(255, 255, 255, .8)",
+                  borderRadius: "20px",
+                  color: "#000",
+                  textAlign: "center",
+                  fontWeight: "bold",
+                  lineHeight: "41px",
+                },
+                {
+                  width: "50px",
+                  height: "50px",
+                  background: "rgba(255, 255, 255, .8)",
+                  borderRadius: "25px",
+                  color: "#000",
+                  textAlign: "center",
+                  fontWeight: "bold",
+                  lineHeight: "51px",
+                },
+                {
+                  width: "60px",
+                  height: "60px",
+                  background: "rgba(255, 255, 255, .8)",
+                  borderRadius: "30px",
+                  color: "#000",
+                  textAlign: "center",
+                  fontWeight: "bold",
+                  lineHeight: "61px",
+                },
+              ]}
             >
               {trashCanData.map((position) => (
                 <EventTrashCanContainer

@@ -15,7 +15,7 @@ export const Calendar = () => {
 
   const [plogging, setPlogging] = useState([]);
   const [page, setPage] = useState(0);
-  const [direction, setDirection] = useState(1);
+  const [direction, setDirection] = useState(0);
   const navigate = useNavigate();
 
   // month가 한자리인지 두자리인지 판별
@@ -155,7 +155,7 @@ export const Calendar = () => {
   const variants = {
     enter: (direction) => {
       return {
-        x: direction > 0 ? 1000 : -1000,
+        x: direction === 0 ? 0 : direction > 0 ? 1000 : -1000,
         opacity: 0,
       };
     },
@@ -173,6 +173,15 @@ export const Calendar = () => {
     },
   };
 
+  const arrowVariants = {
+    hover: {
+      scale: 0.9,
+    },
+    rest: {
+      scale: 1,
+    },
+  };
+
   return (
     <>
       {modalOpen && (
@@ -185,11 +194,29 @@ export const Calendar = () => {
       {modalOpen && <ModalBackground />}
       <CalendarContainer>
         <CalendarHeader>
-          <BackArrow className="arrow1" onClick={handlePrevMonth} />
+          <Box
+            variants={arrowVariants}
+            whileHover="hover"
+            whileTap="hover"
+            whileFocus="hover"
+            initial="rest"
+            animate="rest"
+          >
+            <BackArrow className="arrow1" onClick={handlePrevMonth} />
+          </Box>
           <YearMonthText>
             {selectedDate.getFullYear()}년 {selectedDate.getMonth() + 1}월
           </YearMonthText>
-          <ForwardArrow className="arrow2" onClick={handleNextMonth} />
+          <Box
+            variants={arrowVariants}
+            whileHover="hover"
+            whileTap="hover"
+            whileFocus="hover"
+            initial="rest"
+            animate="rest"
+          >
+            <ForwardArrow className="arrow2" onClick={handleNextMonth} />
+          </Box>
         </CalendarHeader>
         <motion.div
           key={page}
@@ -304,3 +331,5 @@ const CalendarDay = styled.div`
   border: 2px solid
     ${({ isToday }) => (isToday ? COLOR.MAIN_GREEN : "transparent")};
 `;
+
+const Box = styled(motion.div)``;
