@@ -194,7 +194,7 @@ function HomePage() {
             <Text6>
               <Ploging2>{plogging.length}번</Ploging2>
               <Time2>
-                <TimeConvert className="time" time={runningTime} />
+                {real_runningTime}.{real_runningTime2}분
               </Time2>
               <Dis2>{distance}km</Dis2>
             </Text6>
