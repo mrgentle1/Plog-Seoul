@@ -50,10 +50,9 @@ function Router() {
           <Route path="/home/season" element={<SeasonCoursePage />} />
           <Route path="/info" element={<InformationPage />} />
 
+          <Route path="/course" element={<CoursePage />} />
           <Route element={<Layout />}>
             <Route path="/home" element={<HomePage />} />
-            <Route path="/course" element={<CoursePage />} />
-
             <Route path="/plog" element={<PlogPage />} />
             <Route path="/my" element={<MyPage />} />
           </Route>

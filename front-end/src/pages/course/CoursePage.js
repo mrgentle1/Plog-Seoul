@@ -9,13 +9,14 @@ import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 import { CourseMainCard } from "../../components/common/CourseMainCard";
 import { Link } from "react-router-dom";
+import { Footer } from "../../components/layout/Footer";
 
 function CoursePage() {
   const [headerBackground, setHeaderBackground] = useState("transparent");
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 2) {
+      if (window.scrollY > 206) {
         setHeaderBackground(COLOR.MAIN_WHITE);
       } else {
         setHeaderBackground("transparent");
@@ -27,8 +28,6 @@ function CoursePage() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, [headerBackground]);
-
-  console.log(headerBackground);
 
   const setHeaderTitle = useSetRecoilState(headerTitleState);
 
@@ -86,6 +85,7 @@ function CoursePage() {
           </Link>
         </StCourseBottom>
       </CourseMain>
+      <Footer />
     </StCoursePage>
   );
 }
@@ -100,7 +100,6 @@ const StCoursePage = styled.div`
 `;
 
 const CourseMain = styled.div`
-  margin-top: -117px;
   width: 100%;
 `;
 const StImgSlide = styled.div`
