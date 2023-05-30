@@ -12,7 +12,7 @@ import { useSetRecoilState } from "recoil";
 import { headerTitleState } from "../../core/headerTitle";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
-import current from "../../assets/icons/currentMarker.svg";
+import current from "../../assets/icons/mapMarker.svg";
 import trashCanImg from "../../assets/icons/trash.svg";
 import { ReactComponent as Close } from "../../assets/icons/close.svg";
 import { ReactComponent as StartBtn } from "../../assets/icons/recordStart.svg";
@@ -216,11 +216,12 @@ function RecordPage() {
         <Map
           id="MapWrapper"
           center={{
-            lat: state.center.lat - 0.00008,
+            lat: state.center.lat,
             lng: state.center.lng,
           }} // 지도의 중심 좌표
           style={{ width: "100%", height: "100%" }} // 지도 크기
           level={3} // 지도 확대 레벨
+          maxLevel={8}
           isPanto={true}
           onCenterChanged={() => setIsMove(true)}
           ref={mapRef}
@@ -228,21 +229,26 @@ function RecordPage() {
           {!state.isLoading && (
             <div>
               <MapMarker // 마커를 생성합니다
+                className="pulsating-circle"
                 position={state.center}
+                zIndex={10}
                 image={{
                   src: current, // 마커이미지의 주소입니다
                   size: {
-                    width: 80,
-                    height: 80,
+                    width: 30,
+                    height: 30,
                   }, // 마커이미지의 크기입니다
                   options: {
                     offset: {
-                      x: 40,
-                      y: 60,
+                      x: 15,
+                      y: 15,
                     }, // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
                   },
                 }}
               />
+              <CustomOverlayMap position={state.center} xAnchor={0} yAnchor={1}>
+                <MarkerEffect className="pulsating-circle"></MarkerEffect>
+              </CustomOverlayMap>
             </div>
           )}
           {isShowCan && (
@@ -341,12 +347,14 @@ function RecordPage() {
         <ShowTrashCanWrapper>
           {isShowCan ? (
             <TrashCanAtiveBtn
+              className="btn"
               onClick={() => {
                 setIsShowCan(false);
               }}
             />
           ) : (
             <TrashCanBtn
+              className="btn"
               onClick={() => {
                 setIsShowCan(true);
               }}
@@ -447,16 +455,83 @@ const MapContainer = styled.div`
   .startBtn {
     margin-top: 2.8rem;
   }
+
+  .pulsating-circle {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    width: 30px;
+    height: 30px;
+
+    &:before {
+      content: "";
+      position: relative;
+      display: block;
+      width: 300%;
+      height: 300%;
+      box-sizing: border-box;
+      margin-left: -100%;
+      margin-top: -100%;
+      border-radius: 45px;
+      background-color: ${COLOR.MAIN_GREEN};
+      animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    }
+
+    &:after {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      background-color: white;
+      border-radius: 15px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+      animation: pulse-dot 1.25s cubic-bezier(0.455, 0.03, 0.515, 0.955) -0.4s infinite;
+    }
+  }
+
+  @keyframes pulse-ring {
+    0% {
+      transform: scale(0.33);
+    }
+    80%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes pulse-dot {
+    0% {
+      transform: scale(0.8);
+    }
+    50% {
+      transform: scale(1);
+    }
+    100% {
+      transform: scale(0.8);
+    }
+  }
 `;
+
+const MarkerEffect = styled.div``;
 
 const RelocateWrapper = styled.div`
   display: flex;
   position: absolute;
   overflow: hidden;
   top: 9rem;
-  right: 1rem;
+  right: 0;
+  width: 7rem;
+  height: 7rem;
 
   z-index: 10;
+  .btn {
+    width: 8rem;
+    height: 8rem;
+  }
 `;
 
 const ShowTrashCanWrapper = styled.div`
@@ -464,10 +539,17 @@ const ShowTrashCanWrapper = styled.div`
   position: absolute;
   overflow: hidden;
   top: 14rem;
+  right: 0;
 
-  right: 1rem;
+  width: 7rem;
+  height: 7rem;
 
   z-index: 10;
+
+  .btn {
+    width: 8rem;
+    height: 8rem;
+  }
 `;
 
 const RecordPageFooter = styled.div`
