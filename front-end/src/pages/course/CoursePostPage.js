@@ -139,12 +139,12 @@ function CoursePostPage() {
             </Box2>
           </ReviewBox1>
           <ReviewBox2>
-            {isNaN(reviewSum) ? null : reviewSum % 1 === 0 ? (
-              <h1>{reviewSum.toFixed(0)}</h1>
-            ) : reviewSum % 0.1 === 0 ? (
-              <h1>{reviewSum.toFixed(1)}</h1>
-            ) : (
-              <h1>{reviewSum.toFixed(2).replace(/\.?0+$/, "")}</h1>
+            {isNaN(reviewSum) ? null : (
+              <h1>
+                {reviewSum % 0.5 === 0
+                  ? reviewSum.toFixed(1)
+                  : reviewSum.toFixed(2)}
+              </h1>
             )}
 
             {[...Array(5)].map((_, index) => {
