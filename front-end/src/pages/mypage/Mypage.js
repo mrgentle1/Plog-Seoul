@@ -21,6 +21,7 @@ import { Link } from "react-router-dom";
 function MyPage() {
   const token = localStorage.getItem("key");
   const [user, setUser] = useState([]);
+  const [nickname, setNickname] = useState([]);
 
   const form_url =
     "https://docs.google.com/forms/d/e/1FAIpQLSfVS54a7GgefELlOGcm6GSWRfD7XMD1sg4ar3421iG4PRfG-g/viewform?usp=sf_link";
@@ -49,11 +50,12 @@ function MyPage() {
       })
       .then((response) => {
         setUser(response.data.result);
+        setNickname(response.data.result.nickname);
       })
       .catch((error) => {
         console.error(error);
       });
-  }, []);
+  });
 
   useEffect(() => {
     setHeaderTitle(user.nickname);

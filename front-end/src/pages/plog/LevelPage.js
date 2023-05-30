@@ -106,7 +106,7 @@ function LevelPage() {
           <PointList>
             {points.map((data, index) =>
               data ? (
-                <PointCard key={data.id} p={data} />
+                <PointCard key={index} p={data} />
               ) : (
                 <div key={index}>포인트 내역이 없어요</div>
               )
