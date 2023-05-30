@@ -349,7 +349,7 @@ const RecordIngHeader = styled.div`
   position: fixed;
   top: 0;
   width: 100%;
-  height: 12.7rem;
+  height: 9.4rem;
 
   display: grid;
   grid-template-columns: 8.8rem auto 1.4rem;
