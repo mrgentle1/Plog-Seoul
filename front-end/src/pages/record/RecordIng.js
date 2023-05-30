@@ -780,14 +780,14 @@ const StRecordIngPage = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
-  padding-top: 12.7rem;
+  padding-top: 9.4rem;
   padding-bottom: 20rem;
 `;
 const RecordIngHeader = styled.div`
   position: fixed;
   top: 0;
   width: 100%;
-  height: 12.7rem;
+  height: 9.4rem;
 
   display: grid;
   grid-template-columns: 8.8rem auto 1.4rem;

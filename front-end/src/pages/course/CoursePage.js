@@ -11,15 +11,11 @@ import { CourseMainCard } from "../../components/common/CourseMainCard";
 import { Link } from "react-router-dom";
 
 function CoursePage() {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   const [headerBackground, setHeaderBackground] = useState("transparent");
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 206) {
+      if (window.scrollY > 2) {
         setHeaderBackground(COLOR.MAIN_WHITE);
       } else {
         setHeaderBackground("transparent");
@@ -31,6 +27,8 @@ function CoursePage() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, [headerBackground]);
+
+  console.log(headerBackground);
 
   const setHeaderTitle = useSetRecoilState(headerTitleState);
 

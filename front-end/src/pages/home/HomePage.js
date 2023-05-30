@@ -17,6 +17,7 @@ import { COLOR } from "../../styles/color";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { userIdNumber, usePersistRecoilState } from "../../core/userId";
+import { TimeConvert } from "../../components/Record/TimeComponent";
 
 function HomePage() {
   useEffect(() => {
@@ -188,7 +189,7 @@ function HomePage() {
             <Text6>
               <Ploging2>{plogging.length}번</Ploging2>
               <Time2>
-                {real_runningTime}분 {real_runningTime2}초
+                <TimeConvert className="time" time={runningTime} />
               </Time2>
               <Dis2>{distance}km</Dis2>
             </Text6>
@@ -405,11 +406,6 @@ const Text6 = styled.div`
   display: flex;
   justify-content: space-between;
   margin-top: 1rem;
-  font-family: "SUIT Variable";
-  font-style: normal;
-  font-weight: 600;
-  font-size: 2.4rem;
-  line-height: 3rem;
 `;
 const Ploging2 = styled.p`
   width: 9.9rem;
@@ -417,7 +413,7 @@ const Ploging2 = styled.p`
   font-family: "SUIT Variable";
   font-style: normal;
   font-weight: 600;
-  font-size: 24px;
+  font-size: 21px;
   line-height: 30px;
 `;
 const Time2 = styled.p`
@@ -426,7 +422,7 @@ const Time2 = styled.p`
   font-family: "SUIT Variable";
   font-style: normal;
   font-weight: 600;
-  font-size: 24px;
+  font-size: 21px;
   line-height: 30px;
 `;
 const Dis2 = styled.p`
@@ -435,7 +431,7 @@ const Dis2 = styled.p`
   font-family: "SUIT Variable";
   font-style: normal;
   font-weight: 600;
-  font-size: 24px;
+  font-size: 21px;
   line-height: 30px;
 `;
 const Box4 = styled(motion.div)`

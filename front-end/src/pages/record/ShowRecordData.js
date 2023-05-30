@@ -380,6 +380,7 @@ function ShowRecordData({
     getData({
       dist: thisRecordData.distance.toFixed(2),
       when: moment(thisRecordData.createdAt).format("YYYY년 MM월 DD일"),
+      time: thisRecordData.runningTime,
     });
   };
 
