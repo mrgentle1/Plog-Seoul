@@ -91,18 +91,17 @@ function HomePage() {
   const real_runningTime = Math.floor(runningTime / 60);
   const real_runningTime2 = runningTime % 60;
 
-
   // Animation
   const greenBoxVariants = {
-    hover: { 
+    hover: {
       backgroundColor: `${COLOR.MAIN_GREEN_HOVER}`,
       border: `${COLOR.MAIN_GREEN_HOVER}`,
       scale: 0.97,
-    }, 
-    rest: { 
+    },
+    rest: {
       backgroundColor: `${COLOR.MAIN_GREEN}`,
       scale: 1,
-    }
+    },
   };
 
   const whiteBoxVariants = {
@@ -114,7 +113,7 @@ function HomePage() {
     rest: {
       backgroundColor: `${COLOR.MAIN_WHITE}`,
       scale: 1,
-    }
+    },
   };
 
   return (
@@ -142,6 +141,9 @@ function HomePage() {
           </Box4>
         </Link>
         <Box1>
+          <div className="infotext">
+            <span>코스 추천</span>이 필요한가요?
+          </div>
           <Link to="/home/season">
             <LeftBox1
               variants={whiteBoxVariants}
@@ -171,6 +173,9 @@ function HomePage() {
             </RightBox1>
           </Link>
         </Box1>
+        <div className="infotext">
+          <span>나의 플로그</span> 확인이 필요한가요?
+        </div>
         <Link to="/plog">
           <Box3
             variants={whiteBoxVariants}
@@ -230,11 +235,37 @@ const StHomePage = styled.div`
   align-items: center;
   flex-direction: column;
   height: 100%;
+  .infotext {
+    width: 100%;
+    text-align: left;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-family: "SUIT Variable";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    color: ${COLOR.INPUT_BORDER_GRAY};
+    span {
+      color: ${COLOR.MAIN_BLACK};
+    }
+  }
 `;
 const Box1 = styled(motion.div)`
   width: 100%;
-  height: 12.1rem;
+  height: 17.1rem;
   margin-bottom: 1.3rem;
+  .infotext {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-family: "SUIT Variable";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    color: ${COLOR.INPUT_BORDER_GRAY};
+    span {
+      color: ${COLOR.MAIN_BLACK};
+    }
+  }
 `;
 const LeftBox1 = styled(motion.div)`
   float: left;
@@ -243,6 +274,7 @@ const LeftBox1 = styled(motion.div)`
   border-radius: 1.4rem;
   background-color: ${COLOR.MAIN_WHITE};
   padding: 1.2rem 1.6rem;
+  box-shadow: 0px 0px 10px 6px rgba(0, 0, 0, 0.03);
 
   .flag {
     width: 2.3rem;
@@ -274,6 +306,7 @@ const RightBox1 = styled(motion.div)`
   background: ${COLOR.MAIN_WHITE};
   border-radius: 1.4rem;
   padding: 1.2rem 1.6rem;
+  box-shadow: 0px 0px 10px 6px rgba(0, 0, 0, 0.03);
 
   .footprint {
     width: 2.3rem;
@@ -303,6 +336,7 @@ const Box2 = styled(motion.div)`
   background: ${COLOR.MAIN_WHITE};
   border-radius: 1.4rem;
   padding: 1.5rem 1.6rem;
+  box-shadow: 0px 0px 10px 6px rgba(0, 0, 0, 0.03);
   .level {
     width: 1.9rem;
     height: 2rem;
@@ -352,6 +386,7 @@ const Box3 = styled(motion.div)`
   border-radius: 1.4rem;
   padding: 1.4rem 1.9rem;
   background-color: ${COLOR.MAIN_WHITE};
+  box-shadow: 0px 0px 10px 6px rgba(0, 0, 0, 0.03);
 
   .tree {
     width: 2.5rem;
@@ -436,6 +471,7 @@ const Box4 = styled(motion.div)`
   border: 0.2rem solid ${COLOR.MAIN_GREEN};
   border-radius: 1.4rem;
   padding: 1.35rem 1.9rem;
+  box-shadow: 0px 0px 7px 5px rgba(0, 0, 0, 0.1);
   .record {
     width: 2.7rem;
     height: 2.7rem;
