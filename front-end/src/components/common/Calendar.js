@@ -8,11 +8,14 @@ import { COLOR } from "../../styles/color";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { CalendarModal, ModalBackground } from "./modal/CalendarModal";
+import { motion } from "framer-motion";
 
 export const Calendar = () => {
   const token = localStorage.getItem("key");
 
   const [plogging, setPlogging] = useState([]);
+  const [page, setPage] = useState(0);
+  const [direction, setDirection] = useState(1);
   const navigate = useNavigate();
 
   // month가 한자리인지 두자리인지 판별
@@ -51,12 +54,16 @@ export const Calendar = () => {
     setSelectedDate(
       (prevDate) => new Date(prevDate.getFullYear(), prevDate.getMonth() - 1)
     );
+    setPage(page - 1);
+    setDirection(-1);
   };
 
   const handleNextMonth = () => {
     setSelectedDate(
       (prevDate) => new Date(prevDate.getFullYear(), prevDate.getMonth() + 1)
     );
+    setPage(page + 1);
+    setDirection(1);
   };
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -145,6 +152,27 @@ export const Calendar = () => {
     return calendar; // Return the calendar elements
   };
 
+  const variants = {
+    enter: (direction) => {
+      return {
+        x: direction > 0 ? 1000 : -1000,
+        opacity: 0,
+      };
+    },
+    center: {
+      zIndex: 1,
+      x: 0,
+      opacity: 1,
+    },
+    exit: (direction) => {
+      return {
+        zIndex: 0,
+        x: direction < 0 ? 1000 : -1000,
+        opacity: 0,
+      };
+    },
+  };
+
   return (
     <>
       {modalOpen && (
@@ -163,7 +191,20 @@ export const Calendar = () => {
           </YearMonthText>
           <ForwardArrow className="arrow2" onClick={handleNextMonth} />
         </CalendarHeader>
-        <DayLabels>{getMonthCalendar()}</DayLabels>
+        <motion.div
+          key={page}
+          custom={direction}
+          variants={variants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          transition={{
+            x: { type: "spring", stiffness: 300, damping: 30 },
+            opacity: { duration: 0.2 },
+          }}
+        >
+          <DayLabels>{getMonthCalendar()}</DayLabels>
+        </motion.div>
       </CalendarContainer>
     </>
   );

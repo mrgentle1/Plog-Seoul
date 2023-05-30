@@ -205,14 +205,7 @@ function HomePage() {
           animate="rest"
         >
           <Link to="/plog/level">
-            <Box22
-              variants={whiteBoxVariants}
-              whileHover="hover"
-              whileTap="hover"
-              whileFocus="hover"
-              initial="rest"
-              animate="rest"
-            >
+            <Box22>
               <Level className="level" />
               <LevelBox>
                 <Text3>Level {user.level}</Text3>
