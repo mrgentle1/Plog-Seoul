@@ -13,6 +13,7 @@ import { headerTitleState } from "../../core/headerTitle";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 import current from "../../assets/icons/mapMarker.svg";
+import courseMarker from "../../assets/icons/courseMarker.svg";
 import trashCanImg from "../../assets/icons/trash.svg";
 import { ReactComponent as Close } from "../../assets/icons/close.svg";
 import { ReactComponent as StartBtn } from "../../assets/icons/recordStart.svg";
@@ -186,6 +187,41 @@ function RecordPage() {
     );
   };
 
+  const [markers, setMarkers] = useState([]);
+  const [info, setInfo] = useState();
+  const [map, setMap] = useState();
+  // console.log("fffffff %o", courseMarkers);
+
+  useEffect(() => {
+    if (!map) return;
+    const ps = new kakao.maps.services.Places();
+    const course = [{ name: "둘레길" }, { name: "나들길" }, { name: "산책길" }];
+    let markers = [];
+    course.map((it) => {
+      ps.keywordSearch(it.name, (data, status, _pagination) => {
+        if (status === kakao.maps.services.Status.OK) {
+          // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
+          // LatLngBounds 객체에 좌표를 추가합니다
+
+          for (var i = 0; i < data.length; i++) {
+            // @ts-ignore
+            markers.push({
+              position: {
+                lat: data[i].y,
+                lng: data[i].x,
+              },
+              content: data[i].place_name,
+            });
+            // @ts-ignore
+          }
+
+          // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
+        }
+      });
+    });
+    setMarkers(markers);
+  }, [map]);
+
   return (
     // <motion.div
     //   /* 2. 원하는 애니메이션으로 jsx를 감싸준다 */
@@ -225,6 +261,7 @@ function RecordPage() {
           isPanto={true}
           onCenterChanged={() => setIsMove(true)}
           ref={mapRef}
+          onCreate={setMap}
         >
           {!state.isLoading && (
             <div>
@@ -313,19 +350,28 @@ function RecordPage() {
             </MarkerClusterer>
           )}
 
-          {/* {isShowCan &&
-              isVisible &&
-              trashCanData.map((position) => (
-                <EventTrashCanContainer
-                  key={`${position.trashCanId}-${position.title}`}
-                  position={{
-                    lat: position.latlng.lat,
-                    lng: position.latlng.lng,
-                  }} // 마커를 표시할 위치
-                  mSize={markerSize}
-                  title={position.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
-                />
-              ))} */}
+          {markers.map((marker) => (
+            <MapMarker
+              key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
+              position={marker.position}
+              image={{
+                src: courseMarker, // 마커이미지의 주소입니다
+                size: {
+                  width: 64,
+                  height: 64,
+                }, // 마커이미지의 크기입니다
+                options: {
+                  offset: {
+                    x: 15,
+                    y: 15,
+                  }, // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+                },
+              }}
+              onClick={() => setInfo(marker)}
+            >
+              {/* {info && info.content === marker.content && <>{marker.content}</>} */}
+            </MapMarker>
+          ))}
         </Map>
         {/* Reloacate-지도 이동 확인 O -> activate Btn */}
         <RelocateWrapper>
