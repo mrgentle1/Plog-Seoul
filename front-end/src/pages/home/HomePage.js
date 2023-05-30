@@ -48,7 +48,6 @@ function HomePage() {
       })
       .then((response) => {
         setUser(response.data.result);
-        console.log(user);
         setPoint(response.data.result.point);
       })
       .catch((error) => {
