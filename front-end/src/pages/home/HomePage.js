@@ -90,15 +90,30 @@ function HomePage() {
   const real_runningTime = Math.floor(runningTime / 60);
   const real_runningTime2 = runningTime % 60;
 
-  const boxVariants = {
+
+  // Animation
+  const greenBoxVariants = {
     hover: { 
       backgroundColor: `${COLOR.MAIN_GREEN_HOVER}`,
-      scale: 0.95,
+      border: `${COLOR.MAIN_GREEN_HOVER}`,
+      scale: 0.97,
     }, 
     rest: { 
       backgroundColor: `${COLOR.MAIN_GREEN}`,
       scale: 1,
-    }  // 원래의 색상을 original-color-code에 적용
+    }
+  };
+
+  const whiteBoxVariants = {
+    hover: {
+      backgroundColor: `${COLOR.MAIN_WHITE_HOVER}`,
+      border: `${COLOR.MAIN_WHITE_HOVER}`,
+      scale: 0.97,
+    },
+    rest: {
+      backgroundColor: `${COLOR.MAIN_WHITE}`,
+      scale: 1,
+    }
   };
 
   return (
@@ -111,7 +126,7 @@ function HomePage() {
       <StHomePage>
         <Link to="/record">
           <Box4
-            variants={boxVariants}
+            variants={greenBoxVariants}
             whileHover="hover"
             whileTap="hover"
             whileFocus="hover"
@@ -127,14 +142,28 @@ function HomePage() {
         </Link>
         <Box1>
           <Link to="/home/season">
-            <LeftBox1>
+            <LeftBox1
+              variants={whiteBoxVariants}
+              whileHover="hover"
+              whileTap="hover"
+              whileFocus="hover"
+              initial="rest"
+              animate="rest"
+            >
               <Flag className="flag" />
               <Text1>계절별 추천 코스</Text1>
               <Arrow className="arrow" />
             </LeftBox1>
           </Link>
           <Link to="/info">
-            <RightBox1>
+            <RightBox1
+              variants={whiteBoxVariants}
+              whileHover="hover"
+              whileTap="hover"
+              whileFocus="hover"
+              initial="rest"
+              animate="rest"
+            >
               <Footprint className="footprint" />
               <Text2>서울두드림길이란?</Text2>
               <Arrow className="arrow" />
@@ -142,7 +171,14 @@ function HomePage() {
           </Link>
         </Box1>
         <Link to="/plog">
-          <Box3>
+          <Box3
+            variants={whiteBoxVariants}
+            whileHover="hover"
+            whileTap="hover"
+            whileFocus="hover"
+            initial="rest"
+            animate="rest"
+          >
             <Tree className="tree" />
             <Text5>
               <Ploging>{todayMonth}월 플로깅</Ploging>
@@ -159,9 +195,23 @@ function HomePage() {
           </Box3>
         </Link>
 
-        <Box2>
+        <Box2
+          variants={whiteBoxVariants}
+          whileHover="hover"
+          whileTap="hover"
+          whileFocus="hover"
+          initial="rest"
+          animate="rest"
+        >
           <Link to="/plog/level">
-            <Box22>
+            <Box22
+              variants={whiteBoxVariants}
+              whileHover="hover"
+              whileTap="hover"
+              whileFocus="hover"
+              initial="rest"
+              animate="rest"
+            >
               <Level className="level" />
               <LevelBox>
                 <Text3>Level {user.level}</Text3>
@@ -187,12 +237,12 @@ const StHomePage = styled.div`
   flex-direction: column;
   height: 100%;
 `;
-const Box1 = styled.div`
+const Box1 = styled(motion.div)`
   width: 100%;
   height: 12.1rem;
   margin-bottom: 1.3rem;
 `;
-const LeftBox1 = styled.div`
+const LeftBox1 = styled(motion.div)`
   float: left;
   width: 17rem;
   height: 12.1rem;
@@ -222,7 +272,7 @@ const Text1 = styled.p`
   color: ${COLOR.MAIN_BLACK};
 `;
 
-const RightBox1 = styled.div`
+const RightBox1 = styled(motion.div)`
   float: right;
   width: 17rem;
   height: 12.1rem;
@@ -252,7 +302,7 @@ const Text2 = styled.p`
   line-height: 1.9rem;
   color: ${COLOR.MAIN_BLACK};
 `;
-const Box2 = styled.div`
+const Box2 = styled(motion.div)`
   margin-bottom: 13rem;
   width: 35.3rem;
   height: 10.1rem;
@@ -265,7 +315,7 @@ const Box2 = styled.div`
     margin-bottom: 1.2rem;
   }
 `;
-const Box22 = styled.div``;
+const Box22 = styled(motion.div)``;
 const LevelBox = styled.div`
   display: flex;
   justify-content: space-between;
@@ -301,7 +351,7 @@ const Text4 = styled.p`
   line-height: 1.6rem;
   color: ${COLOR.DARK_GRAY};
 `;
-const Box3 = styled.div`
+const Box3 = styled(motion.div)`
   width: 35.3rem;
   height: 12.1rem;
   margin-bottom: 1.3rem;
