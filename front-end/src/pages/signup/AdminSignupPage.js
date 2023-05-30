@@ -6,12 +6,13 @@ import { Button, DisabledButton } from "../../components/common/Button";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 import axios from "axios";
-import { useCookies } from "react-cookie";
 
-function SignupPage() {
+function AdminSignupPage() {
   const [name, setName] = useState("");
-  const [cookies] = useCookies(["accessToken"]);
-  const token = cookies.accessToken;
+  const [code, setCode] = useState("");
+  const [codeError, setCodeError] = useState(true);
+
+  const token = process.env.REACT_APP_TOKEN;
 
   const navigate = useNavigate();
   const goBack = useCallback(() => {
@@ -19,44 +20,44 @@ function SignupPage() {
   }, [navigate]);
 
   const [error, setError] = useState("");
-  const onChangeName = (e) => {
-    const inputValue = e.target.value;
-    const filteredValue = inputValue.replace(/[^\wㄱ-ㅎㅏ-ㅣ가-힣]/g, "");
-    if (inputValue.length > 6) {
-      setError("최대 6글자까지 입력 가능합니다.");
+
+  const onChangeCode = (e) => {
+    setCode(e.target.value);
+    if (e.target.value === "google") {
+      setCodeError(false);
     } else {
-      setError("");
+      setCodeError(true);
     }
-    setName(filteredValue);
   };
 
   const onSubmit = useCallback(() => {
-    axios
-      .post(
-        `${process.env.REACT_APP_API_ROOT}/api/auth/registration`,
-        {
-          nickname: name,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
+    if (!codeError && code === "google") {
+      axios
+        .post(
+          `${process.env.REACT_APP_API_ROOT}/api/auth/registration`,
+          {
+            nickname: code,
           },
-        }
-      )
-      .then((res) => {
-        localStorage.removeItem("key");
-        localStorage.setItem("key", token);
-        if (window.Android) {
-          window.Android.showToastMessage(name + "님, 환영합니다!");
-        }
-        navigate("/home");
-      })
-      .catch((err) => {
-        console.error(err);
-        // handle error
-      });
-  }, [name, navigate]);
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          localStorage.setItem("key", token);
+          if (window.Android) {
+            window.Android.showToastMessage(name + "님, 환영합니다!");
+          }
+          navigate("/home");
+        })
+        .catch((err) => {
+          console.error(err);
+          // handle error
+        });
+    }
+  }, [name, navigate, token, code, codeError]);
 
   return (
     <StSignupPage>
@@ -66,21 +67,19 @@ function SignupPage() {
       <SignupContent>
         <SignupText>
           <h2>
-            플로그 서울에서
+            관리자용 페이지입니다.
             <br />
-            사용할 이름을 알려주세요
+            미리 발급받은 코드를 입력하세요.
           </h2>
         </SignupText>
         <SignupInput>
-          <SignupInputBox
-            maxLength={6}
-            placeholder="최대 6글자까지 입력 가능합니다"
-            onChange={onChangeName}
-          />
-          {error && <ErrorMessage>{error}</ErrorMessage>}
+          <SignupInputBox onChange={onChangeCode} />
+          {codeError && (
+            <ErrorMessage>없는 코드입니다. 다시 입력하세요.</ErrorMessage>
+          )}
         </SignupInput>
         <SignupButton>
-          {!name ? (
+          {codeError || code === "" ? (
             <DisabledButton disabled="disabled">시작하기</DisabledButton>
           ) : (
             <Button onClick={onSubmit}>시작하기</Button>
@@ -91,7 +90,7 @@ function SignupPage() {
   );
 }
 
-export default SignupPage;
+export default AdminSignupPage;
 
 const StSignupPage = styled.div`
   display: flex;

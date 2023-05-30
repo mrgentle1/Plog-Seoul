@@ -28,6 +28,7 @@ import InformationPage from "../pages/home/InformationPage";
 import RankingPage from "../pages/plog/RankingPage";
 import RecordFinishPage from "../pages/record/RecordFinishContainer";
 import ExchangePage from "../pages/mypage/ExchangePage";
+import AdminSignupPage from "../pages/signup/AdminSignupPage";
 
 function Router() {
   return (
@@ -51,6 +52,7 @@ function Router() {
           <Route path="/home/season" element={<SeasonCoursePage />} />
           <Route path="/info" element={<InformationPage />} />
           <Route path="/exchange" element={<ExchangePage />} />
+          <Route path="/admin" element={<AdminSignupPage />} />
 
           <Route path="/course" element={<CoursePage />} />
           <Route element={<Layout />}>

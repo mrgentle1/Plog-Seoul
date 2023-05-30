@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { ReactComponent as Logo } from "../../assets/icons/logo.svg";
 import { ReactComponent as KakaoButton } from "../../assets/icons/kakaoButton.svg";
 
@@ -41,8 +41,17 @@ function LoginPage() {
     window.location.href = process.env.REACT_APP_KAKAO_LOGIN_URL;
   };
 
+  const adminLogin = () => {
+    navigate("/admin");
+  };
+
   return (
     <StLoginPage>
+      <HideButton>
+        <button className="admin" onClick={adminLogin}>
+          관리자 로그인
+        </button>
+      </HideButton>
       <LoginText>
         <Logo className="logo" />
         <p
@@ -69,6 +78,26 @@ const StLoginPage = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
+`;
+
+const HideButton = styled.div`
+  width: 353px;
+  position: fixed;
+  top: 0;
+  padding: 0;
+  text-align: right;
+  .admin {
+    width: 80px;
+    height: 40px;
+    border: none;
+    background: ${COLOR.MAIN_WHITE};
+    font-family: "SUIT Variable";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 13px;
+    line-height: 32px;
+    color: ${COLOR.MEDIUM_GRAY};
+  }
 `;
 
 const LoginText = styled.div`
