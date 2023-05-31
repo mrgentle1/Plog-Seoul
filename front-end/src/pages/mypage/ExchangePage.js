@@ -3,16 +3,40 @@ import { useNavigate } from "react-router-dom";
 import { ReactComponent as BackArrow } from "../../assets/icons/backArrow.svg";
 import { ReactComponent as ExchangeIcon } from "../../assets/icons/exchange.svg";
 import { GreenThinButton } from "../../components/common/Button";
+import { userIdNumber, usePersistRecoilState } from "../../core/userId";
 
+import axios from "axios";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 import { motion } from "framer-motion";
 
 function ExchangePage() {
+  const token = localStorage.getItem("key");
+  const [point, setPoint] = useState(0);
+  const [userId, setUserId] = usePersistRecoilState(userIdNumber);
+
   const navigate = useNavigate();
   const goBack = useCallback(() => {
     navigate(-1);
   }, [navigate]);
+
+  const url = `${process.env.REACT_APP_API_ROOT}/api/users/${userId}`;
+
+  useEffect(() => {
+    axios
+      .get(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        setPoint(response.data.result.point);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   const whiteBoxVariants = {
     hover: {
@@ -41,7 +65,7 @@ function ExchangePage() {
         <ExchangeContent>
           <Box1>
             <ExchangeIcon />
-            <Point>3,800 P</Point>
+            <Point>{point} P</Point>
             <Text1>현재 보유한 포인트</Text1>
           </Box1>
           <Box
