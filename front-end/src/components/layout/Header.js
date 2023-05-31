@@ -23,7 +23,7 @@ const StHomeHeader = styled.div`
   width: 100%;
   height: 80px;
   padding: 66px 0 36px 20px;
-  background-color: ${({ isHome }) => (isHome ? "#F8F8F8" : COLOR.MAIN_WHITE)};
+  background-color: ${({ isHome }) => (isHome ? "#FCFCFC" : COLOR.MAIN_WHITE)};
 
   font-family: "SUIT Variable";
   font-style: normal;
