@@ -7,7 +7,7 @@ import { useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 import { TimeComponent } from "../../components/Record/TimeComponent";
-import current from "../../assets/icons/walk.svg";
+import current from "../../assets/icons/mapMarker.svg";
 import trashCanImg from "../../assets/icons/trash.svg";
 import PlogImg from "../../assets/icons/imgMarker.svg";
 import { ReactComponent as Close } from "../../assets/icons/close.svg";
@@ -660,13 +660,13 @@ function RecordIngPage() {
                 image={{
                   src: current, // 마커이미지의 주소입니다
                   size: {
-                    width: 64,
-                    height: 69,
+                    width: 30,
+                    height: 30,
                   }, // 마커이미지의 크기입니다
                   options: {
                     offset: {
-                      x: 27,
-                      y: 69,
+                      x: 15,
+                      y: 15,
                     }, // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
                   },
                 }}
@@ -721,12 +721,14 @@ function RecordIngPage() {
           <ShowTrashCanWrapper>
             {isShowCan ? (
               <TrashCanAtiveBtn
+                className="btn"
                 onClick={() => {
                   setIsShowCan(false);
                 }}
               />
             ) : (
               <TrashCanBtn
+                className="btn"
                 onClick={() => {
                   setIsShowCan(true);
                 }}
@@ -848,9 +850,15 @@ const RelocateWrapper = styled.div`
   position: absolute;
   overflow: hidden;
   top: 1rem;
-  right: 1rem;
+  right: 0;
+  width: 7rem;
+  height: 7rem;
 
   z-index: 10;
+  .btn {
+    width: 8rem;
+    height: 8rem;
+  }
 `;
 
 const ShowTrashCanWrapper = styled.div`
@@ -858,12 +866,18 @@ const ShowTrashCanWrapper = styled.div`
   position: absolute;
   overflow: hidden;
   top: 6rem;
-  right: 1rem;
+  right: 0;
+  width: 7rem;
+  height: 7rem;
 
   /* width: 4.4rem;
   height: 4.4rem; */
 
   z-index: 10;
+  .btn {
+    width: 8rem;
+    height: 8rem;
+  }
 `;
 
 const RecordDetailContainer = styled.div`
