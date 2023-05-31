@@ -1,16 +1,16 @@
 import { useEffect, useState, useCallback } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { ReactComponent as BackArrow } from "../../assets/icons/backArrow.svg";
-import { ReactComponent as ExchangeIcon } from "../../assets/icons/exchange.svg";
-import { GreenThinButton } from "../../components/common/Button";
-import { userIdNumber, usePersistRecoilState } from "../../core/userId";
+import { useNavigate } from "react-router-dom";
+import { ReactComponent as BackArrow } from "../../../assets/icons/backArrow.svg";
+import { ReactComponent as ExchangeIcon } from "../../../assets/icons/exchange.svg";
+import { GreenThinButton } from "../../../components/common/Button";
+import { userIdNumber, usePersistRecoilState } from "../../../core/userId";
 
 import axios from "axios";
 import styled from "styled-components";
-import { COLOR } from "../../styles/color";
+import { COLOR } from "../../../styles/color";
 import { motion } from "framer-motion";
 
-function ExchangePage() {
+function ZeroPage() {
   const token = localStorage.getItem("key");
   const [point, setPoint] = useState(0);
   const [userId, setUserId] = usePersistRecoilState(userIdNumber);
@@ -68,36 +68,32 @@ function ExchangePage() {
             <Point>{point} P</Point>
             <Text1>현재 보유한 포인트</Text1>
           </Box1>
-          <Link to="/exchange/zero">
-            <Box
-              variants={whiteBoxVariants}
-              whileHover="hover"
-              whileTap="hover"
-              whileFocus="hover"
-              initial="rest"
-              animate="rest"
-            >
-              <GreenThinButton>제로페이 포인트 전환</GreenThinButton>
-            </Box>
-          </Link>
-          <Link to="/exchange/seoul">
-            <Box
-              variants={whiteBoxVariants}
-              whileHover="hover"
-              whileTap="hover"
-              whileFocus="hover"
-              initial="rest"
-              animate="rest"
-            >
-              <GreenThinButton>서울사랑상품권 교환</GreenThinButton>
-            </Box>
-          </Link>
+          <Box
+            variants={whiteBoxVariants}
+            whileHover="hover"
+            whileTap="hover"
+            whileFocus="hover"
+            initial="rest"
+            animate="rest"
+          >
+            <GreenThinButton>제로페이 포인트 전환</GreenThinButton>
+          </Box>
+          <Box
+            variants={whiteBoxVariants}
+            whileHover="hover"
+            whileTap="hover"
+            whileFocus="hover"
+            initial="rest"
+            animate="rest"
+          >
+            <GreenThinButton>서울사랑상품권 교환</GreenThinButton>
+          </Box>
         </ExchangeContent>
       </StExchangePage>
     </motion.div>
   );
 }
-export default ExchangePage;
+export default ZeroPage;
 
 const StExchangePage = styled.div`
   display: flex;
