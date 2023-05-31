@@ -45,6 +45,7 @@ function ZeroPage() {
   }, []);
 
   const real_point = level * 1000 + point - 1000;
+  const [changePoint, setChangePoint] = useState(0);
 
   const [errorMessage, setErrorMessage] = useState(" ");
   const [isExchange, setIsExchange] = useState(false);
@@ -58,15 +59,46 @@ function ZeroPage() {
     } else if (inputValue !== validInput.toString()) {
       setErrorMessage("포인트 입력은 1000단위로 해야합니다.");
     } else {
+      setChangePoint(validInput);
       setErrorMessage("");
       setIsExchange(true);
     }
   };
 
+  const change_point = real_point - changePoint;
+  console.log(change_point);
+
+  const title = "제로페이 전환";
+  const url2 = `${
+    process.env.REACT_APP_API_ROOT
+  }/api/users/${userId}/point?newPoint=${-changePoint}&title=${title}&type=포인트 사용`;
+
   // 교환완료 모달
   const [modalOpen, setModalOpen] = useState(false);
   const showModal = () => {
     setModalOpen(true);
+    axios
+      .put(
+        url2,
+        {
+          userId: userId,
+          newPoint: -changePoint,
+          title: title,
+          type: "포인트 사용",
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        console.log("포인트 적립 성공!");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
@@ -91,7 +123,7 @@ function ZeroPage() {
             </LeftBox>
             <ForwardArrow className="arrow" />
             <RightBox>
-              <Point>{point} P</Point>
+              <Point>{change_point} P</Point>
               <Text1>전환 후 보유 포인트</Text1>
             </RightBox>
           </Box1>

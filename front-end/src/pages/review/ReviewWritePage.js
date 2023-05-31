@@ -94,7 +94,7 @@ function ReviewWritePage() {
   const title1 = course.category;
   const title2 = course.name;
   const real_title = title1 + " - " + title2;
-  const url3 = `${process.env.REACT_APP_API_ROOT}/api/users/${userId}/point?newPoint=${real_point}&title=${real_title}&type=후기작성`;
+  const url3 = `${process.env.REACT_APP_API_ROOT}/api/users/${userId}/point?newPoint=${real_point}&title=${real_title}&type=후기 작성`;
   // 모달창 호출
   const [modalOpen, setModalOpen] = useState(false);
 
