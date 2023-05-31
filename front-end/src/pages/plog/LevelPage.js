@@ -66,11 +66,26 @@ function LevelPage() {
   });
 
   const real_level = sum / 1000 + 1;
+  const just_level = (real_level - 1).toFixed(0);
+  console.log("level", just_level);
+  console.log("dd", sum - just_level * 1000);
+  console.log("ff", just_level * 1000 + 1000 - sum);
+
+  // const data = [
+  //   { name: "level", value: sum > 1000 ? sum - just_level * 1000 : sum },
+  //   {
+  //     name: "remaining",
+  //     value: sum > 1000 ? just_level * 1000 - sum : 1000 - sum,
+  //   },
+  // ];
 
   const data = [
-    { name: "level", value: sum },
-    { name: "remaining", value: 1000 - sum },
+    { name: "level", value: sum - just_level * 1000 },
+    { name: "remaining", value: 1000 + sum - just_level * 1000 },
   ];
+
+  console.log(sum - just_level * 1000);
+  console.log(1000 + sum - just_level * 1000);
 
   return (
     <motion.div
@@ -106,7 +121,7 @@ function LevelPage() {
         </ResponsiveContainer>
 
         <Point>
-          <h5>{sum}</h5>
+          <h5>{sum - just_level * 1000}</h5>
           <h6>/ 1,000 포인트</h6>
         </Point>
         <LevelLine />
