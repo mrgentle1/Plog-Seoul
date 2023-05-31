@@ -4,11 +4,15 @@ import { ReactComponent as BackArrow } from "../../../assets/icons/backArrow.svg
 import { ReactComponent as ForwardArrow } from "../../../assets/icons/forwardArrow.svg";
 import { userIdNumber, usePersistRecoilState } from "../../../core/userId";
 import { Button, DisabledButton } from "../../../components/common/Button";
+import {
+  ZeroModal,
+  ZeroModalBackground,
+} from "../../../components/common/modal/ZeroModal";
 
 import axios from "axios";
 import styled from "styled-components";
 import { COLOR } from "../../../styles/color";
-import { color, motion } from "framer-motion";
+import { motion } from "framer-motion";
 
 function ZeroPage() {
   const token = localStorage.getItem("key");
@@ -59,6 +63,12 @@ function ZeroPage() {
     }
   };
 
+  // 교환완료 모달
+  const [modalOpen, setModalOpen] = useState(false);
+  const showModal = () => {
+    setModalOpen(true);
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -66,6 +76,8 @@ function ZeroPage() {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.6 }}
     >
+      {modalOpen && <ZeroModal setModalOpen={setModalOpen} />}
+      {modalOpen && <ZeroModalBackground />}
       <StExchangePage>
         <ExchangeHeader>
           <BackArrow className="ExchangeBackArrow" onClick={goBack} />
@@ -94,7 +106,7 @@ function ZeroPage() {
               제로페이 포인트 전환하기
             </DisabledButton>
           ) : (
-            <Button>제로페이 포인트 전환하기</Button>
+            <Button onClick={showModal}>제로페이 포인트 전환하기</Button>
           )}
         </ExchangeButton>
       </StExchangePage>
