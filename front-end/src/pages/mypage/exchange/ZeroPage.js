@@ -42,7 +42,7 @@ function ZeroPage() {
 
   const real_point = level * 1000 + point - 1000;
 
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState(" ");
   const [isExchange, setIsExchange] = useState(false);
 
   const onChange = (e) => {
