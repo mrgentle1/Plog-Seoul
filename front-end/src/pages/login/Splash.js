@@ -13,6 +13,10 @@ function SplashPage() {
       setTimeout(() => {
         navigate("/home");
       }, 3000);
+    } else {
+      setTimeout(() => {
+        navigate("/onboard");
+      }, 3000);
     }
   }, [token, navigate]);
 

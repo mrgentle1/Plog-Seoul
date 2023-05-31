@@ -320,58 +320,58 @@ function ShowRecordData({
     }
   }, [isDataLoading, isPathLoading, isImgLoading, pathData, imgData]);
 
-  const bounds = useMemo(() => {
-    const bounds = new kakao.maps.LatLngBounds();
-    if (isDataLoading && thisRecordData) {
-      bounds.extend(
-        new kakao.maps.LatLng(thisRecordData.startLat, thisRecordData.startLng)
-      );
-      bounds.extend(
-        new kakao.maps.LatLng(thisRecordData.endLat, thisRecordData.endLng)
-      );
-    }
+  // const bounds = useMemo(() => {
+  //   const bounds = new kakao.maps.LatLngBounds();
+  //   if (isDataLoading && thisRecordData) {
+  //     bounds.extend(
+  //       new kakao.maps.LatLng(thisRecordData.startLat, thisRecordData.startLng)
+  //     );
+  //     bounds.extend(
+  //       new kakao.maps.LatLng(thisRecordData.endLat, thisRecordData.endLng)
+  //     );
+  //   }
 
-    if (isPathLoading && pathData) {
-      pathData.forEach((point) => {
-        bounds.extend(new kakao.maps.LatLng(point.lat, point.lng));
-      });
-    }
+  //   if (isPathLoading && pathData) {
+  //     pathData.forEach((point) => {
+  //       bounds.extend(new kakao.maps.LatLng(point.lat, point.lng));
+  //     });
+  //   }
 
-    if (isImgLoading && imgData) {
-      imgData.forEach((point) => {
-        bounds.extend(new kakao.maps.LatLng(point.imgLat, point.imgLng));
-      });
-    }
+  //   if (isImgLoading && imgData) {
+  //     imgData.forEach((point) => {
+  //       bounds.extend(new kakao.maps.LatLng(point.imgLat, point.imgLng));
+  //     });
+  //   }
 
-    return bounds;
-  }, [
-    thisRecordData,
-    pathData,
-    imgData,
-    isPathLoading,
-    isDataLoading,
-    isImgLoading,
-  ]);
+  //   return bounds;
+  // }, [
+  //   thisRecordData,
+  //   pathData,
+  //   imgData,
+  //   isPathLoading,
+  //   isDataLoading,
+  //   isImgLoading,
+  // ]);
 
-  useEffect(() => {
-    console.log("여기는 ");
-    const map = mapRef.current;
-    console.log("여기는: ", map);
-    if (map) {
-      console.log("여기는 bounds:", bounds);
-      map.setBounds(bounds);
-      setIsLoading(false);
-    }
-  }, [
-    thisRecordData,
-    pathData,
-    imgData,
-    isPathLoading,
-    isDataLoading,
-    isImgLoading,
-    isLoading,
-    bounds,
-  ]);
+  // useEffect(() => {
+  //   console.log("여기는 ");
+  //   const map = mapRef.current;
+  //   console.log("여기는: ", map);
+  //   if (map) {
+  //     console.log("여기는 bounds:", bounds);
+  //     map.setBounds(bounds);
+  //     setIsLoading(false);
+  //   }
+  // }, [
+  //   thisRecordData,
+  //   pathData,
+  //   imgData,
+  //   isPathLoading,
+  //   isDataLoading,
+  //   isImgLoading,
+  //   isLoading,
+  //   bounds,
+  // ]);
 
   const sendImgUrl = (url) => {
     getImgUrl(url);
@@ -380,6 +380,7 @@ function ShowRecordData({
     getData({
       dist: thisRecordData.distance.toFixed(2),
       when: moment(thisRecordData.createdAt).format("YYYY년 MM월 DD일"),
+      time: thisRecordData.runningTime,
     });
   };
 
@@ -407,7 +408,7 @@ function ShowRecordData({
                     width: "100%",
                     height: "23.6rem",
                   }}
-                  level={7} // 지도의 확대 레벨
+                  level={6} // 지도의 확대 레벨
                   zoomable={false}
                   draggable={false}
                   disableDoubleClickZoom={true}

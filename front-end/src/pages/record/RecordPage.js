@@ -12,7 +12,8 @@ import { useSetRecoilState } from "recoil";
 import { headerTitleState } from "../../core/headerTitle";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
-import current from "../../assets/icons/currentMarker.svg";
+import current from "../../assets/icons/mapMarker.svg";
+import courseMarker from "../../assets/icons/courseMarker.svg";
 import trashCanImg from "../../assets/icons/trash.svg";
 import { ReactComponent as Close } from "../../assets/icons/close.svg";
 import { ReactComponent as StartBtn } from "../../assets/icons/recordStart.svg";
@@ -186,6 +187,41 @@ function RecordPage() {
     );
   };
 
+  const [markers, setMarkers] = useState([]);
+  const [info, setInfo] = useState();
+  const [map, setMap] = useState();
+  // console.log("fffffff %o", courseMarkers);
+
+  useEffect(() => {
+    if (!map) return;
+    const ps = new kakao.maps.services.Places();
+    const course = [{ name: "둘레길" }, { name: "나들길" }, { name: "산책길" }];
+    let markers = [];
+    course.map((it) => {
+      ps.keywordSearch(it.name, (data, status, _pagination) => {
+        if (status === kakao.maps.services.Status.OK) {
+          // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
+          // LatLngBounds 객체에 좌표를 추가합니다
+
+          for (var i = 0; i < data.length; i++) {
+            // @ts-ignore
+            markers.push({
+              position: {
+                lat: data[i].y,
+                lng: data[i].x,
+              },
+              content: data[i].place_name,
+            });
+            // @ts-ignore
+          }
+
+          // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
+        }
+      });
+    });
+    setMarkers(markers);
+  }, [map]);
+
   return (
     // <motion.div
     //   /* 2. 원하는 애니메이션으로 jsx를 감싸준다 */
@@ -216,39 +252,90 @@ function RecordPage() {
         <Map
           id="MapWrapper"
           center={{
-            lat: state.center.lat - 0.00008,
+            lat: state.center.lat,
             lng: state.center.lng,
           }} // 지도의 중심 좌표
           style={{ width: "100%", height: "100%" }} // 지도 크기
           level={3} // 지도 확대 레벨
+          maxLevel={8}
           isPanto={true}
           onCenterChanged={() => setIsMove(true)}
           ref={mapRef}
+          onCreate={setMap}
         >
           {!state.isLoading && (
             <div>
               <MapMarker // 마커를 생성합니다
+                className="pulsating-circle"
                 position={state.center}
+                zIndex={10}
                 image={{
                   src: current, // 마커이미지의 주소입니다
                   size: {
-                    width: 80,
-                    height: 80,
+                    width: 30,
+                    height: 30,
                   }, // 마커이미지의 크기입니다
                   options: {
                     offset: {
-                      x: 40,
-                      y: 60,
+                      x: 15,
+                      y: 15,
                     }, // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
                   },
                 }}
               />
+              <CustomOverlayMap position={state.center} xAnchor={0} yAnchor={1}>
+                <MarkerEffect className="pulsating-circle"></MarkerEffect>
+              </CustomOverlayMap>
             </div>
           )}
           {isShowCan && (
             <MarkerClusterer
               averageCenter={true} // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
               minLevel={6} // 클러스터 할 최소 지도 레벨
+              calculator={[10, 30, 50]}
+              styles={[
+                {
+                  // calculator 각 사이 값 마다 적용될 스타일을 지정한다
+                  width: "30px",
+                  height: "30px",
+                  background: "rgba(255, 255, 255, .8)",
+                  borderRadius: "15px",
+                  color: "#000",
+                  textAlign: "center",
+                  fontWeight: "bold",
+                  lineHeight: "31px",
+                },
+                {
+                  width: "40px",
+                  height: "40px",
+                  background: "rgba(255, 255, 255, .8)",
+                  borderRadius: "20px",
+                  color: "#000",
+                  textAlign: "center",
+                  fontWeight: "bold",
+                  lineHeight: "41px",
+                },
+                {
+                  width: "50px",
+                  height: "50px",
+                  background: "rgba(255, 255, 255, .8)",
+                  borderRadius: "25px",
+                  color: "#000",
+                  textAlign: "center",
+                  fontWeight: "bold",
+                  lineHeight: "51px",
+                },
+                {
+                  width: "60px",
+                  height: "60px",
+                  background: "rgba(255, 255, 255, .8)",
+                  borderRadius: "30px",
+                  color: "#000",
+                  textAlign: "center",
+                  fontWeight: "bold",
+                  lineHeight: "61px",
+                },
+              ]}
             >
               {trashCanData.map((position) => (
                 <EventTrashCanContainer
@@ -263,19 +350,28 @@ function RecordPage() {
             </MarkerClusterer>
           )}
 
-          {/* {isShowCan &&
-              isVisible &&
-              trashCanData.map((position) => (
-                <EventTrashCanContainer
-                  key={`${position.trashCanId}-${position.title}`}
-                  position={{
-                    lat: position.latlng.lat,
-                    lng: position.latlng.lng,
-                  }} // 마커를 표시할 위치
-                  mSize={markerSize}
-                  title={position.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
-                />
-              ))} */}
+          {markers.map((marker) => (
+            <MapMarker
+              key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
+              position={marker.position}
+              image={{
+                src: courseMarker, // 마커이미지의 주소입니다
+                size: {
+                  width: 64,
+                  height: 64,
+                }, // 마커이미지의 크기입니다
+                options: {
+                  offset: {
+                    x: 15,
+                    y: 15,
+                  }, // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+                },
+              }}
+              onClick={() => setInfo(marker)}
+            >
+              {/* {info && info.content === marker.content && <>{marker.content}</>} */}
+            </MapMarker>
+          ))}
         </Map>
         {/* Reloacate-지도 이동 확인 O -> activate Btn */}
         <RelocateWrapper>
@@ -297,12 +393,14 @@ function RecordPage() {
         <ShowTrashCanWrapper>
           {isShowCan ? (
             <TrashCanAtiveBtn
+              className="btn"
               onClick={() => {
                 setIsShowCan(false);
               }}
             />
           ) : (
             <TrashCanBtn
+              className="btn"
               onClick={() => {
                 setIsShowCan(true);
               }}
@@ -349,7 +447,7 @@ const RecordIngHeader = styled.div`
   position: fixed;
   top: 0;
   width: 100%;
-  height: 12.7rem;
+  height: 9.4rem;
 
   display: grid;
   grid-template-columns: 8.8rem auto 1.4rem;
@@ -403,16 +501,83 @@ const MapContainer = styled.div`
   .startBtn {
     margin-top: 2.8rem;
   }
+
+  .pulsating-circle {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    width: 30px;
+    height: 30px;
+
+    &:before {
+      content: "";
+      position: relative;
+      display: block;
+      width: 300%;
+      height: 300%;
+      box-sizing: border-box;
+      margin-left: -100%;
+      margin-top: -100%;
+      border-radius: 45px;
+      background-color: ${COLOR.MAIN_GREEN};
+      animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    }
+
+    &:after {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      background-color: white;
+      border-radius: 15px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+      animation: pulse-dot 1.25s cubic-bezier(0.455, 0.03, 0.515, 0.955) -0.4s infinite;
+    }
+  }
+
+  @keyframes pulse-ring {
+    0% {
+      transform: scale(0.33);
+    }
+    80%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes pulse-dot {
+    0% {
+      transform: scale(0.8);
+    }
+    50% {
+      transform: scale(1);
+    }
+    100% {
+      transform: scale(0.8);
+    }
+  }
 `;
+
+const MarkerEffect = styled.div``;
 
 const RelocateWrapper = styled.div`
   display: flex;
   position: absolute;
   overflow: hidden;
   top: 9rem;
-  right: 1rem;
+  right: 0;
+  width: 7rem;
+  height: 7rem;
 
   z-index: 10;
+  .btn {
+    width: 8rem;
+    height: 8rem;
+  }
 `;
 
 const ShowTrashCanWrapper = styled.div`
@@ -420,10 +585,17 @@ const ShowTrashCanWrapper = styled.div`
   position: absolute;
   overflow: hidden;
   top: 14rem;
+  right: 0;
 
-  right: 1rem;
+  width: 7rem;
+  height: 7rem;
 
   z-index: 10;
+
+  .btn {
+    width: 8rem;
+    height: 8rem;
+  }
 `;
 
 const RecordPageFooter = styled.div`

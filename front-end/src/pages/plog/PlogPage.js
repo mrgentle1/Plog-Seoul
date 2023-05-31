@@ -47,6 +47,18 @@ function PlogPage() {
 
   const levelBarWidth = point >= 1000 ? 321 : (point / 1000) * 321;
 
+  const whiteBoxVariants = {
+    hover: {
+      backgroundColor: `${COLOR.MAIN_WHITE_HOVER}`,
+      border: `${COLOR.MAIN_WHITE_HOVER}`,
+      scale: 0.97,
+    },
+    rest: {
+      backgroundColor: `${COLOR.MAIN_WHITE}`,
+      scale: 1,
+    },
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -59,7 +71,14 @@ function PlogPage() {
           <PlogCalender>
             <Calendar />
           </PlogCalender>
-          <PlogLevel>
+          <PlogLevel
+            variants={whiteBoxVariants}
+            whileHover="hover"
+            whileTap="hover"
+            whileFocus="hover"
+            initial="rest"
+            animate="rest"
+          >
             <Plog1>
               <Level className="level" />
             </Plog1>
@@ -77,15 +96,33 @@ function PlogPage() {
             </Link>
           </PlogLevel>
           <Link to="/plog/achievement">
-            <BorderThinButton>
-              달성한 업적
-              <p>0개</p>
-            </BorderThinButton>
+            <Box
+              variants={whiteBoxVariants}
+              whileHover="hover"
+              whileTap="hover"
+              whileFocus="hover"
+              initial="rest"
+              animate="rest"
+            >
+              <BorderThinButton>
+                달성한 업적
+                <p>0개</p>
+              </BorderThinButton>
+            </Box>
           </Link>
           <Link to="/plog/ranking">
-            <BorderThinButton>
-              랭킹 확인하기<p>거리순/기록순</p>
-            </BorderThinButton>
+            <Box
+              variants={whiteBoxVariants}
+              whileHover="hover"
+              whileTap="hover"
+              whileFocus="hover"
+              initial="rest"
+              animate="rest"
+            >
+              <BorderThinButton>
+                랭킹 확인하기<p>거리순/기록순</p>
+              </BorderThinButton>
+            </Box>
           </Link>
         </StPlogContent>
       </StPlogPage>
@@ -107,7 +144,7 @@ const StPlogContent = styled.div`
   }
 `;
 const PlogCalender = styled.div``;
-const PlogLevel = styled.div`
+const PlogLevel = styled(motion.div)`
   margin-bottom: 12px;
   padding-top: 14px;
   width: 353px;
@@ -171,3 +208,4 @@ const LevelBar2 = styled.div`
   border-radius: 5px;
   z-index: 1;
 `;
+const Box = styled(motion.div)``;

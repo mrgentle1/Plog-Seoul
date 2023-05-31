@@ -27,17 +27,21 @@ import SeasonCoursePage from "../pages/home/SeasonCoursePage";
 import InformationPage from "../pages/home/InformationPage";
 import RankingPage from "../pages/plog/RankingPage";
 import RecordFinishPage from "../pages/record/RecordFinishContainer";
+import ExchangePage from "../pages/mypage/ExchangePage";
+import ZeroPage from "../pages/mypage/exchange/ZeroPage";
+import SeoulPage from "../pages/mypage/exchange/SeoulPage";
+import AdminSignupPage from "../pages/signup/AdminSignupPage";
 
 function Router() {
   return (
     <BrowserRouter>
       <AnimatePresence>
         <Routes>
-          <Route path="/" element={<Onboard />} />
+          <Route path="/" element={<SplashPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/auth/kakao-callback" element={<KakaoCallback />} />
           <Route path="/signup" element={<SignupPage />} />
-          <Route path="/splash" element={<SplashPage />} />
+          <Route path="/onboard" element={<Onboard />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/course/:id" element={<CoursePostPage />} />
           <Route path="/course/main" element={<CourseMainPage />} />
@@ -49,11 +53,14 @@ function Router() {
           <Route path="/plog/ranking" element={<RankingPage />} />
           <Route path="/home/season" element={<SeasonCoursePage />} />
           <Route path="/info" element={<InformationPage />} />
+          <Route path="/exchange" element={<ExchangePage />} />
+          <Route path="/exchange/zero" element={<ZeroPage />} />
+          <Route path="/exchange/seoul" element={<SeoulPage />} />
+          <Route path="/admin" element={<AdminSignupPage />} />
 
+          <Route path="/course" element={<CoursePage />} />
           <Route element={<Layout />}>
             <Route path="/home" element={<HomePage />} />
-            <Route path="/course" element={<CoursePage />} />
-
             <Route path="/plog" element={<PlogPage />} />
             <Route path="/my" element={<MyPage />} />
           </Route>

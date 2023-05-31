@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.View;
 import android.webkit.GeolocationPermissions;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
@@ -103,6 +104,15 @@ public class WebViewActivity extends AppCompatActivity {
             }
         });
         WebView.setWebContentsDebuggingEnabled(true);
+
+        webView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                return true;
+            }
+        });
+        webView.setLongClickable(false);
+
         webView.getSettings().setLoadWithOverviewMode(true);  // WebView 화면크기에 맞추도록 설정 - setUseWideViewPort 와 같이 써야함
         webView.getSettings().setUseWideViewPort(true);  // wide viewport 설정 - setLoadWithOverviewMode 와 같이 써야함
 
@@ -131,12 +141,15 @@ public class WebViewActivity extends AppCompatActivity {
         long gapTime = curTime - backBtnTime;
         String nowUrl = webView.getUrl();
 
-        if (webView.canGoBack() && !nowUrl.equals(rootUrl+"home") && !nowUrl.equals(rootUrl+"record/ing")) {
+        if (webView.canGoBack() && !nowUrl.equals(rootUrl+"home") && !nowUrl.equals(rootUrl+"record/ing")
+        && !nowUrl.equals(rootUrl) && !nowUrl.equals(rootUrl+"onboard")) {
             webView.goBack();
         }  else if (0 <= gapTime && 2000 >= gapTime) {
             super.onBackPressed();
         } else if(nowUrl.equals(rootUrl+"record/ing")) {
             webView.loadUrl("javascript:receiveBackPressed(true)");
+        } else if (nowUrl.equals(rootUrl) || nowUrl.equals(rootUrl+"onboard")) {
+
         } else {
             backBtnTime = curTime;
             Toast.makeText(this, "한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show();

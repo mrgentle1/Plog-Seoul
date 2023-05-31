@@ -8,6 +8,7 @@ import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 import axios from "axios";
 import { RankingBarGraph } from "../../components/common/RankingBar";
+import { TimeConvert } from "../../components/Record/TimeComponent";
 
 function RankingPage() {
   const token = localStorage.getItem("key");
@@ -19,19 +20,24 @@ function RankingPage() {
   }, [navigate]);
 
   const [isLoading, setIsLoading] = useState(true);
+  const [hasMyData, setHasMyData] = useState(false);
   const isUpdate = useRef(false);
   const isMoreThan = useRef(false);
 
-  const [dist, setDist] = useState(true);
+  const isFirst = useRef(false);
+  const isSecond = useRef(false);
+  const isThird = useRef(false);
+  const noneList = useRef(false);
+
+  const [selectDist, setSelectDist] = useState(true);
   const [time, setTime] = useState(false);
 
   const handleDistClick = () => {
-    setDist(true);
-    setTime(false);
+    setSelectDist(true);
   };
 
   const handleTimeClick = () => {
-    setDist(false);
+    setSelectDist(false);
     setTime(true);
   };
 
@@ -42,6 +48,21 @@ function RankingPage() {
   const [rankingTimeData, setRankingTimeData] = useState([
     { rank: 0, userId: 0, nickname: "", level: 0, totalTime: 0 },
   ]);
+
+  const [rankingMyDistData, setRankingMyDistData] = useState({
+    rank: 0,
+    userId: 0,
+    nickname: "",
+    level: 0,
+    totalDist: 0,
+  });
+  const [rankingMyTimeData, setRankingMyTimeData] = useState({
+    rank: 0,
+    userId: 0,
+    nickname: "",
+    level: 0,
+    totalTime: 0,
+  });
 
   async function getRankingData() {
     // async, await을 사용하는 경우
@@ -67,10 +88,37 @@ function RankingPage() {
           totalDist: it.totalDistance,
         };
       });
+      const initMyData = initRanking
+        .filter((data) => data.userId === userId)
+        .map((data) => {
+          return {
+            rank: data.rank,
+            userId: data.userId,
+            nickname: data.nickname,
+            level: data.level,
+            totalDist: data.totalDistance,
+          };
+        });
 
       isUpdate.current = true;
       if (initDistData.length > 3) {
         isMoreThan.current = true;
+        isFirst.current = true;
+        isSecond.current = true;
+        isThird.current = true;
+      } else if (initDistData.length === 3) {
+        isFirst.current = true;
+        isSecond.current = true;
+        isThird.current = true;
+      } else if (initDistData.length === 2) {
+        isFirst.current = true;
+        isSecond.current = true;
+      } else if (initDistData.length === 1) {
+        isFirst.current = true;
+      }
+      if (initMyData.length !== 0) {
+        setRankingMyDistData(initMyData);
+        setHasMyData(true);
       }
       setRankingDistData(initDistData);
     } catch (e) {
@@ -99,10 +147,37 @@ function RankingPage() {
           totalTime: it.totalRunningTime,
         };
       });
+      const initMyData = initRanking
+        .filter((data) => data.userId === userId)
+        .map((data) => {
+          return {
+            rank: data.rank,
+            userId: data.userId,
+            nickname: data.nickname,
+            level: data.level,
+            totalTime: data.totalRunningTime,
+          };
+        });
 
       isUpdate.current = true;
       if (initTimeData.length > 3) {
         isMoreThan.current = true;
+        isFirst.current = true;
+        isSecond.current = true;
+        isThird.current = true;
+      } else if (initTimeData.length === 3) {
+        isFirst.current = true;
+        isSecond.current = true;
+        isThird.current = true;
+      } else if (initTimeData.length === 2) {
+        isFirst.current = true;
+        isSecond.current = true;
+      } else if (initTimeData.length === 1) {
+        isFirst.current = true;
+      }
+      if (initMyData.length !== 0) {
+        setRankingMyTimeData(initMyData);
+        setHasMyData(true);
       }
       setRankingTimeData(initTimeData);
     } catch (e) {
@@ -110,32 +185,169 @@ function RankingPage() {
     }
   }
 
-  const TopUserContainer = ({ num, name, dist, time }) => {
+  const TopUserContainer = ({ num }) => {
     const barData = [
       { rank: 1, bgColor: COLOR.MAIN_GREEN, max: 180 },
       { rank: 2, bgColor: COLOR.LIGHT_GRAY, max: 140 },
       { rank: 3, bgColor: COLOR.LIGHT_GRAY, max: 100 },
     ];
 
+    const userData = (selectDist ? rankingDistData : rankingTimeData)
+      .filter((it) => it.rank === num)
+      .map((data) => {
+        return data;
+      });
+
     return (
-      <TopUserData>
-        <RankingBarGraph
-          num={num}
-          bgColor={barData[num - 1].bgColor}
-          max={barData[num - 1].max}
-        />
-        <p className="UserName">{name}</p>
-        {dist && <p className="UserDist">{dist.toFixed(2)}Km</p>}
-        {time && (
-          <p className="UserDist">
-            {Math.floor(time / 60)}분 {time % 60}초
-          </p>
-        )}
-      </TopUserData>
+      <>
+        <TopUserData>
+          <RankingBarGraph
+            num={num}
+            bgColor={barData[num - 1].bgColor}
+            max={barData[num - 1].max}
+            user={userData.length > 0 && userData[0].userId}
+            myId={userId}
+            hasData={userData.length > 0 ? true : false}
+          />
+
+          {userData.length > 0 ? (
+            <>
+              <p className="UserName">{userData[0].nickname}</p>
+              {selectDist ? (
+                <p className="UserDist">{userData[0].totalDist.toFixed(2)}Km</p>
+              ) : (
+                <>
+                  <TimeConvert
+                    className="UserDist"
+                    time={userData[0].totalTime}
+                  />
+                </>
+              )}
+            </>
+          ) : (
+            <>
+              <p className="UserName">-</p>
+              <p className="UserDist">-</p>
+            </>
+          )}
+        </TopUserData>
+      </>
     );
   };
 
-  const UserRankingContainer = ({ num, name, dist, time, isList, id }) => {
+  const MyUserRankingContainer = () => {
+    const userData = (selectDist ? rankingDistData : rankingTimeData)
+      .filter((it) => it.userId === userId)
+      .map((data) => {
+        return data;
+      });
+
+    const rankingData = (selectDist ? rankingDistData : rankingTimeData).map(
+      (data) => {
+        return data;
+      }
+    );
+
+    const preRankDiff = rankingData
+      .filter((it) => it.rank === userData[0].rank - 1)
+      .map((it) => {
+        return selectDist
+          ? (it.totalDist - userData[0].totalDist).toFixed(2)
+          : it.totalTime - userData[0].totalTime;
+      });
+
+    const Text = () => {
+      return (
+        <>
+          {userData[0].rank === 1 ? (
+            <p className="comment">축하합니다. 1등이에요!</p>
+          ) : (
+            <>
+              {selectDist ? (
+                <>
+                  {preRankDiff < 0.01 ? (
+                    <>
+                      <p className="comment">
+                        다음 등수와 아주 근소한 차이에요!
+                      </p>
+                    </>
+                  ) : (
+                    <p className="comment">
+                      다음 등수까지 {preRankDiff}km 남았어요!
+                    </p>
+                  )}
+                </>
+              ) : (
+                <p className="comment">
+                  다음 등수까지 대략 {Math.floor(preRankDiff / 60)}분 남았어요!
+                </p>
+              )}
+              {}
+            </>
+          )}
+        </>
+      );
+    };
+
+    return (
+      <>
+        {userData.length > 0 ? (
+          <MyContainer>
+            <UserRankingContainer
+              num={userData[0].rank}
+              name={userData[0].nickname}
+              data={selectDist ? userData[0].totalDist : userData[0].totalTime}
+              id={userData[0].userId}
+              isList={false}
+            />
+            <CommentWrapper>
+              <Text />
+            </CommentWrapper>
+            {/* <Text className="comment" /> */}
+            {/* <CommentWrapper>
+              <Comment className="comment" />
+            </CommentWrapper> */}
+          </MyContainer>
+        ) : (
+          <NoneRankContainer>
+            <p className="noneRank">
+              현재 랭킹이 없어요. 플로그를 하고 랭킹을 올려보세요!
+            </p>
+          </NoneRankContainer>
+        )}
+      </>
+    );
+  };
+
+  const UserRankingListContainer = () => {
+    const userData = (selectDist ? rankingDistData : rankingTimeData).map(
+      (data) => {
+        return data;
+      }
+    );
+
+    const data = selectDist ? rankingDistData : rankingTimeData;
+    console.log("testData %o", data);
+
+    console.log("data: %o", userData);
+
+    return (
+      <>
+        {data.map((it) => (
+          <UserRankingContainer
+            key={`${it.rank}-${it.userId}`}
+            num={it.rank}
+            name={it.nickname}
+            data={selectDist ? it.totalDist : it.totalTime}
+            id={it.userId}
+            isList={true}
+          />
+        ))}
+      </>
+    );
+  };
+
+  const UserRankingContainer = ({ num, name, data, isList, id }) => {
     const rank = String(num).padStart(2, "0");
     // const distData = dist / 1000;
     return (
@@ -149,10 +361,11 @@ function RankingPage() {
             </OneselfIconWrapper>
           )}
         </div>
-        {dist && <p className="UserDist">{dist.toFixed(2)}Km</p>}
-        {time && (
+        {selectDist ? (
+          <p className="UserDist">{data.toFixed(2)}Km</p>
+        ) : (
           <p className="UserDist">
-            {Math.floor(time / 60)}분 {time % 60}초
+            <TimeConvert className="UserDist" time={data} />
           </p>
         )}
       </RankingData>
@@ -165,9 +378,10 @@ function RankingPage() {
 
   useEffect(() => {
     if (isUpdate.current) {
+      console.log(hasMyData);
       setIsLoading(false);
     }
-  }, [rankingDistData, rankingTimeData]);
+  }, [rankingDistData, rankingTimeData, hasMyData]);
 
   return (
     <StRankingPage>
@@ -175,122 +389,27 @@ function RankingPage() {
         <BackArrow className="noticeBackArrow" onClick={goBack} />
         <HeaderText>랭킹</HeaderText>
       </RankingHeader>
-      {!isLoading && dist && (
+      <ButtonContainer>
+        <DistButton onClick={handleDistClick} selectDist={selectDist}>
+          <p>거리순</p>
+        </DistButton>
+        <>|</>
+        <TimeButton onClick={handleTimeClick} selectDist={selectDist}>
+          <p>시간순</p>
+        </TimeButton>
+      </ButtonContainer>
+      {!isLoading && (
         <RankingContainer>
           <TopRankingContainer>
-            <TopUserContainer
-              num={2}
-              name={rankingDistData[1].nickname}
-              dist={rankingDistData[1].totalDist}
-            />
-            <TopUserContainer
-              num={1}
-              name={rankingDistData[0].nickname}
-              dist={rankingDistData[0].totalDist}
-            />
-            <TopUserContainer
-              num={3}
-              name={rankingDistData[2].nickname}
-              dist={rankingDistData[2].totalDist}
-            />
+            <TopUserContainer num={2} />
+            <TopUserContainer num={1} />
+            <TopUserContainer num={3} />
           </TopRankingContainer>
-          <ButtonContainer>
-            <DistButton onClick={handleDistClick} dist={dist}>
-              <p>거리순</p>
-            </DistButton>
-            <TimeButton onClick={handleTimeClick} time={time}>
-              <p>시간순</p>
-            </TimeButton>
-          </ButtonContainer>
           <MyRankingContainer>
-            {rankingDistData
-              .filter((data) => data.userId === userId)
-              .map((data) => (
-                <UserRankingContainer
-                  key={data.userId}
-                  num={data.rank}
-                  name={data.nickname}
-                  dist={data.totalDist}
-                  isList={false}
-                />
-              ))}
-
-            <CommentWrapper>다음 등수까지 1.4Km 남았어요!</CommentWrapper>
+            <MyUserRankingContainer />
           </MyRankingContainer>
           <RankingList>
-            {rankingDistData
-              .filter((data) => data.rank > 3 && data.rank < 11)
-              .map((data) => (
-                <OtherRankingContainer>
-                  <UserRankingContainer
-                    num={data.rank}
-                    name={data.nickname}
-                    dist={data.totalDist}
-                    isList={true}
-                    id={data.id}
-                  />
-                </OtherRankingContainer>
-              ))}
-          </RankingList>
-        </RankingContainer>
-      )}
-
-      {!isLoading && time && (
-        <RankingContainer>
-          <TopRankingContainer>
-            <TopUserContainer
-              num={2}
-              name={rankingTimeData[1].nickname}
-              time={rankingTimeData[1].totalTime}
-            />
-            <TopUserContainer
-              num={1}
-              name={rankingTimeData[0].nickname}
-              time={rankingTimeData[0].totalTime}
-            />
-            <TopUserContainer
-              num={3}
-              name={rankingTimeData[2].nickname}
-              time={rankingTimeData[2].totalTime}
-            />
-          </TopRankingContainer>
-          <ButtonContainer>
-            <DistButton onClick={handleDistClick} dist={dist}>
-              <p>거리순</p>
-            </DistButton>
-            <TimeButton onClick={handleTimeClick} time={time}>
-              <p>시간순</p>
-            </TimeButton>
-          </ButtonContainer>
-          <MyRankingContainer>
-            {rankingTimeData
-              .filter((data) => data.userId === userId)
-              .map((data) => (
-                <UserRankingContainer
-                  key={data.userId}
-                  num={data.rank}
-                  name={data.nickname}
-                  time={data.totalTime}
-                  isList={false}
-                />
-              ))}
-
-            <CommentWrapper>다음 등수까지 00초 남았어요!</CommentWrapper>
-          </MyRankingContainer>
-          <RankingList>
-            {rankingTimeData
-              .filter((data) => data.rank > 3 && data.rank < 11)
-              .map((data) => (
-                <OtherRankingContainer>
-                  <UserRankingContainer
-                    num={data.rank}
-                    name={data.nickname}
-                    time={data.totalTime}
-                    isList={true}
-                    id={data.id}
-                  />
-                </OtherRankingContainer>
-              ))}
+            <UserRankingListContainer />
           </RankingList>
         </RankingContainer>
       )}
@@ -305,20 +424,20 @@ const StRankingPage = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
-  padding: 8.8rem 2rem 0rem;
+  padding: 7rem 2rem 0rem;
 `;
 const RankingHeader = styled.div`
   position: fixed;
   top: 0;
   width: 100%;
-  height: 11.8rem;
+  height: 6rem;
   background: ${COLOR.MAIN_WHITE};
   z-index: 100;
 
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  align-items: center;
+  align-items: flex-end;
 
   padding: 0rem 2rem;
   gap: 2.4rem;
@@ -341,7 +460,6 @@ const RankingContainer = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100%;
-  padding-top: 4.4rem;
 `;
 
 const sharedUserNameStyle = `
@@ -404,6 +522,14 @@ const MyRankingContainer = styled.div`
   border-radius: 1.4rem;
 `;
 
+const MyContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  gap: 1.2rem;
+`;
+
 const RankingData = styled.div`
   display: grid;
   grid-template-columns: 4.2rem 1fr 1fr;
@@ -450,19 +576,37 @@ const RankingData = styled.div`
 const OneselfIconWrapper = styled.div`
   display: flex;
   width: 2rem;
-  height: 2.6rem;
+  height: 2.1rem;
 `;
 
 const CommentWrapper = styled.div`
-  ${sharedTextStyle}
+  display: flex;
   width: 100%;
+  height: 100%;
   justify-content: flex-end;
+
+  .comment {
+    ${sharedTextStyle}
+  }
 `;
+
+const NoneRankContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .noneRank {
+    ${sharedTextStyle}
+  }
+`;
+
 const RankingList = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
   padding: 1.2rem 1.2rem;
+  gap: 1.5rem;
 `;
 const OtherRankingContainer = styled.div`
   display: flex;
@@ -484,40 +628,35 @@ const NoneRankingContainer = styled.div`
 `;
 
 const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  width: 100%;
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 4rem;
+  padding-top: 1rem;
 `;
-const DistButton = styled.button`
+const DistButton = styled.div`
   margin-left: 1rem;
   margin-right: 1rem;
-  width: 6rem;
-  height: 3rem;
-  background-color: ${({ dist }) =>
-    dist ? COLOR.MAIN_GREEN : COLOR.LIGHT_GRAY};
-  border: 0.2rem solid
-    ${({ dist }) => (dist ? COLOR.MAIN_GREEN : COLOR.MEDIUM_GRAY)};
-  border-radius: 1rem 1rem 1rem 1rem;
+
   p {
-    color: ${COLOR.MAIN_BLACK};
-    font-size: 1.6rem;
-    font-weight: 500;
+    color: ${({ selectDist }) =>
+      selectDist ? COLOR.MAIN_ORANGE : COLOR.DARK_GRAY};
+    font-size: 1.4rem;
+    font-weight: 600;
     letter-spacing: 0.09rem;
   }
 `;
-const TimeButton = styled.button`
+const TimeButton = styled.div`
   margin-left: 1rem;
   margin-right: 1rem;
-  width: 6rem;
-  height: 3rem;
-  background-color: ${({ time }) =>
-    time ? COLOR.MAIN_GREEN : COLOR.LIGHT_GRAY};
-  border: 0.2rem solid
-    ${({ time }) => (time ? COLOR.MAIN_GREEN : COLOR.MEDIUM_GRAY)};
-  border-radius: 1rem 1rem 1rem 1rem;
+
   p {
-    color: ${COLOR.MAIN_BLACK};
-    font-size: 1.6rem;
-    font-weight: 500;
+    color: ${({ selectDist }) =>
+      !selectDist ? COLOR.MAIN_ORANGE : COLOR.DARK_GRAY};
+    font-size: 1.4rem;
+    font-weight: 600;
     letter-spacing: 0.09rem;
   }
 `;

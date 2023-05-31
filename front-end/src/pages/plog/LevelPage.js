@@ -26,8 +26,6 @@ function LevelPage() {
   const url = `${process.env.REACT_APP_API_ROOT}/api/users/${userId}`;
   const url2 = url + "/point/history";
 
-  console.log(userId);
-
   useEffect(() => {
     axios
       .get(url, {
@@ -42,7 +40,7 @@ function LevelPage() {
       .catch((error) => {
         console.error(error);
       });
-  });
+  }, []);
 
   useEffect(() => {
     axios
@@ -58,7 +56,7 @@ function LevelPage() {
       .catch((error) => {
         console.error(error);
       });
-  });
+  }, []);
 
   const data = [
     { name: "level", value: user.point },
@@ -108,7 +106,7 @@ function LevelPage() {
           <PointList>
             {points.map((data, index) =>
               data ? (
-                <PointCard key={data.id} p={data} />
+                <PointCard key={index} p={data} />
               ) : (
                 <div key={index}>포인트 내역이 없어요</div>
               )
