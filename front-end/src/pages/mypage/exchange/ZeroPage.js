@@ -68,10 +68,37 @@ function ZeroPage() {
   const change_point = real_point - changePoint;
   console.log(change_point);
 
+  const title = "제로페이 포인트 전환";
+  const url2 = `${
+    process.env.REACT_APP_API_ROOT
+  }/api/users/${userId}/point?newPoint=${-changePoint}&title=${title}&type=제로페이`;
+
   // 교환완료 모달
   const [modalOpen, setModalOpen] = useState(false);
   const showModal = () => {
     setModalOpen(true);
+    axios
+      .put(
+        url2,
+        {
+          userId: userId,
+          newPoint: -changePoint,
+          title: title,
+          type: "후기작성",
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        console.log("포인트 적립 성공!");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
