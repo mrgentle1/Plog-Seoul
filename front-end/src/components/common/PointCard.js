@@ -1,14 +1,9 @@
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
-import { useNavigate } from "react-router-dom";
 
 export const PointCard = ({ p }) => {
-  const navigate = useNavigate();
-
   const createdAt = p.createdAt;
   const date = createdAt.substring(0, 10);
-
-  console.log(p.changePoint);
 
   return (
     <>

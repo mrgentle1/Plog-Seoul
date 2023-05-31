@@ -68,10 +68,10 @@ function ZeroPage() {
   const change_point = real_point - changePoint;
   console.log(change_point);
 
-  const title = "제로페이 포인트 전환";
+  const title = "제로페이";
   const url2 = `${
     process.env.REACT_APP_API_ROOT
-  }/api/users/${userId}/point?newPoint=${-changePoint}&title=${title}&type=제로페이`;
+  }/api/users/${userId}/point?newPoint=${-changePoint}&title=${title}&type=포인트 사용`;
 
   // 교환완료 모달
   const [modalOpen, setModalOpen] = useState(false);
@@ -84,7 +84,7 @@ function ZeroPage() {
           userId: userId,
           newPoint: -changePoint,
           title: title,
-          type: "후기작성",
+          type: "포인트 사용",
         },
         {
           headers: {
