@@ -13,6 +13,7 @@ import { motion } from "framer-motion";
 function ExchangePage() {
   const token = localStorage.getItem("key");
   const [point, setPoint] = useState(0);
+  const [level, setLevel] = useState(0);
   const [userId, setUserId] = usePersistRecoilState(userIdNumber);
 
   const navigate = useNavigate();
@@ -32,11 +33,14 @@ function ExchangePage() {
       })
       .then((response) => {
         setPoint(response.data.result.point);
+        setLevel(response.data.result.level);
       })
       .catch((error) => {
         console.error(error);
       });
   }, []);
+
+  const real_point = level * 1000 + point - 1000;
 
   const whiteBoxVariants = {
     hover: {
@@ -65,7 +69,7 @@ function ExchangePage() {
         <ExchangeContent>
           <Box1>
             <ExchangeIcon />
-            <Point>{point} P</Point>
+            <Point>{real_point} P</Point>
             <Text1>현재 보유한 포인트</Text1>
           </Box1>
           <Link to="/exchange/zero">

@@ -1,18 +1,19 @@
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { ReactComponent as BackArrow } from "../../../assets/icons/backArrow.svg";
-import { ReactComponent as ExchangeIcon } from "../../../assets/icons/exchange.svg";
-import { GreenThinButton } from "../../../components/common/Button";
+import { ReactComponent as ForwardArrow } from "../../../assets/icons/forwardArrow.svg";
 import { userIdNumber, usePersistRecoilState } from "../../../core/userId";
+import { Button, DisabledButton } from "../../../components/common/Button";
 
 import axios from "axios";
 import styled from "styled-components";
 import { COLOR } from "../../../styles/color";
-import { motion } from "framer-motion";
+import { color, motion } from "framer-motion";
 
 function ZeroPage() {
   const token = localStorage.getItem("key");
   const [point, setPoint] = useState(0);
+  const [level, setLevel] = useState(0);
   const [userId, setUserId] = usePersistRecoilState(userIdNumber);
 
   const navigate = useNavigate();
@@ -32,22 +33,30 @@ function ZeroPage() {
       })
       .then((response) => {
         setPoint(response.data.result.point);
+        setLevel(response.data.result.level);
       })
       .catch((error) => {
         console.error(error);
       });
   }, []);
 
-  const whiteBoxVariants = {
-    hover: {
-      backgroundColor: `${COLOR.MAIN_WHITE_HOVER}`,
-      border: `${COLOR.MAIN_WHITE_HOVER}`,
-      scale: 0.97,
-    },
-    rest: {
-      backgroundColor: `${COLOR.MAIN_WHITE}`,
-      scale: 1,
-    },
+  const real_point = level * 1000 + point - 1000;
+
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isExchange, setIsExchange] = useState(false);
+
+  const onChange = (e) => {
+    const inputValue = e.target.value.replace(/\D/g, "");
+    const validInput = Math.floor(Number(inputValue) / 1000) * 1000;
+
+    if (validInput > real_point) {
+      setErrorMessage("보유한 포인트보다 전환하려는 포인트가 더 많습니다.");
+    } else if (inputValue !== validInput.toString()) {
+      setErrorMessage("포인트 입력은 1000단위로 해야합니다.");
+    } else {
+      setErrorMessage("");
+      setIsExchange(true);
+    }
   };
 
   return (
@@ -60,35 +69,34 @@ function ZeroPage() {
       <StExchangePage>
         <ExchangeHeader>
           <BackArrow className="ExchangeBackArrow" onClick={goBack} />
-          <HeaderText>포인트 사용</HeaderText>
+          <HeaderText>제로페이 전환</HeaderText>
         </ExchangeHeader>
         <ExchangeContent>
           <Box1>
-            <ExchangeIcon />
-            <Point>{point} P</Point>
-            <Text1>현재 보유한 포인트</Text1>
+            <LeftBox>
+              <Point>{real_point} P</Point>
+              <Text1>현재 보유한 포인트</Text1>
+            </LeftBox>
+            <ForwardArrow className="arrow" />
+            <RightBox>
+              <Point>{point} P</Point>
+              <Text1>전환 후 보유 포인트</Text1>
+            </RightBox>
           </Box1>
-          <Box
-            variants={whiteBoxVariants}
-            whileHover="hover"
-            whileTap="hover"
-            whileFocus="hover"
-            initial="rest"
-            animate="rest"
-          >
-            <GreenThinButton>제로페이 포인트 전환</GreenThinButton>
-          </Box>
-          <Box
-            variants={whiteBoxVariants}
-            whileHover="hover"
-            whileTap="hover"
-            whileFocus="hover"
-            initial="rest"
-            animate="rest"
-          >
-            <GreenThinButton>서울사랑상품권 교환</GreenThinButton>
-          </Box>
+          <Box2>제로페이로 전환할 포인트를 입력하세요</Box2>
+          <Box3>최소 1,000P부터 1,000P 단위로 전환 가능해요</Box3>
+          <InputBox onChange={onChange} />
+          {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
         </ExchangeContent>
+        <ExchangeButton>
+          {errorMessage && !isExchange ? (
+            <DisabledButton disabled="disabled">
+              제로페이 포인트 전환하기
+            </DisabledButton>
+          ) : (
+            <Button>제로페이 포인트 전환하기</Button>
+          )}
+        </ExchangeButton>
       </StExchangePage>
     </motion.div>
   );
@@ -140,14 +148,26 @@ const ExchangeContent = styled.div`
   color: ${COLOR.INPUT_BORDER_GRAY};
 `;
 const Box1 = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   width: 353px;
-  height: 121px;
-  margin-top: 20px;
-  margin-bottom: 36px;
+  height: 60px;
+  margin-top: 10px;
+  margin-bottom: 46px;
   border-radius: 14px;
-  padding: 12px 19px;
-  border: 1px solid ${COLOR.MAIN_GREEN};
-  background-color: ${COLOR.MAIN_WHITE};
+  .arrow {
+    width: 20px;
+    height: 20px;
+    align-items: center;
+    color: ${COLOR.MAIN_GREEN};
+  }
+`;
+const LeftBox = styled.div`
+  text-align: left;
+`;
+const RightBox = styled.div`
+  text-align: right;
 `;
 const Point = styled.div`
   margin-top: 10px;
@@ -159,12 +179,76 @@ const Point = styled.div`
   color: ${COLOR.MAIN_BLACK};
 `;
 const Text1 = styled.div`
+  margin-top: 8px;
+  font-family: "SUIT Variable";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16px;
+  color: ${COLOR.INPUT_BORDER_GRAY};
+`;
+const Box2 = styled.div`
+  font-family: "SUIT Variable";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 19px;
+  color: ${COLOR.MAIN_BLACK};
+`;
+const Box3 = styled.div`
   margin-top: 6px;
   font-family: "SUIT Variable";
   font-style: normal;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 15px;
   line-height: 19px;
-  color: ${COLOR.DARK_GRAY};
+  color: ${COLOR.MAIN_DARK_GREEN};
 `;
-const Box = styled(motion.div)``;
+const InputBox = styled.input`
+  width: 100%;
+  height: 41px;
+  background: ${COLOR.INPUT_GRAY};
+  border: 1px solid ${COLOR.INPUT_BORDER_GRAY};
+  border-radius: 8px;
+  padding: 12px;
+  margin-top: 24px;
+  font-family: "SUIT Variable";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+
+  ::placeholder {
+    color: ${COLOR.INPUT_BORDER_GRAY};
+    font-family: "SUIT Variable";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+  }
+
+  -moz-appearance: textfield; /* Firefox */
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none; /* Safari */
+    margin: 0;
+  }
+`;
+const ErrorMessage = styled.div`
+  color: ${COLOR.MAIN_ORANGE};
+  margin-top: 4px;
+  font-family: "SUIT Variable";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 19px;
+`;
+const ExchangeButton = styled.div`
+  position: fixed;
+  bottom: 0;
+  margin-bottom: 40px;
+  padding: 0;
+
+  display: flex;
+  flex-direction: row;
+`;
