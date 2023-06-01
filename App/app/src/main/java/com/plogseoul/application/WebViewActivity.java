@@ -66,7 +66,8 @@ public class WebViewActivity extends AppCompatActivity {
             Manifest.permission.READ_EXTERNAL_STORAGE
     };
 
-    private String rootUrl = "https://plog-seoul-git-develop-mrgentle1.vercel.app/";
+//    private String rootUrl = "https://plog-seoul-git-develop-mrgentle1.vercel.app/";  // develop
+    private String rootUrl = "https://plog-seoul.vercel.app/";  // production
 
     private void checkPermissions() {
         ArrayList<String> permissionsNeeded = new ArrayList<>();
