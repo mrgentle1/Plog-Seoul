@@ -60,6 +60,9 @@ function RecordPage() {
       isLoading: false,
     }));
     console.log("정확도:", position.coords.accuracy);
+    setTimeout(() => {
+      setIsActive(true);
+    }, 2100);
   };
 
   const showError = (err) => {
@@ -169,7 +172,6 @@ function RecordPage() {
       }));
     }
     console.log("[]useEffect");
-    setTimeout(setIsActive(true), 4000);
   }, []);
   console.log(state);
 
