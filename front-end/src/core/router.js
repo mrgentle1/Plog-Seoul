@@ -28,6 +28,8 @@ import InformationPage from "../pages/home/InformationPage";
 import RankingPage from "../pages/plog/RankingPage";
 import RecordFinishPage from "../pages/record/RecordFinishContainer";
 import ExchangePage from "../pages/mypage/ExchangePage";
+import ZeroPage from "../pages/mypage/exchange/ZeroPage";
+import SeoulPage from "../pages/mypage/exchange/SeoulPage";
 import AdminSignupPage from "../pages/signup/AdminSignupPage";
 
 function Router() {
@@ -52,6 +54,8 @@ function Router() {
           <Route path="/home/season" element={<SeasonCoursePage />} />
           <Route path="/info" element={<InformationPage />} />
           <Route path="/exchange" element={<ExchangePage />} />
+          <Route path="/exchange/zero" element={<ZeroPage />} />
+          <Route path="/exchange/seoul" element={<SeoulPage />} />
           <Route path="/admin" element={<AdminSignupPage />} />
 
           <Route path="/course" element={<CoursePage />} />

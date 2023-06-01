@@ -32,5 +32,5 @@ const StLayout = styled.div`
   height: 100%;
   padding-top: 117px;
   overflow-y: scroll;
-  background-color: ${({ isHome }) => (isHome ? "#F8F8F8" : "transparent")};
+  background-color: ${({ isHome }) => (isHome ? "#FCFCFC" : "transparent")};
 `;

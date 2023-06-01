@@ -101,7 +101,7 @@ function RecordFinishPage() {
           <span>
             {todayMonth}월 {todayDate}일
           </span>
-          <p>개운산 숲 나들길</p>
+          <p></p>
           <CloseWrapper>
             <Close
               className="headerClose"
@@ -254,125 +254,6 @@ const HeaderText = styled.div`
   color: ${COLOR.MAIN_BLACK};
 `;
 
-const ContentsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  position: relative;
-
-  width: 100%;
-
-  padding-bottom: 12.2rem;
-
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-
-  ::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera*/
-  }
-`;
-
-const MapContainer = styled.div`
-  display: flex;
-  position: relative;
-  overflow: hidden;
-
-  width: 100%;
-  height: 23.6rem;
-  border-radius: 1.4rem;
-
-  & > .MapWrapper {
-    position: relative;
-    overflow: hidden;
-  }
-`;
-const DetailDataContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 2.4rem;
-
-  width: 100%;
-
-  padding-top: 2.4rem;
-  padding-bottom: 2.4rem;
-
-  span {
-    font-family: "SUIT Variable";
-    font-style: normal;
-    font-weight: 600;
-    font-size: 2.4rem;
-    line-height: 3rem;
-    color: ${COLOR.MAIN_BLACK};
-  }
-
-  p {
-    font-family: "SUIT Variable";
-    font-style: normal;
-    font-weight: 500;
-    font-size: 1.3rem;
-    line-height: 1.6rem;
-    color: ${COLOR.INPUT_BORDER_GRAY};
-  }
-`;
-
-const sharedDataContainerStyle = `display: flex;
-flex-direction: column;
-gap: 0.6rem;`;
-
-const TimeDataContainer = styled.div`
-  ${sharedDataContainerStyle}
-`;
-const OtherDataContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-`;
-const DistDataContainer = styled.div`
-  ${sharedDataContainerStyle}
-`;
-const CalorieDataContainer = styled.div`
-  ${sharedDataContainerStyle}
-`;
-const PhotoCountDataContainer = styled.div`
-  ${sharedDataContainerStyle}
-`;
-
-const PhotoGridContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  width: 100%;
-
-  padding-top: 2rem;
-  gap: 0.8rem;
-
-  border-top: 0.1rem solid ${COLOR.MAIN_GREEN};
-`;
-
-const PhotoWrapper = styled.div`
-  img {
-    width: 10.9rem;
-    height: 10.9rem;
-    object-fit: cover;
-  }
-`;
-
-const NonePhotoWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  width: 100%;
-  height: 20rem;
-
-  p {
-    font-family: "SUIT Variable";
-    font-style: normal;
-    font-weight: 500;
-    font-size: 1.3rem;
-    line-height: 1.6rem;
-    color: ${COLOR.INPUT_BORDER_GRAY};
-  }
-`;
 const RecordFinishFooter = styled.div`
   display: flex;
   position: fixed;
@@ -385,26 +266,6 @@ const RecordFinishFooter = styled.div`
 
   width: 100%;
   z-index: 500;
-`;
-
-const PlogFinishBtnWrapper = styled.div`
-  display: flex;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 1.5rem;
-  line-height: 1.9rem;
-
-  text-align: center;
-  color: ${COLOR.MAIN_BLACK};
-`;
-
-const PlogShareBtnWrapper = styled.div`
-  display: flex;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 1.5rem;
-  line-height: 1.9rem;
-  text-align: center;
 `;
 
 const PlogRecordFooter = styled.div`
