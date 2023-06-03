@@ -235,6 +235,12 @@ function ShowRecordData({
                 width: 20,
                 height: 20,
               }, // 마커이미지의 크기입니다
+              options: {
+                offset: {
+                  x: 10,
+                  y: 10,
+                }, // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+              },
             }}
           ></MapMarker>
         ))}
@@ -308,30 +314,24 @@ function ShowRecordData({
     if (pathData.length > 1) {
       pathData.map((data) => {
         if (count) {
-          if (i === 6) {
+          if (i === 0) {
             count = false;
             markers.push(data);
           } else {
-            i++;
+            i--;
           }
           return bounds.extend(new kakao.maps.LatLng(data.lat, data.lng));
         } else {
-          if (i === 0) {
+          if (i === 6) {
             count = true;
           } else {
-            i--;
+            i++;
           }
         }
       });
-      const data = [
-        { lat: thisRecordData.startLat, lng: thisRecordData.startLng },
-        { lat: thisRecordData.endLat, lng: thisRecordData.endLng },
-      ];
 
-      data.map((it) => {
-        markers.push(it);
-        bounds.extend(new kakao.maps.LatLng(it.lat, it.lng));
-      });
+      markers.push({ lat: thisRecordData.endLat, lng: thisRecordData.endLng });
+
       // 위치를 기준으로 지도 범위를 재설정합니다
       setMarkers(markers);
       map.setBounds(bounds);
