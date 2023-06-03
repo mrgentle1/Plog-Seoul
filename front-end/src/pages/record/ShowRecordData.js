@@ -323,7 +323,15 @@ function ShowRecordData({
           }
         }
       });
+      const data = [
+        { lat: thisRecordData.startLat, lng: thisRecordData.startLng },
+        { lat: thisRecordData.endLat, lng: thisRecordData.endLng },
+      ];
 
+      data.map((it) => {
+        markers.push(it);
+        bounds.extend(new kakao.maps.LatLng(it.lat, it.lng));
+      });
       // 위치를 기준으로 지도 범위를 재설정합니다
       setMarkers(markers);
       map.setBounds(bounds);
