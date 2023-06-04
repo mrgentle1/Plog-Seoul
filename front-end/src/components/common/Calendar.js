@@ -43,6 +43,8 @@ export const Calendar = () => {
       });
   }, []);
 
+  console.log(plogging);
+
   const ploggingDate = [];
   plogging.map((data) => {
     ploggingDate.push(data.createdAt.substring(0, 10));
@@ -51,19 +53,69 @@ export const Calendar = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   const handlePrevMonth = () => {
-    setSelectedDate(
-      (prevDate) => new Date(prevDate.getFullYear(), prevDate.getMonth() - 1)
+    const prevDate = new Date(
+      selectedDate.getFullYear(),
+      selectedDate.getMonth() - 1
     );
+    const prevMonth = prevDate.getMonth() + 1;
+    const monthString = prevMonth < 10 ? `0${prevMonth}` : prevMonth.toString();
+
+    setSelectedDate(prevDate);
     setPage(page - 1);
     setDirection(-1);
+
+    console.log(monthString);
+
+    axios
+      .get(
+        `${
+          process.env.REACT_APP_API_ROOT
+        }/api/plogging?date=${prevDate.getFullYear()}-${monthString}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        setPlogging(response.data.result.content);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   const handleNextMonth = () => {
-    setSelectedDate(
-      (prevDate) => new Date(prevDate.getFullYear(), prevDate.getMonth() + 1)
+    const nextDate = new Date(
+      selectedDate.getFullYear(),
+      selectedDate.getMonth() + 1
     );
+    const nextMonth = nextDate.getMonth() + 1;
+    const monthString = nextMonth < 10 ? `0${nextMonth}` : nextMonth.toString();
+
+    setSelectedDate(nextDate);
     setPage(page + 1);
     setDirection(1);
+
+    axios
+      .get(
+        `${
+          process.env.REACT_APP_API_ROOT
+        }/api/plogging?date=${nextDate.getFullYear()}-${monthString}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        setPlogging(response.data.result.content);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   const [modalOpen, setModalOpen] = useState(false);
