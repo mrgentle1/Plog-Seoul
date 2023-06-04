@@ -7,12 +7,14 @@ import { useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 import { TimeComponent } from "../../components/Record/TimeComponent";
-import current from "../../assets/icons/walk.svg";
+import current from "../../assets/icons/mapMarker.svg";
 import trashCanImg from "../../assets/icons/trash.svg";
 import PlogImg from "../../assets/icons/imgMarker.svg";
 import { ReactComponent as Close } from "../../assets/icons/close.svg";
 import { ReactComponent as RelocateBtn } from "../../assets/icons/relocateInactivate.svg";
 import { ReactComponent as RelocateAtiveBtn } from "../../assets/icons/relocateActivate.svg";
+import { ReactComponent as TrashCanAtiveBtn } from "../../assets/icons/trashCanActivate.svg";
+import { ReactComponent as TrashCanBtn } from "../../assets/icons/trash.svg";
 import {
   RecordModal,
   ModalBackground,
@@ -31,7 +33,15 @@ let options = {
 const modalData = {
   recording: true,
   title: "플로깅 기록을 종료할까요?",
-  btnText1: "닫기",
+  contents: "지금 종료하면\n오늘의 플로깅 기록이 사라져요",
+  btnText1: "종료하기",
+  btnText2: "계속하기",
+};
+const notMoreThanData = {
+  recording: true,
+  title: "플로깅 기록을 종료할까요?",
+  contents: "1분 미만 기록은\n저장되지 않아요",
+  btnText1: "종료하기",
   btnText2: "계속하기",
 };
 
@@ -52,16 +62,13 @@ function RecordIngPage() {
   const startLng = location.state.lng;
 
   /*사용자 이동 기록*/
-  const [state, setState] = useState([
-    {
-      center: {
-        lat: startLat,
-        lng: startLng,
-      },
-      errMsg: null,
-      isLoading: true,
+  const [state, setState] = useState({
+    level: 2,
+    center: {
+      lat: startLat,
+      lng: startLng,
     },
-  ]);
+  });
 
   /*polyline path를 위함 */
   const [locationList, setLocationList] = useState([
@@ -136,15 +143,12 @@ function RecordIngPage() {
           },
         }
       );
-      console.log(response);
       // 응답 결과(response)를 변수에 저장하거나.. 등 필요한 처리를 해 주면 된다.
       const initRecord = {
         userId: response.data.result.userId,
         recordId: response.data.result.recordId,
       };
       setRecordUserData(initRecord);
-
-      console.log(initRecord);
     } catch (e) {
       // 실패 시 처리
       console.error(e);
@@ -168,7 +172,7 @@ function RecordIngPage() {
           },
         }
       );
-      console.log("success Delete");
+
       // 응답 결과(response)를 변수에 저장하거나.. 등 필요한 처리를 해 주면 된다.
     } catch (e) {
       // 실패 시 처리
@@ -198,10 +202,6 @@ function RecordIngPage() {
         }
       );
 
-      console.log(`distance: ${distAll.current},
-        endLat: ${locationList[locationList.length - 1].lat},
-        endLng: ${locationList[locationList.length - 1].lng},
-        runningTime: ${time.all}`);
       // navigate("/record/point", {
       //   state: {
       //     recordId: `${recordUserData.recordId}`,
@@ -221,7 +221,6 @@ function RecordIngPage() {
 
   // Define the callback function
   window.receiveImageURL = function (url) {
-    console.log("android image url is: ", url);
     imgUrlLoading.current = true;
     setImageUrl(url);
   };
@@ -231,15 +230,16 @@ function RecordIngPage() {
   const [imgData, setImgData] = useState([]);
   async function postImgData() {
     // async, await을 사용하는 경우
+    const sendImgData = {
+      imageUrl: imageUrl,
+      imgLat: locationList[locationList.length - 1].lat,
+      imgLng: locationList[locationList.length - 1].lng,
+    };
     try {
       // GET 요청은 params에 실어 보냄
       const response = await axios.post(
         `${process.env.REACT_APP_API_ROOT}/api/plogging/${recordUserData.recordId}/images/`,
-        {
-          imgUrl: imageUrl,
-          imgLat: locationList[locationList.length - 1].lat,
-          imgLng: locationList[locationList.length - 1].lng,
-        },
+        sendImgData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -247,6 +247,8 @@ function RecordIngPage() {
           },
         }
       );
+
+      setImgData([...imgData, sendImgData]);
     } catch (e) {
       // 실패 시 처리
       console.error(e);
@@ -258,6 +260,7 @@ function RecordIngPage() {
 
   async function postPathData() {
     // async, await을 사용하는 경우
+
     try {
       // GET 요청은 params에 실어 보냄
       const response = await axios.post(
@@ -288,6 +291,8 @@ function RecordIngPage() {
   const [recording, setRecording] = useState(false); //기록 중
   const [isMove, setIsMove] = useState(false);
   const [isActive, setIsActive] = useState(false);
+  const [isShowCan, setIsShowCan] = useState(false);
+  const [level, setLevel] = useState(3);
   const mapRef = useRef();
 
   const start = () => {
@@ -305,12 +310,19 @@ function RecordIngPage() {
           locationList[locationList.length - 1].lng
         )
       );
-      map.setLevel(2);
+      // map.setLevel(2);
+      // setState({
+      //   center: {
+      //     lat: locationList[locationList.length - 1].la,
+      //     lng: locationList[locationList.length - 1].lng,
+      //   },
+      // });
     }
   };
 
+  useEffect(() => {}, [locationList]);
+
   const recordPosition = () => {
-    console.log("position");
     if (navigator.geolocation) {
       // GeoLocation을 이용해서 접속 위치를 얻어옵니다
 
@@ -322,40 +334,35 @@ function RecordIngPage() {
       setWatchId(newId);
     } else {
       // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
-      setState((prev) => ({
-        ...prev,
-        errMsg: "geolocation을 사용할수 없어요..",
-        isLoading: false,
-      }));
+      // setState((prev) => ({
+      //   ...prev,
+      //   errMsg: "geolocation을 사용할수 없어요..",
+      //   isLoading: false,
+      // }));
+      alert("geolocation을 사용할수 없어요");
     }
-    console.log("listlocation: %o", locationList);
   };
 
   const recordCurrentPositon = () => {
     if (navigator.geolocation) {
       // GeoLocation을 이용해서 접속 위치를 얻어옵니다
       navigator.geolocation.getCurrentPosition((position) => {
-        console.log("이미지 정확도:", position.coords.accuracy);
         return {
           lat: position.coords.latitude, // 위도
           lng: position.coords.longitude, // 경도
         };
       }, showError);
     } else {
-      setState((prev) => ({
-        ...prev,
-        errMsg: "geolocation을 사용할수 없어요..",
-        isLoading: false,
-      }));
+      // setState((prev) => ({
+      //   ...prev,
+      //   errMsg: "geolocation을 사용할수 없어요..",
+      //   isLoading: false,
+      // }));
+      alert("geolocation을 사용할수 없어요");
     }
   };
 
   const success = (position) => {
-    console.log("watchPosition: %o", position);
-    console.log("startlat: %o", startLat, "startlng: %o", startLng);
-    console.log("정확도:", position.coords.accuracy);
-    console.log("befor: ", beforeRecord.current);
-
     const coordinates = [
       new kakao.maps.LatLng(beforeRecord.current.lat, beforeRecord.current.lng),
       new kakao.maps.LatLng(
@@ -369,12 +376,8 @@ function RecordIngPage() {
     });
 
     const distDiff = linePath.getLength();
-    console.log("이동거리:", distDiff.toFixed(2), "m");
 
-    console.log("location: %o", locationList);
     if (distDiff !== 0 && position.coords.accuracy < 20 && distDiff < 800) {
-      console.log("이동함");
-
       beforeRecord.current = {
         lat: position.coords.latitude,
         lng: position.coords.longitude,
@@ -414,7 +417,6 @@ function RecordIngPage() {
         setErrorMessage("알 수 없는 오류가 발생했습니다.");
         break;
     }
-    console.log("errMsg", errorMessage);
   };
 
   useEffect(() => {
@@ -434,11 +436,11 @@ function RecordIngPage() {
     updatedTime = time.all;
 
   const run = () => {
-    if (updatedM === 60) {
+    if (updatedM === 59) {
       updatedH++;
       updatedM = 0;
     }
-    if (updatedS === 60) {
+    if (updatedS === 59) {
       updatedM++;
       updatedS = 0;
     }
@@ -449,10 +451,7 @@ function RecordIngPage() {
 
   const recordStopHandler = async (e) => {
     e.preventDefault();
-    console.log("recordHandler");
     try {
-      console.log("기록 종료 버튼 클릭");
-
       if (watchId !== -1) {
         navigator.geolocation.clearWatch(watchId);
         setWatchId(-1);
@@ -475,8 +474,7 @@ function RecordIngPage() {
   };
 
   useEffect(() => {
-    if (time.all > 60) {
-      console.log("here");
+    if (time.all > 59) {
       setIsActive(true);
     }
   }, [time]);
@@ -490,12 +488,69 @@ function RecordIngPage() {
   // }, [imageUrl]);
 
   useEffect(() => {
-    console.log("imageUrl 변화 생김");
+    if (!isMove) {
+      setState({
+        level: 2,
+        center: {
+          lat: locationList[locationList.length - 1].lat,
+          lng: locationList[locationList.length - 1].lng,
+        },
+      });
+    }
+  }, [locationList]);
+
+  useEffect(() => {
     if (imgUrlLoading.current) {
-      console.log("imageUrl 값 변경됨");
+      console.log("변경된 이미지: ", imageUrl);
       postImgData();
     }
   }, [imageUrl]);
+
+  const [markerSize, setMarkerSize] = useState({ width: 64, height: 64 });
+  const [isVisible, setIsVisible] = useState(true);
+  useEffect(() => {
+    console.log(level);
+    // if (level < 4) {
+    //   setMarkerSize({ width: 64, height: 64 });
+    // } else if (level < 7) {
+    //   setMarkerSize({ width: 32, height: 32 });
+    // } else {
+    //   setMarkerSize({ width: 8, height: 8 });
+    // }
+
+    if (level > 5) {
+      setIsVisible(false);
+    } else {
+      setIsVisible(true);
+    }
+  }, [level]);
+
+  const EventTrashCanContainer = ({ position, mSize, title }) => {
+    // console.log("현사이즈", mSize);
+    // console.log("사이즈", markerSize);
+    const map = useMap();
+
+    // if (0 < mapLevel && mapLevel < 4) {
+    //   setMarkerSize({ width: 64, height: 64 });
+    //   // } else if (3 < mapLevel && mapLevel < 6) {
+    //   //   markerSize = { width: 32, height: 32 };
+    //   // } else if (5 < mapLevel && mapLevel < 15) {
+    //   //   markerSize = { width: 16, height: 16 };
+    // } else {
+    //   setMarkerSize({ width: 32, height: 32 });
+    // }
+
+    return (
+      <MapMarker
+        position={position} // 마커를 표시할 위치
+        image={{
+          src: trashCanImg, // 마커이미지의 주소입니다
+          size: { markerSize }, // 마커이미지의 크기입니다
+        }}
+        title={title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+      ></MapMarker>
+    );
+  };
 
   const EventMarkerContainer = ({ position, content }) => {
     const map = useMap();
@@ -519,6 +574,7 @@ function RecordIngPage() {
   };
 
   const [modalOpen, setModalOpen] = useState(false);
+  const [isMoreThan, setIsMoreThan] = useState(false);
   const showModal = () => {
     setModalOpen(true);
   };
@@ -528,15 +584,35 @@ function RecordIngPage() {
     setImgOpen(true);
   };
 
+  // Define the callback function
+  window.receiveBackPressed = function (backPressed) {
+    setModalOpen(backPressed);
+  };
+
+  useEffect(() => {}, [modalOpen]);
+  // Define the callback function
+  window.receiveRecordingExit = function (realExit) {
+    setModalOpen(realExit);
+    deleteRecordData();
+    navigate("/record", { replace: true });
+  };
+
   return (
     <>
-      {modalOpen && (
-        <RecordModal
-          setModalOpen={setModalOpen}
-          data={modalData}
-          id={recordUserData.recordId}
-        />
-      )}
+      {modalOpen &&
+        (isMoreThan ? (
+          <RecordModal
+            setModalOpen={setModalOpen}
+            data={modalData}
+            id={recordUserData.recordId}
+          />
+        ) : (
+          <RecordModal
+            setModalOpen={setModalOpen}
+            data={notMoreThanData}
+            id={recordUserData.recordId}
+          />
+        ))}
       {imgOpen && <RecordImgModal setImgOpen={setImgOpen} data={clickImg} />}
       {(modalOpen || imgOpen) && <ModalBackground />}
       <StRecordIngPage>
@@ -549,6 +625,7 @@ function RecordIngPage() {
             <Close
               className="headerClose"
               onClick={() => {
+                setIsMoreThan(true);
                 showModal();
               }}
             />
@@ -556,13 +633,22 @@ function RecordIngPage() {
         </RecordIngHeader>
         <MapContainer>
           <Map
-            center={locationList[locationList.length - 1]} // 지도의 중심 좌표
+            center={state.center} // 지도의 중심 좌표
             style={{ width: "100%", height: "100%" }} // 지도 크기
             level={2} // 지도 확대 레벨
             isPanto={true}
             onDragEnd={() => setIsMove(true)}
-            onZoomChanged={() => setIsMove(true)}
+            onZoomChanged={(map) => setLevel(map.getLevel())}
             ref={mapRef}
+            onCenterChanged={(map) =>
+              setState({
+                level: map.getLevel(),
+                center: {
+                  lat: map.getCenter().getLat(),
+                  lng: map.getCenter().getLng(),
+                },
+              })
+            }
           >
             <div>
               <MapMarker // 마커를 생성합니다
@@ -574,46 +660,49 @@ function RecordIngPage() {
                 image={{
                   src: current, // 마커이미지의 주소입니다
                   size: {
-                    width: 64,
-                    height: 69,
+                    width: 30,
+                    height: 30,
                   }, // 마커이미지의 크기입니다
                   options: {
                     offset: {
-                      x: 27,
-                      y: 69,
+                      x: 15,
+                      y: 15,
                     }, // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
                   },
                 }}
               />
-              {trashCanData.map((position, index) => (
-                <MapMarker
-                  key={`${position.trashCanId}-${position.title}`}
-                  position={{
-                    lat: position.latlng.lat,
-                    lng: position.latlng.lng,
-                  }} // 마커를 표시할 위치
-                  image={{
-                    src: trashCanImg, // 마커이미지의 주소입니다
-                    size: {
-                      width: 64,
-                      height: 64,
-                    }, // 마커이미지의 크기입니다
-                  }}
-                  title={position.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
-                />
-              ))}
+              {isShowCan &&
+                isVisible &&
+                trashCanData.map((position) => (
+                  <EventTrashCanContainer
+                    key={`${position.trashCanId}-${position.title}`}
+                    position={{
+                      lat: position.latlng.lat,
+                      lng: position.latlng.lng,
+                    }} // 마커를 표시할 위치
+                    mSize={markerSize}
+                    title={position.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+                  />
+                ))}
               {imgData.map((value) => (
                 <EventMarkerContainer
                   key={`EventMarkerContainer-${value.imageUrl}`}
                   position={{ lat: value.imgLat, lng: value.imgLng }}
-                  content={value.imgUrl}
+                  content={value.imageUrl}
                 />
               ))}
               <Polyline
                 path={locationList}
-                strokeWeight={5} // 선의 두께 입니다
-                strokeColor={"#FFAE00"} // 선의 색깔입니다
-                strokeOpacity={0.7} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+                strokeWeight={8} // 선의 두께 입니다
+                strokeColor={"#8EDF82"} // 선의 색깔입니다
+                strokeOpacity={1} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+                strokeStyle={"solid"} // 선의 스타일입니다
+              />
+              <Polyline
+                path={locationList}
+                strokeWeight={4} // 선의 두께 입니다
+                strokeColor={"#ffffff"} // 선의 색깔입니다
+                strokeOpacity={1} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
                 strokeStyle={"solid"} // 선의 스타일입니다
               />
             </div>
@@ -623,18 +712,36 @@ function RecordIngPage() {
             {isMove ? (
               <RelocateBtn
                 onClick={() => {
-                  handleRelocate();
                   setIsMove(false);
+                  handleRelocate();
                 }}
               />
             ) : (
               <RelocateAtiveBtn
                 onClick={() => {
                   // handleRelocate();
+                  // setIsMove(true);
                 }}
               />
             )}
           </RelocateWrapper>
+          <ShowTrashCanWrapper>
+            {isShowCan ? (
+              <TrashCanAtiveBtn
+                className="btn"
+                onClick={() => {
+                  setIsShowCan(false);
+                }}
+              />
+            ) : (
+              <TrashCanBtn
+                className="btn"
+                onClick={() => {
+                  setIsShowCan(true);
+                }}
+              />
+            )}
+          </ShowTrashCanWrapper>
         </MapContainer>
         <RecordDetailContainer>
           <StopWatchContainer>
@@ -657,7 +764,10 @@ function RecordIngPage() {
               </RecordFinishBtn>
             ) : (
               <DisabledFinishButton
-                disabled={true}
+                onClick={() => {
+                  setIsMoreThan(false);
+                  showModal();
+                }}
                 bgColor={COLOR.LIGHT_GRAY}
                 color={COLOR.DARK_GRAY}
               >
@@ -679,14 +789,14 @@ const StRecordIngPage = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
-  padding-top: 12.7rem;
+  padding-top: 9.4rem;
   padding-bottom: 20rem;
 `;
 const RecordIngHeader = styled.div`
   position: fixed;
   top: 0;
-  width: 39.3rem;
-  height: 12.7rem;
+  width: 100%;
+  height: 9.4rem;
 
   display: grid;
   grid-template-columns: 8.8rem auto 1.4rem;
@@ -747,15 +857,40 @@ const RelocateWrapper = styled.div`
   position: absolute;
   overflow: hidden;
   top: 1rem;
-  right: 1rem;
+  right: 0;
+  width: 7rem;
+  height: 7rem;
 
   z-index: 10;
+  .btn {
+    width: 8rem;
+    height: 8rem;
+  }
+`;
+
+const ShowTrashCanWrapper = styled.div`
+  display: flex;
+  position: absolute;
+  overflow: hidden;
+  top: 6rem;
+  right: 0;
+  width: 7rem;
+  height: 7rem;
+
+  /* width: 4.4rem;
+  height: 4.4rem; */
+
+  z-index: 10;
+  .btn {
+    width: 8rem;
+    height: 8rem;
+  }
 `;
 
 const RecordDetailContainer = styled.div`
   position: fixed;
   bottom: 0;
-  width: 39.3rem;
+  width: 100%;
   height: 20rem;
 
   display: flex;

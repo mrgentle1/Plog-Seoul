@@ -1,7 +1,5 @@
-import { useMemo } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { HomeHeader } from "./Header";
-import { HomeHeaderV2 } from "./HeaderV2";
 import { Footer } from "./Footer";
 
 import styled from "styled-components";
@@ -9,8 +7,6 @@ import { COLOR } from "../../styles/color";
 
 export const Layout = () => {
   const location = useLocation();
-
-  const isHeaderV2 = location.pathname === "/course";
 
   const isFooter =
     location.pathname === "/home" ||
@@ -21,7 +17,7 @@ export const Layout = () => {
 
   return (
     <StLayout isHome={location.pathname === "/home"}>
-      {isHeaderV2 ? null : <HomeHeader />}
+      <HomeHeader />
       <Outlet />
       {isFooter ? <Footer /> : null}
     </StLayout>
@@ -34,8 +30,7 @@ const StLayout = styled.div`
   overflow-x: hidden;
   width: 100%;
   height: 100%;
-  padding-top: 127px;
+  padding-top: 117px;
   overflow-y: scroll;
-  background-color: ${({ isHome }) =>
-    isHome ? COLOR.INPUT_GRAY : "transparent"};
+  background-color: ${({ isHome }) => (isHome ? "#FCFCFC" : "transparent")};
 `;

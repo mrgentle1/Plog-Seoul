@@ -4,6 +4,9 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
+import ImgSlide from "../../assets/images/imgSlide.svg";
+import ImgSlide2 from "../../assets/images/imgSlide2.svg";
+import ImgSlide3 from "../../assets/images/imgSlide3.svg";
 
 const ImgSlider = () => {
   const settings = {
@@ -21,10 +24,10 @@ const ImgSlider = () => {
           display: "flex",
           width: "100%",
           position: "absolute",
-          bottom: "24px",
+          bottom: "1px",
           alignItems: "center",
           justifyContent: "center",
-          paddingBottom: "10px",
+          paddingBottom: "20px",
         }}
       >
         <ul> {dots} </ul>
@@ -35,13 +38,13 @@ const ImgSlider = () => {
   return (
     <Slider {...settings}>
       <div>
-        <img src={require("../../assets/images/course1.png")} alt="Image 1" />
+        <img src={ImgSlide} width="100%" />
       </div>
       <div>
-        <img src={require("../../assets/images/course2.png")} alt="Image 2" />
+        <img src={ImgSlide2} width="100%" />
       </div>
       <div>
-        <img src={require("../../assets/images/course2.png")} alt="Image 3" />
+        <img src={ImgSlide3} width="100%" />
       </div>
     </Slider>
   );

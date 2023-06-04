@@ -22,62 +22,34 @@ export function TimeComponent(props) {
   );
 }
 
-export function TimeConvert(seconds) {
-  console.log(seconds);
+export function TimeConvert(props) {
+  console.log(props);
   const [isLodaing, setIsLodading] = useState(true);
+  var myNum = parseInt(props.time, 10);
+  var hours = Math.floor(myNum / 3600);
+  var minutes = Math.floor((myNum - hours * 3600) / 60);
+  var remainSeconds = myNum - hours * 3600 - minutes * 60;
+  console.log(myNum);
 
-  const cal = () => {
-    h();
-    m();
-    s();
+  if (hours < 10) {
+    hours = "0" + hours;
+  }
+  if (minutes < 10) {
+    minutes = "0" + minutes;
+  }
+  if (remainSeconds < 10) {
+    remainSeconds = "0" + remainSeconds;
+  }
+
+  useEffect(() => {
     setIsLodading(false);
-  };
-  const h = () => {
-    if (seconds < 3600) {
-      console.log("seconds < 3600");
-      return <span>00</span>;
-    } else {
-      return <span>{String(seconds / 3600).padStart(2, "0")}</span>;
-    }
-  };
-  const m = () => {
-    if (seconds < 60) {
-      console.log("seconds < 60");
-      return <span>00</span>;
-    } else {
-      return <span>{String((seconds % 3600) / 60).padStart(2, "0")}</span>;
-    }
-  };
-  const s = () => {
-    console.log("s");
-    return <span>{String(seconds % 60).padStart(2, "0")}</span>;
-  };
-
-  useEffect(() => {
-    cal();
   }, []);
-  useEffect(() => {
-    if (!isLodaing) {
-      console.log("done");
-    }
-  }, [isLodaing]);
-  // var hour =
-  //   parseInt(seconds / 3600) < 10
-  //     ? "0" + parseInt(seconds / 3600)
-  //     : parseInt(seconds / 3600);
-  // var min =
-  //   parseInt((seconds % 3600) / 60) < 10
-  //     ? "0" + parseInt((seconds % 3600) / 60)
-  //     : parseInt((seconds % 3600) / 60);
-  // var sec = seconds % 60 < 10 ? "0" + (seconds % 60) : seconds % 60;
 
   return (
     <StTimeConvert>
       {!isLodaing && (
         <>
-          {h()}&nbsp;<span>:</span>&nbsp;
-          {m()}&nbsp;<span>:</span>&nbsp;
-          {s()}
+          <span>{hours + ":" + minutes + ":" + remainSeconds}</span>
         </>
       )}
     </StTimeConvert>
@@ -102,14 +74,12 @@ const StTimeComponent = styled.div`
 const StTimeConvert = styled.div`
   display: flex;
 
-  width: 100%;
-  height: 100%;
-
-  span {
+  /* span {
+    font-family: "SUIT Variable";
     font-style: normal;
     font-weight: 600;
     font-size: 2.4rem;
     line-height: 3rem;
     color: ${COLOR.MAIN_BLACK};
-  }
+  } */
 `;

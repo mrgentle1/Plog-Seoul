@@ -2,6 +2,7 @@ import { useCallback, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ReactComponent as BackArrow } from "../../assets/icons/backArrow.svg";
 import { CourseCard } from "../../components/common/CourseCard";
+import Spinner from "../../assets/images/spinner.gif";
 
 import axios from "axios";
 
@@ -13,6 +14,7 @@ function CourseMainPage() {
 
   const [courses, setCourses] = useState([]);
   const [category, setCategory] = useState("전체");
+  const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
   const goBack = useCallback(() => {
@@ -56,6 +58,7 @@ function CourseMainPage() {
       .then((response) => {
         console.log(response);
         setCourses(response.data.result.content);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.error(error);
@@ -81,9 +84,15 @@ function CourseMainPage() {
       </CourseMainCategory>
       <CourseMainContent>
         <CourseList>
-          {filteredCourses.map((data) => (
-            <CourseCard key={data.routeId} c={data} />
-          ))}
+          {isLoading ? (
+            <Loading src={Spinner} alt="로딩중" width="16%" />
+          ) : (
+            <>
+              {filteredCourses.map((data) => (
+                <CourseCard key={data.routeId} c={data} />
+              ))}
+            </>
+          )}
         </CourseList>
       </CourseMainContent>
     </StCourseMainPage>
@@ -148,7 +157,7 @@ const CourseMainCategory = styled.div`
 `;
 const CourseCategory = styled.button`
   margin-right: 0.6rem;
-  width: 14rem;
+  width: 16rem;
   height: 3.6rem;
   border: none;
   border-radius: 0.8rem;
@@ -176,4 +185,13 @@ const CourseMainContent = styled.div`
   margin-top: 8rem;
 `;
 
-const CourseList = styled.div``;
+const Loading = styled.img`
+  margin-top: 2rem;
+`;
+
+const CourseList = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;

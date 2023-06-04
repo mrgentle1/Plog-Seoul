@@ -11,15 +11,21 @@ import {
   LogoutModal,
   ModalBackground2,
 } from "../../components/common/modal/LogoutModal";
+import {
+  DeleteAccountModal,
+  ModalBackground3,
+} from "../../components/common/modal/DeleteAccountModal";
 
 import axios from "axios";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
 function MyPage() {
   const token = localStorage.getItem("key");
   const [user, setUser] = useState([]);
+  const [nickname, setNickname] = useState([]);
 
   const form_url =
     "https://docs.google.com/forms/d/e/1FAIpQLSfVS54a7GgefELlOGcm6GSWRfD7XMD1sg4ar3421iG4PRfG-g/viewform?usp=sf_link";
@@ -38,6 +44,12 @@ function MyPage() {
     setModalOpen2(true);
   };
 
+  // 회원탈퇴 모달창 호출
+  const [modalOpen3, setModalOpen3] = useState(false);
+  const showModal3 = () => {
+    setModalOpen3(true);
+  };
+
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API_ROOT}/api/auth/me`, {
@@ -48,11 +60,12 @@ function MyPage() {
       })
       .then((response) => {
         setUser(response.data.result);
+        setNickname(response.data.result.nickname);
       })
       .catch((error) => {
         console.error(error);
       });
-  }, [user]);
+  });
 
   useEffect(() => {
     setHeaderTitle(user.nickname);
@@ -60,49 +73,62 @@ function MyPage() {
 
   return (
     <>
-      {modalOpen && <NickNameModal setModalOpen={setModalOpen} />}
-      {modalOpen && <ModalBackground />}
-      {modalOpen2 && <LogoutModal setModalOpen2={setModalOpen2} />}
-      {modalOpen2 && <ModalBackground2 />}
-      <StMyPage>
-        <StHeader>
-          <MyEdit onClick={showModal}>닉네임 변경</MyEdit>
-        </StHeader>
-        <StMyInfo>
-          <MyName>{user.name}</MyName>
-          <MyEmail>{user.email}</MyEmail>
-        </StMyInfo>
-        <StMyContent>
-          <Link to="/plog/level">
-            <MyBox1>
-              <MyText>내 포인트</MyText>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        {modalOpen && <NickNameModal setModalOpen={setModalOpen} />}
+        {modalOpen && <ModalBackground />}
+        {modalOpen2 && <LogoutModal setModalOpen2={setModalOpen2} />}
+        {modalOpen2 && <ModalBackground2 />}
+        {modalOpen3 && <DeleteAccountModal setModalOpen3={setModalOpen3} />}
+        {modalOpen3 && <ModalBackground3 />}
+        <StMyPage>
+          <StHeader>
+            <MyEdit onClick={showModal}>닉네임 변경</MyEdit>
+          </StHeader>
+          <StMyInfo>
+            <MyName>{user.name}</MyName>
+            <MyEmail>{user.email}</MyEmail>
+          </StMyInfo>
+          <StMyContent>
+            <Link to="/exchange">
+              <MyBox1>
+                <MyText>포인트 사용</MyText>
+                <ForwardArrow className="forwardArrow" />
+              </MyBox1>
+            </Link>
+            <Link to="/my/notice">
+              <MyBox2>
+                <MyText>공지사항</MyText>
+                <ForwardArrow className="forwardArrow" />
+              </MyBox2>
+            </Link>
+            <MyBox3
+              onClick={() => {
+                window.open(form_url, "_blank");
+              }}
+            >
+              <MyText>문의하기</MyText>
               <ForwardArrow className="forwardArrow" />
-            </MyBox1>
-          </Link>
-          <Link to="/my/notice">
-            <MyBox2>
-              <MyText>공지사항</MyText>
+            </MyBox3>
+            <Link to="/info">
+              <MyBox4>
+                <MyText>서울 두드림길 안내</MyText>
+                <ForwardArrow className="forwardArrow" />
+              </MyBox4>
+            </Link>
+            <MyBox5 onClick={showModal2}>
+              <MyText2>로그아웃</MyText2>
               <ForwardArrow className="forwardArrow" />
-            </MyBox2>
-          </Link>
-          <MyBox3
-            onClick={() => {
-              window.open(form_url, "_blank");
-            }}
-          >
-            <MyText>문의하기</MyText>
-            <ForwardArrow className="forwardArrow" />
-          </MyBox3>
-          <Link to="/info">
-            <MyBox4>
-              <MyText>서울 두드림길 안내</MyText>
-              <ForwardArrow className="forwardArrow" />
-            </MyBox4>
-          </Link>
-          <MyBox5 onClick={showModal2}>로그아웃</MyBox5>
-        </StMyContent>
-        <Footer />
-      </StMyPage>
+            </MyBox5>
+            <MyBox6 onClick={showModal3}>회원탈퇴</MyBox6>
+          </StMyContent>
+          <Footer />
+        </StMyPage>
+      </motion.div>
     </>
   );
 }
@@ -188,6 +214,11 @@ const MyBox4 = styled.div`
 `;
 const MyBox5 = styled.div`
   display: flex;
+  justify-content: space-between;
+  margin-top: 29px;
+`;
+const MyBox6 = styled.div`
+  display: flex;
   margin-top: 46px;
   font-family: "SUIT Variable";
   font-style: normal;
@@ -201,6 +232,14 @@ const MyText = styled.div`
   font-style: normal;
   font-weight: 600;
   font-size: 16px;
+  line-height: 19px;
+  align-items: center;
+`;
+const MyText2 = styled.div`
+  font-family: "SUIT Variable";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 15px;
   line-height: 19px;
   align-items: center;
 `;

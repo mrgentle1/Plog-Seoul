@@ -9,12 +9,9 @@ import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 import { CourseMainCard } from "../../components/common/CourseMainCard";
 import { Link } from "react-router-dom";
+import { Footer } from "../../components/layout/Footer";
 
 function CoursePage() {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   const [headerBackground, setHeaderBackground] = useState("transparent");
 
   useEffect(() => {
@@ -88,6 +85,7 @@ function CoursePage() {
           </Link>
         </StCourseBottom>
       </CourseMain>
+      <Footer />
     </StCoursePage>
   );
 }
@@ -102,14 +100,12 @@ const StCoursePage = styled.div`
 `;
 
 const CourseMain = styled.div`
-  margin-top: -81px;
   width: 100%;
 `;
 const StImgSlide = styled.div`
   position: relative;
   width: 100%;
   height: 356px;
-  background-color: ${COLOR.MEDIUM_GRAY};
   margin-top: 46px;
   margin-bottom: 21px;
 

@@ -1,10 +1,11 @@
 /* global kakao */
-import { useEffect, useState, useRef, useMemo } from "react";
+import { useEffect, useState, useRef, useMemo, useCallback } from "react";
 import { Map, MapMarker, Polyline, useMap } from "react-kakao-maps-sdk";
 import { Button, BorderGreenThinButton } from "../../components/common/Button";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 import { ReactComponent as Close } from "../../assets/icons/close.svg";
+import { ReactComponent as BackArrow } from "../../assets/icons/backArrow.svg";
 import PlogImg from "../../assets/icons/imgMarker.svg";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import axios from "axios";
@@ -34,8 +35,17 @@ function RecordFinishPage() {
   /*point에서 현재 위치 값을 가져와 초기세팅 해줌 */
   const plogRecord = useLocation();
   const recordId = plogRecord.state.recordId;
+  const isShowPlog = plogRecord.state.isShowPlog;
+  const date = plogRecord.state.date;
+  const time = plogRecord.state.time;
+  const index = plogRecord.state.index;
+
   const [userData, setUserData] = useState({
     recordId: recordId,
+    isShowPlog: isShowPlog,
+    date: date,
+    time: time,
+    index: index,
   });
 
   const [isCourse, sestIsCourse] = useState(false);
@@ -53,6 +63,9 @@ function RecordFinishPage() {
   const finish = () => {
     navigate("/record");
   };
+  const goBack = useCallback(() => {
+    navigate(-1);
+  }, [navigate]);
   const [clickImg, setClickImg] = useState("");
   const [imgOpen, setImgOpen] = useState(false);
   const showImgModal = () => {
@@ -60,9 +73,18 @@ function RecordFinishPage() {
   };
 
   const [clickEditImg, setClickEditImg] = useState("");
+  const [recordImgData, setRecordImgData] = useState({});
   const [imgEditOpen, setImgEditOpen] = useState(false);
   const showEditImgModal = () => {
     setImgEditOpen(true);
+  };
+
+  const getImgUrl = (url) => {
+    setClickImg(url);
+  };
+
+  const getData = (data) => {
+    setRecordImgData(data);
   };
 
   return (
@@ -72,31 +94,49 @@ function RecordFinishPage() {
       )}
       {imgOpen && <RecordImgModal setImgOpen={setImgOpen} data={clickImg} />}
       {imgEditOpen && (
-        <EditImgModal setImgEditOpen={setImgEditOpen} data={clickEditImg} />
+        <EditImgModal
+          setImgEditOpen={setImgEditOpen}
+          img={clickImg}
+          data={recordImgData}
+        />
       )}
 
       {(modalOpen || imgOpen || imgEditOpen) && <ModalBackground />}
-      <RecordFinishHeader>
-        <span>
-          {todayMonth}월 {todayDate}일
-        </span>
-        <p>개운산 숲 나들길</p>
-        <CloseWrapper>
-          <Close
-            className="headerClose"
-            onClick={() => {
-              isCourse ? showModal() : showModal();
-            }}
-          />
-        </CloseWrapper>
-      </RecordFinishHeader>
+      {!userData.isShowPlog ? (
+        <RecordFinishHeader>
+          <span>
+            {todayMonth}월 {todayDate}일
+          </span>
+          <p></p>
+          <CloseWrapper>
+            <Close
+              className="headerClose"
+              onClick={() => {
+                isCourse ? showModal() : showModal();
+              }}
+            />
+          </CloseWrapper>
+        </RecordFinishHeader>
+      ) : (
+        <PlogHeader>
+          <BackArrow className="noticeBackArrow" onClick={goBack} />
+          <HeaderText>
+            {date.substring(5, 7)}월 {date.substring(8, 10)}일{" "}
+            {time[index].substring(0, 2)}:{time[index].substring(3, 5)} 기록
+          </HeaderText>
+        </PlogHeader>
+      )}
+
       <ShowRecordData
         recordId={userData.recordId}
         setModalOpen={setModalOpen}
         setImgOpen={setImgOpen}
         setImgEditOpen={setImgEditOpen}
+        getImgUrl={getImgUrl}
+        getData={getData}
       />
-      <StRecordFinish>
+
+      {!userData.isShowPlog ? (
         <RecordFinishFooter>
           <Button
             onClick={() => {
@@ -107,8 +147,19 @@ function RecordFinishPage() {
           </Button>
           <BorderGreenThinButton>공유하기</BorderGreenThinButton>
         </RecordFinishFooter>
-        {/* <RecordFinishFooter setData={setModalOpen} data={modalData} /> */}
-      </StRecordFinish>
+      ) : (
+        <PlogRecordFooter>
+          <Button
+          // onClick={() => {
+          //   isCourse ? showModal() : showModal();
+          // }}
+          >
+            공유하기
+          </Button>
+        </PlogRecordFooter>
+      )}
+
+      {/* <RecordFinishFooter setData={setModalOpen} data={modalData} /> */}
     </>
   );
 }
@@ -119,7 +170,7 @@ const StRecordFinish = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 39.3rem;
+  width: 100vw;
   height: 100vh;
   padding-top: 12.7rem;
   padding-bottom: 20rem;
@@ -137,7 +188,7 @@ const StRecordFinish = styled.div`
 const RecordFinishHeader = styled.div`
   position: fixed;
   top: 0;
-  width: 39.3rem;
+  width: 100%;
   height: 12.7rem;
 
   display: grid;
@@ -150,7 +201,7 @@ const RecordFinishHeader = styled.div`
 
   background-color: ${COLOR.MAIN_WHITE};
 
-  z-index: 100;
+  z-index: 500;
 
   span {
     font-style: normal;
@@ -182,125 +233,36 @@ const CloseWrapper = styled.div`
   }
 `;
 
-const ContentsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  position: relative;
+const PlogHeader = styled.div`
+  position: fixed;
+  top: 0;
+  width: 39.3rem;
+  height: 11.8rem;
+  background: ${COLOR.MAIN_WHITE};
+  z-index: 100;
 
-  width: 100%;
-
-  padding-bottom: 12.2rem;
-
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-
-  ::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera*/
-  }
-`;
-
-const MapContainer = styled.div`
-  display: flex;
-  position: relative;
-  overflow: hidden;
-
-  width: 100%;
-  height: 23.6rem;
-  border-radius: 1.4rem;
-
-  & > .MapWrapper {
-    position: relative;
-    overflow: hidden;
-  }
-`;
-const DetailDataContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 2.4rem;
-
-  width: 100%;
-
-  padding-top: 2.4rem;
-  padding-bottom: 2.4rem;
-
-  span {
-    font-family: "SUIT Variable";
-    font-style: normal;
-    font-weight: 600;
-    font-size: 2.4rem;
-    line-height: 3rem;
-    color: ${COLOR.MAIN_BLACK};
-  }
-
-  p {
-    font-family: "SUIT Variable";
-    font-style: normal;
-    font-weight: 500;
-    font-size: 1.3rem;
-    line-height: 1.6rem;
-    color: ${COLOR.INPUT_BORDER_GRAY};
-  }
-`;
-
-const sharedDataContainerStyle = `display: flex;
-flex-direction: column;
-gap: 0.6rem;`;
-
-const TimeDataContainer = styled.div`
-  ${sharedDataContainerStyle}
-`;
-const OtherDataContainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-`;
-const DistDataContainer = styled.div`
-  ${sharedDataContainerStyle}
-`;
-const CalorieDataContainer = styled.div`
-  ${sharedDataContainerStyle}
-`;
-const PhotoCountDataContainer = styled.div`
-  ${sharedDataContainerStyle}
-`;
-
-const PhotoGridContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  width: 100%;
-
-  padding-top: 2rem;
-  gap: 0.8rem;
-
-  border-top: 0.1rem solid ${COLOR.MAIN_GREEN};
-`;
-
-const PhotoWrapper = styled.div`
-  img {
-    width: 10.9rem;
-    height: 10.9rem;
-    object-fit: cover;
-  }
-`;
-
-const NonePhotoWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 
-  width: 100%;
-  height: 20rem;
+  padding: 0rem 2rem;
+  gap: 2.4rem;
 
-  p {
-    font-family: "SUIT Variable";
-    font-style: normal;
-    font-weight: 500;
-    font-size: 1.3rem;
-    line-height: 1.6rem;
-    color: ${COLOR.INPUT_BORDER_GRAY};
+  .noticeBackArrow {
+    /* margin-top: 40px;
+    margin-left: 20px; */
   }
 `;
+const HeaderText = styled.div`
+  font-family: "SUIT Variable";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 2rem;
+  line-height: 2.5rem;
+  color: ${COLOR.MAIN_BLACK};
+`;
+
 const RecordFinishFooter = styled.div`
   display: flex;
   position: fixed;
@@ -308,29 +270,23 @@ const RecordFinishFooter = styled.div`
   justify-content: center;
   align-items: center;
   bottom: 0;
-  padding: 0rem 0.6rem 2rem 2rem;
+  padding: 0rem 2rem 0.6rem 2rem;
   gap: 1.2rem;
 
-  width: 39.3rem;
-  z-index: 20rem;
+  width: 100%;
+  z-index: 500;
 `;
 
-const PlogFinishBtnWrapper = styled.div`
+const PlogRecordFooter = styled.div`
   display: flex;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 1.5rem;
-  line-height: 1.9rem;
+  position: fixed;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  bottom: 0;
+  padding: 0rem 2rem 2rem 2rem;
+  gap: 1.2rem;
 
-  text-align: center;
-  color: ${COLOR.MAIN_BLACK};
-`;
-
-const PlogShareBtnWrapper = styled.div`
-  display: flex;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 1.5rem;
-  line-height: 1.9rem;
-  text-align: center;
+  width: 100%;
+  z-index: 500;
 `;

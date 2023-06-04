@@ -5,6 +5,7 @@ import { CourseSeasonCard } from "../../components/common/CourseSeasonCard";
 
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
+import { motion } from "framer-motion";
 import axios from "axios";
 
 function SeasonCoursePage() {
@@ -38,17 +39,29 @@ function SeasonCoursePage() {
   console.log(courses);
 
   return (
-    <StSeasonCoursePage>
-      <SeasonHeader>
-        <BackArrow className="noticeBackArrow" onClick={goBack} />
-        <HeaderText>계절별 추천 코스</HeaderText>
-      </SeasonHeader>
-      <SeasonContent>
-        {courses.map((data) => (
-          <CourseSeasonCard key={data.RNUM} c={data} />
-        ))}
-      </SeasonContent>
-    </StSeasonCoursePage>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.6 }}
+    >
+      <StSeasonCoursePage>
+        <SeasonHeader>
+          <BackArrow className="noticeBackArrow" onClick={goBack} />
+          <HeaderText>계절별 추천 코스</HeaderText>
+        </SeasonHeader>
+        <SeasonContent>
+          {courses.map((data, index) => (
+            <CourseSeasonCard
+              key={data.RNUM}
+              index={data.RNUM}
+              c={data}
+              isLastCard={index === courses.length - 1} // 마지막 아이템인 경우 isLastCard를 true로 설정
+            />
+          ))}
+        </SeasonContent>
+      </StSeasonCoursePage>
+    </motion.div>
   );
 }
 export default SeasonCoursePage;

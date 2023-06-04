@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { ReactComponent as Ranking1st } from "../../assets/icons/ranking1st.svg";
+import { ReactComponent as Ranking1stNotME } from "../../assets/icons/ranking1stBlack.svg";
 
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 
-export const RankingBarGraph = ({ num, bgColor, max }) => {
+export const RankingBarGraph = ({ num, bgColor, max, user, myId, hasData }) => {
   const [height, setHeight] = useState(0);
   const [showNumber, setShowNumber] = useState(false);
   const [showIcon, setShowIcon] = useState(false);
 
   useEffect(() => {
     increaseHeight();
-    console.log("3", showIcon, num);
+    //console.log("3", showIcon, num);
     // setShowIcon(true);
     // console.log("4", showIcon, num);
     const timer = setTimeout(() => {
@@ -30,16 +31,16 @@ export const RankingBarGraph = ({ num, bgColor, max }) => {
   const increaseHeight = () => {
     setHeight(max); // 막대 그래프의 최대 높이로 설정합니다.
     setShowNumber(true); // 숫자 1을 표시합니다.
-    console.log("1", showIcon, num);
+    //console.log("1", showIcon, num);
     setShowIcon(true);
-    console.log("2", showIcon, num);
+    //console.log("2", showIcon, num);
   };
 
   return (
     <StRankingBarGraph>
       {num === 1 && (
         <RankingIcon visible={showIcon ? 1 : 0}>
-          <Ranking1st />
+          {hasData && user === myId ? <Ranking1st /> : <Ranking1stNotME />}
         </RankingIcon>
       )}
       <BarWrapper>

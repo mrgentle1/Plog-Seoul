@@ -19,6 +19,7 @@ public class UserResponseDto {
     private String nickname;
     private String gender;
     private Integer point;
+    private Integer totalPoint;
     private Integer level;
     private String role;
     private Boolean isFirst;
@@ -33,6 +34,7 @@ public class UserResponseDto {
         this.nickname = user.getNickname();
         this.gender = user.getGender();
         this.point = user.getPoint();
+        this.totalPoint = user.getTotalPoint();
         this.level = user.getLevel();
         this.role = user.getRole();
         this.isFirst = user.getIsFirst();

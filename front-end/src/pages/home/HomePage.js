@@ -14,6 +14,7 @@ import { todayMonth, year } from "../../core/date.js";
 import axios from "axios";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { userIdNumber, usePersistRecoilState } from "../../core/userId";
 
@@ -46,7 +47,6 @@ function HomePage() {
       })
       .then((response) => {
         setUser(response.data.result);
-        console.log(user);
         setPoint(response.data.result.point);
       })
       .catch((error) => {
@@ -71,7 +71,7 @@ function HomePage() {
       .catch((error) => {
         console.error(error);
       });
-  });
+  }, []);
 
   const headertext = "안녕하세요, " + user.nickname + "님!";
   useEffect(() => {
@@ -86,59 +86,140 @@ function HomePage() {
   plogging.map((data) => (distance += data.distance));
   distance = distance.toFixed(2);
 
+  const real_runningTime = Math.floor(runningTime / 60);
+
+  // Animation
+  const greenBoxVariants = {
+    hover: {
+      backgroundColor: `${COLOR.MAIN_GREEN_HOVER}`,
+      border: `${COLOR.MAIN_GREEN_HOVER}`,
+      scale: 0.97,
+    },
+    rest: {
+      backgroundColor: `${COLOR.MAIN_GREEN}`,
+      scale: 1,
+    },
+  };
+
+  const whiteBoxVariants = {
+    hover: {
+      backgroundColor: `${COLOR.MAIN_WHITE_HOVER}`,
+      border: `${COLOR.MAIN_WHITE_HOVER}`,
+      scale: 0.97,
+    },
+    rest: {
+      backgroundColor: `${COLOR.MAIN_WHITE}`,
+      scale: 1,
+    },
+  };
+
   return (
-    <StHomePage>
-      <Box1>
-        <Link to="/home/season">
-          <LeftBox1>
-            <Flag className="flag" />
-            <Text1>계절별 추천 코스</Text1>
-            <Arrow className="arrow" />
-          </LeftBox1>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.6 }}
+    >
+      <StHomePage>
+        <Link to="/record">
+          <Box4
+            variants={greenBoxVariants}
+            whileHover="hover"
+            whileTap="hover"
+            whileFocus="hover"
+            initial="rest"
+            animate="rest"
+          >
+            <Record className="record" />
+            <div className="box4">
+              <Text7>오늘도 주워볼까요?</Text7>
+              <HomeButton className="homeButton" />
+            </div>
+          </Box4>
         </Link>
-        <Link to="/info">
-          <RightBox1>
-            <Footprint className="footprint" />
-            <Text2>서울두드림길이란?</Text2>
-            <Arrow className="arrow" />
-          </RightBox1>
-        </Link>
-      </Box1>
-      <Link to="/plog/level">
-        <Box2>
-          <Level className="level" />
-          <LevelBox>
-            <Text3>Level {user.level}</Text3>
-            <Text4>다음 레벨까지 {1000 - point} 포인트</Text4>
-          </LevelBox>
-          <LevelBar />
-          <LevelBar2 width={levelBarWidth} />
-        </Box2>
-      </Link>
-      <Box3>
-        <Tree className="tree" />
-        <Text5>
-          <Ploging>{todayMonth}월 플로깅</Ploging>
-          <Time>걸은 시간</Time>
-          <Dis>걸은 거리</Dis>
-        </Text5>
-        <Text6>
-          <Ploging2>{plogging.length}번</Ploging2>
-          <Time2>{runningTime}분</Time2>
-          <Dis2>{distance}km</Dis2>
-        </Text6>
-      </Box3>
-      <Link to="/record">
-        <Box4>
-          <Record className="record" />
-          <div className="box4">
-            <Text7>오늘도 주워볼까요?</Text7>
-            <HomeButton className="homeButton" />
+        <Box1>
+          <div className="infotext">
+            <span>코스 추천</span>이 필요한가요?
           </div>
-        </Box4>
-      </Link>
-      <Footer />
-    </StHomePage>
+          <Link to="/home/season">
+            <LeftBox1
+              variants={whiteBoxVariants}
+              whileHover="hover"
+              whileTap="hover"
+              whileFocus="hover"
+              initial="rest"
+              animate="rest"
+            >
+              <Flag className="flag" />
+              <Text1>계절별 추천 코스</Text1>
+              <Arrow className="arrow" />
+            </LeftBox1>
+          </Link>
+          <Link to="/info">
+            <RightBox1
+              variants={whiteBoxVariants}
+              whileHover="hover"
+              whileTap="hover"
+              whileFocus="hover"
+              initial="rest"
+              animate="rest"
+            >
+              <Footprint className="footprint" />
+              <Text2>서울두드림길이란?</Text2>
+              <Arrow className="arrow" />
+            </RightBox1>
+          </Link>
+        </Box1>
+        <div className="infotext">
+          <span>나의 플로그</span> 확인이 필요한가요?
+        </div>
+        <Link to="/plog">
+          <Box3
+            variants={whiteBoxVariants}
+            whileHover="hover"
+            whileTap="hover"
+            whileFocus="hover"
+            initial="rest"
+            animate="rest"
+          >
+            <Tree className="tree" />
+            <Text5>
+              <Ploging>{todayMonth}월 플로깅</Ploging>
+              <Time>걸은 시간</Time>
+              <Dis>걸은 거리</Dis>
+            </Text5>
+            <Text6>
+              <Ploging2>{plogging.length}번</Ploging2>
+              <Time2>{real_runningTime}분</Time2>
+              <Dis2>{distance}km</Dis2>
+            </Text6>
+          </Box3>
+        </Link>
+
+        <Box2
+          variants={whiteBoxVariants}
+          whileHover="hover"
+          whileTap="hover"
+          whileFocus="hover"
+          initial="rest"
+          animate="rest"
+        >
+          <Link to="/plog/level">
+            <Box22>
+              <Level className="level" />
+              <LevelBox>
+                <Text3>Level {user.level}</Text3>
+                <Text4>다음 레벨까지 {1000 - point} 포인트</Text4>
+              </LevelBox>
+              <LevelBar />
+              <LevelBar2 width={levelBarWidth} />
+            </Box22>
+          </Link>
+        </Box2>
+
+        <Footer />
+      </StHomePage>
+    </motion.div>
   );
 }
 
@@ -148,25 +229,52 @@ const StHomePage = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
+  height: 100%;
+  .infotext {
+    width: 100%;
+    text-align: left;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-family: "SUIT Variable";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    color: ${COLOR.INPUT_BORDER_GRAY};
+    span {
+      color: ${COLOR.MAIN_BLACK};
+    }
+  }
 `;
-const Box1 = styled.div`
+const Box1 = styled(motion.div)`
   width: 100%;
-  height: 12.1rem;
+  height: 17.1rem;
   margin-bottom: 1.3rem;
+  .infotext {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-family: "SUIT Variable";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    color: ${COLOR.INPUT_BORDER_GRAY};
+    span {
+      color: ${COLOR.MAIN_BLACK};
+    }
+  }
 `;
-const LeftBox1 = styled.div`
+const LeftBox1 = styled(motion.div)`
   float: left;
   width: 17rem;
   height: 12.1rem;
   border-radius: 1.4rem;
   background-color: ${COLOR.MAIN_WHITE};
   padding: 1.2rem 1.6rem;
+  box-shadow: 0px 0px 10px 6px rgba(0, 0, 0, 0.03);
 
   .flag {
     width: 2.3rem;
     height: 2.3rem;
     margin-bottom: 1.2rem;
-    color: ${COLOR.DARK_GRAY};
   }
   .arrow {
     margin-top: 1.5rem;
@@ -176,7 +284,7 @@ const LeftBox1 = styled.div`
     margin-bottom: 1rem;
   }
 `;
-const Text1 = styled.div`
+const Text1 = styled.p`
   font-family: "SUIT Variable";
   font-style: normal;
   font-weight: 600;
@@ -185,7 +293,7 @@ const Text1 = styled.div`
   color: ${COLOR.MAIN_BLACK};
 `;
 
-const RightBox1 = styled.div`
+const RightBox1 = styled(motion.div)`
   float: right;
   width: 17rem;
   height: 12.1rem;
@@ -193,11 +301,11 @@ const RightBox1 = styled.div`
   background: ${COLOR.MAIN_WHITE};
   border-radius: 1.4rem;
   padding: 1.2rem 1.6rem;
+  box-shadow: 0px 0px 10px 6px rgba(0, 0, 0, 0.03);
 
   .footprint {
     width: 2.3rem;
     height: 2.3rem;
-    color: ${COLOR.DARK_GRAY};
     margin-bottom: 1.2rem;
   }
   .arrow {
@@ -208,7 +316,7 @@ const RightBox1 = styled.div`
     margin-bottom: 1rem;
   }
 `;
-const Text2 = styled.div`
+const Text2 = styled.p`
   font-family: "SUIT Variable";
   font-style: normal;
   font-weight: 600;
@@ -216,20 +324,21 @@ const Text2 = styled.div`
   line-height: 1.9rem;
   color: ${COLOR.MAIN_BLACK};
 `;
-const Box2 = styled.div`
-  margin-bottom: 1.3rem;
+const Box2 = styled(motion.div)`
+  margin-bottom: 13rem;
   width: 35.3rem;
   height: 10.1rem;
   background: ${COLOR.MAIN_WHITE};
   border-radius: 1.4rem;
   padding: 1.5rem 1.6rem;
+  box-shadow: 0px 0px 10px 6px rgba(0, 0, 0, 0.03);
   .level {
     width: 1.9rem;
     height: 2rem;
     margin-bottom: 1.2rem;
-    color: ${COLOR.DARK_GRAY};
   }
 `;
+const Box22 = styled(motion.div)``;
 const LevelBox = styled.div`
   display: flex;
   justify-content: space-between;
@@ -249,7 +358,7 @@ const LevelBar2 = styled.div`
   border-radius: 0.5rem;
   z-index: 1;
 `;
-const Text3 = styled.div`
+const Text3 = styled.p`
   font-family: "SUIT Variable";
   font-style: normal;
   font-weight: 600;
@@ -257,7 +366,7 @@ const Text3 = styled.div`
   line-height: 1.9rem;
   color: ${COLOR.MAIN_GREEN};
 `;
-const Text4 = styled.div`
+const Text4 = styled.p`
   font-family: "SUIT Variable";
   font-style: normal;
   font-weight: 500;
@@ -265,18 +374,18 @@ const Text4 = styled.div`
   line-height: 1.6rem;
   color: ${COLOR.DARK_GRAY};
 `;
-const Box3 = styled.div`
-  margin-bottom: 1.3rem;
+const Box3 = styled(motion.div)`
   width: 35.3rem;
   height: 12.1rem;
+  margin-bottom: 1.3rem;
   border-radius: 1.4rem;
   padding: 1.4rem 1.9rem;
   background-color: ${COLOR.MAIN_WHITE};
+  box-shadow: 0px 0px 10px 6px rgba(0, 0, 0, 0.03);
 
   .tree {
     width: 2.5rem;
     height: 2.5rem;
-    color: ${COLOR.DARK_GRAY};
     margin-bottom: 1rem;
   }
 `;
@@ -289,44 +398,75 @@ const Text5 = styled.div`
   font-size: 1.5rem;
   line-height: 1.9rem;
 `;
-const Ploging = styled.div`
+const Ploging = styled.p`
   width: 9.9rem;
+  color: ${COLOR.MAIN_BLACK};
+  font-family: "SUIT Variable";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 19px;
 `;
-const Time = styled.div`
+const Time = styled.p`
   width: 9.9rem;
+  color: ${COLOR.MAIN_BLACK};
+  font-family: "SUIT Variable";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 19px;
 `;
-const Dis = styled.div`
+const Dis = styled.p`
   width: 9.9rem;
+  color: ${COLOR.MAIN_BLACK};
+  font-family: "SUIT Variable";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 19px;
 `;
 const Text6 = styled.div`
   display: flex;
   justify-content: space-between;
   margin-top: 1rem;
+`;
+const Ploging2 = styled.p`
+  width: 9.9rem;
+  color: ${COLOR.MAIN_GREEN};
   font-family: "SUIT Variable";
   font-style: normal;
   font-weight: 600;
-  font-size: 2.4rem;
-  line-height: 3rem;
+  font-size: 21px;
+  line-height: 30px;
+`;
+const Time2 = styled.p`
+  width: 9.9rem;
   color: ${COLOR.MAIN_GREEN};
+  font-family: "SUIT Variable";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 21px;
+  line-height: 30px;
 `;
-const Ploging2 = styled.div`
+const Dis2 = styled.p`
   width: 9.9rem;
+  color: ${COLOR.MAIN_GREEN};
+  font-family: "SUIT Variable";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 21px;
+  line-height: 30px;
 `;
-const Time2 = styled.div`
-  width: 9.9rem;
-`;
-const Dis2 = styled.div`
-  width: 9.9rem;
-`;
-const Box4 = styled.div`
+const Box4 = styled(motion.div)`
   display: flex;
   width: 35.3rem;
   height: 10.1rem;
-  margin-bottom: 12rem;
+  margin-bottom: 1.3rem;
   background: ${COLOR.MAIN_GREEN};
   border: 0.2rem solid ${COLOR.MAIN_GREEN};
   border-radius: 1.4rem;
   padding: 1.35rem 1.9rem;
+  box-shadow: 0px 0px 7px 5px rgba(0, 0, 0, 0.1);
   .record {
     width: 2.7rem;
     height: 2.7rem;
@@ -341,7 +481,7 @@ const Box4 = styled.div`
     justify-content: space-between;
   }
 `;
-const Text7 = styled.div`
+const Text7 = styled.p`
   margin-top: 1.45rem;
   margin-left: -2.5rem;
   font-family: "SUIT Variable";

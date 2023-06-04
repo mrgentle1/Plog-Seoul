@@ -29,9 +29,7 @@ import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -232,23 +230,46 @@ public class PloggingService {
         return new BaseResponseEntity<>(HttpStatus.OK);
     }
 
-    public BaseResponseEntity<List<WeeklyRankingDto>> getWeeklyRankings() {
+
+    // Weekly Ranking
+    public enum SortBy {
+        TOTAL_DISTANCE,
+        TOTAL_RUNNING_TIME,
+    }
+
+    public BaseResponseEntity<?> getWeeklyRankings(String email, SortBy sortBy) {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime startOfWeek = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
         LocalDateTime endOfWeek = now.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
 
-        List<Object[]> weeklyDistances = ploggingRecordRepository.findWeeklyDistanceByUser(startOfWeek, endOfWeek);
+        List<Object[]> weeklyRanking = new ArrayList<>();
+
+        if (sortBy == SortBy.TOTAL_DISTANCE)
+            weeklyRanking = ploggingRecordRepository.findWeeklyDistanceByUser(startOfWeek, endOfWeek);
+        else if (sortBy == SortBy.TOTAL_RUNNING_TIME)
+            weeklyRanking = ploggingRecordRepository.findWeeklyRunningTimeByUser(startOfWeek, endOfWeek);
+
+        Long myRank = 0L;
 
         List<WeeklyRankingDto> rankings = new ArrayList<>();
         int rank = 1;
-        for (Object[] record : weeklyDistances) {
+        for (Object[] record : weeklyRanking) {
             User user = (User) record[0];
             Float totalDistance = ((Number) record[1]).floatValue();
+            Float totalRunningTime = ((Number) record[2]).floatValue();
 
-            rankings.add(new WeeklyRankingDto(rank, user.getUserId(), user.getNickname(), user.getLevel(), totalDistance));
+            rankings.add(new WeeklyRankingDto(rank, user.getUserId(), user.getNickname(), user.getLevel(), totalDistance, totalRunningTime));
+            if (user.getEmail().equals(email)) {
+                myRank = (long) rank;
+            }
             rank++;
         }
 
-        return new BaseResponseEntity<>(HttpStatus.OK, rankings);
+        HashMap<String, Object> map = new LinkedHashMap<>();
+        map.put("sortBy", sortBy);
+        map.put("myRank", myRank);
+        map.put("rankings", rankings);
+
+        return new BaseResponseEntity<>(HttpStatus.OK, map);
     }
 }

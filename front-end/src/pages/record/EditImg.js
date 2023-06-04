@@ -1,22 +1,30 @@
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useCallback, useState, useRef } from "react";
 import { ReactComponent as Filter } from "../../assets/icons/filterWhite.svg";
 import { ReactComponent as ReverseFilter } from "../../assets/icons/filterWhiteReverse.svg";
+import { ReactComponent as FilterAdd } from "../../assets/icons/filterAdd.svg";
+
+import axios from "axios";
 
 import { ReactComponent as Logo } from "../../assets/icons/smallLogo.svg";
+import { ReactComponent as Timer } from "../../assets/icons/timerIcon.svg";
 import html2canvas from "html2canvas";
 import { ReactComponent as Close } from "../../assets/icons/arrow_white_btn.svg";
 import { useNavigate, useHistory } from "react-router-dom";
 import { Button } from "../../components/common/Button";
+import { TimeConvert } from "../../components/Record/TimeComponent";
 
-export const EditImgModal = ({ setImgEditOpen, data }) => {
+export const EditImgModal = ({ setImgEditOpen, img, data }) => {
+  const token = localStorage.getItem("key");
   const navigate = useNavigate();
   const goBack = () => {
     navigate("/record/finish");
   };
 
   const [isReverse, setIsReverse] = useState(false);
+  const [filterImg, setFilterImg] = useState();
+  const isClick = useRef(false);
 
   // 경로
   const pathname = window.location.pathname;
@@ -29,6 +37,59 @@ export const EditImgModal = ({ setImgEditOpen, data }) => {
   const checkModal = () => {
     setImgEditOpen(false);
   };
+
+  const dataURLtoFile = (dataurl, fileName) => {
+    var arr = dataurl.split(","),
+      mime = arr[0].match(/:(.*?);/)[1],
+      bstr = atob(arr[1]),
+      n = bstr.length,
+      u8arr = new Uint8Array(n);
+
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+
+    return new File([u8arr], fileName, { type: mime });
+  };
+
+  /* POST - Record Img */
+
+  const [imgData, setImgData] = useState([]);
+  async function postImgData(img) {
+    // async, await을 사용하는 경우
+    let formData = new FormData();
+    let file = dataURLtoFile(img, "image.png");
+    formData.append("image", file);
+
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_ROOT}/api/images/`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log("success Post");
+      console.log(response.data.result);
+      try {
+        if (window.Android) {
+          console.log("Android shareInstagram");
+          window.Android.shareInstagram(response.data.result);
+        }
+      } catch (e) {
+        console.error(e);
+        console.log("Android shareInstagram error");
+      }
+    } catch (e) {
+      // 실패 시 처리
+      console.error(e);
+      console.log(img);
+      alert("이미지 업로드 실패. 재시도해주세요.");
+    }
+  }
 
   useEffect(() => {
     document.body.style.cssText = `
@@ -43,13 +104,23 @@ export const EditImgModal = ({ setImgEditOpen, data }) => {
     };
   }, []);
 
+  // useEffect(() => {
+  //   if (isClick.current) {
+  //     postImgData();
+  //   }
+  // }, [filterImg]);
+
   const onCapture = () => {
     console.log("onCapture");
     html2canvas(document.getElementById("imgFrame"), {
+      imageTimeout: 15000, //newline
+      scale: 3, //newline
       allowTaint: true,
       useCORS: true,
     }).then((canvas) => {
-      onSaveAs(canvas.toDataURL("image/png"), "image-download.png");
+      // setFilterImg(canvas.toDataURL("image/png"));
+      postImgData(canvas.toDataURL("image/png"));
+      // onSaveAs(canvas.toDataURL("image/png"), "image-download.png");
     });
   };
 
@@ -58,6 +129,7 @@ export const EditImgModal = ({ setImgEditOpen, data }) => {
     var link = document.createElement("a");
     document.body.appendChild(link);
     link.href = uri;
+    console.log("uri", uri);
     link.download = filename;
     link.click();
     document.body.removeChild(link);
@@ -75,7 +147,6 @@ export const EditImgModal = ({ setImgEditOpen, data }) => {
           />
         </ModalCloseWrapper>
         <ModalContents>
-          <SelectFilter></SelectFilter>
           <ModalImg
             id="imgFrame"
             onClick={() => {
@@ -84,25 +155,35 @@ export const EditImgModal = ({ setImgEditOpen, data }) => {
               });
             }}
           >
-            {/* <img src={data} alt="img"></img> */}
-            <SelectImg image={data}></SelectImg>
-            {/* <SelectImg
-              className="Select"
-              style={`background-image: url(${data})`}
-            ></SelectImg> */}
-            {isReverse ? (
+            <SelectImg image={img}></SelectImg>
+            <FilterAdd className="FilterImg" />
+
+            {/* {isReverse ? (
               <ReverseFilter className="FilterImg" />
             ) : (
               <Filter className="FilterImg" />
-            )}
+            )} */}
+            <BottomFilterContainer>
+              <RunTimeContainer>
+                <IconWrapper>
+                  <Timer className="Icon" />
+                </IconWrapper>
+                <TimeWrapper>
+                  <TimeConvert className="TimeText" time={data.time} />
+                </TimeWrapper>
+              </RunTimeContainer>
+              <DistContainer>
+                <p className="DistText">{data.dist}</p>
+                <p className="DistUnitText">KM</p>
+              </DistContainer>
+            </BottomFilterContainer>
 
-            {/* <Logo className="LogoImg" /> */}
-            <p className="DistText">1.23KM</p>
-            <p className="DateText">2023년 5월 18일</p>
+            {/* <p className="DateText">{data.when}</p> */}
           </ModalImg>
           <ModalButton>
             <Button
               onClick={() => {
+                isClick.current = true;
                 onCapture();
               }}
             >
@@ -123,10 +204,11 @@ const ModalContainer = styled.div`
   padding: 4.6rem 2rem 0rem 2rem;
   z-index: 2000;
 
-  position: absolute;
-
+  position: fixed;
+  width: 100vw;
   height: 100vh;
   top: 0;
+  /* overflow-y: hidden; */
 
   /* top: 50%;
   left: 50%; */
@@ -166,20 +248,25 @@ const SelectFilter = styled.div`
 const ModalImg = styled.div`
   display: flex;
   position: relative;
-  width: 35.3rem;
-  height: 35.3rem;
+  width: 100%;
   align-items: center;
-  justify-content: center;
 
-  img {
+  ::after {
+    display: block;
+    content: "";
+    padding-bottom: 100%;
+  }
+
+  /* img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     position: absolute;
-  }
+  } */
   .FilterImg {
-    width: 35.3rem;
-    height: 35.3rem;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
     display: flex;
     position: absolute;
   }
@@ -198,23 +285,102 @@ const ModalImg = styled.div`
     width: 35.3rem;
     height: 35.3rem;
   }
-  p {
+
+  /* p {
     display: flex;
     position: absolute;
     bottom: 2rem;
     font-family: "SUIT Variable";
     font-style: normal;
-    font-weight: 700;
-    font-size: 1.7rem;
-    line-height: 2.1rem;
+    font-weight: 900;
+    font-size: 20px;
+    line-height: 25px;
     text-align: center;
-    color: ${COLOR.MAIN_BLACK};
+    color: ${COLOR.MAIN_WHITE};
 
     &.DistText {
-      left: 1.6rem;
+      right: 1.6rem;
     }
     &.DateText {
       right: 1.6rem;
+    }
+  } */
+`;
+const BottomFilterContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  bottom: 2rem;
+  position: absolute;
+  width: 100%;
+  padding-left: 1.6rem;
+  padding-right: 1.6rem;
+  p {
+    display: flex;
+
+    font-family: "SUIT Variable";
+    font-style: normal;
+    font-weight: 900;
+    font-size: 20px;
+    line-height: 25px;
+    text-align: center;
+    color: ${COLOR.MAIN_WHITE};
+  }
+`;
+
+const RunTimeContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  width: 100%;
+  height: 100%;
+
+  gap: 0.3rem;
+`;
+
+const IconWrapper = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  /* padding-top: 0.1rem; */
+  padding: 0;
+`;
+
+const TimeWrapper = styled.span`
+  display: flex;
+  font-family: "SUIT Variable";
+  font-style: normal;
+  font-weight: 900;
+  font-size: 20px;
+  line-height: 25px;
+  color: ${COLOR.MAIN_WHITE};
+`;
+
+const DistContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 0.4rem;
+
+  p {
+    display: flex;
+    font-family: "SUIT Variable";
+    font-style: normal;
+    text-align: center;
+    color: ${COLOR.MAIN_WHITE};
+
+    &.DistText {
+      font-weight: 900;
+      font-size: 20px;
+      line-height: 25px;
+    }
+    &.DistUnitText {
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 20px;
     }
   }
 `;
@@ -222,8 +388,8 @@ const ModalImg = styled.div`
 const SelectImg = styled.div`
   display: flex;
   position: absolute;
-  width: 35.3rem;
-  height: 35.3rem;
+  width: 100%;
+  padding-bottom: 100%;
   background-position: center;
   background-size: cover;
   background-image: url(${(props) => props.image});
@@ -232,4 +398,5 @@ const SelectImg = styled.div`
 const ModalButton = styled.div`
   display: flex;
   flex-direction: row;
+  width: 100%;
 `;

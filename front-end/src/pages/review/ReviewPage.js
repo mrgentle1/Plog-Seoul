@@ -3,6 +3,9 @@ import { useNavigate, Link } from "react-router-dom";
 import { ReactComponent as BackArrow } from "../../assets/icons/backArrow.svg";
 import { ReactComponent as Pencil } from "../../assets/icons/pencil.svg";
 import { ReactComponent as Star } from "../../assets/icons/star.svg";
+import { ReactComponent as HalfStar } from "../../assets/icons/halfstar.svg";
+import { ReactComponent as QuarterStar } from "../../assets/icons/quarterstar.svg";
+import { ReactComponent as ThreeQuarterStar } from "../../assets/icons/threequartersstar.svg";
 import { ReviewCard } from "../../components/common/ReviewCard";
 
 import axios from "axios";
@@ -61,7 +64,10 @@ function ReviewPage() {
       .catch((error) => {
         console.error(error);
       });
-  }, [reviews]);
+  }, []);
+
+  const reviewSum = course.reviewSum / course.reviewCnt;
+  const filledStars = Math.floor(reviewSum);
 
   return (
     <StReviewPage>
@@ -87,12 +93,25 @@ function ReviewPage() {
         ) : (
           <>
             <ReviewStar>
-              {[...Array(5)].map(
-                (_, index) =>
-                  index < course.reviewSum && (
-                    <Star key={index} className="star" />
-                  )
-              )}
+              <h1>
+                {reviewSum % 0.5 === 0
+                  ? reviewSum.toFixed(1)
+                  : reviewSum.toFixed(2)}
+              </h1>
+              {[...Array(5)].map((_, index) => {
+                if (index < filledStars) {
+                  return <Star key={index} className="star" />;
+                } else if (index === filledStars) {
+                  if (reviewSum - filledStars >= 0.65) {
+                    return <ThreeQuarterStar key={index} className="star" />;
+                  } else if (reviewSum - filledStars >= 0.35) {
+                    return <HalfStar key={index} className="star" />;
+                  } else if (reviewSum - filledStars > 0) {
+                    return <QuarterStar key={index} className="star" />;
+                  }
+                }
+                return null;
+              })}
             </ReviewStar>
             <ReviewList>
               {reviews.map((data) => (
@@ -120,7 +139,7 @@ const ReviewHeader = styled.div`
   position: fixed;
   top: 0;
   width: 100%;
-  height: 127px;
+  height: 105px;
   padding-left: 20px;
   padding-right: 20px;
 
@@ -136,10 +155,10 @@ const ReviewBox1 = styled.div`
   display: flex;
 
   .backArrow {
-    margin-top: 45px;
+    margin-top: 53px;
   }
   h1 {
-    margin-top: 42px;
+    margin-top: 49px;
     margin-left: 20px;
     font-family: "SUIT Variable";
     font-style: normal;
@@ -148,7 +167,7 @@ const ReviewBox1 = styled.div`
     line-height: 25px;
   }
   h4 {
-    margin-top: 44px;
+    margin-top: 51px;
     margin-left: 6px;
     font-family: "SUIT Variable";
     font-style: normal;
@@ -162,7 +181,7 @@ const ReviewBox2 = styled.div`
   display: flex;
   justify-content: space-between;
   width: 110px;
-  margin-top: 44px;
+  margin-top: 53px;
 
   h5 {
     font-family: "SUIT Variable";
@@ -179,11 +198,13 @@ const ReviewBox2 = styled.div`
   }
 `;
 const ReviewMain = styled.div`
-  margin-top: 44px;
+  margin-left: 20px;
+  margin-right: 20px;
+  width: 100%;
+  margin-top: 10px;
   padding-bottom: 30px;
   .noReview {
     margin-top: 300px;
-
     h5 {
       font-family: "SUIT Variable";
       font-style: normal;
@@ -207,7 +228,17 @@ const ReviewMain = styled.div`
 `;
 const ReviewStar = styled.div`
   display: flex;
+  align-items: center;
   margin-top: 12px;
+  h1 {
+    margin-left: 20px;
+    margin-right: 8px;
+    font-family: "SUIT Variable";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 16px;
+  }
   h5 {
     margin-top: 5px;
     margin-right: 10px;
@@ -224,4 +255,7 @@ const ReviewStar = styled.div`
     color: ${COLOR.MAIN_ORANGE};
   }
 `;
-const ReviewList = styled.div``;
+const ReviewList = styled.div`
+  margin-left: 20px;
+  margin-right: 20px;
+`;

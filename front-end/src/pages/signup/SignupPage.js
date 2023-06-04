@@ -15,11 +15,19 @@ function SignupPage() {
 
   const navigate = useNavigate();
   const goBack = useCallback(() => {
-    navigate("/");
+    navigate("/login");
   }, [navigate]);
 
+  const [error, setError] = useState("");
   const onChangeName = (e) => {
-    setName(e.target.value);
+    const inputValue = e.target.value;
+    const filteredValue = inputValue.replace(/[^\wㄱ-ㅎㅏ-ㅣ가-힣]/g, "");
+    if (inputValue.length > 6) {
+      setError("최대 6글자까지 입력 가능합니다.");
+    } else {
+      setError("");
+    }
+    setName(filteredValue);
   };
 
   const onSubmit = useCallback(() => {
@@ -37,7 +45,11 @@ function SignupPage() {
         }
       )
       .then((res) => {
+        localStorage.removeItem("key");
         localStorage.setItem("key", token);
+        if (window.Android) {
+          window.Android.showToastMessage(name + "님, 환영합니다!");
+        }
         navigate("/home");
       })
       .catch((err) => {
@@ -61,9 +73,11 @@ function SignupPage() {
         </SignupText>
         <SignupInput>
           <SignupInputBox
-            placeholder="이름을 입력해주세요"
+            maxLength={6}
+            placeholder="최대 6글자까지 입력 가능합니다"
             onChange={onChangeName}
           />
+          {error && <ErrorMessage>{error}</ErrorMessage>}
         </SignupInput>
         <SignupButton>
           {!name ? (
@@ -147,6 +161,14 @@ const SignupInputBox = styled.input`
     font-size: 14px;
     line-height: 17px;
   }
+`;
+const ErrorMessage = styled.div`
+  width: 100%;
+  text-align: left;
+  padding-left: 5px;
+  color: #ff2c2c;
+  font-size: 12px;
+  margin-top: 4px;
 `;
 const SignupButton = styled.div`
   position: fixed;

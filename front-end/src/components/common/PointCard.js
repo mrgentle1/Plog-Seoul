@@ -1,10 +1,7 @@
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
-import { useNavigate } from "react-router-dom";
 
 export const PointCard = ({ p }) => {
-  const navigate = useNavigate();
-
   const createdAt = p.createdAt;
   const date = createdAt.substring(0, 10);
 
@@ -15,7 +12,17 @@ export const PointCard = ({ p }) => {
           <StPointText>
             <PointText>
               <h3>{p.title}</h3>
-              <h6>+{p.changePoint}</h6>
+              <h6
+                className={
+                  p.changePoint > 0
+                    ? "point positive"
+                    : p.changePoint < 0
+                    ? "point negative"
+                    : "point"
+                }
+              >
+                {p.changePoint > 0 ? `+${p.changePoint}` : p.changePoint}
+              </h6>
             </PointText>
             <PointTag>
               <Tag>
@@ -65,13 +72,18 @@ const PointText = styled.div`
     line-height: 17px;
     color: ${COLOR.DARK_GRAY};
   }
-  h6 {
+  .point {
     font-family: "SUIT Variable";
     font-style: normal;
     font-weight: 600;
     font-size: 15px;
     line-height: 19px;
+  }
+  .positive {
     color: ${COLOR.MAIN_DARK_GREEN};
+  }
+  .negative {
+    color: ${COLOR.MAIN_ORANGE};
   }
 `;
 const PointTag = styled.div`

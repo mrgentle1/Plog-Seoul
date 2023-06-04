@@ -16,11 +16,20 @@ public interface PloggingRecordRepository extends JpaRepository<PloggingRecord, 
     Page<PloggingRecord> findAllByUserEmail(String email, Pageable pageable);
     Page<PloggingRecord> findByUserEmailAndCreatedAtBetween(String email, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
 
-    @Query("SELECT p.user, SUM(p.distance) as totalDistance " +
+    @Query("SELECT p.user, SUM(p.distance) as totalDistance, SUM(p.runningTime) as totalRunningTime " +
             "FROM PloggingRecord p " +
             "WHERE p.createdAt >= :startOfWeek AND p.createdAt <= :endOfWeek " +
             "GROUP BY p.user " +
             "ORDER BY totalDistance DESC")
     List<Object[]> findWeeklyDistanceByUser(@Param("startOfWeek") LocalDateTime startOfWeek, @Param("endOfWeek") LocalDateTime endOfWeek);
+
+
+    @Query("SELECT p.user, SUM(p.distance) as totalDistance, SUM(p.runningTime) as totalRunningTime " +
+            "FROM PloggingRecord p " +
+            "WHERE p.createdAt >= :startOfWeek AND p.createdAt <= :endOfWeek " +
+            "GROUP BY p.user " +
+            "ORDER BY totalRunningTime DESC")
+    List<Object[]> findWeeklyRunningTimeByUser(@Param("startOfWeek") LocalDateTime startOfWeek, @Param("endOfWeek") LocalDateTime endOfWeek);
+
 
 }

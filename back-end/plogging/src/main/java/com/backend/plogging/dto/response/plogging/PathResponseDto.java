@@ -10,8 +10,8 @@ import lombok.Setter;
 public class PathResponseDto {
     private Long pathId;
     private Long recordId;
-    private Float wayLat;
-    private Float wayLng;
+    private Double wayLat;
+    private Double wayLng;
     private Long sequence;
 
     public PathResponseDto(Path path) {

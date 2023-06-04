@@ -7,11 +7,15 @@ import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { CalendarModal, ModalBackground } from "./modal/CalendarModal";
+import { motion } from "framer-motion";
 
 export const Calendar = () => {
   const token = localStorage.getItem("key");
 
   const [plogging, setPlogging] = useState([]);
+  const [page, setPage] = useState(0);
+  const [direction, setDirection] = useState(0);
   const navigate = useNavigate();
 
   // month가 한자리인지 두자리인지 판별
@@ -39,31 +43,88 @@ export const Calendar = () => {
       });
   }, []);
 
+  console.log(plogging);
+
   const ploggingDate = [];
   plogging.map((data) => {
     ploggingDate.push(data.createdAt.substring(0, 10));
   });
 
-  console.log(ploggingDate);
-
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   const handlePrevMonth = () => {
-    setSelectedDate(
-      (prevDate) => new Date(prevDate.getFullYear(), prevDate.getMonth() - 1)
+    const prevDate = new Date(
+      selectedDate.getFullYear(),
+      selectedDate.getMonth() - 1
     );
+    const prevMonth = prevDate.getMonth() + 1;
+    const monthString = prevMonth < 10 ? `0${prevMonth}` : prevMonth.toString();
+
+    setSelectedDate(prevDate);
+    setPage(page - 1);
+    setDirection(-1);
+
+    console.log(monthString);
+
+    axios
+      .get(
+        `${
+          process.env.REACT_APP_API_ROOT
+        }/api/plogging?date=${prevDate.getFullYear()}-${monthString}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        setPlogging(response.data.result.content);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   const handleNextMonth = () => {
-    setSelectedDate(
-      (prevDate) => new Date(prevDate.getFullYear(), prevDate.getMonth() + 1)
+    const nextDate = new Date(
+      selectedDate.getFullYear(),
+      selectedDate.getMonth() + 1
     );
+    const nextMonth = nextDate.getMonth() + 1;
+    const monthString = nextMonth < 10 ? `0${nextMonth}` : nextMonth.toString();
+
+    setSelectedDate(nextDate);
+    setPage(page + 1);
+    setDirection(1);
+
+    axios
+      .get(
+        `${
+          process.env.REACT_APP_API_ROOT
+        }/api/plogging?date=${nextDate.getFullYear()}-${monthString}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        setPlogging(response.data.result.content);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const [specialDate, setSpecialDate] = useState("");
 
   const handleDayClick = (formattedDate) => {
     if (ploggingDate.includes(formattedDate)) {
-      const path = `/plog/${formattedDate}`;
-      navigate(path);
+      setModalOpen(true);
+      setSpecialDate(formattedDate);
     }
   };
 
@@ -73,6 +134,15 @@ export const Calendar = () => {
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const firstDayOfWeek = new Date(year, month, 1).getDay();
     const calendar = [];
+    const dateCountMap = {}; // 날짜별 항목 개수를 저장할 객체
+
+    ploggingDate.forEach((date) => {
+      if (dateCountMap[date]) {
+        dateCountMap[date]++;
+      } else {
+        dateCountMap[date] = 1;
+      }
+    });
 
     const daysOfWeek = ["일", "월", "화", "수", "목", "금", "토"];
 
@@ -102,13 +172,17 @@ export const Calendar = () => {
         .toString()
         .padStart(2, "0")}`;
       const isSpecial = ploggingDate.includes(formattedDate);
-      const isSunday = currentDate.getUTCDay() === 0; // 일요일인 경우
+      const isSunday = currentDate.getUTCDay() === 0; // 일요일
+      const isToday = currentDate.toDateString() === new Date().toDateString(); // 오늘 날짜
+      const itemCount = dateCountMap[formattedDate] || 0;
 
       calendar.push(
         <CalendarDay
           key={day}
           isSpecial={isSpecial}
           isSunday={isSunday}
+          isToday={isToday}
+          itemCount={itemCount}
           onClick={() => handleDayClick(formattedDate)}
         >
           {day}
@@ -130,17 +204,88 @@ export const Calendar = () => {
     return calendar; // Return the calendar elements
   };
 
+  const variants = {
+    enter: (direction) => {
+      return {
+        x: direction === 0 ? 0 : direction > 0 ? 1000 : -1000,
+        opacity: 0,
+      };
+    },
+    center: {
+      zIndex: 1,
+      x: 0,
+      opacity: 1,
+    },
+    exit: (direction) => {
+      return {
+        zIndex: 0,
+        x: direction < 0 ? 1000 : -1000,
+        opacity: 0,
+      };
+    },
+  };
+
+  const arrowVariants = {
+    hover: {
+      scale: 0.9,
+    },
+    rest: {
+      scale: 1,
+    },
+  };
+
   return (
-    <CalendarContainer>
-      <CalendarHeader>
-        <BackArrow className="arrow1" onClick={handlePrevMonth} />
-        <YearMonthText>
-          {selectedDate.getFullYear()}년 {selectedDate.getMonth() + 1}월
-        </YearMonthText>
-        <ForwardArrow className="arrow2" onClick={handleNextMonth} />
-      </CalendarHeader>
-      <DayLabels>{getMonthCalendar()}</DayLabels>
-    </CalendarContainer>
+    <>
+      {modalOpen && (
+        <CalendarModal
+          setModalOpen={setModalOpen}
+          plogging={plogging}
+          specialDate={specialDate}
+        />
+      )}
+      {modalOpen && <ModalBackground />}
+      <CalendarContainer>
+        <CalendarHeader>
+          <Box
+            variants={arrowVariants}
+            whileHover="hover"
+            whileTap="hover"
+            whileFocus="hover"
+            initial="rest"
+            animate="rest"
+          >
+            <BackArrow className="arrow1" onClick={handlePrevMonth} />
+          </Box>
+          <YearMonthText>
+            {selectedDate.getFullYear()}년 {selectedDate.getMonth() + 1}월
+          </YearMonthText>
+          <Box
+            variants={arrowVariants}
+            whileHover="hover"
+            whileTap="hover"
+            whileFocus="hover"
+            initial="rest"
+            animate="rest"
+          >
+            <ForwardArrow className="arrow2" onClick={handleNextMonth} />
+          </Box>
+        </CalendarHeader>
+        <motion.div
+          key={page}
+          custom={direction}
+          variants={variants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          transition={{
+            x: { type: "spring", stiffness: 300, damping: 30 },
+            opacity: { duration: 0.2 },
+          }}
+        >
+          <DayLabels>{getMonthCalendar()}</DayLabels>
+        </motion.div>
+      </CalendarContainer>
+    </>
   );
 };
 
@@ -214,8 +359,19 @@ const CalendarDay = styled.div`
   font-weight: 500;
   font-size: 13px;
   line-height: 16px;
-  background-color: ${({ isSpecial }) =>
-    isSpecial ? COLOR.MAIN_GREEN_HOVER : COLOR.MAIN_WHITE};
+  background-color: ${({
+    isSpecial,
+    itemCount,
+    isPreviousMonth,
+    isNextMonth,
+  }) =>
+    isSpecial && itemCount > 3
+      ? COLOR.GREEN
+      : itemCount === 0
+      ? COLOR.MAIN_WHITE
+      : isPreviousMonth || isNextMonth
+      ? COLOR.MAIN_WHITE
+      : COLOR.MAIN_GREEN_HOVER};
   border-radius: 8px;
   color: ${({ isPreviousMonth, isNextMonth, isSunday }) =>
     isPreviousMonth || isNextMonth
@@ -224,4 +380,8 @@ const CalendarDay = styled.div`
       ? COLOR.MAIN_ORANGE
       : "inherit"};
   cursor: ${({ isSpecial }) => (isSpecial ? "pointer" : "default")};
+  border: 2px solid
+    ${({ isToday }) => (isToday ? COLOR.MAIN_GREEN : "transparent")};
 `;
+
+const Box = styled(motion.div)``;

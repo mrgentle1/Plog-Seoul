@@ -8,6 +8,7 @@ import { Calendar } from "../../components/common/Calendar";
 import axios from "axios";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
+import { motion } from "framer-motion";
 import { BorderThinButton } from "../../components/common/Button";
 import { Link } from "react-router-dom";
 
@@ -31,7 +32,6 @@ function PlogPage() {
         },
       })
       .then((response) => {
-        console.log(response);
         setUser(response.data.result);
         setUserName(response.data.result.nickname);
         setPoint(response.data.result.point);
@@ -47,40 +47,86 @@ function PlogPage() {
 
   const levelBarWidth = point >= 1000 ? 321 : (point / 1000) * 321;
 
+  const whiteBoxVariants = {
+    hover: {
+      backgroundColor: `${COLOR.MAIN_WHITE_HOVER}`,
+      border: `${COLOR.MAIN_WHITE_HOVER}`,
+      scale: 0.97,
+    },
+    rest: {
+      backgroundColor: `${COLOR.MAIN_WHITE}`,
+      scale: 1,
+    },
+  };
+
   return (
-    <StPlogPage>
-      <StPlogContent>
-        <PlogCalender>
-          <Calendar />
-        </PlogCalender>
-        <PlogLevel>
-          <Plog1>
-            <Level className="level" />
-          </Plog1>
-          <Link to="/plog/level">
-            <Plog2>
-              <PlogText>
-                <Text1>Level {user.level}</Text1>
-                <Text2>다음 레벨까지 {1000 - point} 포인트</Text2>
-              </PlogText>
-            </Plog2>
-            <Plog3>
-              <LevelBar></LevelBar>
-              <LevelBar2 width={levelBarWidth}></LevelBar2>
-            </Plog3>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.6 }}
+    >
+      <StPlogPage>
+        <StPlogContent>
+          <PlogCalender>
+            <Calendar />
+          </PlogCalender>
+          <PlogLevel
+            variants={whiteBoxVariants}
+            whileHover="hover"
+            whileTap="hover"
+            whileFocus="hover"
+            initial="rest"
+            animate="rest"
+          >
+            <Plog1>
+              <Level className="level" />
+            </Plog1>
+            <Link to="/plog/level">
+              <Plog2>
+                <PlogText>
+                  <Text1>Level {user.level}</Text1>
+                  <Text2>다음 레벨까지 {1000 - point} 포인트</Text2>
+                </PlogText>
+              </Plog2>
+              <Plog3>
+                <LevelBar></LevelBar>
+                <LevelBar2 width={levelBarWidth}></LevelBar2>
+              </Plog3>
+            </Link>
+          </PlogLevel>
+          <Link to="/plog/achievement">
+            <Box
+              variants={whiteBoxVariants}
+              whileHover="hover"
+              whileTap="hover"
+              whileFocus="hover"
+              initial="rest"
+              animate="rest"
+            >
+              <BorderThinButton>
+                달성한 업적
+                <p>0개</p>
+              </BorderThinButton>
+            </Box>
           </Link>
-        </PlogLevel>
-        <Link to="/plog/achievement">
-          <BorderThinButton>
-            달성한 업적
-            <p>0개</p>
-          </BorderThinButton>
-        </Link>
-        <BorderThinButton>
-          랭킹 확인하기<p>126등</p>
-        </BorderThinButton>
-      </StPlogContent>
-    </StPlogPage>
+          <Link to="/plog/ranking">
+            <Box
+              variants={whiteBoxVariants}
+              whileHover="hover"
+              whileTap="hover"
+              whileFocus="hover"
+              initial="rest"
+              animate="rest"
+            >
+              <BorderThinButton>
+                랭킹 확인하기<p>거리순/기록순</p>
+              </BorderThinButton>
+            </Box>
+          </Link>
+        </StPlogContent>
+      </StPlogPage>
+    </motion.div>
   );
 }
 
@@ -98,7 +144,7 @@ const StPlogContent = styled.div`
   }
 `;
 const PlogCalender = styled.div``;
-const PlogLevel = styled.div`
+const PlogLevel = styled(motion.div)`
   margin-bottom: 12px;
   padding-top: 14px;
   width: 353px;
@@ -162,3 +208,4 @@ const LevelBar2 = styled.div`
   border-radius: 5px;
   z-index: 1;
 `;
+const Box = styled(motion.div)``;

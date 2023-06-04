@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 import { ReactComponent as ArrowGreen } from "../../assets/icons/arrow_green.svg";
+import { ReactComponent as Arrow } from "../../assets/icons/arrow.svg";
 
 export const Button = ({ children, onClick }) => {
   return <StButton onClick={onClick}>{children}</StButton>;
@@ -33,6 +34,17 @@ export const BorderGreenThinButton = ({ children, onClick }) => {
   );
 };
 
+export const GreenThinButton = ({ children, onClick }) => {
+  return (
+    <StGreenButtonWrapper>
+      <StGreenThinButton onClick={onClick}>
+        <div className="text">{children}</div>
+        <Arrow className="arrow1" />
+      </StGreenThinButton>
+    </StGreenButtonWrapper>
+  );
+};
+
 const StButton = styled.button`
   width: 353px;
   height: 60px;
@@ -40,6 +52,7 @@ const StButton = styled.button`
   border-radius: 14px;
   background-color: ${COLOR.MAIN_GREEN};
   color: ${COLOR.MAIN_BLACK};
+  font-size: 15px;
   font-family: "SUIT Variable";
   font-style: normal;
   font-weight: 600;
@@ -150,4 +163,60 @@ const StBorderGreenThinButton = styled.button`
   font-size: 14px;
   line-height: 17px;
   text-align: center;
+`;
+
+const StGreenButtonWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  text-align: left;
+  align-items: flex-start;
+  padding: 12px 16px;
+  width: 353px;
+  height: 54px;
+  background-color: ${COLOR.MAIN_GREEN_HOVER};
+  border: 1px solid ${COLOR.MAIN_GREEN_HOVER};
+  border-radius: 14px;
+  margin-bottom: 12px;
+`;
+const StGreenThinButton = styled.button`
+  border: none;
+  background-color: ${COLOR.MAIN_GREEN_HOVER};
+  font-family: "SUIT Variable";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 19px;
+  color: ${COLOR.MAIN_BLACK};
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px;
+  gap: 12px;
+
+  width: 321px;
+  height: 30px;
+
+  .text {
+    display: flex;
+    flex-direction: row;
+  }
+  p {
+    text-align: left;
+    font-family: "SUIT Variable";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 27px;
+    color: ${COLOR.MAIN_GREEN};
+  }
+  .arrow1 {
+    color: ${COLOR.MAIN_WHITE};
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+    width: 30px;
+    height: 30px;
+  }
 `;

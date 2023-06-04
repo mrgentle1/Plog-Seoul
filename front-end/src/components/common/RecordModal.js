@@ -42,19 +42,23 @@ export const RecordModal = ({ setModalOpen, data, id }) => {
   const closeModal = () => {
     console.log("close");
     setModalOpen(false);
-    navigate("/record");
   };
   const gotoModal = () => {
     console.log("goto");
-
     setModalOpen(false);
+    navigate("/plog/level");
   };
 
   const exitModal = () => {
     console.log("check");
     setModalOpen(false);
     deleteRecordData();
-    navigate("/record");
+    navigate("/home");
+  };
+  const plogExitModal = () => {
+    console.log("check");
+    setModalOpen(false);
+    navigate("/plog");
   };
 
   return (
@@ -66,11 +70,7 @@ export const RecordModal = ({ setModalOpen, data, id }) => {
               <RecordAlert className="modalIcon" />
               <ModalText>
                 <h3>{data.title}</h3>
-                <h5>
-                  지금 종료하면
-                  <br />
-                  오늘의 플로깅 기록이 사라져요
-                </h5>
+                <h5>{data.contents}</h5>
               </ModalText>
             </>
           ) : (
@@ -91,7 +91,7 @@ export const RecordModal = ({ setModalOpen, data, id }) => {
         <ModalButton>
           <CloseButton
             onClick={() => {
-              data.recording ? exitModal() : closeModal();
+              data.recording ? exitModal() : plogExitModal();
             }}
           >
             {data.btnText1}
@@ -119,10 +119,19 @@ export const ModalBackground = styled.div`
   width: 100vw;
   height: 100vh;
 
+  top: 0;
+
   background: rgba(190, 194, 198, 0.9);
   display: flex;
   justify-content: center;
   align-items: center;
+
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+
+  ::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+  }
 `;
 
 const ModalContainer = styled.div`
@@ -190,6 +199,7 @@ const ModalText = styled.div`
     line-height: 1.9rem;
     text-align: center;
     color: ${COLOR.INPUT_BORDER_GRAY};
+    white-space: pre-line;
   }
 `;
 const ModalLine = styled.div`

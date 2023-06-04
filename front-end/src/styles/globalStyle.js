@@ -14,11 +14,15 @@ const GlobalStyle = createGlobalStyle`
     margin: 0 auto;
     font-size: 62.5%;
 
+    -webkit-touch-callout:none;
+    -webkit-user-select:none;
+    -webkit-tap-highlight-color:rgba(0,0,0,0);
+
   }
 
   @font-face {
     font-family: "SUITE-Regular";
-    src: url("./styles/fonts/SUITE-Variable-ttf/SUITE-Variable.ttf");
+    src: url("./styles/fonts/SUIT-Variable-ttf/SUIT-Variable.ttf");
   }
  
   * {

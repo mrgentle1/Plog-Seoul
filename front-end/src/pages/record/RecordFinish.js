@@ -31,11 +31,11 @@ function RecordFinish() {
   const token = localStorage.getItem("key");
 
   /*point에서 현재 위치 값을 가져와 초기세팅 해줌 */
-  const plogRecord = useLocation();
-  const recordId = plogRecord.state.recordId;
-  const [userData, setUserData] = useState({
-    recordId: recordId,
-  });
+  // const plogRecord = useLocation();
+  // const recordId = plogRecord.state.recordId;
+  // const [userData, setUserData] = useState({
+  //   recordId: recordId,
+  // });
 
   const [isCourse, sestIsCourse] = useState(false);
 
@@ -63,39 +63,39 @@ function RecordFinish() {
     kcal: 0,
   });
 
-  async function getRecordData() {
-    // async, await을 사용하는 경우
-    try {
-      // GET 요청은 params에 실어 보냄
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_ROOT}/api/plogging/${userData.recordId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+  // async function getRecordData() {
+  //   // async, await을 사용하는 경우
+  //   try {
+  //     // GET 요청은 params에 실어 보냄
+  //     const response = await axios.get(
+  //       `${process.env.REACT_APP_API_ROOT}/api/plogging/${userData.recordId}`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
 
-      // 응답 결과(response)를 변수에 저장하거나.. 등 필요한 처리를 해 주면 된다.
-      const recordData = {
-        distance: response.data.result.distance,
-        startLat: response.data.result.startLat,
-        startLng: response.data.result.startLng,
-        endLat: response.data.result.endLat,
-        endLng: response.data.result.endLng,
-        runningTime: response.data.result.runningTime,
-        kcal: response.data.result.kcal,
-      };
+  //     // 응답 결과(response)를 변수에 저장하거나.. 등 필요한 처리를 해 주면 된다.
+  //     const recordData = {
+  //       distance: response.data.result.distance,
+  //       startLat: response.data.result.startLat,
+  //       startLng: response.data.result.startLng,
+  //       endLat: response.data.result.endLat,
+  //       endLng: response.data.result.endLng,
+  //       runningTime: response.data.result.runningTime,
+  //       kcal: response.data.result.kcal,
+  //     };
 
-      setThisRecordData(recordData);
-      console.log("get성공?:", thisRecordData);
-    } catch (e) {
-      // 실패 시 처리
-      console.error(e);
-      alert("기록 get 실패.");
-    }
-  }
+  //     setThisRecordData(recordData);
+  //     console.log("get성공?:", thisRecordData);
+  //   } catch (e) {
+  //     // 실패 시 처리
+  //     console.error(e);
+  //     alert("기록 get 실패.");
+  //   }
+  // }
 
   /* GET - Record path */
 
@@ -106,33 +106,33 @@ function RecordFinish() {
     },
   ]);
 
-  async function getPathData() {
-    // async, await을 사용하는 경우
-    try {
-      // GET 요청은 params에 실어 보냄
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_ROOT}/api/plogging/${userData.recordId}/paths/`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      console.log("get경로: %o", response);
-      const initPath = response.data.result.content.map((it) => {
-        return {
-          lat: it.wayLat,
-          lng: it.wayLng,
-        };
-      });
-      setPathData(initPath);
-    } catch (e) {
-      // 실패 시 처리
-      console.error(e);
-      alert("경로 get 실패. 재시도해주세요.");
-    }
-  }
+  // async function getPathData() {
+  //   // async, await을 사용하는 경우
+  //   try {
+  //     // GET 요청은 params에 실어 보냄
+  //     const response = await axios.get(
+  //       `${process.env.REACT_APP_API_ROOT}/api/plogging/${userData.recordId}/paths/`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+  //     console.log("get경로: %o", response);
+  //     const initPath = response.data.result.content.map((it) => {
+  //       return {
+  //         lat: it.wayLat,
+  //         lng: it.wayLng,
+  //       };
+  //     });
+  //     setPathData(initPath);
+  //   } catch (e) {
+  //     // 실패 시 처리
+  //     console.error(e);
+  //     alert("경로 get 실패. 재시도해주세요.");
+  //   }
+  // }
 
   /* GET - Record Img */
 
@@ -145,38 +145,38 @@ function RecordFinish() {
       imgLng: 0,
     },
   ]);
-  async function getImgData() {
-    // async, await을 사용하는 경우
-    try {
-      // GET 요청은 params에 실어 보냄
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_ROOT}/api/plogging/${userData.recordId}/images/`,
+  // async function getImgData() {
+  //   // async, await을 사용하는 경우
+  //   try {
+  //     // GET 요청은 params에 실어 보냄
+  //     const response = await axios.get(
+  //       `${process.env.REACT_APP_API_ROOT}/api/plogging/${userData.recordId}/images/`,
 
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      console.log("get이미지: %o", response);
-      const initImg = response.data.result.content.map((it) => {
-        return {
-          imageId: it.imageId,
-          recordId: it.recordId,
-          imgUrl: it.imgUrl,
-          imgLat: it.imgLat,
-          imgLng: it.imgLng,
-        };
-      });
-      setImgData(initImg);
-    } catch (e) {
-      // 실패 시 처리
-      console.error(e);
-      setIsImgData(false);
-      // alert("이미지 get 실패. 재시도해주세요.");
-    }
-  }
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+  //     console.log("get이미지: %o", response);
+  //     const initImg = response.data.result.content.map((it) => {
+  //       return {
+  //         imageId: it.imageId,
+  //         recordId: it.recordId,
+  //         imgUrl: it.imgUrl,
+  //         imgLat: it.imgLat,
+  //         imgLng: it.imgLng,
+  //       };
+  //     });
+  //     setImgData(initImg);
+  //   } catch (e) {
+  //     // 실패 시 처리
+  //     console.error(e);
+  //     setIsImgData(false);
+  //     // alert("이미지 get 실패. 재시도해주세요.");
+  //   }
+  // }
 
   const bounds = useMemo(() => {
     const bounds = new kakao.maps.LatLngBounds();
@@ -233,40 +233,40 @@ function RecordFinish() {
     );
   };
 
-  useEffect(() => {
-    getRecordData();
-    getPathData();
-    getImgData();
-    console.log("기록가져오는 중");
-  }, []);
+  // useEffect(() => {
+  //   getRecordData();
+  //   getPathData();
+  //   getImgData();
+  //   console.log("기록가져오는 중");
+  // }, []);
 
-  useEffect(() => {
-    console.log("data기록가져옴");
-    console.log("rlfhr: %o", thisRecordData.runningTime);
+  // useEffect(() => {
+  //   console.log("data기록가져옴");
+  //   console.log("rlfhr: %o", thisRecordData.runningTime);
 
-    setIsDataLoading(false);
+  //   setIsDataLoading(false);
 
-    console.log("rlfhr: %o", thisRecordData);
-  }, [thisRecordData]);
+  //   console.log("rlfhr: %o", thisRecordData);
+  // }, [thisRecordData]);
 
-  useEffect(() => {
-    console.log("path기록가져옴");
+  // useEffect(() => {
+  //   console.log("path기록가져옴");
 
-    console.log("1.경로: %o", pathData);
-    const map = mapRef.current;
-    if (map) map.setBounds(bounds);
-    setIsPathLoading(false);
-    console.log("2.경로: %o", pathData);
-  }, [pathData]);
+  //   console.log("1.경로: %o", pathData);
+  //   const map = mapRef.current;
+  //   if (map) map.setBounds(bounds);
+  //   setIsPathLoading(false);
+  //   console.log("2.경로: %o", pathData);
+  // }, [pathData]);
 
-  useEffect(() => {
-    console.log("img기록가져옴");
-    setIsImgLoading(false);
-    if (imgData[0].recordId === userData.recordId) {
-      setIsImgData(true);
-    }
-    console.log("이미지: %o", imgData);
-  }, [imgData]);
+  // useEffect(() => {
+  //   console.log("img기록가져옴");
+  //   setIsImgLoading(false);
+  //   if (imgData[0].recordId === userData.recordId) {
+  //     setIsImgData(true);
+  //   }
+  //   console.log("이미지: %o", imgData);
+  // }, [imgData]);
 
   // useEffect(() => {
   //   if (!isDataLoading & !isPathLoading) {
@@ -283,12 +283,16 @@ function RecordFinish() {
       )}
       {imgOpen && <RecordImgModal setImgOpen={setImgOpen} data={clickImg} />}
       {imgEditOpen && (
-        <EditImgModal setImgOpen={setImgEditOpen} data={clickEditImg} />
+        <EditImgModal
+          setImgEditOpen={setImgEditOpen}
+          img={clickEditImg}
+          data={{ dist: 10, when: "2023년5월28일" }}
+        />
       )}
 
       {(modalOpen || imgOpen || imgEditOpen) && <ModalBackground />}
       <StRecordFinish>
-        {!isDataLoading && !isPathLoading && !isImgLoading && (
+        {
           <>
             <RecordFinishHeader>
               <span>
@@ -323,14 +327,13 @@ function RecordFinish() {
                   draggable={false}
                   ref={mapRef}
                 >
-                  {isImgData &&
-                    imgData.map((value) => (
-                      <EventMarkerContainer
-                        key={`EventMarkerContainer-${value.recordId}-${value.imageId}`}
-                        position={{ lat: value.imgLat, lng: value.imgLng }}
-                        content={value.imgUrl}
-                      />
-                    ))}
+                  {dummyImg.recordImgData.map((value) => (
+                    <EventMarkerContainer
+                      key={`EventMarkerContainer-${value.recordId}-${value.imageId}`}
+                      position={{ lat: value.imgLat, lng: value.imgLng }}
+                      content={value.imgUrl}
+                    />
+                  ))}
                   <Polyline
                     path={pathData}
                     strokeWeight={6} // 선의 두께 입니다
@@ -344,25 +347,33 @@ function RecordFinish() {
                 <TimeDataContainer>
                   {/* <TimeConvert seconds={thisRecordData.runningTime} /> */}
                   {/* <span>{thisRecordData.runningTime}</span> */}
-                  <span>{(thisRecordData.runningTime / 60).toFixed(2)}분</span>
+                  {/* <span>{(thisRecordData.runningTime / 60).toFixed(2)}분</span> */}
+                  <span>1111분</span>
+
                   <p>걸은 시간</p>
                 </TimeDataContainer>
                 <OtherDataContainer>
                   <DistDataContainer>
-                    <span>{thisRecordData.distance}</span>
+                    {/* <span>{thisRecordData.distance}</span> */}
+                    <span>11111</span>
+
                     <p>걸은 킬로미터</p>
                   </DistDataContainer>
                   <CalorieDataContainer>
-                    <span>{thisRecordData.kcal}</span>
+                    {/* <span>{thisRecordData.kcal}</span> */}
+                    <span>11111</span>
+
                     <p>소모한 칼로리</p>
                   </CalorieDataContainer>
                   <PhotoCountDataContainer>
-                    <span>{isImgData ? imgData.length : 0}</span>
+                    {/* <span>{isImgData ? imgData.length : 0}</span> */}
+                    <span>11111</span>
+
                     <p>남긴 사진</p>
                   </PhotoCountDataContainer>
                 </OtherDataContainer>
               </DetailDataContainer>
-              {isImgData ? (
+              {!isImgData ? (
                 <PhotoGridContainer>
                   {dummyImg.recordImgData.map((img) => (
                     <PhotoWrapper key={`${img.recordId}-${img.imageId}`}>
@@ -385,7 +396,7 @@ function RecordFinish() {
               )}
             </ContentsContainer>
           </>
-        )}
+        }
 
         <RecordFinishFooter>
           <Button
@@ -409,7 +420,7 @@ const StRecordFinish = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 39.3rem;
+  width: 100vw;
   height: 100vh;
   padding-top: 12.7rem;
   padding-bottom: 20rem;
@@ -427,7 +438,7 @@ const StRecordFinish = styled.div`
 const RecordFinishHeader = styled.div`
   position: fixed;
   top: 0;
-  width: 39.3rem;
+  width: 100%;
   height: 12.7rem;
 
   display: grid;

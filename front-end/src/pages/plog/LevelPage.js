@@ -8,6 +8,7 @@ import { userIdNumber, usePersistRecoilState } from "../../core/userId";
 
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
+import { motion } from "framer-motion";
 import axios from "axios";
 
 function LevelPage() {
@@ -25,8 +26,6 @@ function LevelPage() {
   const url = `${process.env.REACT_APP_API_ROOT}/api/users/${userId}`;
   const url2 = url + "/point/history";
 
-  console.log(userId);
-
   useEffect(() => {
     axios
       .get(url, {
@@ -41,7 +40,7 @@ function LevelPage() {
       .catch((error) => {
         console.error(error);
       });
-  });
+  }, []);
 
   useEffect(() => {
     axios
@@ -57,58 +56,89 @@ function LevelPage() {
       .catch((error) => {
         console.error(error);
       });
+  }, []);
+
+  let sum = 0;
+  points.map((point) => {
+    let p = point.changePoint;
+    sum += p;
+    console.log(sum);
   });
 
+  const real_level = sum / 1000 + 1;
+  const just_level = (real_level - 1).toFixed(0);
+  console.log("level", just_level);
+  console.log("dd", sum - just_level * 1000);
+  console.log("ff", just_level * 1000 + 1000 - sum);
+
+  // const data = [
+  //   { name: "level", value: sum > 1000 ? sum - just_level * 1000 : sum },
+  //   {
+  //     name: "remaining",
+  //     value: sum > 1000 ? just_level * 1000 - sum : 1000 - sum,
+  //   },
+  // ];
+
   const data = [
-    { name: "level", value: user.point },
-    { name: "remaining", value: 1000 - user.point },
+    { name: "level", value: sum - just_level * 1000 },
+    { name: "remaining", value: 1000 + sum - just_level * 1000 },
   ];
 
+  console.log(sum - just_level * 1000);
+  console.log(1000 + sum - just_level * 1000);
+
   return (
-    <StNoticePage>
-      <NoticeHeader>
-        <BackArrow className="noticeBackArrow" onClick={goBack} />
-        <HeaderText>Level {user.level}</HeaderText>
-      </NoticeHeader>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.6 }}
+    >
+      <StNoticePage>
+        <NoticeHeader>
+          <BackArrow className="noticeBackArrow" onClick={goBack} />
+          <HeaderText>Level {real_level.toFixed(0)}</HeaderText>
+        </NoticeHeader>
 
-      <ResponsiveContainer width="100%" height={240} className="graph">
-        <PieChart>
-          <Pie
-            data={data}
-            startAngle={90}
-            endAngle={-270}
-            cx="50%"
-            cy="50%"
-            innerRadius="55%"
-            outerRadius="90%"
-            animationDuration={1000}
-            animationBegin={0.5}
-            dataKey="value"
-          >
-            <Cell fill={COLOR.MAIN_GREEN} />
-            <Cell fill={COLOR.FOOTER_GRAY} />
-          </Pie>
-        </PieChart>
-      </ResponsiveContainer>
+        <ResponsiveContainer width="100%" height={240} className="graph">
+          <PieChart>
+            <Pie
+              data={data}
+              startAngle={90}
+              endAngle={-270}
+              cx="50%"
+              cy="50%"
+              innerRadius="55%"
+              outerRadius="90%"
+              animationDuration={1000}
+              animationBegin={0.5}
+              dataKey="value"
+            >
+              <Cell fill={COLOR.MAIN_GREEN} />
+              <Cell fill={COLOR.FOOTER_GRAY} />
+            </Pie>
+          </PieChart>
+        </ResponsiveContainer>
 
-      <Point>
-        <h5>{user.point}</h5>
-        <h6>/ 1,000 포인트</h6>
-      </Point>
-      <LevelLine />
-      <NoticeContent>
-        <PointText>포인트 내역</PointText>
-        <PointList>
-          {points.map((data, index) =>
-            data ? (
-              <PointCard key={data.id} p={data} />
-            ) : (
-              <div key={index}>포인트 내역이 없어요</div>
-            )
-          )}
-        </PointList>
-      </NoticeContent>
-    </StNoticePage>
+        <Point>
+          <h5>{sum - just_level * 1000}</h5>
+          <h6>/ 1,000 포인트</h6>
+        </Point>
+        <LevelLine />
+        <NoticeContent>
+          <PointText>포인트 내역</PointText>
+          <PointList>
+            {points.map((data, index) =>
+              data ? (
+                <PointCard key={index} p={data} />
+              ) : (
+                <div key={index}>포인트 내역이 없어요</div>
+              )
+            )}
+          </PointList>
+        </NoticeContent>
+      </StNoticePage>
+    </motion.div>
   );
 }
 
