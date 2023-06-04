@@ -17,7 +17,7 @@ Plog Seoul은 서울시에서 제공하는 <b>서울 두드림길 공공데이�
  <br/>
  
 ## 팀원 소개        
-|<img src="https://github.com/~~~.png" width="80">|<img src="https://github.com/~~~.png" width="80">|<img src="https://github.com/~~~.png" width="80">|<img width="120" alt="image" src="https://github.com/mrgentle1/Plog-Seoul/assets/66265618/57d11682-82bd-4e74-bbd9-1df05613c73a">|
+|<img src="https://avatars.githubusercontent.com/u/59019322?v=4" width="120">|<img src="https://github.com/~~~.png" width="80">|<img src="https://github.com/~~~.png" width="80">|<img width="120" alt="image" src="https://github.com/mrgentle1/Plog-Seoul/assets/66265618/57d11682-82bd-4e74-bbd9-1df05613c73a">|
 |:---:|:---:|:---:|:---:|
 |[@mrgentle1](https://github.com/mrgentle1)|[@ancy0](https://github.com/ancy0)|[]()|[@seiyoon](https://github.com/seiyoon)|        
 |김준영|안채영|이정우|황세윤|
