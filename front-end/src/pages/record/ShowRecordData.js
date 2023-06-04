@@ -1,9 +1,10 @@
 /* global kakao */
-import { useEffect, useState, useRef, useMemo } from "react";
+import { useEffect, useState, useRef, useMemo, useCallback } from "react";
 import { Map, MapMarker, Polyline, useMap } from "react-kakao-maps-sdk";
 import { Button, BorderGreenThinButton } from "../../components/common/Button";
 import styled from "styled-components";
 import { COLOR } from "../../styles/color";
+import { ReactComponent as BackArrow } from "../../assets/icons/backArrow.svg";
 import { ReactComponent as Close } from "../../assets/icons/close.svg";
 import PlogImg from "../../assets/icons/imgMarker.svg";
 import { useNavigate, Link, useLocation } from "react-router-dom";
@@ -234,6 +235,11 @@ function ShowRecordData({
     setModalOpen(true);
   };
   const navigate = useNavigate();
+
+  const goBack = useCallback(() => {
+    navigate(-1);
+  }, [navigate]);
+
   const finish = () => {
     navigate("/record");
   };
@@ -393,7 +399,10 @@ function ShowRecordData({
         {/* {!isDataLoading && ( */}
         {!isPathLoading && (
           <>
-            {/* <RecordHeader /> */}
+            <RankingHeader>
+              <BackArrow className="noticeBackArrow" onClick={goBack} />
+              <HeaderText>플로그 기록</HeaderText>
+            </RankingHeader>
             <ContentsContainer>
               {/* {!isPathLoading && ( */}
               <MapContainer>
@@ -502,6 +511,36 @@ const StRecordFinish = styled.div`
   ::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera*/
   }
+`;
+
+const RankingHeader = styled.div`
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 8rem;
+  background: ${COLOR.MAIN_WHITE};
+  z-index: 100;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-end;
+
+  padding: 0rem 2rem;
+  gap: 2.4rem;
+
+  .noticeBackArrow {
+    /* margin-top: 40px;
+    margin-left: 20px; */
+  }
+`;
+const HeaderText = styled.div`
+  font-family: "SUIT Variable";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 2rem;
+  line-height: 2.5rem;
+  color: ${COLOR.MAIN_BLACK};
 `;
 
 const ContentsContainer = styled.div`
