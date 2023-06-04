@@ -8,10 +8,11 @@ export const CalendarModal = ({ setModalOpen, plogging, specialDate }) => {
   const navigate = useNavigate();
 
   const [isSelected, setIsSelected] = useState(false);
-
   const [selectedRecordId, setSelectedRecordId] = useState(null);
+  const [listIndex, setListIndex] = useState(null);
 
-  const handleSelect = (recordId) => {
+  const handleSelect = (recordId, index) => {
+    setListIndex(index); // Update listIndex state
     setSelectedRecordId(recordId);
   };
 
@@ -19,10 +20,20 @@ export const CalendarModal = ({ setModalOpen, plogging, specialDate }) => {
     setModalOpen(false);
   };
 
+  const time = plogging
+    .filter((data) => data.createdAt.substring(0, 10) === specialDate)
+    .map((data) => data.createdAt.substring(11, 16));
+
   const handleSelectAndNavigate = () => {
     if (selectedRecordId) {
       navigate("/record/test", {
-        state: { recordId: selectedRecordId, isShowPlog: true },
+        state: {
+          recordId: selectedRecordId,
+          isShowPlog: true,
+          date: specialDate,
+          time: time,
+          index: listIndex,
+        },
       });
       closeModal();
     }
@@ -42,7 +53,7 @@ export const CalendarModal = ({ setModalOpen, plogging, specialDate }) => {
               <CalendarList
                 key={index}
                 p={data}
-                onClick={() => handleSelect(data.recordId)}
+                onClick={() => handleSelect(data.recordId, index)}
                 isSelected={selectedRecordId === data.recordId}
                 isLastItem={index === array.length - 1}
               />

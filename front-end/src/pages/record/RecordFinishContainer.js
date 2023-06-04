@@ -36,10 +36,16 @@ function RecordFinishPage() {
   const plogRecord = useLocation();
   const recordId = plogRecord.state.recordId;
   const isShowPlog = plogRecord.state.isShowPlog;
+  const date = plogRecord.state.date;
+  const time = plogRecord.state.time;
+  const index = plogRecord.state.index;
 
   const [userData, setUserData] = useState({
     recordId: recordId,
     isShowPlog: isShowPlog,
+    date: date,
+    time: time,
+    index: index,
   });
 
   const [isCourse, sestIsCourse] = useState(false);
@@ -114,7 +120,10 @@ function RecordFinishPage() {
       ) : (
         <PlogHeader>
           <BackArrow className="noticeBackArrow" onClick={goBack} />
-          <HeaderText>랭킹</HeaderText>
+          <HeaderText>
+            {date.substring(5, 7)}월 {date.substring(8, 10)}일{" "}
+            {time[index].substring(0, 2)}:{time[index].substring(3, 5)} 기록
+          </HeaderText>
         </PlogHeader>
       )}
 
