@@ -23,6 +23,7 @@ public class KakaoUserDto {
                 .gender(this.gender)
                 .level(1)
                 .point(0)
+                .totalPoint(0)
                 .isFirst(true)
                 .role("USER").build();
 
