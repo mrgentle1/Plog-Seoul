@@ -33,7 +33,10 @@ public class User extends BaseEntity {
     private String gender;
 
     @Column(name = "point")
-    private Integer point;
+    private Integer point;  // 현재 포인트 (1000포인트 당 1레벨 업)
+
+    @Column(name = "total_point")
+    private Integer totalPoint;  // 보유하고 있는 전체 포인트
 
     @Column(name = "level")
     private Integer level;

@@ -249,7 +249,7 @@ const ModalImg = styled.div`
   display: flex;
   position: relative;
   width: 100%;
-  align-items: color-interpolation-filters;
+  align-items: center;
 
   ::after {
     display: block;

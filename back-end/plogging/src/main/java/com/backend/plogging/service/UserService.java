@@ -265,7 +265,9 @@ public class UserService {
         Optional<User> user = userRepository.findById(userId);
 
         Integer currentPoint = user.get().getPoint();
-        Integer newPoint = currentPoint + change;
+        Integer newPoint = currentPoint;
+        if (change > 0) newPoint += change;
+        Integer totalPoint = user.get().getTotalPoint() + change;
 
         if (user.isPresent()) {
             // 1000점 단위로 레벨업
@@ -284,11 +286,13 @@ public class UserService {
 
 
             user.get().setPoint(newPoint);
+            user.get().setTotalPoint(totalPoint);
             userRepository.save(user.get());
             pointRepository.save(point);
 
             Map<String, Object> result = new LinkedHashMap<>();
             result.put("point", user.get().getPoint());
+            result.put("totalPoint", totalPoint);
             result.put("level", user.get().getLevel());
 
             return new BaseResponseEntity<>(HttpStatus.OK, result);

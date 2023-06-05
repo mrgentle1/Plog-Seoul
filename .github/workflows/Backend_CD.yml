@@ -1,8 +1,6 @@
 name: Backend CD
 
-on:
-  push:
-    branches: [ "main", "develop" ]
+on: workflow_dispatch
 
 permissions:
   contents: read

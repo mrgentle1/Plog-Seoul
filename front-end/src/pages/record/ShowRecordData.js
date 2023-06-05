@@ -6,28 +6,14 @@ import styled from "styled-components";
 import { COLOR } from "../../styles/color";
 import { ReactComponent as Close } from "../../assets/icons/close.svg";
 import PlogImg from "../../assets/icons/imgMarker.svg";
+import Marker from "../../assets/icons/mapMarker.svg";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import axios from "axios";
 
-import {
-  RecordModal,
-  ModalBackground,
-} from "../../components/common/RecordModal";
-
-import dummyImg from "../../dummys/recordImgData.json";
-import { RecordHeader } from "../../components/layout/RecordHeader";
-import { RecordImgModal } from "../../components/Record/ImgModal";
-import { EditImgModal } from "./EditImg";
 import { TimeConvert } from "../../components/Record/TimeComponent";
-import { path } from "d3-path";
+
 import moment from "moment";
 
-const modalData = {
-  recording: false,
-  title: "오늘의 플로깅은 어떠셨나요?",
-  btnText1: "닫기",
-  btnText2: "내 포인트 확인",
-};
 function ShowRecordData({
   recordId,
   setModalOpen,
@@ -37,13 +23,6 @@ function ShowRecordData({
   getData,
 }) {
   const token = localStorage.getItem("key");
-
-  /*point에서 현재 위치 값을 가져와 초기세팅 해줌 */
-  //   const plogRecord = useLocation();
-  //   const recordId = plogRecord.state.recordId;
-  //   const [userData, setUserData] = useState({
-  //     recordId: recordId,
-  //   });
 
   const [isCourse, sestIsCourse] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -103,7 +82,6 @@ function ShowRecordData({
       };
 
       setThisRecordData(recordData);
-      console.log("get성공?:", thisRecordData);
     } catch (e) {
       // 실패 시 처리
       console.error(e);
@@ -130,13 +108,12 @@ function ShowRecordData({
           },
         }
       );
-      console.log("get경로: %o", response);
+
       const initArray = response.data.result.content.map((array) => {
         return array;
       });
-      console.log("array", initArray);
+
       const initPath = initArray.map((it) => {
-        console.log("it", it);
         return { lat: it.wayLat, lng: it.wayLng };
       });
       if (counter === 0) {
@@ -146,15 +123,7 @@ function ShowRecordData({
       }
 
       setIsLast(response.data.result.last);
-      // const map = mapRef.current;
-      // const bounds = new kakao.maps.LatLngBounds();
 
-      // initPath.forEach((point, i) => {
-      //   //LatLngBounds객체에 좌표추가
-      //   bounds.extend(new kakao.maps.LatLng(point.lat, point.lng));
-      // });
-      // if (map) map.setBounds(bounds);
-      // console.log("getBounds", bounds);
       getPath.current = true;
     } catch (e) {
       // 실패 시 처리
@@ -197,7 +166,7 @@ function ShowRecordData({
           },
         }
       );
-      console.log("get이미지: %o", response);
+
       const initImg = response.data.result.map((it) => {
         return {
           imageId: it.imageId,
@@ -244,10 +213,39 @@ function ShowRecordData({
     setImgOpen(true);
   };
 
-  // const [clickEditImg, setClickEditImg] = useState("");
-
   const showEditImgModal = () => {
     setImgEditOpen(true);
+  };
+
+  const EventStrEnMarkerContainer = () => {
+    const data = [
+      { lat: thisRecordData.startLat, lng: thisRecordData.startLng },
+      { lat: thisRecordData.endLat, lng: thisRecordData.endLng },
+    ];
+
+    return (
+      <>
+        {data.map((it) => (
+          <MapMarker
+            key={`${it.lat}-${it.lng}`}
+            position={it} // 마커를 표시할 위치
+            image={{
+              src: Marker, // 마커이미지의 주소입니다
+              size: {
+                width: 20,
+                height: 20,
+              }, // 마커이미지의 크기입니다
+              options: {
+                offset: {
+                  x: 10,
+                  y: 10,
+                }, // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+              },
+            }}
+          ></MapMarker>
+        ))}
+      </>
+    );
   };
 
   const EventMarkerContainer = ({ position, content }) => {
@@ -263,6 +261,7 @@ function ShowRecordData({
             height: 35,
           }, // 마커이미지의 크기입니다
         }}
+        zIndex={10}
         onClick={() => {
           // setClickImg(content);
           sendImgUrl(content);
@@ -281,97 +280,63 @@ function ShowRecordData({
 
   useEffect(() => {
     console.log("data기록가져옴");
-    console.log("rlfhr: %o", thisRecordData.runningTime);
-
     setIsDataLoading(false);
-
-    console.log("rlfhr: %o", thisRecordData);
   }, [thisRecordData]);
 
   useEffect(() => {
-    console.log("path기록가져옴");
-
-    console.log("1.경로: %o", pathData);
-    // const map = mapRef.current;
-    // if (map) map.setBounds(bounds);
-    console.log("1get", getPath.current, getImg.current);
-
     if (getPath.current) {
-      console.log("2get", getPath.current, getImg.current);
       setIsPathLoading(false);
     }
   }, [pathData]);
 
   useEffect(() => {
-    console.log("img기록가져옴", recordId);
     if (getImg.current) {
-      console.log("이미지 기록이 있다.");
       setIsImgLoading(false);
-      console.log("이미지: %o", imgData);
     }
   }, [imgData]);
 
   useEffect(() => {
     if (!isDataLoading && !isPathLoading && !isImgLoading) {
-      console.log("loading???????");
-      console.log("get", getPath.current, getImg.current);
-
       setIsLoading(false);
     }
   }, [isDataLoading, isPathLoading, isImgLoading, pathData, imgData]);
 
-  // const bounds = useMemo(() => {
-  //   const bounds = new kakao.maps.LatLngBounds();
-  //   if (isDataLoading && thisRecordData) {
-  //     bounds.extend(
-  //       new kakao.maps.LatLng(thisRecordData.startLat, thisRecordData.startLng)
-  //     );
-  //     bounds.extend(
-  //       new kakao.maps.LatLng(thisRecordData.endLat, thisRecordData.endLng)
-  //     );
-  //   }
+  const [map, setMap] = useState();
+  const [markers, setMarkers] = useState([]);
+  useEffect(() => {
+    if (!map) return;
+    // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
+    // LatLngBounds 객체에 좌표를 추가합니다
+    var i = 0;
+    var count = true;
+    let markers = [];
+    const bounds = new kakao.maps.LatLngBounds();
+    if (pathData.length > 1) {
+      pathData.map((data) => {
+        if (count) {
+          if (i === 0) {
+            count = false;
+            markers.push(data);
+          } else {
+            i--;
+          }
+          return bounds.extend(new kakao.maps.LatLng(data.lat, data.lng));
+        } else {
+          if (i === 6) {
+            count = true;
+          } else {
+            i++;
+          }
+        }
+      });
 
-  //   if (isPathLoading && pathData) {
-  //     pathData.forEach((point) => {
-  //       bounds.extend(new kakao.maps.LatLng(point.lat, point.lng));
-  //     });
-  //   }
+      markers.push({ lat: thisRecordData.endLat, lng: thisRecordData.endLng });
 
-  //   if (isImgLoading && imgData) {
-  //     imgData.forEach((point) => {
-  //       bounds.extend(new kakao.maps.LatLng(point.imgLat, point.imgLng));
-  //     });
-  //   }
-
-  //   return bounds;
-  // }, [
-  //   thisRecordData,
-  //   pathData,
-  //   imgData,
-  //   isPathLoading,
-  //   isDataLoading,
-  //   isImgLoading,
-  // ]);
-
-  // useEffect(() => {
-  //   console.log("여기는 ");
-  //   const map = mapRef.current;
-  //   console.log("여기는: ", map);
-  //   if (map) {
-  //     console.log("여기는 bounds:", bounds);
-  //     map.setBounds(bounds);
-  //     setIsLoading(false);
-  //   }
-  // }, [
-  //   thisRecordData,
-  //   pathData,
-  //   imgData,
-  //   isPathLoading,
-  //   isDataLoading,
-  //   isImgLoading,
-  //   isLoading,
-  //   bounds,
-  // ]);
+      // 위치를 기준으로 지도 범위를 재설정합니다
+      setMarkers(markers);
+      map.setBounds(bounds);
+    }
+  }, [map, pathData]);
 
   const sendImgUrl = (url) => {
     getImgUrl(url);
@@ -385,7 +350,6 @@ function ShowRecordData({
   };
 
   if (isLoading) return <div>로딩중..</div>;
-  // if (!pathData) return null;
 
   return (
     <>
@@ -407,12 +371,13 @@ function ShowRecordData({
                     width: "100%",
                     height: "23.6rem",
                   }}
-                  level={6} // 지도의 확대 레벨
+                  level={3} // 지도의 확대 레벨
                   zoomable={false}
-                  draggable={false}
                   disableDoubleClickZoom={true}
                   ref={mapRef}
+                  onCreate={setMap}
                 >
+                  <EventStrEnMarkerContainer />
                   {isImgData &&
                     imgData.map((value) => (
                       <EventMarkerContainer
@@ -422,9 +387,16 @@ function ShowRecordData({
                       />
                     ))}
                   <Polyline
-                    path={pathData}
+                    path={markers}
+                    strokeWeight={12} // 선의 두께 입니다
+                    strokeColor={"#8EDF82"} // 선의 색깔입니다
+                    strokeOpacity={1} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+                    strokeStyle={"solid"} // 선의 스타일입니다
+                  />
+                  <Polyline
+                    path={markers}
                     strokeWeight={6} // 선의 두께 입니다
-                    strokeColor={"#D7263D"} // 선의 색깔입니다
+                    strokeColor={"#ffffff"} // 선의 색깔입니다
                     strokeOpacity={1} // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
                     strokeStyle={"solid"} // 선의 스타일입니다
                   />
@@ -460,7 +432,6 @@ function ShowRecordData({
                         src={img.imgUrl}
                         alt="img"
                         onClick={() => {
-                          console.log(img.imgUrl);
                           sendImgUrl(img.imgUrl);
                           sendRecordData();
                           showEditImgModal();
