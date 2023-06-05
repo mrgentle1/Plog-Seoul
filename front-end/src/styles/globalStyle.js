@@ -18,6 +18,12 @@ const GlobalStyle = createGlobalStyle`
     -webkit-user-select:none;
     -webkit-tap-highlight-color:rgba(0,0,0,0);
 
+
+    @font-face {
+      font-family: "SUITE-Regular";
+      src: url("./styles/fonts/SUIT-Variable-ttf/SUIT-Variable.ttf");
+    }
+
   }
 
   @font-face {
