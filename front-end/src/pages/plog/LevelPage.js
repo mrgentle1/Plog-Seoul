@@ -166,7 +166,7 @@ const NoticeHeader = styled.div`
   align-items: center;
 
   .noticeBackArrow {
-    margin-top: 35px;
+    margin-top: 38px;
     margin-left: 20px;
   }
 `;
@@ -184,7 +184,7 @@ const AllPoint = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 40px;
+  margin-top: 25px;
   h1 {
     font-family: "SUIT Variable";
     font-style: normal;

@@ -46,12 +46,12 @@ const NoticeHeader = styled.div`
   align-items: center;
 
   .noticeBackArrow {
-    margin-top: 76px;
+    margin-top: 54px;
     margin-left: 20px;
   }
 `;
 const HeaderText = styled.div`
-  margin-top: 74px;
+  margin-top: 53px;
   margin-left: 22px;
   font-family: "SUIT Variable";
   font-style: normal;
@@ -61,7 +61,7 @@ const HeaderText = styled.div`
   color: ${COLOR.MAIN_BLACK};
 `;
 const NoticeContent = styled.div`
-  margin-top: 50px;
+  margin-top: 30px;
   .noticeText {
     font-family: "SUIT Variable";
     font-style: normal;
