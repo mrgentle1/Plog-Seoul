@@ -182,7 +182,7 @@ const HeaderText = styled.div`
   color: ${COLOR.MAIN_BLACK};
 `;
 const InfoContent = styled.div`
-  margin-top: 20px;
+  margin-top: 28px;
   margin-bottom: 33px;
   width: 353px;
   .image {
