@@ -167,14 +167,14 @@ const SearchHeader = styled.div`
   align-items: center;
 
   .signupBackArrow {
-    margin-top: 50px;
+    margin-top: 20px;
     margin-left: 20px;
   }
 `;
 const SearchInput = styled.div`
   position: relative;
   width: 80%;
-  margin-top: 46px;
+  margin-top: 20px;
   margin-left: 25px;
 
   .inputSearch {
