@@ -22,15 +22,8 @@ function RankingPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [hasMyData, setHasMyData] = useState(false);
   const isUpdate = useRef(false);
-  const isMoreThan = useRef(false);
-
-  const isFirst = useRef(false);
-  const isSecond = useRef(false);
-  const isThird = useRef(false);
-  const noneList = useRef(false);
 
   const [selectDist, setSelectDist] = useState(true);
-  const [time, setTime] = useState(false);
 
   const handleDistClick = () => {
     setSelectDist(true);
@@ -38,7 +31,6 @@ function RankingPage() {
 
   const handleTimeClick = () => {
     setSelectDist(false);
-    setTime(true);
   };
 
   /* GET - 랭킹 */
@@ -101,21 +93,7 @@ function RankingPage() {
         });
 
       isUpdate.current = true;
-      if (initDistData.length > 3) {
-        isMoreThan.current = true;
-        isFirst.current = true;
-        isSecond.current = true;
-        isThird.current = true;
-      } else if (initDistData.length === 3) {
-        isFirst.current = true;
-        isSecond.current = true;
-        isThird.current = true;
-      } else if (initDistData.length === 2) {
-        isFirst.current = true;
-        isSecond.current = true;
-      } else if (initDistData.length === 1) {
-        isFirst.current = true;
-      }
+
       if (initMyData.length !== 0) {
         setRankingMyDistData(initMyData);
         setHasMyData(true);
@@ -160,21 +138,7 @@ function RankingPage() {
         });
 
       isUpdate.current = true;
-      if (initTimeData.length > 3) {
-        isMoreThan.current = true;
-        isFirst.current = true;
-        isSecond.current = true;
-        isThird.current = true;
-      } else if (initTimeData.length === 3) {
-        isFirst.current = true;
-        isSecond.current = true;
-        isThird.current = true;
-      } else if (initTimeData.length === 2) {
-        isFirst.current = true;
-        isSecond.current = true;
-      } else if (initTimeData.length === 1) {
-        isFirst.current = true;
-      }
+
       if (initMyData.length !== 0) {
         setRankingMyTimeData(initMyData);
         setHasMyData(true);
@@ -216,12 +180,12 @@ function RankingPage() {
               {selectDist ? (
                 <p className="UserDist">{userData[0].totalDist.toFixed(2)}Km</p>
               ) : (
-                <>
+                <p className="UserDist">
                   <TimeConvert
                     className="UserDist"
                     time={userData[0].totalTime}
                   />
-                </>
+                </p>
               )}
             </>
           ) : (

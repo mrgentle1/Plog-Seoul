@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.List;
 
+import static com.backend.plogging.service.PloggingService.SortBy;
+import static com.backend.plogging.service.PloggingService.RankingPeriod;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/plogging")
@@ -40,8 +43,10 @@ public class PloggingController {
     }
 
     @GetMapping("/ranking")
-    public BaseResponseEntity<?> getRanking(Principal principal, @RequestParam PloggingService.SortBy sortBy) {
-        BaseResponseEntity response = ploggingService.getWeeklyRankings(principal.getName(), sortBy);
+    public BaseResponseEntity<?> getRanking(Principal principal,
+                                            @RequestParam SortBy sortBy,
+                                            @RequestParam(defaultValue = "OVERALL") RankingPeriod period) {
+        BaseResponseEntity response = ploggingService.getWeeklyRankings(principal.getName(), sortBy, period);
         return response;
     }
 

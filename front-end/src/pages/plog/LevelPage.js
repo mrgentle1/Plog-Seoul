@@ -19,14 +19,15 @@ function LevelPage() {
   const [userId, setUserId] = usePersistRecoilState(userIdNumber);
 
   const navigate = useNavigate();
-  const goBack = useCallback(() => {
-    navigate(-1);
-  }, [navigate]);
 
   const url = `${process.env.REACT_APP_API_ROOT}/api/users/${userId}`;
   const url2 = url + "/point/history";
 
-  useEffect(() => {
+  const goBack = useCallback(() => {
+    navigate(-1);
+  }, [navigate]);
+
+  const fetchData = () => {
     axios
       .get(url, {
         headers: {
@@ -40,9 +41,7 @@ function LevelPage() {
       .catch((error) => {
         console.error(error);
       });
-  }, []);
 
-  useEffect(() => {
     axios
       .get(url2, {
         headers: {
@@ -56,20 +55,17 @@ function LevelPage() {
       .catch((error) => {
         console.error(error);
       });
+  };
+
+  useEffect(() => {
+    fetchData();
   }, []);
 
   let sum = 0;
   points.map((point) => {
     let p = point.changePoint;
     sum += p;
-    console.log(sum);
   });
-
-  const real_level = sum / 1000 + 1;
-  const just_level = (real_level - 1).toFixed(0);
-  console.log("level", just_level);
-  console.log("dd", sum - just_level * 1000);
-  console.log("ff", just_level * 1000 + 1000 - sum);
 
   // const data = [
   //   { name: "level", value: sum > 1000 ? sum - just_level * 1000 : sum },
@@ -80,12 +76,9 @@ function LevelPage() {
   // ];
 
   const data = [
-    { name: "level", value: sum - just_level * 1000 },
-    { name: "remaining", value: 1000 + sum - just_level * 1000 },
+    { name: "level", value: user.point },
+    { name: "remaining", value: 1000 - user.point },
   ];
-
-  console.log(sum - just_level * 1000);
-  console.log(1000 + sum - just_level * 1000);
 
   return (
     <motion.div
@@ -97,9 +90,14 @@ function LevelPage() {
       <StNoticePage>
         <NoticeHeader>
           <BackArrow className="noticeBackArrow" onClick={goBack} />
-          <HeaderText>Level {real_level.toFixed(0)}</HeaderText>
+          <HeaderText>Level {user.level}</HeaderText>
         </NoticeHeader>
 
+        <AllPoint>
+          <h1>
+            전체 포인트 _ <span>{user.totalPoint}</span>
+          </h1>
+        </AllPoint>
         <ResponsiveContainer width="100%" height={240} className="graph">
           <PieChart>
             <Pie
@@ -109,7 +107,7 @@ function LevelPage() {
               cx="50%"
               cy="50%"
               innerRadius="55%"
-              outerRadius="90%"
+              outerRadius="88%"
               animationDuration={1000}
               animationBegin={0.5}
               dataKey="value"
@@ -119,9 +117,8 @@ function LevelPage() {
             </Pie>
           </PieChart>
         </ResponsiveContainer>
-
         <Point>
-          <h5>{sum - just_level * 1000}</h5>
+          <h5>{user.point}</h5>
           <h6>/ 1,000 포인트</h6>
         </Point>
         <LevelLine />
@@ -152,7 +149,7 @@ const StNoticePage = styled.div`
   height: 100%;
   padding-top: 88px;
   .graph {
-    margin-top: 40px;
+    margin-top: 15px;
   }
 `;
 const NoticeHeader = styled.div`
@@ -183,11 +180,29 @@ const HeaderText = styled.div`
   line-height: 25px;
   color: ${COLOR.MAIN_BLACK};
 `;
+const AllPoint = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 40px;
+  h1 {
+    font-family: "SUIT Variable";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 21px;
+    color: ${COLOR.MAIN_BLACK};
+    span {
+      font-weight: 700;
+      font-size: 16px;
+      color: ${COLOR.MAIN_DARK_GREEN};
+    }
+  }
+`;
 const Point = styled.div`
   margin-top: -140px;
-  margin-bottom: 140px;
+  margin-bottom: 110px;
   text-align: center;
-
   h5 {
     font-family: "SUIT Variable";
     font-style: normal;

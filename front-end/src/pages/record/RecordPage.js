@@ -16,7 +16,7 @@ import current from "../../assets/icons/mapMarker.svg";
 import courseMarker from "../../assets/icons/courseMarker.svg";
 import trashCanImg from "../../assets/icons/trash.svg";
 import { ReactComponent as Close } from "../../assets/icons/close.svg";
-import { ReactComponent as StartBtn } from "../../assets/icons/recordStart.svg";
+import { ReactComponent as LoadingStartBtn } from "../../assets/icons/loadingRunStartBtn.svg";
 import { ReactComponent as RecordStartBtn } from "../../assets/icons/runStartBtn.svg";
 import { ReactComponent as RelocateBtn } from "../../assets/icons/relocateInactivate.svg";
 import { ReactComponent as RelocateAtiveBtn } from "../../assets/icons/relocateActivate.svg";
@@ -38,6 +38,8 @@ function RecordPage() {
   const [errorMessage, setErrorMessage] = useState("");
   const [isMove, setIsMove] = useState(false);
   const [isShowCan, setIsShowCan] = useState(false);
+  const [isActive, setIsActive] = useState(false);
+
   const [level, setLevel] = useState(3);
   const mapRef = useRef();
   const [state, setState] = useState({
@@ -58,6 +60,9 @@ function RecordPage() {
       isLoading: false,
     }));
     console.log("정확도:", position.coords.accuracy);
+    setTimeout(() => {
+      setIsActive(true);
+    }, 2100);
   };
 
   const showError = (err) => {
@@ -410,15 +415,19 @@ function RecordPage() {
       </MapContainer>
       <RecordPageFooter>
         <RecordStartBtnWrapper>
-          <Link
-            to={"/record/ing"}
-            state={{
-              lat: `${state.center.lat}`,
-              lng: `${state.center.lng}`,
-            }}
-          >
-            <RecordStartBtn />
-          </Link>
+          {isActive ? (
+            <Link
+              to={"/record/ing"}
+              state={{
+                lat: `${state.center.lat}`,
+                lng: `${state.center.lng}`,
+              }}
+            >
+              <RecordStartBtn />
+            </Link>
+          ) : (
+            <LoadingStartBtn />
+          )}
         </RecordStartBtnWrapper>
       </RecordPageFooter>
     </StRecordPage>
