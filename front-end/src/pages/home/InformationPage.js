@@ -157,7 +157,7 @@ const InfoHeader = styled.div`
   position: fixed;
   top: 0;
   width: 393px;
-  height: 118px;
+  height: 103px;
   background: ${COLOR.MAIN_WHITE};
   z-index: 100;
 
@@ -167,12 +167,12 @@ const InfoHeader = styled.div`
   align-items: center;
 
   .noticeBackArrow {
-    margin-top: 40px;
+    margin-top: 35px;
     margin-left: 20px;
   }
 `;
 const HeaderText = styled.div`
-  margin-top: 39px;
+  margin-top: 35px;
   margin-left: 22px;
   font-family: "SUIT Variable";
   font-style: normal;
@@ -182,7 +182,7 @@ const HeaderText = styled.div`
   color: ${COLOR.MAIN_BLACK};
 `;
 const InfoContent = styled.div`
-  margin-top: 30px;
+  margin-top: 20px;
   margin-bottom: 33px;
   width: 353px;
   .image {
