@@ -53,12 +53,12 @@ const NoticeHeader = styled.div`
   align-items: center;
 
   .noticeBackArrow {
-    margin-top: 76px;
+    margin-top: 54px;
     margin-left: 20px;
   }
 `;
 const HeaderText = styled.div`
-  margin-top: 74px;
+  margin-top: 50px;
   margin-left: 22px;
   font-family: "SUIT Variable";
   font-style: normal;
