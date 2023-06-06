@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class WeeklyRankingDto {
+public class RankingDto {
 
     private int rank;
     private Long userId;
@@ -14,7 +14,7 @@ public class WeeklyRankingDto {
     private Float totalDistance;
     private Float totalRunningTime;
 
-    public WeeklyRankingDto(int rank, Long userId, String nickname, Integer level, Float totalDistance, Float totalRunningTime) {
+    public RankingDto(int rank, Long userId, String nickname, Integer level, Float totalDistance, Float totalRunningTime) {
         this.rank = rank;
         this.userId = userId;
         this.nickname = nickname;
