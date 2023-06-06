@@ -139,7 +139,7 @@ const ReviewHeader = styled.div`
   position: fixed;
   top: 0;
   width: 100%;
-  height: 105px;
+  height: 103px;
   padding-left: 20px;
   padding-right: 20px;
 
@@ -155,10 +155,10 @@ const ReviewBox1 = styled.div`
   display: flex;
 
   .backArrow {
-    margin-top: 53px;
+    margin-top: 45px;
   }
   h1 {
-    margin-top: 49px;
+    margin-top: 42px;
     margin-left: 20px;
     font-family: "SUIT Variable";
     font-style: normal;
@@ -167,7 +167,7 @@ const ReviewBox1 = styled.div`
     line-height: 25px;
   }
   h4 {
-    margin-top: 51px;
+    margin-top: 45px;
     margin-left: 6px;
     font-family: "SUIT Variable";
     font-style: normal;
@@ -181,7 +181,7 @@ const ReviewBox2 = styled.div`
   display: flex;
   justify-content: space-between;
   width: 110px;
-  margin-top: 53px;
+  margin-top: 45px;
 
   h5 {
     font-family: "SUIT Variable";
@@ -201,7 +201,7 @@ const ReviewMain = styled.div`
   margin-left: 20px;
   margin-right: 20px;
   width: 100%;
-  margin-top: 10px;
+  margin-top: 15px;
   padding-bottom: 30px;
   .noReview {
     margin-top: 300px;
