@@ -159,7 +159,7 @@ const NoticeHeader = styled.div`
   position: fixed;
   top: 0;
   width: 393px;
-  height: 118px;
+  height: 103px;
   background: ${COLOR.MAIN_WHITE};
   z-index: 100;
 
@@ -169,12 +169,12 @@ const NoticeHeader = styled.div`
   align-items: center;
 
   .noticeBackArrow {
-    margin-top: 40px;
+    margin-top: 35px;
     margin-left: 20px;
   }
 `;
 const HeaderText = styled.div`
-  margin-top: 39px;
+  margin-top: 35px;
   margin-left: 22px;
   font-family: "SUIT Variable";
   font-style: normal;
