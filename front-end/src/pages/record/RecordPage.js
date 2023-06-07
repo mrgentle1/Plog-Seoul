@@ -420,7 +420,7 @@ function RecordPage() {
       </MapContainer>
       <RecordPageFooter>
         <RecordStartBtnWrapper>
-          {isActive ? (
+          {!loading ? (
             <Link
               to={"/record/ing"}
               state={{
