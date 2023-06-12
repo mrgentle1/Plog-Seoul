@@ -394,24 +394,24 @@ const RankingHeader = styled.div`
   position: fixed;
   top: 0;
   width: 100%;
-  height: 6rem;
+  height: 8.1rem;
   background: ${COLOR.MAIN_WHITE};
   z-index: 100;
 
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  align-items: flex-end;
+  align-items: center;
 
   padding: 0rem 2rem;
   gap: 2.4rem;
 
   .noticeBackArrow {
-    /* margin-top: 40px;
-    margin-left: 20px; */
+    margin-top: 5.65rem;
   }
 `;
 const HeaderText = styled.div`
+  margin-top: 5.6rem;
   font-family: "SUIT Variable";
   font-style: normal;
   font-weight: 700;
@@ -597,6 +597,7 @@ const ButtonContainer = styled.div`
   justify-content: flex-end;
   width: 100%;
   text-align: center;
+  margin-top: 1rem;
   margin-bottom: 4rem;
   padding-top: 1rem;
 `;

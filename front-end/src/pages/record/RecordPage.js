@@ -24,6 +24,7 @@ import { ReactComponent as TrashCanAtiveBtn } from "../../assets/icons/trashCanA
 import { ReactComponent as TrashCanBtn } from "../../assets/icons/trash.svg";
 import { HomeHeaderV2 } from "../../components/layout/HeaderV2";
 import axios from "axios";
+import { Loading } from "../../components/common/Loading";
 
 const { kakao } = window;
 
@@ -39,6 +40,7 @@ function RecordPage() {
   const [isMove, setIsMove] = useState(false);
   const [isShowCan, setIsShowCan] = useState(false);
   const [isActive, setIsActive] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const [level, setLevel] = useState(3);
   const mapRef = useRef();
@@ -60,6 +62,7 @@ function RecordPage() {
       isLoading: false,
     }));
     console.log("정확도:", position.coords.accuracy);
+    setLoading(false); // api 호출 완료 됐을 때 false로 변경하려 로딩화면 숨김처리
     setTimeout(() => {
       setIsActive(true);
     }, 2100);
@@ -159,6 +162,7 @@ function RecordPage() {
   }, [setHeaderTitle]);
 
   useEffect(() => {
+    setLoading(true); // api 호출 전에 true로 변경하여 로딩화면 띄우기
     getTrashCanData(); //쓰레기통 위치 정보
 
     if (navigator.geolocation) {
@@ -253,6 +257,7 @@ function RecordPage() {
           />
         </CloseWrapper>
       </RecordIngHeader>
+      {loading ? <Loading /> : null}
       <MapContainer>
         <Map
           id="MapWrapper"
@@ -415,7 +420,7 @@ function RecordPage() {
       </MapContainer>
       <RecordPageFooter>
         <RecordStartBtnWrapper>
-          {isActive ? (
+          {!loading ? (
             <Link
               to={"/record/ing"}
               state={{

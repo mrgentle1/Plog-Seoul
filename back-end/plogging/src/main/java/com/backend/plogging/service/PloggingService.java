@@ -8,10 +8,7 @@ import com.backend.plogging.domain.User;
 import com.backend.plogging.dto.request.plogging.ImageRequestDto;
 import com.backend.plogging.dto.request.plogging.PathRequestDto;
 import com.backend.plogging.dto.request.plogging.PloggingPostRequestDto;
-import com.backend.plogging.dto.response.plogging.ImageResponseDto;
-import com.backend.plogging.dto.response.plogging.PathResponseDto;
-import com.backend.plogging.dto.response.plogging.RecordResponseDto;
-import com.backend.plogging.dto.response.plogging.WeeklyRankingDto;
+import com.backend.plogging.dto.response.plogging.*;
 import com.backend.plogging.repository.ImageRepository;
 import com.backend.plogging.repository.PathRepository;
 import com.backend.plogging.repository.PloggingRecordRepository;
@@ -23,10 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.YearMonth;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
@@ -231,45 +225,82 @@ public class PloggingService {
     }
 
 
-    // Weekly Ranking
+    // Ranking SortBy
     public enum SortBy {
         TOTAL_DISTANCE,
         TOTAL_RUNNING_TIME,
     }
 
-    public BaseResponseEntity<?> getWeeklyRankings(String email, SortBy sortBy) {
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime startOfWeek = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-        LocalDateTime endOfWeek = now.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+    // 랭킹 조회 기간
+    public enum RankingPeriod {
+        DAILY,
+        WEEKLY,
+        MONTHLY,
+        YEARLY,
+        OVERALL
+    }
 
-        List<Object[]> weeklyRanking = new ArrayList<>();
+    public BaseResponseEntity<?> getWeeklyRankings(String email, SortBy sortBy, RankingPeriod period) {
+
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime startOfWeek, endOfWeek;
+
+        switch (period) {
+            case DAILY:
+                startOfWeek = now.with(LocalTime.MIN);
+                endOfWeek = now.with(LocalTime.MAX);
+                break;
+            case WEEKLY:
+                startOfWeek = now.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).with(LocalTime.MIN);;
+                endOfWeek = now.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY)).with(LocalTime.MAX);
+                break;
+            case MONTHLY:
+                startOfWeek = now.with(TemporalAdjusters.firstDayOfMonth()).with(LocalTime.MIN);
+                endOfWeek = now.with(TemporalAdjusters.lastDayOfMonth()).with(LocalTime.MAX);
+                break;
+            case YEARLY:
+                startOfWeek = now.with(TemporalAdjusters.firstDayOfYear()).with(LocalTime.MIN);
+                endOfWeek = now.with(TemporalAdjusters.lastDayOfYear()).with(LocalTime.MAX);
+                break;
+            case OVERALL:
+                startOfWeek = LocalDateTime.of(1970, 1, 1, 0, 0, 0);
+                endOfWeek = LocalDateTime.of(9999, 12, 31, 23, 59, 59);
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + period);
+        }
+
+        List<Object[]> ranking = new ArrayList<>();
 
         if (sortBy == SortBy.TOTAL_DISTANCE)
-            weeklyRanking = ploggingRecordRepository.findWeeklyDistanceByUser(startOfWeek, endOfWeek);
+            ranking = ploggingRecordRepository.findWeeklyDistanceByUser(startOfWeek, endOfWeek);
         else if (sortBy == SortBy.TOTAL_RUNNING_TIME)
-            weeklyRanking = ploggingRecordRepository.findWeeklyRunningTimeByUser(startOfWeek, endOfWeek);
+            ranking = ploggingRecordRepository.findWeeklyRunningTimeByUser(startOfWeek, endOfWeek);
 
         Long myRank = 0L;
 
-        List<WeeklyRankingDto> rankings = new ArrayList<>();
+        List<RankingDto> rankingDto = new ArrayList<>();
         int rank = 1;
-        for (Object[] record : weeklyRanking) {
+        for (Object[] record : ranking) {
             User user = (User) record[0];
             Float totalDistance = ((Number) record[1]).floatValue();
             Float totalRunningTime = ((Number) record[2]).floatValue();
 
-            rankings.add(new WeeklyRankingDto(rank, user.getUserId(), user.getNickname(), user.getLevel(), totalDistance, totalRunningTime));
+            rankingDto.add(new RankingDto(rank, user.getUserId(), user.getNickname(), user.getLevel(), totalDistance, totalRunningTime));
             if (user.getEmail().equals(email)) {
                 myRank = (long) rank;
             }
             rank++;
         }
 
-        HashMap<String, Object> map = new LinkedHashMap<>();
-        map.put("sortBy", sortBy);
-        map.put("myRank", myRank);
-        map.put("rankings", rankings);
+        RankingResponseDto responseDto = RankingResponseDto.builder()
+                .period(period)
+                .startDate(startOfWeek.toLocalDate())
+                .endDate(endOfWeek.toLocalDate())
+                .sortBy(sortBy)
+                .myRank(myRank)
+                .rankings(rankingDto).build();
 
-        return new BaseResponseEntity<>(HttpStatus.OK, map);
+        return new BaseResponseEntity<>(HttpStatus.OK, responseDto);
     }
 }
