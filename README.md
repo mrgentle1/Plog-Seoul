@@ -1,5 +1,7 @@
 # Plog Seoul
-2023 서울 열린데이터광장 공공데이터 활용 모바일 앱/웹 경진대회 수상작 <br/>
+2023 서울 열린데이터광장 공공데이터 활용 모바일 앱/웹 경진대회 **최우수상** 수상작 <br/>
+- [공공 데이터 포털 - 2023 수상 내역](https://www.data.go.kr/suc/awardWinningDetail.do?pageIndex=1&originId=PDS_0000000001195+++&atchFileId=FILE_000000002896460&searchCondition3=1&searchCondition2=2&sort-post=2&searchKeyword1=%ED%94%8C%EB%A1%9C%EA%B7%B8)
+- [국민대학교 알림마당](https://totalart.kookmin.ac.kr/community/kookmin/people/1074730?pn=38rss)
  <br/>
 
 ## 프로젝트 소개
